@@ -48,19 +48,19 @@
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                 <div class="row">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         {{ form.category.label_tag }}
                         {{ form.category |add_class:"form-control select2" }}
                         {{ form.category.errors }}
                     </div>
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label>Enseignement</label><br/>
                         {{ form.subject |add_class:"form-control select2" }}
                         {{ form.subject.errors }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group">
                             {{ form.topic.label_tag }}
                             {{ form.topic |add_class:"form-control" }}
@@ -69,14 +69,14 @@
                     </div>
                 </div> 
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         {{ form_m.texte.label_tag }} <br/>
                         {{ form_m.texte  }}
                         {{ form_m.texte.errors }}
                     </div>
                 </div>    
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group">
                             <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
                             <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

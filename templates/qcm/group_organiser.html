@@ -111,14 +111,14 @@
             <div class="modal-body">
                 <form method="POST" action="" enctype='multipart/form-data' id="new_chapter">                    
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 <input type="text" name="rename_chapter"  id="rename_chapter" class="form-control" maxlength="30">
                             </div>
                             <input name="is_update" id="is_update" type="hidden" />
                             <input name="pk_chapter_id" id="pk_chapter_id" type="hidden" /> 
                         </div>    
-                        <div class="col-sm-12 col-md-12">         
+                        <div class="col-xs-12 col-md-12">         
                             <a href="javascript:void(0)" class="btn btn-primary" id="submit_rename_parcours">Enregistrer</button>   
                             <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
                         </div>
@@ -141,13 +141,13 @@
             <div class="modal-body">
                 <form method="POST" action="" enctype='multipart/form-data' id="add_new_chapter">                    
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 <label>Titre : </label>
                                 <input type="text" name="add_chapter"  id="add_chapter" class="form-control" maxlength="30">
                             </div>
                         </div>    
-                        <div class="col-sm-12 col-md-12">         
+                        <div class="col-xs-12 col-md-12">         
                             <a href="javascript:void(0)" class="btn btn-primary" id="submit_add_chapter" data-book_id="{{ book.id }}" >Enregistrer</button>   
                             <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
                         </div>
@@ -169,7 +169,7 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                     <form method="POST" action="" enctype='multipart/form-data'>
                         <input type="hidden" name="book_section_id_get" id="book_section_id_get"  id="book_section_id_get" />
                         <input type="hidden" name="book_subject_id" id="book_subject_id" value="{{ book.subject.id }}" />
@@ -179,7 +179,7 @@
 
 
                         <div class="row">
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-md-12">
                                 <div class="form-group">
                                     <a href="javascript:void();" class="selector_existant_book_document_choice existant_book_document_choice" data-type="Course" id="this_type_document5">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-c-square" viewBox="0 0 14 14">
@@ -243,13 +243,13 @@
                     {% csrf_token %}                          
                     <input type="hidden" name="chapter_id" id="chapter_id_inside_modal"/>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <label>Titre :</label><br/> 
                             {{ formsec.title|add_class:"form-control" }}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <div class="form-group">
                             <label>Bordure :</label>  
                                 <a href="#"><i class="fa fa-square fa-2x selector_section_color" data-color="5D4391" style="color:#5D4391"></i></a>
@@ -267,7 +267,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">         
                                 <a href="javascript:void(0)" class="btn btn-primary" id="new_section_modal_creator"  >Enregistrer</a>   
                                 <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
@@ -294,12 +294,12 @@
                     {% csrf_token %}                          
                     <input type="hidden" id="section_id" name="section_id" />
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">         
+                        <div class="col-xs-12 col-md-12">         
                             {{ formsec.title|add_class:"form-control" }}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <div class="form-group">
                             <label>Bordure :</label><br/>  
                                         <a href="#"><i class="fa fa-square fa-2x selector_section_color_update" data-color="9274C7" style="color:#9274C7"></i></a>
@@ -317,7 +317,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">         
+                        <div class="col-xs-12 col-md-12">         
                             <a href="javascript:void(0)" class="btn btn-primary" id="save_section">Enregistrer</a>   
                             <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
                         </div>
@@ -339,11 +339,11 @@
             </div>
             <div class="modal-body">
                 <div class="row" >
-                    <div class="col-sm-12 col-md-12" id='show_modal_document_body'>
+                    <div class="col-xs-12 col-md-12" id='show_modal_document_body'>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-12"> 
+                    <div class="col-xs-12 col-md-12"> 
                         <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Fermer la fenêtre" class="btn btn-default"   /></a>
                     </div>
                 </div>
@@ -367,12 +367,12 @@
                 <form method="POST" action="{% url 'book_duplicate_summary' %}" enctype='multipart/form-data' id="new_chapter"> 
                     {% csrf_token %}   
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <label>Choisir les groupes destinations.<small class="text-danger">Si l'organiser d'un groupe n'est pas vide, il sera complété par cet organiser.</small></label>
                         </div>
                     </div>             
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <input type="hidden" name='group_id' value="{{ group.id }}" />
                             <input type="hidden" name='book_id' value="{{ book.id }}" />
                             <div class="form-group">
@@ -394,7 +394,7 @@
                                 <li class="sanspuce"><label><input type="radio" name="format_new" value="no"> Associer ces groupes à ce sommaire. <small>Ce sommaire sera visible depuis tous les groupes liés et sa modification sera effective dans tous les groupes liés.</small></label></li>                               
                             </div>
                         </div>    
-                        <div class="col-sm-12 col-md-12">         
+                        <div class="col-xs-12 col-md-12">         
                             <button type="submit" class="btn btn-primary" id="submit_duplicate_symmary">Enregistrer</button>   
                             <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
                         </div>

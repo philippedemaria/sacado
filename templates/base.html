@@ -362,7 +362,7 @@
                 <form action="{%  url 'password_reset' %}" method="POST"  >
                 {% csrf_token %}
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 {{ np_form.email|add_class:"form-control"|attr:"placeholder:Renseigner votre courriel"|attr:"required"}}
                             </div>

@@ -28,14 +28,14 @@
     <form  action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ form.name.label_tag }}</label>
                     {{ form.name |add_class:"form-control" }}
                     {{ form.name.errors }}
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ form.flag.label_tag }}</label>
                     {{ form.flag |add_class:"btn btn-default" }}
@@ -44,7 +44,7 @@
             </div>
         </div> 
         <div class="row">
-            <div class="col-sm-6 col-md-2">
+            <div class="col-xs-6 col-md-2">
                 <div class="form-group">
                     <label>{{ form.code.label_tag }}</label>
                     {{ form.code |add_class:"form-control" }}
@@ -52,7 +52,7 @@
                 </div>
             </div>
  
-            <div class="col-sm-6 col-md-2">
+            <div class="col-xs-6 col-md-2">
                 <div class="form-group">
                     <label>{{ form.indicatif.label_tag }}</label>
                     {{ form.indicatif |add_class:"form-control" }}
@@ -61,7 +61,7 @@
             </div>
 
  
-            <div class="col-sm-12 col-md-8">
+            <div class="col-xs-12 col-md-8">
                 <div class="form-group">
                     <label>{{ form.zone.label_tag }}</label>
                     {{ form.zone |add_class:"form-control select2" }}
@@ -71,7 +71,7 @@
 
         </div> 
         <div class="row">
-            <div class="col-sm-6 col-md-6">
+            <div class="col-xs-6 col-md-6">
                 <div class="form-group">
                     <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
                     <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
@@ -80,7 +80,7 @@
         </div>
         {% if country %}
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="form-group">
                     <a href="{% url 'delete_country'  country.id %}"  class="btn btn-danger"  onclick="return TestDelete(' ce pays ')">Supprimer</a>
                 </div>           

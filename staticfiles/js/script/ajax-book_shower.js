@@ -79,6 +79,23 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
 
+           
+        $(document).on('click', ".show_this_bloc_correction" , function (event) {
+
+            var this_html = $(this).data("correction") ; 
+            $("#book_shower_page").modal('toggle');
+            $("#book_shower_correction_content").html(this_html);
+
+        }); 
+
+    
+        $(document).on('change', "#customRanger" , function (event) {
+
+            var value = $(this).val() ; 
+
+            $("#book_shower_correction_content").css("font-size",value*12);
+
+        });  
 
 
 });

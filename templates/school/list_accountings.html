@@ -36,7 +36,7 @@
 {% block body %}
     <section class="content_list"> 
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <table class="table table-sacado  table-hover standard_tab_sort">
                     <thead>
                         <tr>
@@ -81,7 +81,7 @@
 
         {% if request.user.school.customer.is_display_button %} 
         <div class="row">
-            <div class="col-sm-12 col-md-12"> 
+            <div class="col-xs-12 col-md-12"> 
                 <div class="alert alert-sacado">
                     <a href="{% url 'renew_school_adhesion' %}" class="btn btn-xs btn-warning">Abonnement nouvelle année scolaire</a>   <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>  
                 </div>

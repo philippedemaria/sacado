@@ -10,13 +10,13 @@
 <section id="pricing">
     <div class="full_container">
         <div class="row">
-            <div class="col-sm-12 col-md-12" align="center" style="margin-bottom: 20px">
+            <div class="col-xs-12 col-md-12" align="center" style="margin-bottom: 20px">
                 <img src="{% if name == "Autonomie" %}{% static 'img/menu_autonomie.png' %}{% else %}{% static 'img/menu_accompagnement.png' %}{% endif %}" width="60px">
                 Menu <span class="sub_header"> {{ name }}</span> 
 
 
         <div class="row">
-            <div class="col-sm-12 col-md-12" align="center">
+            <div class="col-xs-12 col-md-12" align="center">
                 <p>Choisir le nombre d'enfants que vous souhaitez inscrire</p>
             </div>
         </div> 
@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="row"><input type="hidden" name="menu" value="{{  name }}" />
-            <div class="col-sm-12 col-md-12" align="center">
+            <div class="col-xs-12 col-md-12" align="center">
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label class="btn btn-violet_border family_selected active" id="one_child" data_value="one"  data_menus="{% for f in formules %}{{ f.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
                         <input type="radio" name="children" id="one_child_radio" value="1" checked   >  1 enf<span class="no_visualisation">ant</span>*
@@ -57,26 +57,26 @@
             </div>
         </div> 
         <div class="row">
-            <div class="col-sm-12 col-md-12 violet" align="center">
+            <div class="col-xs-12 col-md-12 violet" align="center">
                 <small>* ou je suis majeur ou émancipé et peux m'inscrire sans l'accord d'au moins l'un de mes parents.</small>
             </div>
         </div> 
 
 
         <div class="row">
-            <div class="col-sm-12 col-md-12" align="center">
+            <div class="col-xs-12 col-md-12" align="center">
                 <p></p>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-12" align="center">
+            <div class="col-xs-12 col-md-12" align="center">
                 <h4>Un essai offert pour tester la plateforme</h4>
             </div>
         </div> 
 
 
         <div class="row">
-            <div class="col-sm-12 col-md-12" align="center">
+            <div class="col-xs-12 col-md-12" align="center">
                 <p></p>
             </div>
         </div> 
@@ -96,7 +96,7 @@
         {% comment %}
         <div class="row" id = "result_price">
             {% for formule in formules %}                
-            <div class="col-sm-4 col-md-4" align="center">
+            <div class="col-xs-4 col-md-4" align="center">
                 <form action="{% url 'details_of_adhesion' %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="total_price" id="total_price{{ formule.id }}" value="{{ formule.data.total1 }}" />
@@ -108,12 +108,12 @@
 
                     <div class="card">
                         <div class="row">
-                            <div class="col-sm-12 col-md-12 child">
+                            <div class="col-xs-12 col-md-12 child">
                                 1 enfant
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-md-12">
                               <div class="sub_header">Adhésion {{ formule.adhesion }}</div> 
                             </div>
                         </div>

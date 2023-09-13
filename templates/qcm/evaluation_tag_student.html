@@ -44,10 +44,10 @@
          <a href="{% url 'show_parcours_student' evaluation.id  %}" class="btn btn-new-violet"  style="width:200px;"><i class="fa fa-arrow-circle-right"></i> Démarrer</a>
         </div>
         <div class="row">
-            <div class="col-md-5  col-lg-6  col-sm-5" style="color: #998fa6;">
+            <div class="col-md-5  col-lg-6  col-xs-5" style="color: #998fa6;">
                 <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
             </div>
-            <div class="col-md-5  col-lg-6  col-sm-5" style="color: #998fa6;">
+            <div class="col-md-5  col-lg-6  col-xs-5" style="color: #998fa6;">
                 {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
             </div>
         </div>

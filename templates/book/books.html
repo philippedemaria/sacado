@@ -26,14 +26,14 @@
         {% regroup mybooks by subject as subject_list %}
         {% for subject in subject_list %}
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 {{ subject.grouper.name }}
             </div>
         </div><hr/>
         <div class="row" align="center">
             {% regroup subject.list by level as level_list %}
             {% for level in level_list %}
-               <div class="col-sm-12 col-md-3 col-lg-3">
+               <div class="col-xs-12 col-md-3 col-lg-3">
                <div class="book_level">
 
                    <div>{{ level.grouper.name }}</div>

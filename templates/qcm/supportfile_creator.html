@@ -52,14 +52,14 @@ ul#id_skills li{
 
 <div class="content_main">
 
-    <div class="col-sm-12 col-md-12" id="full_kind_exercise_div">
+    <div class="col-xs-12 col-md-12" id="full_kind_exercise_div">
         <div style="margin-top:35px">
 
             <div class="row">
 
                 {% for qt in qtypes %}
 
-                <div class="col-xs-6 col-sm-4 col-md-3" align='left'>
+                <div class="col-xs-6 col-xs-4 col-md-3" align='left'>
                     <div class="qtypes_choice qtypes_choice_square" style="background-image: url({{ qt.imagefile.url }});background-color: white; background-size: contain;background-repeat: no-repeat;height:100px;width:100%">
                         <a href="{% url 'create_supportfile' qt.id 0  %}">
                             <div style="height:98px;width:97px;float:left " />

@@ -39,14 +39,14 @@
         <form action="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                         {{ form.category.label_tag }}
                         {{ form.category |add_class:"form-control select2" }}
                         {{ form.category.errors }}
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                         {{ form.subject.label_tag }}
                         {{ form.subject |add_class:"form-control select2" }}
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group">
                         {{ form.topic.label_tag }}
                         {{ form.topic |add_class:"form-control" }}
@@ -64,7 +64,7 @@
                 </div>
             </div> 
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group">
                         {{ form_m.texte.label_tag }} 
                         {{ form_m.texte  }}
@@ -73,7 +73,7 @@
                 </div>
             </div>    
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group">
                         <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" />
                         <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

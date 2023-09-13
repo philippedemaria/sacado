@@ -36,7 +36,7 @@
 {% block body %}     
     <section class="content_main"> 
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="alert alert-info">
                     Exercice de référence : {{ exercise.knowledge.name}} 
                 </div>                
@@ -45,7 +45,7 @@
         <form action="" method="POST" enctype='multipart/form-data'> 
         {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group">
                         {{ form.title.label_tag }}
                         {{ form.title |add_class:"form-control" }}
@@ -54,7 +54,7 @@
                 </div>           
             </div> 
             <div class="row">
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group">
                         {{ form.duration.label_tag }}
                         {{ form.duration |add_class:"form-control" }}
@@ -63,12 +63,12 @@
                 </div>   
             </div>   
             <div class="row">
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                      <div class="form-group">
                         {{ form.sort.label_tag }}
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                      <div class="form-group">
                         {{ form.sort |attr:"data-toggle:toggle" |attr:"data-onstyle:danger"|attr:"data-offstyle:success"|attr:"data-on:Rem"|attr:"data-off:App"}}
                         {{ form.sort.errors }}
@@ -76,12 +76,12 @@
                 </div>
             </div> 
             <div class="row">
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group">
                         Type de document
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group">
                         <input type="checkbox" id="type_choice" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Fichier" data-off="Vidéo" />
                     </div>
@@ -92,16 +92,16 @@
 
 
             <div class="row">
-                <div class="col-sm-12 col-md-4"  id="file">
+                <div class="col-xs-12 col-md-4"  id="file">
                     <div class="row">
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                              <div class="form-group">
                                 {{ form.width.label_tag }}
                                 {{ form.width |add_class:"form-control" }}
                                 {{ form.width.errors }}
                             </div>
                         </div>  
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                             <div class="form-group">
                                 {{ form.height.label_tag }}
                                 {{ form.height |add_class:"form-control" }}
@@ -110,7 +110,7 @@
                         </div>
                     </div> 
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 {{ form.mediation.label_tag }}
                                 {{ form.mediation |add_class:"btn btn-default" }}
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-5" id="video">            
+                <div class="col-xs-12 col-md-5" id="video">            
                     <div class="form-group">
                         {{ form.video.label_tag }}<small> N'utiliser que vos propres vidéos</small>
                         {{ form.video |add_class:"form-control"|attr:"placeholder:INkui5BHDZU" }}
@@ -137,7 +137,7 @@
 
      
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group">
                         <input value="Enregistrer" type="submit" class="btn btn-sacado"/>
                         <a href="javascript:history.back()"><input type="button" value="Annuler"

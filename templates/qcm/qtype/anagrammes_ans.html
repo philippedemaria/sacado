@@ -20,13 +20,13 @@
 
  
             <div class="row"> 
-                <div class="col-sm-12 col-md-5 anagram zoom_in">
+                <div class="col-xs-12 col-md-5 anagram zoom_in">
                     {{ choice.answer|safe }} <i class="fa fa-caret-right pull-right"></i>  
                 </div>
 
 
 
-                <div class="col-sm-12 col-md-6 text-green_index " align='left'>
+                <div class="col-xs-12 col-md-6 text-green_index " align='left'>
                     <input type="text" name="answers" class="answer_student_box zoom_in" data-choice_id='{{ choice.id }}' data-loop="{{ forloop.counter }}" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}" /> 
                 </div>
             </div>
@@ -34,7 +34,7 @@
  
 
             <div class="row validation">
-                <div class="col-sm-12 col-md-3" align="center"  >
+                <div class="col-xs-12 col-md-3" align="center"  >
                     <a  href="#" class="btn btn-primary show_anagrams_correction" data-supportfile_id="{{ supportfile.id }}" data-choice_id='{{ choice.id }}'  
                         id="nav_start{{ forloop.counter }}" data-loop="{{ forloop.counter }}"><i class="fa fa-caret-right"></i> Valider 
                     </a>

@@ -41,7 +41,7 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-8">
+            <div class="col-xs-12 col-md-12 col-lg-8">
                 {% if relationship.instruction or relationship.exercise.supportfile.annoncement  %}  
                     <a href="#" id='show_consigne_div' class="btn btn-sacado_active">Lire la consigne <i class="fa fa-caret-down"></i></a> 
 
@@ -105,7 +105,7 @@
                 {% endif %}
 
                 <div class="row">
-                    <div class="col-sm-12 col-lg-8">
+                    <div class="col-xs-12 col-lg-8">
                         <div class="form-group">
                             {% get_is_lock parcours today as is_lock %}                            
  
@@ -128,7 +128,7 @@
  
                 </div>
             </div>
-            <div class="col-sm-12 col-lg-4">
+            <div class="col-xs-12 col-lg-4">
                 {% if relationship.exercise.supportfile.is_scratch   %} 
                 <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br><br>
                 <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>

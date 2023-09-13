@@ -38,27 +38,27 @@
  
 <section class="content_main">
   <div class="row">
-      <div class="col-sm-12 col-md-12">
+      <div class="col-xs-12 col-md-12">
         <div class="alert alert-danger">
             Dans le cas d'un enregistrement de plusieurs savoir faire, il est OBLIGATOIRE d'inscrire un seul attendu faire par ligne, sans sauter de ligne.
         </div>
       </div>
   </div>  
   <div class="row">
-      <div class="col-sm-12 col-md-12">
+      <div class="col-xs-12 col-md-12">
    
 
             <form method="post" action="" enctype='multipart/form-data'>
               {% csrf_token %}
                       <div class="row">
-                          <div class="col-sm-12 col-md-6">
+                          <div class="col-xs-12 col-md-6">
                             <div class="form-group">
                                 <label>{{ form.level.label_tag }}</label>
                                 {{ form.level |add_class:"form-control select2"  }}
                                 {{ form.level.errors }}
                             </div>
                           </div>                          
-                          <div class="col-sm-12 col-md-6">
+                          <div class="col-xs-12 col-md-6">
                             <div class="form-group">
                                 <label>{{ form.theme.label_tag }}</label>
                                 {{ form.theme |add_class:"form-control select2"  }}
@@ -68,7 +68,7 @@
 
                       </div>
                       <div class="row">
-                          <div class="col-sm-12 col-md-12">
+                          <div class="col-xs-12 col-md-12">
                               <div class="form-group">
                                   <label>{{ form.name.label_tag }}</label>
                                   {{ form.name |add_class:"form-control" }}
@@ -81,7 +81,7 @@
 
              
                       <div class="row">
-                          <div class="col-sm-12 col-md-12">
+                          <div class="col-xs-12 col-md-12">
                               {% if waiting %}
                               <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>   
                               {% else %}

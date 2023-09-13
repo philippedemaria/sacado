@@ -13,7 +13,7 @@
     </script> 
 
 <style>
-.extend_parcours .col-xs-4, .extend_parcours .col-sm-4, .extend_parcours .col-md-4, .extend_parcours .col-lg-4 {
+.extend_parcours .col-xs-4, .extend_parcours .col-xs-4, .extend_parcours .col-md-4, .extend_parcours .col-lg-4 {
     padding-right: 0px!important;
 }
 </style>    
@@ -66,7 +66,7 @@
         <div class="tab-pane  {% if nb_folders and not organiser %}active{% endif %}" id="1">
             <div class="row" style="margin-bottom: 20px"> 
 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <a href="{% url 'create_folder' group.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> <span class="btn_label">Créer un nouveau dossier</span></a>
  
                     <a href="{% url 'all_folders' %}" class="btn btn-xs btn-sacado"><i class="bi bi-clipboard-plus"></i>  <span class="btn_label">Dupliquer un dossier mutualisé</span></a>
@@ -86,7 +86,7 @@
  
             <div class="row" style="margin-bottom: 20px"> 
 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <label>
                         <small>Parcours externes aux {{nb_folders}} dossiers</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -110,7 +110,7 @@
         <div class="tab-pane" id="3">
             <form action="" methode="POST" id="evaluations_sortable">
             <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <label>
                         <small>Evaluations externes aux {{nb_folders}} dossiers</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -133,7 +133,7 @@
         </div>
         <div class="tab-pane" id="4">
             <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <label>
                         <small>Doc. perso. externes aux {{nb_folders}} dossiers</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -151,7 +151,7 @@
         </div>
         <div class="tab-pane" id="5">
             <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <label>
                         <small>Questions flash externes aux {{nb_folders}} dossiers</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -165,7 +165,7 @@
         </div>
         <div class="tab-pane" id="6">
             <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <label>
                         <small>Quiz externes aux {{nb_folders}} dossiers</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -189,7 +189,7 @@
         <div class="tab-pane" id="7">
             <div class="row" style="margin-bottom: 20px"> 
 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <label>
                         <small>Bibliotex externes aux {{nb_folders}} dossiers</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -210,7 +210,7 @@
         <div class="tab-pane" id="8">
 
             <div class="row" style="margin-bottom: 20px"> 
-                <div class="col-sm-12 ">
+                <div class="col-xs-12 ">
                     <label>
                         <small>Flashpack externes aux {{nb_folders}} dossiers</small>
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>

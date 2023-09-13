@@ -3,7 +3,7 @@
  
 
 <div class="row">
-    <div class="col-sm-12 col-md-12" >  
+    <div class="col-xs-12 col-md-12" >  
         <button id="text_writer"  data-nbclone=0  class="btn btn-default bcPicker-tools" style="font-family: 'Times New Roman';font-size: 16px; font-weight:bold;" >T</button>
         <button id="line"  data-nb={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} class="btn btn-default line bcPicker-tools"><i class="fa fa-window-minimize"></i></button> 
 
@@ -24,7 +24,7 @@
 <hr/>  
 
 <div id="paint_tools"  class="row tools">   
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <label>Taille</label> <br/>
             <button id="decrease" class="btn btn-default" >-</button>
             <span id="size" class="btn btn-default" >2</span>
@@ -35,7 +35,7 @@
 </div> 
 
     <div class="row">  
-        <div class="col-sm-12 col-md-12" id="my_appreciations"><label>Annotations</label><br>
+        <div class="col-xs-12 col-md-12" id="my_appreciations"><label>Annotations</label><br>
             {% for comment in comments %}
                 <button id="comment{{ comment.id }}" data-nb={% if c_e or w_a %}{{ nb }}{% else %}1{% endif %} data-text="{{ comment.comment }}" class="btn btn-default comment">{{ comment.comment }}</button> 
             {% empty %}
@@ -48,7 +48,7 @@
 <div id="comments_div"  class="tools"> 
  
     <div id="more_text"  class="row">   
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <label>Ajouter une annotation personnalisée</label> <br/>
             {{ formComment.comment|add_class:"form-control"|attr:"rows:2"|attr:"cols:4" }} <br/>
             <a href="#" id="add_my_appreciation" class="btn btn-primary" >Sauvegarder</a>
@@ -61,7 +61,7 @@
 
 
         </div>
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <hr>  
         </div>
     </div> 

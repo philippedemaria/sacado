@@ -26,7 +26,7 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-12 col-md-3">
+            <div class="col-xs-12 col-md-3">
                 <div class="form-group">
                    <label>Nom  de la formule :</label> {{ formule.name }}
                 </div>
@@ -46,7 +46,7 @@
                 </div>
             </div>
  
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="form-group">
                     <label>Pack famille :</label> {%  if  formule.is_family    %} <span class="text-success">OUI</span> {% else %} <span class="text-danger">NON</span> {% endif %}
                 </div>
@@ -56,7 +56,7 @@
 
  
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="form-group">
                     <input value="Enregistrer le tarif" type="submit" class="btn btn-primary"   />
                     <a href="javascript:history.back()"><input type="button" value="Annuler"

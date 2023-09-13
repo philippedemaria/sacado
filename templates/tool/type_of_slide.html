@@ -10,7 +10,7 @@
 {% csrf_token %}  
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="form-group">
                 {{ form.title.label_tag }}  
                 {{ form.title |add_class:"form-control" }}
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="row">
-<!--         <div class="col-sm-6 col-md-2">
+<!--         <div class="col-xs-6 col-md-2">
             <div class="form-group">
                 {{ form.duration.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >0, si transition manuelle.</div>
@@ -28,7 +28,7 @@
                 {{ form.duration.errors }}
             </div>
         </div> -->
-        <div class="col-sm-6 col-md-3">
+        <div class="col-xs-6 col-md-3">
             <div class="form-group">
                 {{ form.is_publish.label_tag }}<br/>
                 {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
@@ -37,7 +37,7 @@
         </div>  
     </div>
     <div class="row">                
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="form-group">
                 {{ form.content.label_tag }}<br/>
                 {{ form.content }}
@@ -46,7 +46,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12 col-md-12"> 
+        <div class="col-xs-12 col-md-12"> 
             <div class="form-group">
                 <input value="{{ diaporama.id }}" id="diaporama_id" name="diaporama_id" type="hidden"  />
                 {% if slide %}

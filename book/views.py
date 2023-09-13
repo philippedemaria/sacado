@@ -1222,25 +1222,29 @@ def update_page(request,idb, idp):
                     nf.skills.set( exo.skills.all())
                     nf.knowledges.set(exo.knowledges.all())
                 elif nf.typebloc.id == 6 :
-                    exo=Exotex.objects.create(title = nf.title, 
-                                                            content = nf.content, 
-                                                            content_html =nf.content_html,
-                                                            author = request.user.teacher , 
-                                                            calculator = nf.is_calculator,
-                                                            subject = page.chapter.book.subject,  
-                                                            knowledge = nf.knowledge,   
-                                                            level = page.chapter.book.level, 
-                                                            theme = nf.theme,
-                                                             is_share     = 1,
-                                                             is_python    = nf.is_python,
-                                                             is_scratch   =  nf.is_scratch,
-                                                             is_tableur   =  nf.is_tableur,
-                                                             is_corrected = 1,
-                                                             is_annals   = nf.is_annals,
-                                                             point = 0,
-                                                             correction = nf.correction,
-                                                             correction_html =nf.correction_html,
-                                                             bloc_id=nf.id)
+                    try : 
+                        title = nf.title.split(".")[1]
+                    except :
+                        title = nf.title
+                    exo=Exotex.objects.create(title = title, 
+                                                content = nf.content, 
+                                                content_html =nf.content_html,
+                                                author = request.user.teacher , 
+                                                calculator = nf.is_calculator,
+                                                subject = page.chapter.book.subject,  
+                                                knowledge = nf.knowledge,   
+                                                level = page.chapter.book.level, 
+                                                theme = nf.theme,
+                                                is_share     = 1,
+                                                is_python    = nf.is_python,
+                                                is_scratch   =  nf.is_scratch,
+                                                is_tableur   =  nf.is_tableur,
+                                                is_corrected = 1,
+                                                is_annals   = nf.is_annals,
+                                                point = 0,
+                                                correction = nf.correction,
+                                                correction_html =nf.correction_html,
+                                                bloc_id=nf.id)
                     exo.skills.set( nf.skills.all())
                     exo.knowledges.set(nf.knowledges.all())
 

@@ -4,35 +4,35 @@
 
 {% csrf_token %}
 <div class="row">
-    <div class="col-sm-12 col-md-12">  
+    <div class="col-xs-12 col-md-12">  
         {{ form.title.label_tag }}
         {{ form.title|add_class:"form-control" }}
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-4">  
+    <div class="col-xs-12 col-md-4">  
         {{ form.is_asso.label_tag }}<br/>
         {{ form.is_asso |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
     </div>
-    <div class="col-sm-12 col-md-4">  
+    <div class="col-xs-12 col-md-4">  
         {{ form.is_publish.label_tag }}<br/>
         {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
     </div>
-    <div class="col-sm-12 col-md-4">  
+    <div class="col-xs-12 col-md-4">  
         {{ form.is_ebep.label_tag }}<br/>
         {{ form.is_ebep |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
     </div>
 </div>
 <hr/>
 <div class="row">
-    <div class="col-sm-12 col-md-12 alert-danger">  
+    <div class="col-xs-12 col-md-12 alert-danger">  
         {{ form.url.label_tag }} <em>A ne renseigner qu'avec grande prudence et après avoir mis en place l'url.</em><br/>
         {{ form.url|add_class:"form-control"}}
     </div>
 </div>
 <hr/>
 <div class="row">
-    <div class="col-sm-12 col-md-12">  
+    <div class="col-xs-12 col-md-12">  
         {{ form.remark.label_tag }}<br/>
         {{ form.remark }}
     </div>
@@ -41,15 +41,15 @@
 
 <div class="row">
     <div class="form-group">  
-        <div class="col-sm-4 col-md-4">  
+        <div class="col-xs-4 col-md-4">  
             {{ form.degres.label_tag }}
             {{ form.degres|add_class:"form-control select2" }}
         </div>
-        <div class="col-sm-4 col-md-6">  
+        <div class="col-xs-4 col-md-6">  
             {{ form.themes.label_tag }}
             {{ form.themes|add_class:"form-control select2" }}
         </div>
-        <div class="col-sm-4 col-md-2">  
+        <div class="col-xs-4 col-md-2">  
             {{ form.ranking.label_tag }}
             {{ form.ranking|add_class:"form-control" }}
         </div>
@@ -62,7 +62,7 @@
 
 
 <div class="row">
-    <div class="col-sm-12 col-md-12"> 
+    <div class="col-xs-12 col-md-12"> 
         <div class="form-group"> 
             {{ form.imagefile.label_tag }}  
             {{ form.imagefile|add_class:"btn btn-default" }}
@@ -70,14 +70,14 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-8"> 
+    <div class="col-xs-12 col-md-8"> 
         <div class="form-group">
             <input value="Enregistrer" type="submit" class="btn btn-primary"/>
             <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
         </div>
     </div>
     {% if tool and request.user.user_type == 2 %}
-    <div class="col-sm-12 col-md-4">
+    <div class="col-xs-12 col-md-4">
         <div class="form-group">
             <a href="{% url 'delete_tool' tool.id %}" class="btn btn-danger"  onclick="return TestDelete('cet outil')">Supprimer cet outil</a>
         </div>

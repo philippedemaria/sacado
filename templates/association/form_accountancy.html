@@ -36,13 +36,13 @@
 
         <div class="row alert alert-sacado">                
             <div class="row">              
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group">
                         <label>Date</label>
                         <input name="date" type="date" class="form-control" required />
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group">
                         <label>Montant</label>
                         {{ form.amount |add_class:"form-control"|attr:"placeholder: Montant"}} 
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="row"> 
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group">
                         <label>Compte débiteur</label>
                         <select name="plan_id_d" class="form-control select2" >
@@ -61,7 +61,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-3">
+                <div class="col-xs-12 col-md-3">
                     <div class="form-group">
                         <label>Compte créditeur</label>
                         <select name="plan_id_c" class="form-control select2" >
@@ -75,14 +75,14 @@
             </div>
                   
             <div class="row">
-                <div class="col-sm-12 col-md-8">
+                <div class="col-xs-12 col-md-8">
                     <label>Attention, une fois cette opération enregistrée, elle sera consignée dans le journal des comptes sans pouvoir être modifiée.</label>
                 </div>    
             </div>
 
 
             <div class="row">
-                <div class="col-sm-12 col-md-8">
+                <div class="col-xs-12 col-md-8">
                     <div class="form-group">
                         <input value="Enregistrer la transaction" type="submit" class="btn btn-primary"   />
                         <a href="javascript:history.back()"><input type="button" value="Annuler"

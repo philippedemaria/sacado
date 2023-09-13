@@ -42,7 +42,7 @@
 {% if nb_base > 0 %}
 <form action="{% url 'actioner_pef' %}" method="POST" enctype='multipart/form-data'>
     <div class="row">    
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             {% csrf_token %}
             <table class="table table-sacado table-hovered table-striped  standard_tab_sort_not_first"  style="width:100%" >
                 <thead> 
@@ -116,7 +116,7 @@
                             <!-- Ajout de groupes par Ajax --->
                             <div id="affectation{{ folder.id }}" class="card-skill no_visu_on_load"> 
                               <div class="row">
-                                    <div class="col-sm-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{folder.id}}"><i class="fa fa-times"></i></span>         
+                                    <div class="col-xs-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{folder.id}}"><i class="fa fa-times"></i></span>         
                                         Affecter aux Groupes 
                                     </div>
                                </div> 
@@ -194,7 +194,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             {% block archive  %} 
             <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces dossiers')"> 
                 <i class="fa fa-archive"> </i>   Archiver la sélection
@@ -210,7 +210,7 @@
 
 
         <div class="row"> 
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="alert alert-danger">Aucun parcours n'est affecté à ce groupe. Si un groupe ne contient pas d'élève, <strong>vous ne pouvez pas lui attribuer de parcours</strong>. Lorsque vos parcours sont créés, les élèves les rejoignent directement dès leur inscription via le lien <span style="color:#271942">https://sacado.xyz/group/{% if  group %}{{ group.code }}{% else %}code_du_groupe{% endif %}</span><br>
                 <i class="fa fa-bullhorn"></i> <strong>Préparer</strong> maintenant vos parcours, <strong>publier</strong>.  
                 </div>
@@ -218,7 +218,7 @@
         </div>
         
         <div class="row"> 
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <h2 class='thin'><i class="fa fa-recycle"></i> 3 façons de disposer de parcours avec <span class="sacado">sacado</span></h2>  
                     
 

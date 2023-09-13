@@ -61,7 +61,7 @@
 
 {% block info %} 
 <div class="row" style="font-size: 20px">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <div class="alert alert-info">
             <i class="fa fa-warning"></i> Pour associer une évaluation à un groupe, tout ou partie, il faut cocher <strong>au moins</strong> un élève de ce groupe. Une fois l'évaluation créée, vous pourrez choisir ses exercices via l'interface de l'évaluation depuis l'un des groupes associés. 
             <br>Si l'évaluation ne contient aucun élève, elle est accessible depuis la rubrique <i class="fa fa-th"></i> Parcours ou via le taleau de bord : Mes parcours et évaluations non affectés.
@@ -172,7 +172,7 @@
 
 
 {% block save_evaluation %}    
-    <div class="col-sm-12 col-md-4">
+    <div class="col-xs-12 col-md-4">
             {% if parcours %}
                 <a href="{% url 'clone_parcours' parcours.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('cette évaluation')"> 
                     <i class="fa fa-clone"> </i>   Dupliquer

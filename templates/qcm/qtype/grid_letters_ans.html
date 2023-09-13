@@ -18,17 +18,17 @@
 
 	    <div class="row"  align="left" style="margin-top:10px">
 	        {% if supportfile.annoncement %}
-	            <div class="col-sm-12 col-lg-12 custom_content" 
+	            <div class="col-xs-12 col-lg-12 custom_content" 
 	                 style="max-height:80px">{{ annoncement|safe }}
 	            </div>
 	        {% endif %}
 	    </div> 
 
 	    <div class="row">
-	        <div class="col-sm-8" align='center'>
+	        <div class="col-xs-8" align='center'>
 	            {{ supportfile.grid|safe }}
 	        </div>
-	        <div class="col-sm-4"  align='left'><label>Les mots à trouver :</label>
+	        <div class="col-xs-4"  align='left'><label>Les mots à trouver :</label>
 	            {% for choice in supportchoices %}
 	                <div>{{forloop.counter}}. <span style="font-weight: bold;">{{ choice|upper }}</span> <span id="check{{forloop.counter0 }}"></span>
 	            		<input type="hidden" id="word{{forloop.counter0 }}" value="{{ choice|upper }}" class="these_words"   /> 

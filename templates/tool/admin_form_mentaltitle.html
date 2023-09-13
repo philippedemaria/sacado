@@ -63,42 +63,42 @@
 <section class="content_main"> 
  
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-xs-6">
             <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
                {% csrf_token %}
                 <div class="row">
-                    <div class="col-sm-12 form-group">
+                    <div class="col-xs-12 form-group">
                         <label>Titre </label>
                         {{ form.title |add_class:"form-control"  }}
                         {{ form.title.errors }}
                     </div>
                 </div>    
                 <div class="row">
-                    <div class="col-sm-7 form-group">
+                    <div class="col-xs-7 form-group">
                         <label>Enseignement</label>
                         {{ form.subjects|add_class:"form-control select2" }}
                         {{ form.subjects.errors }}
                     </div> 
-                    <div class="col-sm-3 form-group">
+                    <div class="col-xs-3 form-group">
                         <label>En ligne ?</label><br/>
                         {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                         {{ form.is_display.errors }}
                     </div>                                      
-                    <div class="col-sm-2 form-group">
+                    <div class="col-xs-2 form-group">
                         <label>Ordre</label>
                         {{ form.ranking |add_class:"form-control"  }}
                         {{ form.ranking.errors }}
                     </div>
                 </div>  
                 <div class="row">
-                    <div class="col-sm-12 form-group">
+                    <div class="col-xs-12 form-group">
                         <label>Niveaux</label>
                         {{ form.levels|add_class:"form-control select2" }}
                         {{ form.levels.errors }}
                     </div> 
                 </div>  
                 <div class="row">
-                    <div class="col-sm-12 form-group">
+                    <div class="col-xs-12 form-group">
                         <div class="form-group">
                             <input value="Créer" type="submit" class="btn btn-primary" name="mental" value="no" />
                         </div>

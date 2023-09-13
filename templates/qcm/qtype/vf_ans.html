@@ -41,13 +41,13 @@
 
 
 				<div style="padding: 10px; font-size:18px"> 
-					<div class="col-sm-6" align='center'>
+					<div class="col-xs-6" align='center'>
 						<label class="btn btn-lg btn-true">VRAI 
 							<input type="radio" name="answers" value="{{ choice.id }}" data-supportfile_id="{{ supportfile.id }}" data-choice_id="{{ choice.id }}"  
 							        data-is_correct=1 data-loop="{{ forloop.counter }}"class="selected_answer no_visu_on_load"  />
 						</label>
 					</div>  	 
-					<div class="col-sm-6" align='center'>
+					<div class="col-xs-6" align='center'>
 						<label class="btn btn-lg btn-false">FAUX 
 							<input type="radio" name="answers" value="{{ choice.id }}" data-supportfile_id="{{ supportfile.id }}" data-choice_id="{{ choice.id }}" 
 								    data-is_correct=0 data-loop="{{ forloop.counter }}" class="selected_answer no_visu_on_load"  />
@@ -57,7 +57,7 @@
 
 		    </div>
 		    <div class="row validation"  style="position:absolute; bottom:0px;">
-		    	<div class="col-sm-12 col-md-3" align="center"  >
+		    	<div class="col-xs-12 col-md-3" align="center"  >
 		            <a href="#"  data-loop='{{ forloop.counter }}'  data-supportfile_id="{{ supportfile.id }}" class="btn btn-lg btn-primary show_this_vf_correction" id="nav_start{{ forloop.counter }}">
 		            	<i class="fa fa-caret-right"></i> Valider 
 		            </a>

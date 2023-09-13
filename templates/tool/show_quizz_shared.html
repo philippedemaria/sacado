@@ -35,12 +35,12 @@
  
  
   <div class="row" align="center">  
-        <div class="col-sm-12 col-md-3" align="center"  >
+        <div class="col-xs-12 col-md-3" align="center"  >
             <div id="start_quizz">
                 <button  class='btn btn-primary'><i class='fa fa-play'></i> Lecture automatique</button>
             </div>
         </div>
-        <div class="col-sm-12 col-md-6" align="center" >
+        <div class="col-xs-12 col-md-6" align="center" >
             {% for question in questions %}
                 <button id="question{{ forloop.counter }}" class="btn btn-default thisquestion"> Q{{ forloop.counter }} </button> 
             {% endfor %}
@@ -48,7 +48,7 @@
 
 
 
-        <div class="col-sm-12 col-md-3" align="center"  >
+        <div class="col-xs-12 col-md-3" align="center"  >
             <button data-nav="prev" class="btn btn-default nav"><i class="fa fa-caret-left"></i> Précedent</button>  
             <button data-nav="next" class="btn btn-default nav"><i class="fa fa-caret-right"></i> Suivant</button>
             <button id="stop_quizz" class="btn btn-default"><i class="fa fa-compress"></i></button>
@@ -64,7 +64,7 @@
                 <li class="my_slide">
                     <input type="hidden" value="3" id="introduction" /> 
                     <div class="row consigne_diapo"  align="center">  
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <h1 style="font-size:4em" class="thin"> 
                                 {{ quizz.title}}
                             </h1>
@@ -78,7 +78,7 @@
                     <li class="my_slide">
                         <input type="hidden" value="{{ quizz.interslide }}" id="inter_slide{{ forloop.counter }}" /> 
                         <div class="row consigne_diapo"  align="center">  
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-md-12">
                                 <h1 style="font-size:4em" class="thin"><b>Question {{forloop.counter}}.</b><span class="instruction"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.</span> <br/> 
                                     {% if question.qtype == 1 %}
                                         Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
@@ -104,10 +104,10 @@
                     <li class="my_slide">
                         <input type="hidden" value="{{ question.duration }}" id="duration{{ forloop.counter }}" /> 
                         <div class="row">  
-                            <div class="col-sm-2 col-md-2" align="left">
+                            <div class="col-xs-2 col-md-2" align="left">
                                 <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
                             </div>
-                            <div class="col-sm-8 col-md-8" align="center">
+                            <div class="col-xs-8 col-md-8" align="center">
                                     {% if question.qtype == 1 %}
                                         <b>Vrai  ou  Faux ?</b>
                                     {% elif question.qtype == 2 %}
@@ -118,20 +118,20 @@
                                         <b> Choisir la seule bonne réponse</b>. 
                                     {% endif %}
                             </div>
-                            <div class="col-sm-2 col-md-2" align="right">
+                            <div class="col-xs-2 col-md-2" align="right">
                                 <div class="countdown instruction" id="counterdown{{ forloop.counter }}" > 
                                     {{ question.duration }}
                                 </div>
                             </div>
                         </div> 
                         <div class="row">  
-                            <div class="col-sm-12 col-md-12"align="center">
+                            <div class="col-xs-12 col-md-12"align="center">
                                 <h1 style="font-size:3.5em" class="thin"> {{ question.title }} </h1>
                             </div>
                         </div>
                         {% if question.imagefile %}
                         <div class="row">  
-                            <div class="col-sm-12 col-md-12"align="center">
+                            <div class="col-xs-12 col-md-12"align="center">
                                  <img src="{{ question.imagefile.url }}" height="{% if question.qtype == 2 %}550{% else %}350{% endif %}px" />
                             </div>
                         </div>
@@ -141,7 +141,7 @@
 
                         {% if question.tool and quizz.is_numeric %}  
                             <div class="row" style="margin-bottom:  20px; margin-top: 20px;"> 
-                                <div class="col-sm-12 col-md-12" align="center">
+                                <div class="col-xs-12 col-md-12" align="center">
                                     <button class="btn btn-default" id="sqrt_tool">$\sqrt{x}$</button> 
                                     <button class="btn btn-default" id="pow_tool">$x^{n}$</button> 
                                 </div> 
@@ -151,11 +151,11 @@
 
                         {% if question.qtype == 1 %}   
                    
-                                <div class="col-sm-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
+                                <div class="col-xs-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
                                     <h1 style="font-size:3.5em" class="thin">VRAI </h1>  
                                 </div> 
 
-                                <div class="col-sm-12 col-md-6 bgcolorRed white"  align="center" style="border-radius : 10px ">
+                                <div class="col-xs-12 col-md-6 bgcolorRed white"  align="center" style="border-radius : 10px ">
                                     <h1 style="font-size:3.5em" class="thin">FAUX </h1>  
                                 </div> 
                            
@@ -164,12 +164,12 @@
                             {% for choice in question.choices.all %}
                                 {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
                                 {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                                <div class="col-sm-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em;   border-radius : 10px">
+                                <div class="col-xs-12 col-md-6" style="padding-right: 20px;margin-bottom: 20px;font-size:1.2em;   border-radius : 10px">
                                     <div class="row" >
-                                        <div class="col-sm-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
+                                        <div class="col-xs-2 col-md-1 {{ rowcolor }} get_image" style="padding-top: 2px;color:#FFF; padding-left:10px; border-radius : 10px 0px 0px 10px"> 
                                             <h1 style="font-size:2.5em">{{ choice_letter }} </h1>    
                                         </div>
-                                        <div class="col-sm-10 col-md-11 {{ rowcolor }}" align="center" style="color:#FFF; font-size:{% if choice.answer|length > 20 %}1.5{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius : 0px 10px  10px 0px"> 
+                                        <div class="col-xs-10 col-md-11 {{ rowcolor }}" align="center" style="color:#FFF; font-size:{% if choice.answer|length > 20 %}1.5{% elif choice.answer|length > 10  %}2.5{% else  %}3{% endif %}em; border-radius : 0px 10px  10px 0px"> 
                                             {{ choice.answer }}
                                         </div>
                                     </div>  
@@ -186,7 +186,7 @@
                 <li class="my_slide">
                     <input type="hidden" value="3" id="final_question" /> 
                     <div class="row consigne_diapo"  align="center">  
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <h1 style="font-size:4em" class="thin">
                                 <br/><br/>
                                 <b> -- FIN -- </b>

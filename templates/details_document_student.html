@@ -23,7 +23,7 @@
     <div class="card_freeze">
         <div id="div_results{{ rc.id }}" class="div_results no_visu_on_load" >
                 <div class="row">
-                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-relation_id="{{rc.id}}"><i class="fa fa-times"></i></a>     
+                    <div class="col-xs-12 col-md-12"> <a href="#" class="div_results_close pull-right" data-relation_id="{{rc.id}}"><i class="fa fa-times"></i></a>     
                       {% if noggb_data.comment %}
                         <label  style="font-size: 10px;font-weight: 600">Commentaire :</label> {{ noggb_data.comment }} 
                         <hr style="padding:0px; margin:10px 0px"/> 
@@ -38,7 +38,7 @@
                     </div>
                 </div>                            
                 <div class="row">
-                    <div class="col-sm-12 col-md-12"> 
+                    <div class="col-xs-12 col-md-12"> 
                         <a href="#" data-toggle='modal' data-target='#my_production' 
                                         class="read_my_production pull-right" data-student_id="{{ student.user.id}}" data-custom=0 
                                         data-exercise_id="{{ rc.id}}">
@@ -261,7 +261,7 @@
             <div id="div_results_custom{{ rc.id }}" class="div_results" >
                 {% if data %}
                 <div class="row">
-                    <div class="col-sm-12 col-md-12"> <a href="#" class="div_results_custom_close pull-right" data-customexercise_id="{{rc.id}}"><i class="fa fa-times"></i></a>     
+                    <div class="col-xs-12 col-md-12"> <a href="#" class="div_results_custom_close pull-right" data-customexercise_id="{{rc.id}}"><i class="fa fa-times"></i></a>     
                       {% if data.point %}
                         <label  style="font-size: 10px;font-weight: 600;">Note : {{ data.point }}/{{ rc.mark }} </label><br>
                       {% endif %}
@@ -280,7 +280,7 @@
                 </div>  
                 {% endif %}  
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">  
+                    <div class="col-xs-12 col-md-12">  
                         <a href="#" data-toggle='modal' data-target='#my_production' 
                                         class="read_my_production pull-right" data-student_id="{{ student.user.id}}" data-custom=1 
                                         data-exercise_id="{{ rc.id}}">
@@ -302,7 +302,7 @@
                     </div>
                 </div>  
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">   
+                    <div class="col-xs-12 col-md-12">   
                         <label  style="font-size: 10px;font-weight: 600;">Savoir faire </label>
                           {% for dt in data.knowledges.all %}
                             <li class="sanspuce" style="font-size: 10px;">{{dt.knowledge.name }}  <i class="fa fa-square

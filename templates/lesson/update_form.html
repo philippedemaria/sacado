@@ -24,7 +24,7 @@ $('.datepicker').datepicker();
 <form  action="{% url 'update_event' event.id %}" method="POST">
   
     <div class="row">                      
-      <div class="col-sm-12 col-md-12">
+      <div class="col-xs-12 col-md-12">
          <div class="form-group"><input type="hidden" name="event_id" value="{{ event.id }}" />
              <input value='{{ event.title  }}' type="text" id="title" name="title" class="form-control"/> 
         </div>
@@ -33,7 +33,7 @@ $('.datepicker').datepicker();
 
 
     <div class="row">                    
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="form-group">
                 <div class="form-group">url<br>
                     {{ form.url |add_class:"form-control"  }}
@@ -44,12 +44,12 @@ $('.datepicker').datepicker();
 
     
     <div class="row"> 
-      <div class="col-sm-3 col-md-3">
+      <div class="col-xs-3 col-md-3">
             <div class="form-group">Le<br>
                 <input value='{{ event.start |date:"Y-m-d"}}' type="date" id="id_start" name="start" class="form-control"/> 
             </div>
       </div>  
-      <div class="col-sm-9 col-md-9">
+      <div class="col-xs-9 col-md-9">
             <div class="form-group">
                     <div class="form-group">
                     Couleur <span id="selected_colored"></span> <br><input type="hidden" id="id_colored" name="color" required  value="{{ event.color }}" />
@@ -67,7 +67,7 @@ $('.datepicker').datepicker();
     </div>
 
     <div class="row"> 
-      <div class="col-sm-6 col-md-6">
+      <div class="col-xs-6 col-md-6">
           <div class="form-group">De 
               <select  id='start_hour' name='start_hour' class="form-control select2">
                   {% for h in hours %}
@@ -76,7 +76,7 @@ $('.datepicker').datepicker();
               </select>  
           </div>
       </div>  
-      <div class="col-sm-6 col-md-6">
+      <div class="col-xs-6 col-md-6">
           <div class="form-group">à
               <select  id='end_hour' name='end_hour' class="form-control select2">
                   {% for h in hours %}
@@ -89,7 +89,7 @@ $('.datepicker').datepicker();
  
 
     <div class="row">                    
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="form-group">
                 <div class="form-group">Inviter d'autres élèves<br>
                     {{ form.users |add_class:"form-control select2"  }}
@@ -102,7 +102,7 @@ $('.datepicker').datepicker();
 
 
     <div class="row">                    
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="form-group">
                 <div class="form-group">Commentaire<br>
                     <textarea class="form-control" rows="3" name="comment" id="id_comment">{{ event.comment }}</textarea>
@@ -111,7 +111,7 @@ $('.datepicker').datepicker();
         </div>
     </div>  
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="form-group"> 
               <input value="Enregistrer" type="submit" class="btn btn-warning" style="width:100%"/> 
             </div>

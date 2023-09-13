@@ -36,9 +36,9 @@
 {% block body %}
 <section class="content_main"> 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
-        <div class="col-sm-12 col-md-12 encours">
-            <div class="col-sm-4 col-md-3">
+        <div class="col-xs-12 col-md-12">
+        <div class="col-xs-12 col-md-12 encours">
+            <div class="col-xs-4 col-md-3">
                 <label>Encours.  Mois
                     <select name="month" id="month" class="control-form">
                         <option value="1" {% if this_month == 1 %}selected{% endif %}>Janv.</option>
@@ -56,13 +56,13 @@
                     </select>  
                 :</label> <span id="this_month"><b>{{ total_month }} €</b></span>
             </div>
-            <div class="col-sm-4 col-md-2">
+            <div class="col-xs-4 col-md-2">
                 <label>Année civile : <b>{{ total_year }} € </b></label><br/>
             </div>
-            <div class="col-sm-4 col-md-2">
+            <div class="col-xs-4 col-md-2">
                 <label>Année scolaire : <b>{{ total_shoolyear}} € </b></label><br/>
             </div>
-            <div class="col-sm-4 col-md-5">
+            <div class="col-xs-4 col-md-5">
                 <label>du <input name="from_date" type="date"  id="from_date" class="control-form period">  au : <input name="to_date" id="to_date" type="date" class="control-form period"> <b> <span id="this_period"></span> </b></label>
             </div>
         </div>
@@ -72,7 +72,7 @@
 
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <form action="" method="POST">
             {% csrf_token %}
             <table  class="standard_tab_sort300 table table-sacado table-striped table-hover table-responsive">
@@ -141,7 +141,7 @@
 
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">     
+        <div class="col-xs-12 col-md-12">     
                 <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
         </div>
     </div>

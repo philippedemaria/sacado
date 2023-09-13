@@ -46,23 +46,23 @@
     <form action="" method="POST">
     {% csrf_token %}    
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                     <div class="row">
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             <div class="form-group">
                                 {{ form.name.label_tag }} <font style="font-size:12px">18 lettres max.</font>
                                 {{ form.name |add_class:"form-control" }}
                                 {{ form.name.errors }}
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             <div class="form-group">
                                 {{ form.level.label_tag }}
                                 {{ form.level |add_class:"form-control select2" }}
                                 {{ form.level.errors }}
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             <div class="form-group">
                                 {{ form.subject.label_tag }}
                                 {{ form.subject |add_class:"form-control select2" }}
@@ -71,21 +71,21 @@
                         </div>
                     </div> 
                     <div class="row">
-                        <div class="col-sm-12 col-lg-4">
+                        <div class="col-xs-12 col-lg-4">
                               {{ form.color.label_tag }}
                               <div id="color-picker-component" class="input-group colorpicker-component">
                                   {{ form.color.as_hidden }}
                                   <span class="input-group-addon"><i></i></span>
                               </div>
                         </div>
-                         <div class="col-sm-12 col-md-4">
+                         <div class="col-xs-12 col-md-4">
                                <label>Suivi parent ? <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
                                     <div class="helper_tip_text" > Un code est généré par élève pour donner un accès aux résultats des acquisitions de leurs enfants. </div>
                                 </span> 
                                </label> <br>
                                 {{ form.suiviparent  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                         </div>
-                         <div class="col-sm-12 col-md-4">
+                         <div class="col-xs-12 col-md-4">
                                 <label>Verrouiller<span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                     <div class="helper_tip_text" > Interdire l'admission dans un groupe via le lien d'inscription. </div>
                                 </span></label> <br/> 
@@ -94,7 +94,7 @@
                         </div>
                     </div> 
                     <div class="row"> 
-                        <div class="col-sm-12 col-lg-12">
+                        <div class="col-xs-12 col-lg-12">
                             <div class="form-group">
                                 <label>Enseignant</label>
                                 {{ form.teacher |add_class:"form-control select2" }}
@@ -106,7 +106,7 @@
                     {% if request.user.school %}   
                         {% if group %}
                         <div class="row"> 
-                            <div class="col-sm-12 col-lg-12">
+                            <div class="col-xs-12 col-lg-12">
                                 <div class="form-group">
                                     <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
                                         <div class="btn btn-default full_width" style="text-align: left; font-size:15px; margin-bottom: 5px">
@@ -154,7 +154,7 @@
                         </div> 
                         {% else %}
                         <div class="row"> 
-                            <div class="col-sm-12 col-lg-12">
+                            <div class="col-xs-12 col-lg-12">
                                 <div class="alert alert-danger">
                                      Une fois le groupe créé avec son enseignant de référence, vous pourrez lui attribuer des enseignants en co-animation.
                                 </div>
@@ -163,7 +163,7 @@
                         {% endif %}
                     {% else %}
                         <div class="row"> 
-                            <div class="col-sm-12 col-lg-12">
+                            <div class="col-xs-12 col-lg-12">
                                 <div class="alert alert-danger">
                                     La gestion de la co-animation n'est possible qu'avec la version établissement.
                                 </div>
@@ -171,7 +171,7 @@
                         </div> 
                     {% endif %}
                     <div class="row">
-                        <div class="col-sm-12 col-md-7">
+                        <div class="col-xs-12 col-md-7">
                             <div class="form-group">
                                 <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
                                 <a href="javascript:history.back()"><input type="button" value="Retour"
@@ -205,7 +205,7 @@
 
                         </div>
                         {% if group and not is_gar_check %}
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             {% if group.students.all|length > 0 %}
                             <div class="form-group" style="margin-top: 250px">
                                 <a href="{% url 'delete_all_students_group' group.id %}" class="btn btn-danger" onclick="return TestDelete('tous les élèves de ce groupe')">Dissocier tous les élèves de ce groupe</a>
@@ -223,10 +223,10 @@
                         {% endif %}
                     </div>
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 {% if not is_gar_check %}
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group">
                             <label>Elèves <small>(Optionnel)<em> L'adresse mail est facultative.</em> <br><span style="color:#cb2131">1 élève par ligne. <br/>Le mot de passe par défaut est : sacado2020</span></small></label> <br> 
                             <textarea name="students" id="students_id"  style="border:1px #CCC solid" class="form-control" rows="20" placeholder="Turing;Alan;alan.turing@enigma.com"></textarea>

@@ -7,13 +7,13 @@
 {% for flashcard in flashpack.flashcards.all %}
 <div class="row"> 
 
-    <div class="col-sm-12 col-md-6" id="question"  align="center">
+    <div class="col-xs-12 col-md-6" id="question"  align="center">
         <div class="exotex flashcard qflashcard">
             {{ flashcard.question|safe }}
         </div>  
     </div>
 
-    <div class="col-sm-12 col-md-6" style="margin-top: 15px">
+    <div class="col-xs-12 col-md-6" style="margin-top: 15px">
         {% get_result_by_student flashcard flashpack student as result %} 
         {% if result %}
             <div class="alert alert-sacado">

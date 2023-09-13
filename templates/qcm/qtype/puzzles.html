@@ -2,7 +2,7 @@
 {% load static %}
 {% load item_tags %}
 <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form_card" style="margin-top:20px;">
             <label>Titre </label>
             {{ form.title|add_class:"form-control"   }}
@@ -12,19 +12,19 @@
             {{ form.instruction.errors } 
         </div>                                       
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="row" style="margin-top:20px">    
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 {% include 'modes.html' %}
             </div>
         </div>
 
  
         <div class="row"> 
-            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+            <div class="col-xs-12 col-md-6 no_visu" style="margin-top:20px">
                 {% include 'qcm/qtype/0_config_middle.html' %}
             </div>
-            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+            <div class="col-xs-12 col-md-6 no_visu" style="margin-top:20px">
                 {% include 'qcm/qtype/0_config_right.html' %}
             </div>
         </div>
@@ -33,11 +33,11 @@
 
 
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <div class="form_card" style="margin-top:20px;">
 
             <div class="row" style="margin-bottom:20px;">
-                <div class="col-sm-5 col-md-3"> <label>Les puzzles et leurs images</label>
+                <div class="col-xs-5 col-md-3"> <label>Les puzzles et leurs images</label>
                     <a href="javascript:void();" id="show_pseudorandomize_zone" class="btn btn-sacado">
                                     <label>Exercice pseudo-aléatoire ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                                                 <div class="helper_tip_text" >
@@ -54,7 +54,7 @@
                         </label>
                     </a>
                 </div>
-                <div class="col-sm-7 col-md-9">
+                <div class="col-xs-7 col-md-9">
                     <span class="row no_visu_on_load btn-sacado" id="pseudorandomize_zone">
                         {{ form.pseudoalea_nb }} <label>puzzles à proposer parmi les <span id="nb_pseudo_aleatoire">2</span> enregistrés ci-dessous. Si 0, les puzzles sont tous proposés.</label>
                     </span>                                    
@@ -67,33 +67,33 @@
      
             <script id="rowToClone" type="text/template">
                 <div id="duplicate">
-                    <div class="col-sm-12">
+                    <div class="col-xs-12">
                         <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left">
-                            <div class="col-sm-6 col-md-2">
+                            <div class="col-xs-6 col-md-2">
                                 <h1>Puzzle <span id="nb_puzzle"></span> </h1>
                                 <a href="javascript:void();" class="remove_more edit text-danger"><i class="bi bi-trash"></i> Supprimer</a>
                             </div>
-                            <div class="col-sm-6 col-md-4">
+                            <div class="col-xs-6 col-md-4">
                                 <p>Image entière</p>
                                 <div class="row ">
                                     <input type="hidden" name="subloop__prefix__" id="subloop__prefix__" />
-                                    <div class="col-sm-4 col-md-3 get_image"  align="center" id="imager"> 
+                                    <div class="col-xs-4 col-md-3 get_image"  align="center" id="imager"> 
                                         <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-image"></i>
                                         {{ form_ans.empty_form.imageanswer|add_class:"choose_imageanswer" }}
                                         <img  height="90px" class="choose_imageanswer preview" id="preview"> 
                                     </div>
-                                    <div class="col-sm-2 col-md-3"  align="center">   
+                                    <div class="col-xs-2 col-md-3"  align="center">   
                                         {{ form_ans.empty_form.answer|attr:"cols:30"|attr:"placeholder:Taille 3x3"  }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-6" id="subformsetZone">
+                            <div class="col-xs-12 col-md-6" id="subformsetZone">
                                 <p><a href="javascript:void();"  class="add_sub_more edit" id="data_loop" >Images. Format carré 100px x 100px<i class="bi bi-plus-circle"></i> Ajouter une image </a><br/> </p>
                                 {% for form_sub in form_sub_ans %} 
                                     {{ form_sub.id }}
-                                    <div class="col-sm-6 col-md-4">
+                                    <div class="col-xs-6 col-md-4">
                                         <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-                                            <div class="col-sm-10 get_image"  align="center" id="imagersub"> 
+                                            <div class="col-xs-10 get_image"  align="center" id="imagersub"> 
                                                 <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-imagesub"></i>
                                                 {{ form_sub.imageanswer|add_class:"choose_imageanswersub to-data-loop" }}
                                                 <img src="{% if form_sub.imageanswer.url %}{{ form_sub.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswersub preview" id="previewsub"> 
@@ -108,14 +108,14 @@
             </script> 
             <script id="subToClone" type="text/template">    
                 <div id="subduplicate">
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-xs-6 col-md-4">
                         <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-                            <div class="col-sm-10 get_image"  align="center" id="imagersub"> 
+                            <div class="col-xs-10 get_image"  align="center" id="imagersub"> 
                                 <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-imagesub"></i>
                                 {{ form_sub_ans.empty_form.imageanswer|add_class:"choose_imageanswersub to-data-loop" }}
                                 <img src="{% if form_sub.imageanswer.url %}{{ form_sub.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswersub preview" id="previewsub"> 
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-xs-1">
                                 <span class="text-danger remove_sub_more"><i class="fa fa-times"></i></span>
                             </div>    
                         </div>
@@ -131,32 +131,32 @@
             <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
             {% for form in form_ans %} 
                 {{ form.id }}
-                <div class="col-sm-12">
+                <div class="col-xs-12">
                     <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left">
-                        <div class="col-sm-6 col-md-2" id="nb_puzzle{{ forloop.counter0 }}" >
+                        <div class="col-xs-6 col-md-2" id="nb_puzzle{{ forloop.counter0 }}" >
                             <h1>Puzzle {{ forloop.counter }}</h1>
                         </div>
-                        <div class="col-sm-6 col-md-4">
+                        <div class="col-xs-6 col-md-4">
                             <p>Image entière. La taille en nbre de pièces <small>Long.x larg.</small></p>
                             <div class="row ">
                                 <input type="hidden" name="subloop{{ forloop.counter0 }}" id="subloop{{ forloop.counter0 }}" value="1" />
-                                <div class="col-sm-4 col-md-3 get_image"  align="center" id="imager{{ forloop.counter0 }}"> 
+                                <div class="col-xs-4 col-md-3 get_image"  align="center" id="imager{{ forloop.counter0 }}"> 
                                     <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-image{{ forloop.counter0 }}"></i>
                                     {{ form.imageanswer|add_class:"choose_imageanswer" }}
                                     <img src="{% if form.imageanswer.url %}{{ form.imageanswer.url }}{% endif %}" height="100px" width="100px" class="choose_imageanswer preview" id="preview{{ forloop.counter0 }}"> 
                                 </div>
-                                <div class="col-sm-2 col-md-3"  align="center">   
+                                <div class="col-xs-2 col-md-3"  align="center">   
                                     {{ form.answer|attr:"cols:30"|attr:"placeholder:Taille 3x3"  }}
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-6" id="subformsetZone{{ forloop.counter0 }}">                            
+                        <div class="col-xs-12 col-md-6" id="subformsetZone{{ forloop.counter0 }}">                            
                             <p>Images. Format carré 100px x 100px <a href="javascript:void();"  class="add_sub_more edit" data_loop="{{ forloop.counter0 }}" ><i class="bi bi-plus-circle"></i> Ajouter une image</a></p>
                             {% for form_sub in form_sub_ans %} 
                                 {{ form_sub.id }}
-                                <div class="col-sm-6 col-md-4">
+                                <div class="col-xs-6 col-md-4">
                                     <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-                                        <div class="col-sm-12 get_image"  align="center" id="imagersub{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"> 
+                                        <div class="col-xs-12 get_image"  align="center" id="imagersub{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"> 
                                             <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-imagesub{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"></i>
                                             {{ form_sub.imageanswer|add_class:"choose_imageanswersub to-data-loop" }}
                                             <img src="{% if form_sub.imageanswer.url %}{{ form_sub.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswersub preview" id="previewsub{{ forloop.parentloop.counter0 }}-{{ forloop.counter0 }}"> 
@@ -175,7 +175,7 @@
 
 
             <div class="row">
-                <div class="col-sm-12 col-md-12" >
+                <div class="col-xs-12 col-md-12" >
                     <a href="javascript:void();"  class="add_more btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter un puzzle</a><br/><br/>
                 </div>                            
             </div>
@@ -328,8 +328,8 @@
             $("#preview"+nb).addClass("preview") ; 
             $("#id_customchoices"+nb+"-imageanswer").removeClass("preview") ;
             $("#id_customchoices-"+nb+"-answer").removeClass("preview") ;
-            $("#imager"+nb).addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
-            $("#imager"+nb).next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
+            $("#imager"+nb).addClass("col-xs-2 col-md-1").removeClass("col-xs-4 col-md-3");
+            $("#imager"+nb).next().addClass("col-xs-10 col-md-11").removeClass("col-xs-8 col-md-9");
 
           }
 
@@ -343,8 +343,8 @@
             $("#id_customchoices-"+nb+"-answer").addClass("preview") ;
             $("#preview"+nb).removeClass("preview") ; 
             $("#delete_img"+nb).removeClass("preview") ; 
-            $("#imager"+nb).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            $("#imager"+nb).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            $("#imager"+nb).removeClass("col-xs-2 col-md-1").addClass("col-xs-4 col-md-3");
+            $("#imager"+nb).next().removeClass("col-xs-10 col-md-11").addClass("col-xs-8 col-md-9");
 
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 
@@ -466,8 +466,8 @@
             $("#delete_subimg"+loop).addClass("preview") ;
             $("#id_customsubchoices"+nb+"-imageanswer"+loop).removeClass("preview") ;
             $("#id_customsubchoices-"+nb+"-answer"+loop).removeClass("preview") ;
-            $("#imagersub"+loop).addClass("col-sm-2 col-md-1").removeClass("col-sm-4 col-md-3");
-            $("#imagersub"+loop).next().addClass("col-sm-10 col-md-11").removeClass("col-sm-8 col-md-9");
+            $("#imagersub"+loop).addClass("col-xs-2 col-md-1").removeClass("col-xs-4 col-md-3");
+            $("#imagersub"+loop).next().addClass("col-xs-10 col-md-11").removeClass("col-xs-8 col-md-9");
           }
 
         function SubpreviewFile(nb,loop) {
@@ -479,8 +479,8 @@
             $("#id_customsubchoices-"+nb+"-answer"+loop).addClass("preview") ;
             $("#previewsub"+loop).removeClass("preview") ; 
             $("#delete_subimg"+loop).removeClass("preview") ; 
-            $("#imagersub"+loop).removeClass("col-sm-2 col-md-1").addClass("col-sm-4 col-md-3");
-            $("#imagersub"+loop).next().removeClass("col-sm-10 col-md-11").addClass("col-sm-8 col-md-9");
+            $("#imagersub"+loop).removeClass("col-xs-2 col-md-1").addClass("col-xs-4 col-md-3");
+            $("#imagersub"+loop).next().removeClass("col-xs-10 col-md-11").addClass("col-xs-8 col-md-9");
 
             reader.addEventListener("load", function (e) {
                                                 var image = e.target.result ; 

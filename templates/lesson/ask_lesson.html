@@ -49,7 +49,7 @@
                       <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="handler widget-user-header">
                         <div class="row"> 
-                            <div class="col-sm-5 col-md-5">
+                            <div class="col-xs-5 col-md-5">
                                 {% if teacher.user.avatar %}
                                     <img src="{{ teacher.user.avatar }}" class="avatar_big"  />
                                 {% endif %}
@@ -57,7 +57,7 @@
                                     <span class="thin"> {{ teacher.user.first_name  }} </span>
                                 </div> 
                             </div>
-                            <div class="col-sm-7 col-md-7" style="font-size:15px">
+                            <div class="col-xs-7 col-md-7" style="font-size:15px">
                                 {% if teacher.comment %}
                                 {{ teacher.comment|safe }}
                                 {% endif %}

@@ -48,17 +48,17 @@
                 {% csrf_token %}
         <div class="row">                
              
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="alert alert-sacado">
                     {% if accounting %}
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="col-xs-12 col-md-12 col-lg-12">
                             <b>Facture #{{ accounting.id }}</b>
                         </div>
                     </div>
                     {% endif %}
                     <div class="row">
-                        <div class="col-sm-6 col-md-6 col-lg-8">
+                        <div class="col-xs-6 col-md-6 col-lg-8">
                             <div class="form-group">
                                 {{ form.plan |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
                                 {{ form.plan.errors }}
@@ -66,13 +66,13 @@
                         </div>           
                     </div>
                     <div class="row">
-                        <div class="col-sm-3 col-md-3 col-lg-3">                            
+                        <div class="col-xs-3 col-md-3 col-lg-3">                            
                             <div class="form-group">
                                 {{ form.forme |add_class:"form-control select2"|attr:"placeholder:Forme"}}  
                                 {{ form.forme.errors }}
                             </div>
                         </div>
-                        <div class="col-sm-5 col-md-4 col-lg-5">
+                        <div class="col-xs-5 col-md-4 col-lg-5">
                             <div class="form-group">
                                 {{ form.mode |add_class:"form-control select2"}}  
                                 {{ form.mode.errors }}
@@ -83,34 +83,34 @@
 
   
                     <div class="row">          
-                        <div class="col-sm-4 col-md-3 col-lg-3">
+                        <div class="col-xs-4 col-md-3 col-lg-3">
                                 {{ form.date_payment |add_class:"form-control datetimepicker"|attr:"placeholder:Date de paiement"}}  
                                 {{ form.date_payment.errors }}
                         </div>
-                        <div class="col-sm-5 col-md-5  col-lg-5">                            
+                        <div class="col-xs-5 col-md-5  col-lg-5">                            
                                 {{ form.objet |add_class:"form-control"|attr:"placeholder:Libellé"}}  
                                 {{ form.objet.errors }}
                         </div>
-                        <div class="col-sm-3 col-md-4" style="display:none">
+                        <div class="col-xs-3 col-md-4" style="display:none">
                             {{ form.is_credit|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:danger"|attr:"data-on:Entrée"|attr:"data-off:Sortie"}} 
                             {{ form.is_credit.errors }} 
                         </div> 
                     </div>
 
                     <div class="row" style="margin: 10px 0px"> 
-                        <div class="col-sm-6 col-md-4" align="right">
+                        <div class="col-xs-6 col-md-4" align="right">
                             <label>Compte cible ?</label>
                         </div>
-                        <div class="col-sm-6 col-md-8">
+                        <div class="col-xs-6 col-md-8">
                             {{ form.is_paypal |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Paypal"|attr:"data-off:Crédit Agricole"}} 
                             {{ form.is_paypal.errors }} 
                         </div>
                     </div>
                     <div class="row" style="margin: 10px 0px"> 
-                        <div class="col-sm-6 col-md-4" align="right">
+                        <div class="col-xs-6 col-md-4" align="right">
                             <label>Affiche la facture sur l'interface client ?</label>
                         </div>
-                        <div class="col-sm-6 col-md-8">
+                        <div class="col-xs-6 col-md-8">
                             {{ form.is_facturation |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}} 
                             {{ form.is_facturation.errors }}  
                         </div>
@@ -126,17 +126,17 @@
         <script id="rowToClone" type="text/template">
             <div id="duplicate">  
                 <div class="row" >
-                    <div class="col-sm-8 col-md-8 col-lg-9" > 
+                    <div class="col-xs-8 col-md-8 col-lg-9" > 
                         <div class="form-group">
                             {{ form_ds.empty_form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
                         </div> 
                     </div>
-                    <div class="col-sm-2 col-md-2 col-lg-2" > 
+                    <div class="col-xs-2 col-md-2 col-lg-2" > 
                         <div class="form-group">
                             {{ form_ds.empty_form.amount|add_class:"form-control"|attr:"placeholder:€" }}
                         </div> 
                     </div>
-                    <div class="col-sm-2 col-md-2 col-lg-1">
+                    <div class="col-xs-2 col-md-2 col-lg-1">
                         <div class="form-group" >
                            <div class="delete_button"></div>
                         </div> 
@@ -148,14 +148,14 @@
             </div>
         </script>    
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="alert alert-sacado"> 
                     <div id="formsetZone">
                             <div class="row">
-                                <div class="col-sm-6 col-md-6" >
+                                <div class="col-xs-6 col-md-6" >
                                     Description et montant
                                 </div>  
-                                <div class="col-sm-6 col-md-6" >
+                                <div class="col-xs-6 col-md-6" >
                                     <a href="#"  class="btn btn-info add_more" >Ajouter </a><br/><br/>
                                 </div>                            
                             </div>
@@ -164,17 +164,17 @@
                             {% for form in form_ds %}
                             <div id="duplicate0">  
                                 <div class="row" >
-                                    <div class="col-sm-8 col-md-9" > 
+                                    <div class="col-xs-8 col-md-9" > 
                                         <div class="form-group">
                                             {{ form.description|add_class:"form-control"|attr:"placeholder:Description" }} 
                                         </div> 
                                     </div>
-                                    <div class="col-sm-2 col-md-2" > 
+                                    <div class="col-xs-2 col-md-2" > 
                                         <div class="form-group">
                                             {{ form.amount|add_class:"form-control" }}
                                         </div> 
                                     </div>
-                                    <div class="col-sm-2 col-md-1">
+                                    <div class="col-xs-2 col-md-1">
                                         <div class="form-group" > <br/>
                                            <div class="delete_button"></div>
                                         </div> 
@@ -197,14 +197,14 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 {{ form.observation.label_tag }} <br/>
                 {{ form.observation }}
                 {{ form.observation.errors }}
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-8">
+            <div class="col-xs-12 col-md-8">
                 <div class="form-group">
  
  

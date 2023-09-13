@@ -31,7 +31,7 @@
 <section class="content_main">
     {% if not get_target %} 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="consigne">
                 <label>Savoir faire ciblés :</label>
                 {% for sf in sfs %}<li><label>{{ sf }}</label></li>{% endfor %}
@@ -40,14 +40,14 @@
     </div>
     {% endif %}
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <img src="{% static 'img/conseil.png' %}" height="35" /> Sélectionner les savoir faire {% if get_target %}<b>visés</b> par le{% else %}<b>pré-requis</b> pour bien démarrer ce{% endif %} parcours. {% if not get_target %}Le test de positionnement contient un maximum de 30 exercices pour une durée de 55 minutes. Si la durée des exercices par savoir faire excède 55 minutes, les exercices sont déterminés au prorata de savoir faire.{% else %} Le parcours contient <b>au maximum</b> 15 exercices par savoir faire cochés. 3 savoir faire cochés peut donc créer un parcours de 45 exercices. Plus de 3 savoir faire peut </small>être excessif.{% endif %}<a href="#" data-toggle='modal' data-target='#explain_ia'><i class="fa fa-question-circle"></i></a>
         </div>
     </div>
     <form method="POST">
         {% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <table class="table table-hover display1000" style="width:100%">
                     <thead>
                         <tr>
@@ -89,7 +89,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <input value="{% if get_target %}Choisir les pré-requis{% else %}Créer le test de positionnement{% endif %}" type="submit"  class="btn btn-primary" onclick="return check_checkboxes_ia()"  />
             </div>
         </div>

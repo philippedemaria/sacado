@@ -50,14 +50,14 @@
     <form action="" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-4 form_card">
+            <div class="col-xs-12 col-md-4 form_card">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                         <label>Titre des questions flash</label>
                         {{ form.title |add_class:"form-control"|attr:"value:Questions flash" }}
                         {{ form.title.errors }}
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-xs-6">
                         <label>Enseignement</label>
                         {{ form.subject|add_class:"form-control select2" }}
                         {{ form.subject.errors }}
@@ -65,24 +65,24 @@
                     <input name="color" type="hidden" value="#5d4391" />
                 </div>
                 <div class="row">
-                    <div class="col-sm-6 form-group">
+                    <div class="col-xs-6 form-group">
                         <label>Niveaux</label>
                         {{ form.levels|add_class:"form-control select2" }}
                         {{ form.levels.errors }}
                     </div>                   
-                    <div class="col-sm-6 form-group">                                 
+                    <div class="col-xs-6 form-group">                                 
                        <br/> <input type="checkbox" name="is_questions_quizz" id="is_questions_quizz" value="1" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Questions de quizz" data-off="Activités mentales" data-width="180" />
                     </div>
                 </div>
                 <div class="row div_is_mark div_is_ranking">
-                    <div class="col-sm-12 col-md-12" style="overflow-y: auto;overflow-x: hidden;height: 150px;">
+                    <div class="col-xs-12 col-md-12" style="overflow-y: auto;overflow-x: hidden;height: 150px;">
                         <label>Attribuer aux groupes proposés</label> 
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
 	                </div>	
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4 setup_ggb">
+            <div class="col-xs-12 col-md-4 setup_ggb">
                 <div class='form_card'>
                     <table class="table table-sacado borderless">
                         <tr>
@@ -117,7 +117,7 @@
                     </table>
                 </div>  
             </div>            
-            <div class="col-sm-12 col-md-4 setup_ggb no_visu">
+            <div class="col-xs-12 col-md-4 setup_ggb no_visu">
                 <div class='form_card'>
                         <table class="table table-sacado borderless">
                             <tr>
@@ -190,11 +190,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-12 form_card" style="margin-top: 10px" id="question_choice_style">
+            <div class="col-xs-12 col-md-12 form_card" style="margin-top: 10px" id="question_choice_style">
             </div> 
         </div>
 	    <div class="row">
-	        <div class="col-sm-6 col-md-6"> 
+	        <div class="col-xs-6 col-md-6"> 
 	            <div class="form-group">
 	                <input value="Générer" type="submit" class="btn btn-primary"/>
 	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

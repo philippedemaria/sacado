@@ -91,13 +91,13 @@ MathJax = {
 
 {% if  quizz_nav == 0 %}
     <div class="row consigne_diapo"  align="center">  
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
  
             {% if quizz.vignette %}<img src="{{ quizz.vignette.url }}" width="300px"  />{% endif %}
         </div>
     </div>
     <div class="row" >  
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <h1 style="line-height: 80px;" > Consignes.</h1>
             <span style="font-size:1.2em; text-align: left;" >    
                 Durée : <b>{% if duration %} {{ duration|date:"i" }} min{% else %}Temps libre{% endif %}</b><br/>
@@ -114,7 +114,7 @@ MathJax = {
     </div> 
     <div style="height:40px"></div>                   
     <div class="row" align="right" > 
-        <div class="col-sm-12 col-md-12" >
+        <div class="col-xs-12 col-md-12" >
             <button type="submit" class="btn btn-primary"><i class="fa fa-caret-right"></i> Démarrer le quizz</button>
             <input type="button" value="Retour à la page précédente" class="btn btn-default" onclick="javascript:history.back()"/>
         </div>
@@ -122,10 +122,10 @@ MathJax = {
 {% elif not end_of_quizz %}
 
     <div class="row">  
-        <div class="col-sm-2 col-md-2" align="left">
+        <div class="col-xs-2 col-md-2" align="left">
             <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
         </div>
-        <div class="col-sm-8 col-md-8" align="center">
+        <div class="col-xs-8 col-md-8" align="center">
                 {% if question.qtype == 1 %}
                     <b>Vrai  ou  Faux ?</b>
                 {% elif question.qtype == 2 %}
@@ -138,7 +138,7 @@ MathJax = {
         </div>
     </div> 
     <div class="row" align="center"  style="width:80%;padding:10px ; margin-right: auto; margin-left:auto; background-color: #f1eef7 ;">  
-        <div class="col-sm-12 col-md-12"align="center">
+        <div class="col-xs-12 col-md-12"align="center">
             {% if quizz.is_numeric and quizz.is_random %}
                 {% with d=question.mental.alea_content_creator %}
                     <h1 style="font-size:2.5em"  > {{ d.t }} </h1>
@@ -154,7 +154,7 @@ MathJax = {
     <hr/> 
     {% if question.tool and quizz.is_numeric %}  
         <div class="row" style="margin-bottom:  20px; margin-top: 20px;"> 
-            <div class="col-sm-12 col-md-12" align="center">
+            <div class="col-xs-12 col-md-12" align="center">
                 <button class="btn btn-default" id="sqrt_tool">$\sqrt{x}$</button> 
                 <button class="btn btn-default" id="pow_tool">$x^{n}$</button> 
             </div> 
@@ -165,19 +165,19 @@ MathJax = {
     {% if question.qtype == 1 %} 
     {% get_ans_for_this_question question quizz student as this_answer %}  
         <div class="row"> 
-            <div class="col-sm-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
+            <div class="col-xs-12 col-md-6 bgcolorBlue white"  align="center" style="border-radius : 10px ">
                 <label style="font-size:3.5em" class="thin">
                     VRAI <input type="radio" name="solution" value="1" {% if 1 in this_answer.answer  %}checked{% endif %}    class="answer_quizz_vf">
                 </label>  
             </div> 
 
-            <div class="col-sm-12 col-md-6 bgcolorRed white"  align="center" style="border-radius : 10px ">
+            <div class="col-xs-12 col-md-6 bgcolorRed white"  align="center" style="border-radius : 10px ">
                 <label style="font-size:3.5em" class="thin">FAUX <input type="radio" name="solution" value="0"  {% if 0 in this_answer.answer    %}checked{% endif %}  class="answer_quizz_vf"></label>  
             </div> 
         </div> 
     {% elif question.qtype == 2 %}
         <div class="row"> 
-            <div class="col-sm-12 col-md-12"align="center">
+            <div class="col-xs-12 col-md-12"align="center">
                 {% if question.mental and question.mental.jquery %}
                     <canvas class="this_canvas" id="canvas{{ forloop.counter0}}" width="900px" height="450px" style="border:1px solid #CCC; background-color: white;"></canvas>
                     <script>{{  question.mental.jquery|add_parameters:forloop.counter0 }}</script>
@@ -196,10 +196,10 @@ MathJax = {
         {% for choice in question.choices.all %}
  
             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-6" style="margin-bottom: 5px ; font-size:1.2em; border-radius : 10px;background-color: #f1eef7 ;">
+            <div class="col-xs-12 col-md-12 col-lg-12 col-xl-6" style="margin-bottom: 5px ; font-size:1.2em; border-radius : 10px;background-color: #f1eef7 ;">
                 <div class="row" >
                     {% get_ans_for_this_question quizz question student as this_answer %}
-                    <div class="col-sm-12 col-md-12  col-lg-12 col-xl-6 {{ rowcolor }}"  
+                    <div class="col-xs-12 col-md-12  col-lg-12 col-xl-6 {{ rowcolor }}"  
                          style="color:#5d4391;  padding: 5px; font-size : 1.5em">  
                          <input type="{% if question.qtype == 3 %}checkbox{% else %}radio{% endif %}" name="solution" id="solution{{ choice.id }}" value="{{ choice.id }}" {% if choice.id in this_answer.answer %}checked{% endif %}   class="answer_quizz"> 
                          {{ choice.answer }}
@@ -218,15 +218,15 @@ MathJax = {
 <div style="height:40px"></div>
 
 <div class="row" align="center" > 
-    <div class="col-sm-6 col-md-9" align="center"  ></div>
-    <div class="col-sm-6 col-md-3" align="center"  >
+    <div class="col-xs-6 col-md-9" align="center"  ></div>
+    <div class="col-xs-6 col-md-3" align="center"  >
         {% if quizz.is_back and quizz_nav_prev > 0 %}
             <a href="{% url 'goto_quizz_student' quizz.id %}" class="btn btn-default"><i class="fa fa-caret-left"></i> Précedent</a>
         {% endif %}  
     </div>
 </div> 
 <div class="row" > 
-    <div class="col-sm-12 col-md-12" id="button_submit_div">
+    <div class="col-xs-12 col-md-12" id="button_submit_div">
         {% if question.has_choices_with_retroaction %}
             <a href="javascript:void();" id="show_retroaction" class="btn btn-primary"><i class="fa fa-caret-right"></i> Enregistrer la réponse</a>
         {% else %}
@@ -241,7 +241,7 @@ MathJax = {
 {% else %}
 
     <div class="row consigne_diapo"  align="center">  
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <h1 style="font-size:4em" class="thin">
                 <br/><br/>
                 <b> -- FIN -- </b>

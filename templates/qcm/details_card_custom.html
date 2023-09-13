@@ -84,13 +84,13 @@
           <!-- Pop up de la date de la tache d'un exercice  -->
           <div id="custom_detail_dateur{{customexercise.id}}" class="card-dateur"  > 
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">     
+                    <div class="col-xs-12 col-md-12 title">     
                         <span href="#customcard{{customexercise.id}}" class="custom_select_task_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></span>  
                          Programmation de tâche  
                     </div>
                </div> 
               <div class="row">
-                  <div class="col-sm-12 col-md-12">              
+                  <div class="col-xs-12 col-md-12">              
                     <hr style="padding:0px; margin:10px 0px"/> 
                     <label  style="font-size: 10px;">Date limite de rendu ?</label><br>
                     <input type="type" name="dateur" data-relationship_id="{{customexercise.id}}" data-type ="1" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
@@ -99,7 +99,7 @@
               </div> 
               <hr style="padding:0px; margin:10px 0px"/> 
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <span class="custom_select_task_close btn btn-xs btn-primary" data-customexercise_id="{{customexercise.id}}">Valider</span>
                     </div>
                 </div> 
@@ -108,14 +108,14 @@
           <!-- Pop up de la date de publication d'un exercice  -->
           <div id="custom_detail_pub{{customexercise.id}}" class="card-dateur"  >
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">     
+                    <div class="col-xs-12 col-md-12 title">     
                         <span href="#card{{customexercise.id}}" class="custom_select_publish_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></span>  
                          Date de publication
                     </div>  
                </div> 
               <hr style="padding:0px; margin:10px 0px"/> 
               <div class="row">
-                  <div class="col-sm-12 col-md-12">      
+                  <div class="col-xs-12 col-md-12">      
                   <label  style="font-size: 12px;">Date de publication ?</label><br>
                                                       <!-- on conserve  relationship_id pour réutiliser la fonction JS-->
                   <input type="type" name="start" data-relationship_id="{{customexercise.id}}" data-type ="0" data-custom ="1" value='{{ customexercise.date_limit|date:"Y-m-d" }}' class="datetimepicker dateur pull-right" />
@@ -123,7 +123,7 @@
               </div>
               <hr style="padding:0px; margin:10px 0px"/>                 
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <span class="custom_select_publish_close btn btn-xs btn-primary" data-customexercise_id="{{customexercise.id}}">Valider</span>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
           <!-- Pop up de la durée et du nombre de situation d'un exercice  -->
           <div id="custom_details{{customexercise.id}}" class="card-dateur"  > 
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">
+                    <div class="col-xs-12 col-md-12 title">
                     <span href="#customcard{{customexercise.id}}" class="custom_select_details_close pull-right" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times"></i></span>               
                         Contexte 
                     </div>
@@ -142,14 +142,14 @@
               <hr style="padding:0px; margin:10px 0px"/> 
 
                <div class="row">
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-xs-6 col-md-6">
                         <label  style="font-size: 12px;"><i class="fa fa-clock-o"></i> Durée estimée </label><br>
                         <input type="type" name="duration" data-customexercise_id="{{customexercise.id}}" id="duration{{customexercise.id}}"  data-type ="2"  value="{{ customexercise.duration }}" class="custom_details_exercise" /> min.
                     </div>
                 </div> 
               <hr style="padding:0px; margin:10px 0px"/>  
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <span class="select_details_close btn btn-xs btn-primary" data-customexercise_id="{{customexercise.id}}">Valider</span>
                     </div>
                 </div> 
@@ -158,7 +158,7 @@
           <!-- Pop up de partage d'un exercice  -->
           <div id="custom_share{{ customexercise.id }}" class="card-dateur"  > 
               <div class="row">
-                    <div class="col-sm-12 col-md-12   title">  
+                    <div class="col-xs-12 col-md-12   title">  
                       <span href="#customcard{{customexercise.id}}" class="custom_select_share_close" data-customexercise_id="{{customexercise.id}}"><i class="fa fa-times pull-right"></i></span>           
                          Redirections & Liens
                     </div>

@@ -19,13 +19,13 @@
 
 {% block type_of_question %} 
     <div class="row" >
-        <div class="col-sm-12 col-md-6" ><label>Enoncé</label><br/>  
+        <div class="col-xs-12 col-md-6" ><label>Enoncé</label><br/>  
             {{ form.title|attr:"required"|add_class:"form-control"    }}
         </div>
 
 
 
-        <div class="col-sm-12 col-md-6" > <label>{% block label %} Ecrire votre texte à trous et utiliser la mise en gras pour signaler les mots à remplacer par des trous.{% endblock %}</label><br/>
+        <div class="col-xs-12 col-md-6" > <label>{% block label %} Ecrire votre texte à trous et utiliser la mise en gras pour signaler les mots à remplacer par des trous.{% endblock %}</label><br/>
             {{ form.filltheblanks|attr:"required"|add_class:"form-control"  }}
         </div>
     </div>

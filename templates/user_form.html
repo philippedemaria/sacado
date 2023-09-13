@@ -1,14 +1,14 @@
 {% load widget_tweaks %}
 
 <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form-group">
             {{ u_form.last_name.label_tag }}
             {{ u_form.last_name |add_class:"form-control id_last_name" }}
             {{ u_form.last_name.errors }}
         </div>
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form-group">
             {{ u_form.first_name.label_tag }}
             {{ u_form.first_name |add_class:"form-control id_first_name" }}
@@ -17,7 +17,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-12 col-md-8">
+    <div class="col-xs-12 col-md-8">
         <div class="form-group">
             {{ u_form.email.label_tag }}
 
@@ -31,35 +31,35 @@
             <small>Pour les enseignants, une adresse @ac-***.fr ou @aefe.fr ou @mlfmonde.org est attendue. Nous contacter sinon.</small>
         </div>
     </div>
-    <div class="col-sm-1 col-md-4">
+    <div class="col-xs-1 col-md-4">
         <div class="form-group">
             <span class="ajaxresultmail pull-right"></span>
         </div>
     </div>
 </div> 
 <div class="row">
-    <div class="col-sm-11 col-md-8">
+    <div class="col-xs-11 col-md-8">
         <div class="form-group">
             {{ u_form.username.label_tag }}
             {{ u_form.username |add_class:"form-control username" }}
             {{ u_form.username.errors }}
         </div>
     </div>
-    <div class="col-sm-1 col-md-4">
+    <div class="col-xs-1 col-md-4">
         <div class="form-group">
             <span class="ajaxresult pull-right"></span>
         </div>
     </div>
 </div> 
 <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form-group">
             {{ u_form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
             {{ u_form.password1 |add_class:"form-control" }}
             {{ u_form.password1.errors }}
         </div>
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form-group">
             {{ u_form.password2.label_tag }}
             {{ u_form.password2 |add_class:"form-control" }}
@@ -69,7 +69,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <div class="form-group">
             {{ u_form.cgu }}  <small>Je reconnais avoir lu et compris les <a href="#" data-target="#cgu" data-toggle='modal'>conditions générales d'utilisation</a> et je les accepte</small>.
         </div>

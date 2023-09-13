@@ -11,10 +11,10 @@
  
 {% block revision %}
 <div class="row">  
-    <div class="col-sm-2 col-md-2">
+    <div class="col-xs-2 col-md-2">
         <i class="bi bi-bootstrap-reboot" style="font-size:100px"></i> Réviser ses flashcards
     </div>
-    <div class="col-sm-10 col-md-10">
+    <div class="col-xs-10 col-md-10">
         <h1> Réviser ses flashcards</h1>
         <i class="fa fa-fw fa-database"></i> Ce flashpack contient {{ flashpack.flashcards.count }} flashcards.<br/><br/>
     </div> 
@@ -29,28 +29,28 @@
     {% for flashcard in flashcards %}
     <li class="my_slide">
         <div class="row">  
-            <div class="col-sm-12 col-md-3" id="offset"></div>
-            <div class="col-sm-12 col-md-6" id="question"  align="center">
+            <div class="col-xs-12 col-md-3" id="offset"></div>
+            <div class="col-xs-12 col-md-6" id="question"  align="center">
                 <div class="exotex flashcard qflashcard">
                     {{ flashcard.question|safe }}
                 </div>  
             </div>
-            <div class="col-sm-12 col-md-6 no_visu_on_load" id="answer{{ flashcard.id }}" align="center">
+            <div class="col-xs-12 col-md-6 no_visu_on_load" id="answer{{ flashcard.id }}" align="center">
                 <div class="exotex flashcard aflashcard" >
                     {{ flashcard.answer|safe }}
                 </div>  
             </div>
         </div>
         <div class="row"> 
-            <div class="col-sm-12 col-md-3" id="offsethelper"></div>
-            <div class="col-sm-12 col-md-6" align="center" id="data_buttons{{ flashcard.id }}"  >
+            <div class="col-xs-12 col-md-3" id="offsethelper"></div>
+            <div class="col-xs-12 col-md-6" align="center" id="data_buttons{{ flashcard.id }}"  >
                 <br/>
                 {% if flashcard.helper   %}
                 <button class="btn btn-default show_helper" data-flashcard_id="{{ flashcard.id }}" style="width: 200px"> Aide </button>
                 {% endif %}
                 <button class="btn btn-primary show_answer" data-flashcard_id="{{ flashcard.id }}" style="width: 200px"> Réponse </button>
             </div>
-            <div class="col-sm-12 col-md-12 no_visu_on_load" align="center"  id="buttons{{ flashcard.id }}"  >
+            <div class="col-xs-12 col-md-12 no_visu_on_load" align="center"  id="buttons{{ flashcard.id }}"  >
                 <div class="alert">
                     Cliquez sur le bouton qui vous semble le plus proche de votre réponse.
                 </div>
@@ -60,10 +60,10 @@
             </div>
         </div> 
         <div class="row no_visu_on_load" id="helper{{ flashcard.id }}"> 
-            <div class="col-sm-12 col-md-3" align="right">
+            <div class="col-xs-12 col-md-3" align="right">
                 <h1 class="thin">Aide : </h1>
             </div>
-            <div class="col-sm-12 col-md-6"  align="center">
+            <div class="col-xs-12 col-md-6"  align="center">
                 <div class="exotex flashcard_helper hflashcard">
                     {{ flashcard.helper|safe }}
                 </div>  

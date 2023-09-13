@@ -68,12 +68,12 @@
 <form method="POST"> 
     {% csrf_token %}
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="row no_visu_on_load" id="exercises_search_div" >
-                <div class="col-sm-12 col-md-4">
+                <div class="col-xs-12 col-md-4">
                     <div class="form_card">
                         <div class="row">
-                            <div class="col-sm-12 col-md-6">
+                            <div class="col-xs-12 col-md-6">
                                 <label>Enseignements : </label> 
                                 <select name="subjects" multiple class="form-control select2 subjects_levels" id="id_subjects" required>
                                     {% for s in subjects %}
@@ -81,7 +81,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="col-sm-12 col-md-6">
+                            <div class="col-xs-12 col-md-6">
                                 <label>Niveaux concernés : </label>
                                 <select name="levels" multiple class="form-control select2 subjects_levels" id="id_levels">
                                     {% for l in levels %}
@@ -91,7 +91,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-md-12">
                                 <div class="form-group">
                                     <label>Compétences évaluées :</label><br>
                                     <select name="skills" multiple class="form-control select2" id="id_skills">
@@ -104,10 +104,10 @@
                         </div>
                     </div>  
                 </div>
-                <div class="col-sm-12 col-md-8">
+                <div class="col-xs-12 col-md-8">
                     <div class="form_card">
                         <div class="row">
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-md-12">
                                 <label>Thèmes ciblés : </label>
                                 <select name="themes" multiple class="form-control select2 all_discriminants" id="id_themes">
                                     {% for t in themes %}

@@ -6,7 +6,7 @@
 {% load static %}
 {% load item_tags %}
 <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form_card" style="margin-top:20px;">
             <label>Enoncé :</label>                          
             <div id="formsetZone_variables">  
@@ -16,19 +16,19 @@
         </div>                                                    
     </div>
  
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="row" style="margin-top:20px">    
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 {% include 'modes.html' %}
             </div>
         </div>
 
  
         <div class="row"> 
-            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+            <div class="col-xs-12 col-md-6 no_visu" style="margin-top:20px">
                 {% include 'qcm/qtype/0_config_middle.html' %}
             </div>
-            <div class="col-sm-12 col-md-6 no_visu" style="margin-top:20px">
+            <div class="col-xs-12 col-md-6 no_visu" style="margin-top:20px">
                 {% include 'qcm/qtype/0_config_right.html' %}
             </div>
         </div>
@@ -38,10 +38,10 @@
 
 
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <div class="form_card" style="margin-top:20px;">
             <div class="row" style="margin-bottom:20px;">
-                <div class="col-sm-5 col-md-3">  <label>Les mots et leur définition</label>
+                <div class="col-xs-5 col-md-3">  <label>Les mots et leur définition</label>
                     <a href="javascript:void();" id="show_pseudorandomize_zone" class="btn btn-sacado">
                         <label>Question pseudo-aléatoire ? <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                                                 <div class="helper_tip_text" >
@@ -58,7 +58,7 @@
                         </label>
                     </a>
                 </div>
-                <div class="col-sm-7 col-md-9">
+                <div class="col-xs-7 col-md-9">
                     <span class="row no_visu_on_load btn-sacado" id="pseudorandomize_zone">
                         {{ form.pseudoalea_nb }} <label>mots à proposer parmi les <span id="nb_pseudo_aleatoire">2</span> enregistrés ci-dessous. Si 0, les mots sont tous proposés.</label>
                     </span>                                    
@@ -67,27 +67,27 @@
 
             <script id="rowToClone" type="text/template">
                 <div id="duplicate">
-                    <div class="col-sm-12">
+                    <div class="col-xs-12">
                         <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-                            <div class="col-sm-5">
+                            <div class="col-xs-5">
                                 <div class="row ">   
-                                    <div class="col-sm-12 col-md-12" >
+                                    <div class="col-xs-12 col-md-12" >
                                         {{ form_ans.empty_form.answer|attr:"placeholder:Mot"|add_class:"quizz_font30 quizz_answer"  }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-xs-6">
                                 <div class="row ">
-                                    <div class="col-sm-12" >
+                                    <div class="col-xs-12" >
                                         {{ form_ans.empty_form.answerbis|attr:"placeholder:Définition"|add_class:"quizz_font30 quizz_answer"  }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-xs-1">
                                 <span class="input-group-addon input-group-addon-right remove_more"><i class="bi bi-trash"></i></span>
                             </div>            
                             <div class="row">
-                                <div class="col-sm-12 col-md-12" >
+                                <div class="col-xs-12 col-md-12" >
                                     <a href="javascript:void()" class="automatic_insertion"   id="feed_back"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
                                     <div id="div_feed_back" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
                                     {{ form_ans.empty_form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
@@ -107,24 +107,24 @@
                 <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
                 {% for form in form_ans %} 
                     {{ form.id }}
-                    <div class="col-sm-12">
+                    <div class="col-xs-12">
                         <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-                            <div class="col-sm-5">
+                            <div class="col-xs-5">
                                 <div class="row ">
-                                    <div class="col-sm-12 col-md-12" > 
+                                    <div class="col-xs-12 col-md-12" > 
                                         {{ form.answer|attr:"placeholder:Mot"|add_class:"quizz_font30 quizz_answer"  }}
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-xs-6">
                                 <div class="row ">
-                                    <div class="col-sm-12 col-md-12" >
+                                    <div class="col-xs-12 col-md-12" >
                                         {{ form.answerbis|attr:"placeholder:Définition"|add_class:"quizz_font30 quizz_answer"  }}
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-12" >
+                                <div class="col-xs-12 col-md-12" >
                                     <a href="javascript:void()" class="automatic_insertion"   id="feed_back{{ forloop.counter0 }}"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
                                     <div id="div_feed_back{{ forloop.counter0 }}" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
                                     {{ form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
@@ -141,7 +141,7 @@
 
 
             <div class="row">
-                <div class="col-sm-12 col-md-12" >
+                <div class="col-xs-12 col-md-12" >
                     <a href="javascript:void();"  class="add_more btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter un mot et sa définition </a><br/><br/>
                 </div>                            
             </div>

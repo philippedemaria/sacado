@@ -7,13 +7,13 @@
     {% csrf_token %}
 
 
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <input type="hidden" name="exercise_id" value="{{ exercise.id }}"   />
         </div>
 
 
     <div class="row form-group">  
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
  
            {% include 'qcm/_imagefile_displayer_class.html' %}
 
@@ -37,7 +37,7 @@
 
 
     <div class="row  form-group">  
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <select name="knowledge_id" class="select2" id="knowledge_id">
                 <option value="">Choisir un savoir faire</option>
                 {% for w in waitings %}
@@ -51,7 +51,7 @@
         </div>
     </div>
     <div class="row form-group">  
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <input type="submit" value="Modifier le savoir faire" class="btn btn-primary" />
         </div>
     </div>

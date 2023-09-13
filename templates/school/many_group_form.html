@@ -47,7 +47,7 @@
                 <!-- Les formulaires du formset -->
                 <div id="formsetZone">
                     <div class="row" id="duplicate" style="display:none">  
-                        <div class="col-sm-12 col-md-2">
+                        <div class="col-xs-12 col-md-2">
                                 <div class="form-group">
                                     <label>{{ formset.empty_form.level.label_tag }}</label><br/>
                                     {{ formset.empty_form.level |add_class:"form-control" }}
@@ -55,27 +55,27 @@
                                 </div> 
 
                         </div>   
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                                 <div class="form-group">
                                     <label>{{ formset.empty_form.subject.label_tag }}</label><br/>
                                     {{ formset.empty_form.subject |add_class:"form-control" }}
                                     {{ formset.empty_form.subject.errors }}
                                 </div>  
                         </div>                     
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                                 <div class="form-group">
                                     <label>{{ formset.empty_form.name.label_tag }}</label> <br/>
                                     {{ formset.empty_form.name  |add_class:"form-control"  }}
                                 </div>
                         </div>
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                                 <div class="form-group">
                                     <label>Enseignant</label><br/>
                                     {{ formset.empty_form.teacher |add_class:"form-control" }}
                                     {{ formset.empty_form.teacher.errors }}
                                 </div>  
                         </div>
-                        <div class="col-sm-12 col-md-1">
+                        <div class="col-xs-12 col-md-1">
                             <div class="form-group" ><label class="white"> -</label><br/>
                                <div class="delete_button"></div>
                             </div> 
@@ -83,27 +83,27 @@
                     </div>
                     {% for form in formset %}
                     <div class="row" id="duplicate{{ forloop.counter0 }}">  
-                        <div class="col-sm-12 col-md-2">
+                        <div class="col-xs-12 col-md-2">
                                 <div class="form-group">
                                     <label>{{ form.level.label_tag }}</label><br/>
                                     {{ form.level |add_class:"form-control select2"  }}
                                     {{ form.level.errors }}
                                 </div>  
                         </div> 
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                                 <div class="form-group">
                                     <label>{{ form.subject.label_tag }}</label> <br/>
                                     {{ form.subject |add_class:"form-control"   }}
                                     {{ form.subject.errors }}
                                 </div>
                         </div>                     
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                                 <div class="form-group">
                                     <label>{{ form.name.label_tag }}</label> <br/>
                                     {{ form.name |add_class:"form-control"   }}
                                 </div>
                         </div>
-                        <div class="col-sm-12 col-md-3">
+                        <div class="col-xs-12 col-md-3">
                                 <div class="form-group">
                                     <label>Enseignant</label><br/>
                                     {{ form.teacher |add_class:"form-control select2"  }}
@@ -115,10 +115,10 @@
 
                 </div> 
                 <div class="row">
-                    <div class="col-sm-6 col-md-6 controls">
+                    <div class="col-xs-6 col-md-6 controls">
                             <a href="#" id="new_item" class="btn btn-info add_more" >+ Ajouter un groupe</a>
                     </div>
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-xs-6 col-md-6">
                            <button class="btn btn-primary" type="submit"> Enregistrer les groupes</button>
 
                            <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

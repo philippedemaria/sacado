@@ -7,7 +7,7 @@
 {% if resp == 0  %}
     <script type="text/javascript" src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
     <script type="text/javascript" src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <div class="form-group">
             {{ form.writing |add_class:"form-control"|attr:"rows:3" }}
             {{ form.writing.errors }}

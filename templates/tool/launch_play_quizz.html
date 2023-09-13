@@ -41,7 +41,7 @@
                 <li class="my_slide my_slide_instruction">
                     <input type="hidden" value="{{ gquizz.quizz.interslide }}" id="inter_slide" /> 
                     <div class="row consigne_diapo"  align="center">  
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <h1 style="font-size:3em" class="thin"><br/>La durée de cette question est <br/>  <b>{{ question.duration }} secondes</b>.  <br/> 
                                 {% if question.qtype == 1 %}
                                     Répondre à cette question par <br/><b>Vrai</b> ou <b>Faux</b>
@@ -64,10 +64,10 @@
                 <li class="my_slide">
                     <input type="hidden" value="{{ question.duration }}" id="duration" /> 
                     <div class="row">  
-                        <div class="col-sm-2 col-md-2" align="left">
+                        <div class="col-xs-2 col-md-2" align="left">
                             <img src="{% if question.calculator %}{% static 'img/calculator.png' %}{% else %}{% static 'img/no_calculator.png' %}{% endif %}" height="50px" />
                         </div>
-                        <div class="col-sm-8 col-md-8" align="center">
+                        <div class="col-xs-8 col-md-8" align="center">
                                 {% if question.qtype == 1 %}
                                     <b>Vrai  ou  Faux ?</b>
                                 {% elif question.qtype == 2 %}
@@ -78,7 +78,7 @@
                                     <b> Choisir la seule bonne réponse</b>. 
                                 {% endif %}
                         </div>
-                        <div class="col-sm-2 col-md-2" align="right">
+                        <div class="col-xs-2 col-md-2" align="right">
                             <div class="countdown instruction" id="counterdown" > 
                                 {{ question.duration }}
                             </div>
@@ -86,20 +86,20 @@
                     </div> 
                     {% if question.imagefile %}
                     <div class="row">  
-                        <div class="col-sm-12 col-md-12"align="center">
+                        <div class="col-xs-12 col-md-12"align="center">
                             <h1 style="font-size:2.5em" class="thin">  
                                 {{ question.title|safe }} 
                             </h1>
                         </div>
                     </div>
                     <div class="row">  
-                        <div class="col-sm-12 col-md-12"align="center">
+                        <div class="col-xs-12 col-md-12"align="center">
                             <img src="{{ question.imagefile.url }}" height="300px"  />
                         </div>
                     </div>
                     {% else %}
                     <div class="row">  
-                        <div class="col-sm-12 col-md-12"align="center">
+                        <div class="col-xs-12 col-md-12"align="center">
                             <h1 style="font-size:4em" class="thin">  
                                 {{ question.title|safe }} 
                             </h1>
@@ -108,11 +108,11 @@
                     {% endif %}
                     {% if question.qtype == 1 %}   
                         <div class="row">
-                            <div class="col-sm-6 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
+                            <div class="col-xs-6 col-md-6 bgcolorBlue white" style="border-radius : 10px ">
                                 <h1>VRAI </h1>  
                             </div> 
 
-                            <div class="col-sm-6 col-md-6 bgcolorRed white" style="border-radius : 10px ">
+                            <div class="col-xs-6 col-md-6 bgcolorRed white" style="border-radius : 10px ">
                                 <h1>FAUX </h1>  
                             </div> 
                         </div>
@@ -121,7 +121,7 @@
                         {% for choice in question.choices.all %}
                             {% cycle 'bgcolorRed' 'bgcolorBlue' 'bgcolorOrange' 'bgcolorGreen' as rowcolor silent %} 
                             {% cycle 'A' 'B' 'C' 'D'  as choice_letter silent %}
-                            <div class="col-sm-6 col-md-6 {{ rowcolor }} get_image" 
+                            <div class="col-xs-6 col-md-6 {{ rowcolor }} get_image" 
                                 style="margin-bottom: 20px; color:#FFF; border : 1px solid #F0F0F0; border-radius : 10px ; font-size:{% if choice.answer|length > 30 %}2{% else  %}3{% endif %}em">
                                         {% if choice.imagefile %}
                                             <img src="{{ choice.imagefile.url }}" height="250px" />
@@ -137,7 +137,7 @@
                 </li>
                 <li class="my_slide my_slide_instruction">
                     <div class="row">
-                       <div class="col-sm-12 col-md-12">
+                       <div class="col-xs-12 col-md-12">
                              <a href="#" class="command_results" data-all="1" data-question_id="{{ question.id }}" data-random="{% if gquizz.quizz.is_random %}1{% else %}0{% endif %}">
                                 Afficher tous ?
                             </a>
@@ -147,13 +147,13 @@
                         </div>
                     </div>
                     <div class="row consigne_diapo"  align="center">
-                        <div class="col-sm-12 col-md-12" id="last_slide" >
+                        <div class="col-xs-12 col-md-12" id="last_slide" >
                             <h1 style="font-size:6em;line-height: 400px" class="thin">Résultats</h1>
                         </div>
-                        <div class="col-sm-12 col-md-12" id="display_results" >
+                        <div class="col-xs-12 col-md-12" id="display_results" >
  
                         </div>
-                        <div class="col-sm-12 col-md-12"  >
+                        <div class="col-xs-12 col-md-12"  >
                             <button type="submit" class="btn btn-default">Question suivante ?</button>
                         </div>
                     </div>  

@@ -106,9 +106,9 @@ function caster(evt)
 }
 </script>
 
-    <div class="col-sm-12 col-md-12" align="center"> 
+    <div class="col-xs-12 col-md-12" align="center"> 
              <div class="row" style="margin:10px">
-                <div class="col-sm-12 col-md-12"> 
+                <div class="col-xs-12 col-md-12"> 
                 	<h1 class="thin">Capture par smartphone</h1>
                 </div>
             </div>
@@ -119,7 +119,7 @@ function caster(evt)
             {% csrf_token %}
 
           <div class="row" style="margin:10px">
-            <div class="col-sm-12 col-md-12"> 
+            <div class="col-xs-12 col-md-12"> 
 			  <input type="file" name="image" accept="image/*" 
 			  class="btn btn-default" id="id_image" onchange="caster
 (event)">
@@ -127,7 +127,7 @@ function caster(evt)
             </div>
 
             <div class="row" style="margin:10px">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group" id="image">
 						 	             
                     </div>
@@ -135,7 +135,7 @@ function caster(evt)
             </div>
             {% comment %}
           	<div class="row">
-                  <div class="col-sm-12 col-md-12"> 
+                  <div class="col-xs-12 col-md-12"> 
                           <div class="form-group">
                               <input value="envoyer à l'écran" class="btn btn-pr
 imary" 
@@ -146,7 +146,7 @@ ion établissement est requise.' {% endif %}>
             </div>
 
             <div class="row">
-                <div class="col-sm-12 col-md-12"> 
+                <div class="col-xs-12 col-md-12"> 
                     <div class="form-group">
                         <input value="Télécharger dans la bibliothèque" type="su
 bmit" class="btn btn-primary"  {% if not sacado_asso %}  disabled  title='La ver
@@ -155,7 +155,7 @@ sion établissement est requise.' {% endif %}/>
                 </div>
             </div>
             <div class="row"  style="margin:10px">
-                <div class="col-sm-12 col-md-12"> 
+                <div class="col-xs-12 col-md-12"> 
                     <div class="form-group">
                         <a href="{% url 'list_visiocopie' %}" class="btn btn-def
 ault">Annuler, retour à ma bibliothèque</a>

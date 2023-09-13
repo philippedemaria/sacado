@@ -7,7 +7,7 @@
 {{ form.title.errors }}
 
 <div class="row">
-    <div class="col-sm-12 col-md-12">                        
+    <div class="col-xs-12 col-md-12">                        
         <div class="form-group"> 
         <label>Enoncé :</label>
         <a href="javascript:void();" id="show_randomize_zone" class="btn btn-sacado">
@@ -18,14 +18,14 @@
             </label>
         </a>
         <div class="row no_visu_on_load" id="randomize_zone">
-            <div class="col-sm-12 col-md-12 alert alert-sacado">
+            <div class="col-xs-12 col-md-12 alert alert-sacado">
          
 
                 <div class="row">                      
-                    <div class="col-sm-12 col-md-6 controls">
+                    <div class="col-xs-12 col-md-6 controls">
                          <small>Déclaration des variables aléatoires</small> <a href="javascript:void();" id="new_item" class="btn btn-sacado add_more_question" >+ variable</a>
                     </div>
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                           <small>Nombre de situations proposées {{ form.pseudoalea_nb  }} </small>
                     </div>   
                 </div>
@@ -33,28 +33,28 @@
                 {{ form_var.management_form }} 
                 <script id="rowToClone_question" type="text/template">
                     <div id="duplicate_variables">  
-                        <div class="col-sm-12 col-md-6 qrandom">
-                                <div class="col-sm-4 col-md-4"> 
+                        <div class="col-xs-12 col-md-6 qrandom">
+                                <div class="col-xs-4 col-md-4"> 
                                         <label>Nom : </label>  <br/>{{ form_var.empty_form.name|add_class:"form-control"|attr:"placeholder:a" }} 
                                 </div>
 
-                                <div class="col-sm-4 col-md-4" > 
+                                <div class="col-xs-4 col-md-4" > 
                                         <label>Nb entier ?</label> <br/>
                                         {{ form_var.empty_form.is_integer|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
                                 </div>
-                                <div class="col-sm-4 col-md-4" > 
+                                <div class="col-xs-4 col-md-4" > 
                                             <label>0 exclus ?</label> <br/> 
                                             {{ form_var.empty_form.is_notnull|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }} 
                                 </div>
-                                <div class="col-sm-4 col-md-4" > 
+                                <div class="col-xs-4 col-md-4" > 
                                             <label>Min.</label> <br/> 
                                             {{ form_var.empty_form.minimum|add_class:"form-control" }} 
                                 </div>
-                                <div class="col-sm-4 col-md-4" > 
+                                <div class="col-xs-4 col-md-4" > 
                                         <label>Max.</label>  <br/>
                                         {{ form_var.empty_form.maximum|add_class:"form-control" }} 
                                 </div>
-                                <div class="col-sm-4 col-md-4"><br/>
+                                <div class="col-xs-4 col-md-4"><br/>
                                     <div class="delete_button_question"></div>
                                 </div>                                 
                         </div>
@@ -64,7 +64,7 @@
                 </div>
             </div>  
             <div class="alert alert-danger">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <small><i class="fa fa-warning"></i> Ne pas utiliser dans votre énoncé et réponses les noms de vos variables pour désigner autre chose que vos variables.</small> 
                 </div>
             </div>
@@ -77,12 +77,12 @@
 </div>
 <img src="{% static 'img/tex.png' %}" height="15px"/> <small>Pour inclure une formule, utiliser les délimiteurs dollar $ et pour une figure, utiliser TiKZ</small>
 <div class="row" > 
-    <div class="col-sm-12 col-md-12 form-group">
+    <div class="col-xs-12 col-md-12 form-group">
         <a href="javascript:void();" id="show_latex_formula" class="btn btn-sacado"><label><img src="{% static 'img/tex.png' %}" width="15px" /> Inclure les champs de réponse dans l'énoncé  ? </label> </a> 
     </div>
 </div> 
 <div class="row no_visu_on_load" id="latex_formula" > 
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <span style="line-height: 1.7em"><small>Utiliser 
             <span class="formula">\input[name][3em]{valeur par défaut}</span> 
             pour placer le champ à compléter. <br/>

@@ -43,7 +43,7 @@
 <form action="" method="POST" enctype='multipart/form-data'> 
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="alert alert-sacado">
                 <img src="{% static 'img/conseil.png' %}" height="40px"/> Affecter tous les exercices aux élèves choisis au premier exercice  
                 <input id="select_all_exercices"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Oui" data-off="Non" /> 
@@ -52,7 +52,7 @@
     </div>
     {% if nb_rc == 0 %}
     <div class="row">
-        <div  class="col-sm-12 col-md-12">
+        <div  class="col-xs-12 col-md-12">
             <div class="alert alert-danger">  
                 Ce parcours ne contient aucun exercice. 
                 <a href="{% url 'exercise_bibliotex_peuplate'  bibliotex.id %}"   class="no_button"> Sélectionner les exercices</a> 
@@ -61,12 +61,12 @@
     </div>
     {% endif %}
 
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             {% csrf_token %}
             {% for relationtex in bibliotex.relationtexs.all   %} 
  
                 <div class="row"  >
-                    <div class="col-sm-12 col-md-6 exotex_shower_content" >        
+                    <div class="col-xs-12 col-md-6 exotex_shower_content" >        
   
                         
           
@@ -91,7 +91,7 @@
                             {{ relationtex.exotex.content_html|safe }} 
                          {% endif %}
                     </div> 
-                    <div  class="col-sm-12 col-md-6">
+                    <div  class="col-xs-12 col-md-6">
                             <span class="btn btn-info select_student" 
                                 id="selecteur{{relationtex.exercise.id}}"    
                                 data-student_id="0"   data-custom=0
@@ -139,7 +139,7 @@
 
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
 
 
                 <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>

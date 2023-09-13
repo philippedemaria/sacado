@@ -26,7 +26,7 @@
 
 			{% if  'input' in  annoncement %}
 				<div class="row" style="margin-top:20px;padding: 10px">		
-					<div class="col-sm-12"> 
+					<div class="col-xs-12"> 
 						<div class="consigne" align="left"> 
 			 				{{  annoncement|safe }} 
 			 			</div> 
@@ -35,12 +35,12 @@
 				</div>
 
 				<div class="row" style="margin:20px">		
-					<div class="col-sm-12"> 
+					<div class="col-xs-12"> 
 			 			
 					</div>
 				</div>
 			    <div class="row">
-			    	<div class="col-sm-12 col-md-3" align="center"  >
+			    	<div class="col-xs-12 col-md-3" align="center"  >
 			            <a href="#" class="btn btn-primary show_these_inputs_correction" 
 			               data-supportfile_id='{{ supportfile.id }}' data-loop='{{ forloop.counter }}' data-choice_id=0><i class="fa fa-caret-right"></i> Valider </a>
 			        </div>
@@ -49,7 +49,7 @@
 				<div class="row" style="padding-top: 10px;">  
 					{% with choice=shufflechoices|index:forloop.counter0 %}
 						{% if choice.answer %}
-							<div class="col-sm-12" align='left'> 
+							<div class="col-xs-12" align='left'> 
 								<div class="consigne custom_content zoom_in">
 					 				{{  annoncement|safe }}<br/>
 			
@@ -63,7 +63,7 @@
 								</div>
 							</div>
 						{% else %}
-							<div class="col-sm-12" align='left'>
+							<div class="col-xs-12" align='left'>
 								<div class="consigne zoom_in"> 
 					 				{{  annoncement|safe }}
 					 			</div>
@@ -74,7 +74,7 @@
 							</div>
 						{% endif %}
 					    <div class="row validation"   style="margin:100px 0px;">
-					    	<div class="col-sm-12 col-md-3" align="center"  >
+					    	<div class="col-xs-12 col-md-3" align="center"  >
 					            <a href="#" class="btn btn-primary show_these_inputs_correction" 
 					               data-supportfile_id='{{ supportfile.id }}' data-loop='{{ forloop.counter }}' 
 					               data-choice_id='{{ choice.id }}'><i class="fa fa-caret-right"></i> Valider </a>

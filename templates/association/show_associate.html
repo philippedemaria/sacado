@@ -33,22 +33,22 @@
 {% block body %}
 <div class="content_main">  
         <div class="row">        
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
  
             </div>
         </div> 
         <div class="row">        
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <label> Nom : </label>{% if associate.user %} {{ associate.user.last_name }} {% else %} {{ associate.last_name }} {% endif %}
             </div>   
         </div> 
         <div class="row">        
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <label> Prénom : </label>{% if associate.user %} {{ associate.user.first_name }} {% else %} {{ associate.first_name }} {% endif %}
             </div>   
         </div>                           
         <div class="row">        
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <label> Membre : </label>{{ associate.quality }}
             </div>   
         </div> 

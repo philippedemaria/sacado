@@ -23,14 +23,14 @@
 
 {% block body %}  
 <section class="content_main">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
 
         <form action="{% url 'gestion_files' %}" method="POST" enctype='multipart/form-data'> 
        
 
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-6 col-lg-6">
+                <div class="col-xs-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <select name="level" class="select2">
                             {% for l in levels %}
@@ -39,7 +39,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6">
+                <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                         <input value="Lancer le test" type="submit" name="launch" class="btn btn-primary"/>
                     </div>
@@ -47,7 +47,7 @@
             </div> 
  
             <div class="row">
-                <div class="col-sm-12 col-md-12 col-lg-12">
+                <div class="col-xs-12 col-md-12 col-lg-12">
                      <table class="table table-sacado display_no_details20">
                         <thead> 
                             <tr> 

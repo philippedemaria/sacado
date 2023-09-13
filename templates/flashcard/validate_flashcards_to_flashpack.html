@@ -81,7 +81,7 @@
         </table>
 
         <div class="row">
-            <div class="col-sm-12 col-md-12"> 
+            <div class="col-xs-12 col-md-12"> 
                 <div class="form-group">
  
 
@@ -125,7 +125,7 @@
                 <div class="modal-body">
                     {% csrf_token %} 
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">  
+                        <div class="col-xs-12 col-md-12">  
                             <div class="form-group">
                                 <input type="text" id="id_flashcard" name="flashcard"  /> 
                                 <input type="text" id="id_flashpack" name="flashpack" value="{{ flashpack.id }}" /> 
@@ -133,14 +133,14 @@
                         </div>    
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <div class="form-group">
                                 {{ form.comment|attr:"placeholder:Ecrire votre commentaire"}}  
                             </div>
                         </div>    
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <div class="form-group">
                                 <input value="Commenter la flashcard" type="submit" class="btn btn-primary"/>
                                 <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

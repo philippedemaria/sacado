@@ -52,7 +52,7 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-12 col-lg-8 form_card">
+            <div class="col-xs-12 col-lg-8 form_card">
                 <div class="form-group">
                     {{ form.title.label_tag }} <em>50 caractères max.</em><br>
                     {{ form.title|add_class:"form-control"   }}
@@ -72,7 +72,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-lg-8">
+                    <div class="col-xs-12 col-lg-8">
                         <div class="form-group">
                             <input value="Enregistrer" type="submit" class="btn btn-primary"/>
                             <a href="javascript:history.back()"><input type="button" value="Annuler"
@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     {% if course and request.user.user_type == 2 %}
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group">
                             <a href="{% url 'delete_course' course.id  parcours.id %}" class="btn btn-danger"  onclick="return TestDelete('ce contenu')">Supprimer ce cours</a>
                         </div>
@@ -88,7 +88,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="col-sm-12 col-lg-4">
+            <div class="col-xs-12 col-lg-4">
                 <div class="form_card">
                 {% if request.user.user_type == 2 %}
                     <h4 class="thin"><i class="fa fa-cogs"></i> Configuration</h4>

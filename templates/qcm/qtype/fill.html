@@ -6,7 +6,7 @@
 
 {% block body_qtype %}
 <div class="row">
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form_card" style="margin-top:20px;">
             <label>Titre </label>
             {{ form.title|add_class:"form-control"   }}
@@ -18,7 +18,7 @@
             </div>           
         </div>                                            
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-xs-12 col-md-6">
         <div class="form_card" style="margin-top:20px">    
             {% include 'qcm/qtype/0_config_middle.html' %}
         </div>
@@ -33,17 +33,17 @@
         {% for form in form_ans %} 
             {{ form.id }}
             <div class="row quizz_line_answer quizz_box_answer quizz_box_answer_left" >
-                <div class="col-sm-12">
+                <div class="col-xs-12">
                     <div class="row answer_box_light_purple ">
-                        <div class="col-sm-12 col-md-7 proposition  answer_box_no_border" > 
+                        <div class="col-xs-12 col-md-7 proposition  answer_box_no_border" > 
                             {{ form.answer|attr:"placeholder:Ecrire la question"|add_class:"quizz_font30 quizz_answer"  }}
                         </div>
-                        <div class="col-sm-12 col-md-5 reponse  answer_box_no_border" >
+                        <div class="col-xs-12 col-md-5 reponse  answer_box_no_border" >
                             {{ form.answerbis|attr:"placeholder:Ecrire la réponse attendue"|add_class:"quizz_font30 quizz_answer"  }}
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12" >
+                        <div class="col-xs-12 col-md-12" >
                             <a href="javascript:void()" class="automatic_insertion"   id="feed_back{{ forloop.counter0 }}"><i class="bi bi-arrow-return-right"></i> Afficher un feedback/une correction si cette réponse est choisie. </a>
                             <div id="div_feed_back{{ forloop.counter0 }}" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
                             {{ form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire ici" }}
@@ -55,13 +55,13 @@
         {% endfor %}
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-12" >
+            <div class="col-xs-12 col-md-12" >
                 <a href="javascript:void();"  class="add_more btn btn-sacado_active" ><i class="bi bi-plus-circle"></i> Ajouter <span class="qr">un couple Question/Réponse</span> </a><br/><br/>
             </div>                            
         </div>
     </div>
 
-    <div class="col-sm-12 col-md-7" >
+    <div class="col-xs-12 col-md-7" >
         <div class="row form_card" style="margin-top:20px;">
             {% include 'qcm/qtype/_content_correction.html' %}
         </div> 
@@ -75,20 +75,20 @@
 <script id="rowToClone" type="text/template">
     <div id="duplicate"> 
         <div class="row quizz_line_answer quizz_box_answer quizz_box_answer_left" >  
-            <div class="col-sm-12">
+            <div class="col-xs-12">
                 <div class="row answer_box_light_purple">
-                    <div class="col-sm-12 col-md-7 answer_box_no_border" > 
+                    <div class="col-xs-12 col-md-7 answer_box_no_border" > 
                         {{ form_ans.empty_form.answer|attr:"placeholder:Ecrire la question"|add_class:"quizz_font30 quizz_answer"  }}
                     </div>
-                    <div class="col-sm-11 col-md-4 answer_box_no_border" > 
+                    <div class="col-xs-11 col-md-4 answer_box_no_border" > 
                         {{ form_ans.empty_form.answerbis|attr:"placeholder:Ecrire la réponse attendue"|add_class:"quizz_font30 quizz_answer"  }}
                     </div>
-                    <div class="col-sm-1 col-sm-1">
+                    <div class="col-xs-1 col-xs-1">
                         <span class="btn btn-danger remove_more"><i class="bi bi-trash"></i></span>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-12" >
+                    <div class="col-xs-12 col-md-12" >
                         <a href="javascript:void()" class="automatic_insertion"   id="feed_back"><i class="bi bi-arrow-return-right"></i> Afficher un feedback/une correction si cette réponse est choisie. </a>
                         <div id="div_feed_back{{ forloop.counter0 }}" class="checkbox_no_display">
                         {{ form_ans.empty_form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire ici" }}

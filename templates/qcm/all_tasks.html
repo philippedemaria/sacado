@@ -27,7 +27,7 @@
 {% block body %}
 <section class="content_main">  
     <div class="row"> 
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
  
             <table  class="table table-sacado table-hover display" >
                 {% regroup relationships by parcours as parcours_list %}  
@@ -92,7 +92,7 @@
         </div>
     </div> 
     <div class="row"> 
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
                 {% for parcours in parcourses %}
                     <a href="{% url 'parcours_tasks_and_publishes'  parcours.id   %}" class="btn btn-xs btn-default">Créer une tache dans {{ parcours }} </a> 
                 {% endfor %}

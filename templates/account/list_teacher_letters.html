@@ -12,7 +12,7 @@
  
 {% block letters %}
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
         {% for l in letters %}
             <a href="{% url 'list_teacher_letter'  l %}" class="btn btn-{% if l == slug %}primary{% else %}default{% endif %}">{{ l }}</a>
         {% endfor %}

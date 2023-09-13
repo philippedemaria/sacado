@@ -4,7 +4,7 @@
 
 
 {% if request.user.is_student %}
-  <div class="col-sm-12 col-md-12" align="left" style="margin:10px 0px">
+  <div class="col-xs-12 col-md-12" align="left" style="margin:10px 0px">
 
 
         {% get_is_lock relation.parcours today as is_lock %} 
@@ -30,12 +30,12 @@
   </div>
 {% elif request.user.is_teacher %} 
 
-    <div class="col-sm-12 col-md-12" align="left" style="margin:10px 0px">
+    <div class="col-xs-12 col-md-12" align="left" style="margin:10px 0px">
 			    <a href="#" class="btn btn-primary" onclick="javascript: window.close()">Enregistrer l'exercice </a>
     </div>
 
 
-    <div class="col-sm-12 col-md-12" align="left" style="margin:10px 0px">
+    <div class="col-xs-12 col-md-12" align="left" style="margin:10px 0px">
         <div class="alert alert-info">
             Vous êtes en <b>version enseignant</b>. L'exercice ne s'enregistre pas. Cette version est une démo de ce que voit l'élève.
         </div>

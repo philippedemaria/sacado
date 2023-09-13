@@ -43,29 +43,29 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-12 col-md-8 form_card">
+            <div class="col-xs-12 col-md-8 form_card">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group"> 
                             <label>Importer un fichier (ggb, doc, xls, odt, dtt, pdf, ...) ou écrire un lien externe</label>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
 				            {{ form.title.label_tag }}
 				            {{ form.title|add_class:"form-control" }}
                             {{ form.title.errors }}
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <div class="form-group"> 
                             {{ form.file.label_tag }} <label><small>(50Ko )</small></label>
                             {{ form.file|add_class:"btn btn-default" }}
                         </div>
                     </div>    
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <div class="form-group"> 
                             {{ form.link.label_tag }}  
                             {{ form.link|add_class:"form-control"|attr:"placeholder:https://" }}
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div class="row {% if docperso or group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span>
@@ -85,7 +85,7 @@
 	                </div>	
                 </div>
                 <div class="row {% if docperso or group %}no_visu{% endif %}"  id="folders_is_global">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -94,7 +94,7 @@
                             {{ form.folders.errors }}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -105,7 +105,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4 setup_ggb no_visu">
+            <div class="col-xs-12 col-md-4 setup_ggb no_visu">
                 <div class="form_card">
 
                 <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
@@ -141,7 +141,7 @@
             </div>
         </div>
 	    <div class="row">
-	        <div class="col-sm-8 col-md-8"> 
+	        <div class="col-xs-8 col-md-8"> 
 	            <div class="form-group">
 
                     <input value="Enregistrer" type="submit" class="btn btn-primary"/>
@@ -151,7 +151,7 @@
 	        </div>
 
             {% if docperso %}
-                <div class="col-sm-4 col-md-4">  
+                <div class="col-xs-4 col-md-4">  
                     {% if parcours %}
                     <a href="{% url 'delete_docperso' parcours.id docperso.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('ce document')" > 
                         <i class="fa fa-trash"> </i>   Supprimer

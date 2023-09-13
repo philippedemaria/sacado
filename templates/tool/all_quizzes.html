@@ -36,14 +36,14 @@
     <form action="" method="POST" enctype='multipart/form-data'>  
     {% csrf_token %}
     <div class="row search_bar" >
-        <div class="col-sm-12 col-md-2 col-lg-2">
+        <div class="col-xs-12 col-md-2 col-lg-2">
                 <select id="id_subject" name="subject" class="form-control select2">
                     {% for s in teacher.subjects.all %}
                         <option value="{{s.id}}">{{ s.shortname }}</option>
                     {% endfor %}
                 </select>
         </div>
-        <div class="col-sm-10 col-md-2 col-lg-2">
+        <div class="col-xs-10 col-md-2 col-lg-2">
                 <select id="id_level" name="level" class="form-control select2" >
                     <option value=" ">Choisir un niveau</option>
                     {% for l in teacher.levels.all|dictsort:"ranking" %}
@@ -51,17 +51,17 @@
                     {% endfor %}
                 </select>
         </div>
-        <div class="col-sm-2 col-md-1 col-lg-1">
+        <div class="col-xs-2 col-md-1 col-lg-1">
             <div class="form-group" id="loading">
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-5 col-lg-5">
+        <div class="col-xs-12 col-md-5 col-lg-5">
                 <select id="thm_id" name="theme" class="form-control select2" multiple>
                     <option value=" ">Choisir un niveau puis un thème</option>
                 </select>
         </div>
-        <div class="col-sm-12 col-md-2 col-lg-2">
+        <div class="col-xs-12 col-md-2 col-lg-2">
                 <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
                 <input type="hidden" name="is_eval" id="is_eval"  value="{{ is_eval }}" />
         </div>
@@ -76,10 +76,10 @@
             <div id="loading">
             </div>
 
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
  
 
-                        <div class="col-sm-12 col-md-12  form_card">
+                        <div class="col-xs-12 col-md-12  form_card">
                             Pour trouver des quizz mutualisés, vous devez :                
                             <div style="height:20px"></div>
                             <ol>Sélectionner une matière</ol>
@@ -135,7 +135,7 @@
                     {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">
                     {% for group in teacher.groups.all %}
-                    <div class="col-sm-6 card_modal_search exercise_body_shared">
+                    <div class="col-xs-6 card_modal_search exercise_body_shared">
                         <div class="quizz_item" style="background-color:{{ group.color }}">
                             <label  class="btn btn-sacado ">Groupe : {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
                             <div class="form_card" style="padding : 15px 5px "><label>Dossiers associés</label>                         
@@ -153,7 +153,7 @@
                     {% endfor %} 
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-xs-12">
                             <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer le quizz <span id="this_document_label"></span></a>
                         </div>
                     </div>

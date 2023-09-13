@@ -20,7 +20,7 @@
       <div class="modal-content">
           <div class="modal-header" style="background-color: {{ event.color }}">
               <div class="row" style="color:#FFF">                      
-                  <div class="col-sm-12 col-md-12">
+                  <div class="col-xs-12 col-md-12">
                      <div class="event-group">
                         <h2>{{ event.title  }}<small><a href="#" class="vue" data-dismiss="modal"><i class="fa fa-times pull-right"></i></a></small>
 
@@ -29,7 +29,7 @@
                   </div>
               </div>
               <div class="row"  style="color:#FFF">
-                    <div class="col-sm-9 col-md-9">                        
+                    <div class="col-xs-9 col-md-9">                        
                       <div class="event-group">
                             <h5>
                             {% if event.is_allday == 0 %}
@@ -45,7 +45,7 @@
                             </h5>  
                       </div> 
                     </div> 
-                    <div class="col-sm-3 col-md-3"> 
+                    <div class="col-xs-3 col-md-3"> 
                             <a href="{% url 'delete_event' event.id %}" class="white pull-right" onclick="return TestDelete('cet événement ?')" ><i class='fa fa-trash'></i></a> 
                             <a href="#" class="white update_event_modal pull-right" style='margin-right:10px' data-event_id="{{ event.id  }}" ><i class='fa fa-pencil'></i></a>   
                     </div>   
@@ -58,7 +58,7 @@
           <div class="modal-body">                  
                   <div class="row">   
       
-                      <div class="col-sm-8 col-md-8">                      
+                      <div class="col-xs-8 col-md-8">                      
                           <div class="event-group">
                           <i class='fa fa-university'></i> Lieu<br>
                              <small> {{ event.place  }}</small>
@@ -85,7 +85,7 @@
 
 
  
-                      <div class="col-sm-4 col-md-4">
+                      <div class="col-xs-4 col-md-4">
                           <div class="event-group">
                               
                             {% if event.display == 0  %} <div class="alert alert-danger">Evènement privé</div> {% else %} <div class="alert alert-danger">Evènement public</div>  {% endif %}
@@ -94,7 +94,7 @@
                       </div>   
                   </div> 
                 <!--<div class="row">   
-                      <div class="col-sm-2 col-md-2">                      
+                      <div class="col-xs-2 col-md-2">                      
                           <div class="event-group">
                               <div class="event-group">
                                   Notification<br>
@@ -104,19 +104,19 @@
                               </div>
                           </div>  
                       </div>
-                      <div class="col-sm-4 col-md-4">
+                      <div class="col-xs-4 col-md-4">
                           <div class="event-group">
                               <input  type="number" id='days' name='days'  placeholder="jours avant" class="event-control select2"/>
                           </div>
                       </div> 
-                       <div class="col-sm-4 col-md-4">
+                       <div class="col-xs-4 col-md-4">
                           <div class="event-group">
                               <input  type="date" id='date_notif' name='date_notif' class="event-control select2"/>
                           </div>
                       </div>                  
                   </div> -->
                   <div class="row">                    
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-xs-12 col-md-12">
                           <div class="event-group">
                               <i class='fa fa-comment'></i>  Commentaire<br>
                               <small>{{ event.comment |safe  }}</small>

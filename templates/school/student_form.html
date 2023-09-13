@@ -38,7 +38,7 @@
         <input type="hidden" name="school" value="{{ school.id }}" />
 
         <div class="row">
-            <div class="col-sm-12 col-md-2">
+            <div class="col-xs-12 col-md-2">
                 <div class="form-group">
                     <label>{{ user_form.civilite.label_tag }}</label>
                     {{ user_form.civilite  |add_class:"form-control select2" }}
@@ -47,7 +47,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ user_form.last_name.label_tag }}</label>
                     {{ user_form.last_name  |add_class:"form-control" }}
@@ -56,7 +56,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ user_form.first_name.label_tag }}</label>
                     {{ user_form.first_name  |add_class:"form-control" }}
@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ user_form.email.label_tag }} <em>Optionnel</em></label>
                     {{ user_form.email  |add_class:"form-control" }}
@@ -76,7 +76,7 @@
 
         {% if groups %}
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>Groupe :</label>
                     <select name="group" class="form-control select2">
@@ -97,7 +97,7 @@
 
 
         <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group">
                         <input value="Enregistrer" type="submit" class="btn btn-primary"/>
                         <a href="javascript:history.back()">

@@ -40,7 +40,7 @@
 
 {% block type_of_question %} 
     <div class="row" >
-        <div class="col-sm-12 col-md-12" ><label>Enoncé</label><br/>  
+        <div class="col-xs-12 col-md-12" ><label>Enoncé</label><br/>  
             {{ form.title|attr:"required"   }}
         </div>
     </div> 
@@ -59,26 +59,26 @@
                 
 <script id="rowToClone" type="text/template">
     <div id="duplicate">
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-                <div class="col-sm-11">
+                <div class="col-xs-11">
                     <div class="row ">
-                        <div class="col-sm-2 col-md-2 get_image"  align="center" id="imager"> 
+                        <div class="col-xs-2 col-md-2 get_image"  align="center" id="imager"> 
                             <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-image"></i>
                             {{ form_ans.empty_form.imageanswer|add_class:"choose_imageanswer" }}
                             <img src="{% if form.imageanswer.url %}{{ form.imageanswer.url }}{% endif %}" height="90px" 
                                  class="choose_imageanswer preview" id="preview"> 
                         </div>
-                        <div class="col-sm-8 col-md-8" >
+                        <div class="col-xs-8 col-md-8" >
                             <a href="#" id="delete_img" class="preview delete_img"><i class="fa fa-trash"></i></a> 
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-1">
+                <div class="col-xs-1">
                     <span class="input-group-addon input-group-addon-right remove_more"><i class="bi bi-trash"></i></span>
                 </div>            
                 <div class="row">
-                    <div class="col-sm-12 col-md-12" >
+                    <div class="col-xs-12 col-md-12" >
                         <a href="javascript:void()" class="automatic_insertion"   id="feed_back"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
                         <div id="div_feed_back" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
                         {{ form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
@@ -100,22 +100,22 @@
     <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
     {% for form in form_ans %} 
         {{ form.id }}
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="row quizz_line_answer quizz_box_answer multiple_quizz_box_answer quizz_box_answer_left" >  
-                <div class="col-sm-12">
+                <div class="col-xs-12">
                     <div class="row ">
-                        <div class="col-sm-2 col-md-2 get_image"  align="center" id="imager{{ forloop.counter0 }}"> 
+                        <div class="col-xs-2 col-md-2 get_image"  align="center" id="imager{{ forloop.counter0 }}"> 
                             <i class="fa fa-file-image-o answer_margin10 fa-2x" id="file-image{{ forloop.counter0 }}"></i>
                             {{ form.imageanswer|add_class:"choose_imageanswer" }}
                             <img src="{% if form.imageanswer.url %}{{ form.imageanswer.url }}{% endif %}" height="90px" class="choose_imageanswer preview" id="preview{{ forloop.counter0 }}"> 
                         </div>
-                        <div class="col-sm-9 col-md-9" >
+                        <div class="col-xs-9 col-md-9" >
                             <a href="#" id="delete_img{{ forloop.counter0 }}" class="preview delete_img"><i class="fa fa-trash"></i></a> 
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 col-md-12" >
+                    <div class="col-xs-12 col-md-12" >
                         <a href="javascript:void()" class="automatic_insertion"   id="feed_back{{ forloop.counter0 }}"><i class="bi bi-arrow-return-right"></i> Afficher un feedback si cette réponse est choisie. </a>
                         <div id="div_feed_back{{ forloop.counter0 }}" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
                         {{ form.retroaction|add_class:"form-control"|attr:"rows:3"|attr:"placeholder:Ecrire le feedback" }}
@@ -132,7 +132,7 @@
 
 {% block add_more %} 
     <div class="row">
-        <div class="col-sm-12 col-md-12" >
+        <div class="col-xs-12 col-md-12" >
             <a href="javascript:void();"  class="add_more edit" ><i class="bi bi-plus-circle"></i> Ajouter une image </a><br/><br/>
         </div>                            
     </div>

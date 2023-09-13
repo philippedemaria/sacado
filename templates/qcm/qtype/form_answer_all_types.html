@@ -47,7 +47,7 @@
             {% if student %}
             {% get_available relation student  as available %}                                    <!-- Si le nombre de tentative est dépassée ou pas : même code que get_parcours_available mais pour une relationship -->
             {% get_parcours_available relation.parcours student relation.exercise as parcours_available %} <!-- Si le nombre de tentative est dépassée ou pas : même code que get_available pour une parcours --> 
-            <div class="col-sm-12 col-md-1 col-lg-1 full_screen_size form_card" align="center">
+            <div class="col-xs-12 col-md-1 col-lg-1 full_screen_size form_card" align="center">
                 {% if student.ebep %}
                 <div class="calculator_img"  class="calculator_img double_bottom_padding">
                       <a href="#" id="use_tools" ><img src="{% static 'img/situation.png' %}"  class="img_size_square_75" /></a>            
@@ -157,7 +157,7 @@
                 </div>
             </div> 
             {% endif %}
-            <div class="col-sm-12 col-md-12 col-lg-9" align="center">
+            <div class="col-xs-12 col-md-12 col-lg-9" align="center">
 
                 {% if relation.relationship_remediation.all|length > 0 %}
                 <span class="pull-right">
@@ -175,15 +175,15 @@
                 <!-- ================== Zone d'enregistrement ===============================--> 
                 <!-- ======================================================================= -->                     
                     <div class="row">
-                        <div class="col-sm-2 col-md-1 col-lg-1" align="left">
+                        <div class="col-xs-2 col-md-1 col-lg-1" align="left">
                             <img src="{% static 'img/sacadoA1.png' %}" height="30px"/>
                         </div>
-                        <div class="col-sm-6 col-md-8 col-lg-9" align="left">
+                        <div class="col-xs-6 col-md-8 col-lg-9" align="left">
                             {% if supportfile.title %}
                             <div class="custom_title" style="border: 2px solid {{ supportfile.theme.subject.color }};color: {{ supportfile.theme.subject.color }}"><label>{{ supportfile.title }}</label></div>
                             {% endif %}
                         </div>
-                        <div class="col-sm-4 col-md-3 col-lg-2"  >
+                        <div class="col-xs-4 col-md-3 col-lg-2"  >
                         {% if request.user.is_student %}
                           {% if relation.score_display %}
                                   <div class="custom_score" style="border: 2px solid {{ supportfile.theme.subject.color }};color: {{ supportfile.theme.subject.color }}"><label>Score : <span id="score_span">0</span>/<span id="numexo_span">{% if numexo < 0 %} 0 {% else %}{{ numexo }}{% endif %}</span></label></div>
@@ -225,7 +225,7 @@
                 <!-- ============================ Fin de Zone ===============================--> 
                 <!-- ======================================================================= -->
 
-                <div class="col-sm-12 col-md-12" align="left" style="margin:30px 50px">
+                <div class="col-xs-12 col-md-12" align="left" style="margin:30px 50px">
                   <!-- Retour aux exercices du parcours -->
                   {% if parcours.is_evaluation %}
                       {% if  parcours.is_exit %}
@@ -236,7 +236,7 @@
                   {% endif %}
                 </div>
             </div>  
-            <div class="col-sm-12 md-12 col-lg-2">
+            <div class="col-xs-12 md-12 col-lg-2">
                {% include 'qcm/signal_exercise_peda_live.html' %}  
 
                {% if supportfile.qtype == 10 %}
@@ -273,7 +273,7 @@
 
     {% if data.positionnement  %}
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-xs-12 col-md-12 col-lg-12">
             <form action="" method="POST" enctype='multipart/form-data'>                  
                 <table class='table'>
                     <tr>

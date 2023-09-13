@@ -2,7 +2,7 @@
         <input type="hidden" id="type_of_document" value="{{ type_of_document }}" name="type_of_document" /><input type="hidden" id="id_parcours" value="{{ parcours.id }}" name="id_parcours" />
         {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="col-xs-12 col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>Enseignements</label>
                         <select id="id_subject" name="subject" class="form-control select2">
@@ -12,7 +12,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="col-xs-12 col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>Niveau</label>
                         <select id="id_level" name="level" class="form-control select2" >
@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-4 col-lg-6">
+                <div class="col-xs-12 col-md-4 col-lg-6">
                     <div class="form-group">
                         <label>Mot clé </label> <span style="font-size:12px"><em>Recherche par mot clé.</em></span>
                         <input id="keyword" name="keyword" class="form-control" />
@@ -34,7 +34,7 @@
 
             </div> 
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div id="loader">
                     </div>
                     <div id="content_exercises" class="list_choice">

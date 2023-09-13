@@ -58,15 +58,15 @@
 <section class="content_main">
     <form action="" method="POST" enctype='multipart/form-data'>
     <div class="row">
-        <div class="col-sm-12 col-md-4 form_card">
+        <div class="col-xs-12 col-md-4 form_card">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-7 col-md-8 col-lg-9">
+                <div class="col-xs-7 col-md-8 col-lg-9">
                     {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
                     {{ form.title |add_class:"form-control" }}
                     {{ form.title.errors }}
                 </div>
-                <div class="col-sm-5  col-md-4 col-lg-3 no_visu">                    
+                <div class="col-xs-5  col-md-4 col-lg-3 no_visu">                    
                     {{ form.color.label_tag }}      
                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                         <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -82,7 +82,7 @@
                         {{ form.subject.as_hidden}}
                         {{ form.level.as_hidden  }}
                 {% else %}
-                <div class="col-sm-12  col-md-6">
+                <div class="col-xs-12  col-md-6">
                     <div class="form-group">
                         <label>Enseignement <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                     <div class="helper_tip_text" >Renseigner la matière  liée à ce parcours. Il vous sera cependant possible de choisir des exercices d'une autre matière. Par exemple, un enseignant de SPC doit renseigner ici SPC et pourra choisir des exercices de Maths plus tard dans ce parcours de SPC. </div>
@@ -92,7 +92,7 @@
                         {{ form.subject.errors }}
                     </div>
                 </div> 
-                <div class="col-sm-12  col-md-6">
+                <div class="col-xs-12  col-md-6">
                     <div class="form-group">
                         <label>Niveau d'enseignement :</label>  
                         {{ form.level|add_class:"form-control select2"|attr:"required"}}
@@ -102,7 +102,7 @@
                 {% endif %}
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-xs-12 col-md-6">
                     <label>Attribuer aux groupes
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
@@ -113,7 +113,7 @@
                         {{ form.groups.errors }}
                     </div>
                 </div> 
-                <div class="col-sm-6  col-md-6">
+                <div class="col-xs-6  col-md-6">
                     <div class="form-group">  
                         <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
                             <small><i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le parcours est partagé entre ces groupes.<br/>
@@ -124,7 +124,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-6">                    
+                <div class="col-xs-12 col-md-6">                    
                         <label>Inclure dans les dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -139,12 +139,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 no_visu ">
-            <div class="col-sm-12 col-md-12 form_card">
+        <div class="col-xs-12 col-md-4 no_visu ">
+            <div class="col-xs-12 col-md-12 form_card">
                 {% include 'qcm/insert_vignettes.html' %}
             </div>
         </div>
-        <div class="col-sm-12 col-md-4 no_visu ">                             
+        <div class="col-xs-12 col-md-4 no_visu ">                             
             <table class="table table-sacado borderless form_card">
                 {% block evaluation %} 
                     <tr>
@@ -266,7 +266,7 @@
 
     
     <div class="row" style="margin-top:40px">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-xs-12 col-md-6">
             <div class="form-group">
                 {% block save %}
                 <span  id="save_and_choose_span" {% if  parcours.is_ia %}class="no_visu_on_load"{% endif %} ><input value="Enregistrer {% if not  parcours.is_sequence %}et choisir les exercices{% endif %}" type="submit" name="save_and_choose" class="btn btn-primary"  /></span>  
@@ -280,7 +280,7 @@
         </div> 
 
         {% block save_evaluation %}
-        <div class="col-sm-12 col-md-6">
+        <div class="col-xs-12 col-md-6">
         {% if parcours %}
                 
                 <a href="{% url 'clone_parcours' parcours.id  1 %}" class="btn btn-info"  onclick="return TestDuplicate('ce parcours')"> 

@@ -33,19 +33,19 @@
 {% block body %}
 <div class="content_main  alert alert-sacado">  
         <div class="row">        
-            <div class="col-sm-12 col-md-8">
+            <div class="col-xs-12 col-md-8">
                 <div class="observation_asso">
                     <label> Objet : </label> {{ accounting.objet }}
                 </div>
             </div>       
-            <div class="col-sm-12 col-md-4">
+            <div class="col-xs-12 col-md-4">
                 <div class="observation_asso">
                     <label> Etablie par : </label> {{ accounting.user }}
                 </div>
             </div>
         </div>  
         <div class="row">        
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="observation_asso">
                     {% if accounting.beneficiaire %}
                         <label> Bénéficiaire : </label> {{ accounting.beneficiaire }}<br/>
@@ -68,7 +68,7 @@
             </div>
         </div> 
         <div class="row">        
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="observation_asso">
                     <table class="table table-sacado">
                         <tr><td>Descriptions</td><td>Montant</td></tr>
@@ -78,7 +78,7 @@
                     </table>
                 </div>        
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="observation_asso">
                     <table class="table table-sacado">
                         <tr><td>Date de paiement : </div></td><td> <b>{{ accounting.date|date:"Y-m-d" }}  </b></td></tr> 
@@ -90,7 +90,7 @@
             </div>
         </div> 
         <div class="row">        
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="observation_asso">
                     <label> Observations :</label>
                     {% if accounting.observation %}{{ accounting.observation|safe }}{% else %}Néant{% endif %}
@@ -99,10 +99,10 @@
         </div> 
 
         <div class="row" style="margin-top:20px">        
-            <div class="col-sm-6 col-md-3">
+            <div class="col-xs-6 col-md-3">
                 <a href="{% url 'print_accounting' accounting.id %}" class="btn btn-primary" ><i class="fa fa-print"></i> Imprimer cette facture </a>
             </div>
-            <div class="col-sm-6 col-md-3">
+            <div class="col-xs-6 col-md-3">
                 <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default"/></a>
             </div>
         </div> 

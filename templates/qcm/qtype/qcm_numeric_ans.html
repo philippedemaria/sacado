@@ -22,10 +22,10 @@
 		        <div class="custom_all_answers custom_content">        
 					{% for choice in shufflechoices|index:forloop.counter0 %}
 					<div class="row quizz_item zoom_in" style="padding: 10px;"> 
-						<div class="col-sm-11 proposition " align='left'>
+						<div class="col-xs-11 proposition " align='left'>
 						{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{ choice.answer  }} 
 						</div>  	 
-						<div class="col-sm-1" align='left'>
+						<div class="col-xs-1" align='left'>
 							<input type="{% if supportfile.qtype == 3  %}radio{% else %}checkbox{% endif %}" data-is_correct=""
 								   name="answers" value="{{ choice.id }}" data-loop="{{ forloop.parentloop.counter }}" class="selected_answer"  />
 						</div>
@@ -35,7 +35,7 @@
 
 		    </div>
 		    <div class="row validation">
-		    	<div class="col-sm-12 col-md-3" align="center"  >
+		    	<div class="col-xs-12 col-md-3" align="center"  >
 		            <a  href="#" class="btn btn-lg btn-primary show_this_qcm_correction" data-supportfile_id="{{ supportfile.id }}"   
 		            	id="nav_start{{ forloop.counter }}" data-loop="{{ forloop.counter }}"><i class="fa fa-caret-right"></i> Valider </a>
 		        </div>

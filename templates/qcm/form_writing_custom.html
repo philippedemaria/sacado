@@ -37,7 +37,7 @@
 <section class="content_main"> 
     <div class="row">
 
-        <div class="col-sm-12 col-md-12 col-lg-8">
+        <div class="col-xs-12 col-md-12 col-lg-8">
 
             {% if customexercise.customexercise_remediation.all|length > 0 %}
             <span class="pull-right">
@@ -93,7 +93,7 @@
             <form action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
                 {% if customexercise.is_image  %} 
-                    <div class="col-sm-7 col-lg-7" >
+                    <div class="col-xs-7 col-lg-7" >
                     {% if customexercise.is_scratch   %} 
                         <div class="form-group">
                             <label>Numéro du script : <small>nombre obligatoire</small></label> <br/>
@@ -110,20 +110,20 @@
                         <!-- Les formulaires du formset -->
                         <div id="formsetZone">
                             <div class="row" id="duplicate" style="display:none">            
-                                <div class="col-sm-12 col-md-8">
+                                <div class="col-xs-12 col-md-8">
                                         <div class="form-group">
                                             {{ form_ans.empty_form.image |add_class:"btn btn-default" }}
                                             {{ form_ans.empty_form.image.errors }}
                                         </div>
 
                                 </div>    
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-xs-12 col-md-4">
                                     <div class="delete_button"></div>
                                 </div>
                             </div>
                             {% for form in form_ans %}
                             <div class="row" id="duplicate{{ forloop.counter0 }}">            
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-xs-12 col-md-6">
                                     <div class="form-group">
                                         {% if not customexercise.is_scratch   %}  <label>{{ form.image.label_tag }}</label><br/>{% endif %} 
                                         {{ form.image |add_class:"btn btn-default" }}
@@ -135,14 +135,14 @@
 
                         </div> 
                         <div class="row">
-                            <div class="col-sm-6 col-md-6 controls">
+                            <div class="col-xs-6 col-md-6 controls">
                                 <div class="form-group">
                                     <a href="#" id="new_item" class="btn btn-default add_more" ><i class="fa fa-plus"></i> Ajouter une image</a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-5 col-lg-5">
+                    <div class="col-xs-5 col-lg-5">
                         {% if images %}
                             {% for img in images %}
                                 <div class="row" id="delete_custom_answer_image{{ img.id }}">
@@ -210,7 +210,7 @@
 
                 {% if only_show %}
                 <div class="row">
-                    <div class="col-sm-12 col-lg-8">
+                    <div class="col-xs-12 col-lg-8">
                         <div class="form-group">
                             {% if not customexercise.is_realtime  %} 
 
@@ -249,7 +249,7 @@
         </div>  
 
 
-        <div class="col-sm-12 col-lg-4">
+        <div class="col-xs-12 col-lg-4">
 
             {% if customexercise.skills.all|length > 0 %}              
                 <label>Compétences visées :</label>
@@ -287,7 +287,7 @@
 
     {% if data.positionnement  %}
     <div class="row">
-        <div class="col-sm-12 col-md-12 col-lg-12">
+        <div class="col-xs-12 col-md-12 col-lg-12">
             <form action="" method="POST" enctype='multipart/form-data'>                  
                 <table class='table'>
                     <tr>

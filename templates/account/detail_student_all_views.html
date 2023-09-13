@@ -30,7 +30,7 @@
 
 {% if exercises|length > 0 %}
 <div class="row">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
         <table class="table table-sacado  table-hover">
             <tbody>
                 <tr>
@@ -105,7 +105,7 @@
             {% if student.user.is_in_academy  %}
 
             <div class="row bilan_div">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <form action="{% url 'print_monthly_statistiques' %}" method="POST">{% csrf_token %}
                         <img src="{% static 'img/pdf.png' %}" width="20px"/> Je veux imprimer le bilan pdf du <input type="date" id="date_start_id" name="date_start" /> au <input type="date" id="date_stop_id" name="date_stop" />
                         <input type="hidden" name="group_id" id="group_id" value="{{ group.id }}" />
@@ -120,7 +120,7 @@
             {% comment %}
             <!-- bilan des parents par mois -->
             <div class="row bilan_div">
-                <div class="col-sm-12 col-md-5" align="center">
+                <div class="col-xs-12 col-md-5" align="center">
                     <h3>Semaine {{ datebar }}</h3>
 
                     {% if score_bool %}
@@ -131,7 +131,7 @@
                         <div class="alert alert-danger">Aucun exercice travaillé durant cette semaine</div>
                     {% endif %}
                 </div>                 
-                <div class="col-sm-12 col-md-7" align="center">
+                <div class="col-xs-12 col-md-7" align="center">
                     <h3>Suivi annuel des attendus</h3>
                     <input id="scoreswRadar" value="{{scoreswRadar}}" type="hidden" /> 
                     <input id="waitingsRadar" value="{{waitingsRadar}}" type="hidden" /> 
@@ -145,7 +145,7 @@
 
 
             <div class="row bilan_div">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <a href="#skills{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilan des compétences</a>
                     <div id="skills{{ forloop.counter }}" class="collapse bilan_details">
                         <table class="table table-sacado  table-hover" style="min-width:70%">
@@ -179,7 +179,7 @@
             </div>
              
             <div class="row bilan_div">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <a href="#waitings{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilan des attendus</a>
 
                     <div id="waitings{{ forloop.counter }}" class="collapse bilan_details">
@@ -212,7 +212,7 @@
             </div>
              
             <div class="row bilan_div">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <a href="#knowledges{{ forloop.counter }}" data-toggle="collapse"  class="bilan_title"><i class="fa fa-angle-right"></i> <i class="fa fa-angle-down"></i>  Bilan des savoir faire </a>
                         <div id="knowledges{{ forloop.counter }}" class="collapse bilan_details">
                             {% with student.resultknowledge_dict as results %}
@@ -253,7 +253,7 @@
             </div>
 
             <div class="row bilan_div">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <a href="#exercises{{ forloop.counter }}" data-toggle="collapse" class="bilan_title"><i class="fa fa-angle-right"></i><i class="fa fa-angle-down"></i>   Bilan des exercices </a>
                     <div id="exercises{{ forloop.counter }}" class="collapse bilan_details">
                         {% regroup exercises by theme as theme_list %}
@@ -315,7 +315,7 @@
 <div class="row">
     <div class="row">
 
-            <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
+            <div class="col-md-12 col-lg-12 col-xs-12" style="text-align: center">
                 <div class="alert alert-info">
                     <h1 class="thin"> Aucun exercice n'est proposé à cet élève.</h1>
                     <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">

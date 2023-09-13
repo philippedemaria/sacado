@@ -39,7 +39,7 @@
         <form action="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-7">
+                <div class="col-xs-12 col-md-7">
                     <div> Niveau : {{  exercise.level.name  }}<br/>
                     Thème : {{  exercise.theme.name  }}<br/>
                     Savoir-faire : {{  exercise.knowledge.name  }}
@@ -57,7 +57,7 @@
                     </div>
 
                 </div>
-                <div class="col-sm-12 col-md-5">
+                <div class="col-xs-12 col-md-5">
                     <table  class="table table-sacado  table-hover standard_tab_sort2000">
                         <thead>
                         <tr>
@@ -86,7 +86,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-12 col-md-12">     
+                <div class="col-xs-12 col-md-12">     
                         <a href="javascript:history.back()"  class="btn btn-default " >Retour </a>
                 </div>
             </div>

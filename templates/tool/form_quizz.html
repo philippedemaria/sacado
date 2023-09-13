@@ -51,14 +51,14 @@
     <form action="#" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-4 form_card">
+            <div class="col-xs-12 col-md-4 form_card">
                 <div class="row">
-                    <div class="col-sm-7 col-md-8 col-lg-9">
+                    <div class="col-xs-7 col-md-8 col-lg-9">
                         {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
                         {{ form.title |add_class:"form-control" }}
                         {{ form.title.errors }}
                     </div>
-                    <div class="col-sm-5  col-md-4 col-lg-3 no_visu">                    
+                    <div class="col-xs-5  col-md-4 col-lg-3 no_visu">                    
                         {{ form.color.label_tag }}      
                         <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                             <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -74,7 +74,7 @@
                     {{ form.subject.as_hidden}}
                 {% else %}
                 <div class="row">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <div class="form-group">
         		            <label>Enseignement</label>
         		            {{ form.subject|add_class:"form-control select2" }}
@@ -84,20 +84,20 @@
                 </div>
                 {% endif %}
                 <div class="row {% if group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-6"  >
+                    <div class="col-xs-12 col-md-6"  >
                         <label>Attribuer aux groupes</label>
                         <div class="alert alert-sacado form-group" id="grplist">                          
                             {{ form.groups|add_class:"select_all"   }}
                             {{ form.groups.errors }}
                         </div>
 	                </div>	
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label><img src="{% static 'img/conseil.png' %}" width="25px"/> <small>Aides et conseils : <br/>Cocher, décocher les groupes pour affiner les dossiers.<br/>
                         <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le quizz est partagé entre ces groupes.</small></label>
                     </div> 
                 </div>
                 <div class="row no_visu">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <label>Inclure dans les dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -112,7 +112,7 @@
                     </div>
                 </div>
                 <div class="row no_visu">
-                    <div class="col-sm-12 col-md-12 form-group" >
+                    <div class="col-xs-12 col-md-12 form-group" >
                         <label>Associer aux parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text_right" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -137,8 +137,8 @@
             </div>
 
 
-            <div class="col-sm-12 col-md-4 ">
-                <div class="col-sm-12 col-md-12 form_card  {% if not request.user.is_superuser %}setup_ggb no_visu{% endif %}">
+            <div class="col-xs-12 col-md-4 ">
+                <div class="col-xs-12 col-md-12 form_card  {% if not request.user.is_superuser %}setup_ggb no_visu{% endif %}">
                     <table class="table table-sacado borderless" style="margin-bottom:0px">
                         {% if request.user.is_superuser %}
                         <tr>
@@ -195,12 +195,12 @@
                             </tr>
                     </table> 
                 </div>
-                <div class="col-sm-12 col-md-12 form_card no_visu" style="margin-top:15px">
+                <div class="col-xs-12 col-md-12 form_card no_visu" style="margin-top:15px">
                     {% include 'qcm/insert_vignettes.html' %}
                 </div>
             </div>
 
-            <div class="col-sm-12 col-md-4">
+            <div class="col-xs-12 col-md-4">
                 <div class='form_card'>
                     <table class="table table-sacado borderless"  style="margin-bottom:0px">
                         <tr>
@@ -292,7 +292,7 @@
         </div>
 	    <div class="row">
 
-	        <div class="col-sm-6 col-md-6"> 
+	        <div class="col-xs-6 col-md-6"> 
 	            <div class="form-group">
 	                <input value="Enregistrer et créer les questions" type="submit" class="btn btn-primary" id="on_submit_button" />
 	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
@@ -300,13 +300,13 @@
 	        </div> 
             {% if quizz %}
 
-            <div class="col-sm-3 col-md-3"> 
+            <div class="col-xs-3 col-md-3"> 
 
                 <a href="{% url 'create_question' quizz.id 0 %}" class="btn btn-quizz_bank"  > 
                     <i class="fa fa-pencil"> </i>   Modifier les questions
                 </a>
             </div> 
-            <div class="col-sm-3 col-md-3"> 
+            <div class="col-xs-3 col-md-3"> 
                 <a href="{% url 'delete_quizz' quizz.id %}" class="btn btn-danger"  onclick="return TestDelete('ce quizz')"> 
                     <i class="fa fa-trash"> </i>   Supprimer
                 </a>

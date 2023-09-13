@@ -57,7 +57,7 @@
 <section class="real_time_list"> 
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <table id="standard_tab" class="table table-sacado  table-hover">
                 <thead>
                 <tr>
@@ -172,10 +172,10 @@
                     <form action="{% url 'export_skills_after_evaluation' %}" method="post" > 
                         {% csrf_token %}<input type="hidden" name="parcours_id" value="{{ parcours.id }}" id="parcours_id"/>
                         <div class="row">
-                            <div class="col-sm-6">  
+                            <div class="col-xs-6">  
                                 <label>Pour une même compétence, prendre en compte </label>
                             </div>
-                            <div class="col-sm-6">  
+                            <div class="col-xs-6">  
                                 <select name="nb_skill" class="form-control select2">
                                     <option value="1">La dernière évaluée</option>
                                     <option value="2">Les 2 dernières évaluées</option>
@@ -188,7 +188,7 @@
 
 
                         <div class="row">
-                            <div class="col-sm-12">  
+                            <div class="col-xs-12">  
                                 <label> Rappel : <br/>
                                 4 niveaux de maitrise. Les codes correpondants sont 1, 2, 3, 4 et A.<br>  
                                     <li class="sanspuce"><i class="fa fa-square text-primary"></i> Très bonne maitrise  : 4 </li>
@@ -203,7 +203,7 @@
                         </div> 
                         <hr/>
                         <div class="row">
-                            <div class="col-sm-12">  
+                            <div class="col-xs-12">  
                                 <button type="submit" class="btn btn-primary" > Exporter </button>   
                                 <a href="#"  class="btn btn-default" class="close" data-dismiss="modal" aria-label="Close">Fermer</a>
                             </div>
@@ -227,12 +227,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">     
+                        <div class="col-xs-12 col-md-12">     
                             Transfert de notes de Sacado vers Pronote (1 min. 14 s.)
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">     
+                        <div class="col-xs-12 col-md-12">     
                             <video src="https://sacado.xyz/ressources/videos/stats.mp4" width=560  height=315 controls  >
                               Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
                             </video>
@@ -240,12 +240,12 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">     
+                        <div class="col-xs-12 col-md-12">     
                             Transfert de compétences de Sacado vers Pronote (1 min. 17 s.)
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">     
+                        <div class="col-xs-12 col-md-12">     
                             <video src="https://sacado.xyz/ressources/videos/stats_parcours.mp4" width=560  height=315 controls  >
                               Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
                             </video>

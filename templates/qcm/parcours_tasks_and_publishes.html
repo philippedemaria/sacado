@@ -41,7 +41,7 @@
     box-shadow: 0 0px 0px rgba(0, 0, 0, 0);
 }
 </style>
-<div class="col-sm-12 col-md-12">
+<div class="col-xs-12 col-md-12">
     <section class="content_main"> 
         <form action="" method="POST"> 
             <input type="hidden" value="{{ parcours.id }}" name="parcours" id="parcours"/>
@@ -282,7 +282,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 {{ form.title |add_class:"form-control" }}
                                 <input type="hidden"  id="parcours_id"  value="{{ parcours.id }}" />
@@ -290,14 +290,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 <label>Sous-section ? {{ form.is_subtitle  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"  }} </label>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 <label>Fichier attaché : <small>Pour lier un fichier pdf (préférable), à ce titre de section. (facultatif)</small></label>
                                   {{ form.attach_file|add_class:"btn btn-default" }}<br/> 

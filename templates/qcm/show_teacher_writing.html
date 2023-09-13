@@ -41,7 +41,7 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-8">
+            <div class="col-xs-12 col-md-12 col-lg-8">
              <a href="#" data-toggle='modal' data-target='#consigne' class="btn btn-danger">Lire la consigne</a>
             <hr>
 
@@ -65,7 +65,7 @@
                 {% endif %}
 
                 <div class="row">
-                    <div class="col-sm-12 col-lg-8">
+                    <div class="col-xs-12 col-lg-8">
                         <div class="form-group">
  
                             <input value="Soumettre votre exercice"   class="btn btn-primary"/>
@@ -76,7 +76,7 @@
  
                 </div>
             </div>
-            <div class="col-sm-12 col-lg-4">
+            <div class="col-xs-12 col-lg-4">
                 {% if exercise.supportfile.is_scratch   %} 
                 <label>Conseil :</label>  Utiliser le site Scratch pour créer votre script. Prendre une capture d'écran et la déposer dans la zone de texte.<br><br><br>
                 <a href="https://scratch.mit.edu/projects/editor/?tutorial=getStarted" target="_blank">Naviguer vers Scratch <img src="{% static 'img/scratch.png' %}"/></a>

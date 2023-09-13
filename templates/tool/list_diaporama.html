@@ -39,7 +39,7 @@
     <form action="{% url 'diaporama_actioner' %}" method="POST" enctype='multipart/form-data'>          
     {% csrf_token %} 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <table id="standard_tab" class="table table-sacado  table-hover">
                 <thead>
                 <tr>
@@ -74,7 +74,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">  
+        <div class="col-xs-12 col-md-12">  
                 <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces présentations')"> 
                     <i class="fa fa-archive"> </i>   Archiver la sélection
                 </button>

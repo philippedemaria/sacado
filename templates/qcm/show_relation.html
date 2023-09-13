@@ -25,7 +25,7 @@
 <section class="content_main content_main_exercise">
     {% get_available relation student  as available %}                                    <!-- Si le nombre de tentative est dépassée ou pas : même code que get_parcours_available mais pour une relationship -->
     {% get_parcours_available parcours student relation.exercise as parcours_available %} <!-- Si le nombre de tentative est dépassée ou pas : même code que get_available pour une parcours -->
-    <div class="col-sm-12 col-md-1 col-lg-1 full_screen_size">
+    <div class="col-xs-12 col-md-1 col-lg-1 full_screen_size">
         {% if student.ebep %}
         <div class="calculator_img"  class="calculator_img double_bottom_padding full_screen_size_details">
               <a href="#" id="use_tools" ><img src="{% static 'img/situation.png' %}"  class="img_size_square_75" /></a>            
@@ -143,7 +143,7 @@
         </div>
 
     </div>  
-    <div class="col-sm-12 col-md-8 col-lg-8">
+    <div class="col-xs-12 col-md-8 col-lg-8">
 
       {% if exercise.audiofile %}
         <div id="audio_open">
@@ -271,7 +271,7 @@
       </form>
 
     </div> 
-    <div class="col-sm-2 col-md-1 col-lg-1">
+    <div class="col-xs-2 col-md-1 col-lg-1">
 
       {% if relation.is_not_consigne_remediation %}
       <h1 class="thin">Aides</h1>
@@ -282,7 +282,7 @@
           {% endfor  %} 
       {% endif  %}
     </div>
-    <div class="col-sm-12 col-md-12 col-lg-2">
+    <div class="col-xs-12 col-md-12 col-lg-2">
         {% if not relation.parcours.is_evaluation %}
         {% if relation.relationships_courses.all|length > 0 %}      
           <h4 style="color:{{ relation.parcours.color }}">Le cours </h4>
@@ -336,7 +336,7 @@
           <div  id="ebep_div">
               {% for tool in relation.exercise.tools.all %}          
               <div class="row">
-                  <div class="col-sm-12 col-md-12 col-lg-12" align="left">
+                  <div class="col-xs-12 col-md-12 col-lg-12" align="left">
                       {{ tool.remark|safe }}
                   </div>
               </div>
@@ -655,8 +655,8 @@
 
     <div style="height:40px;clear: both"></div>
      <div class="checkbox_no_display" id="draft" >
-          <div class="col-sm-0 col-md-1 col-lg-1"></div>
-          <div class="col-sm-12 col-md-11 col-lg-11">
+          <div class="col-xs-0 col-md-1 col-lg-1"></div>
+          <div class="col-xs-12 col-md-11 col-lg-11">
                 <div style="left:800px;  position:absolute; z-index:1000;"><a href="#" id="close_draft"><i class="fa fa-times"></i></a></div>            
                 {% if sacado_asso  %}
 	{% comment %}

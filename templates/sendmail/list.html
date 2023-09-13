@@ -115,7 +115,7 @@
 
                 <div class="admin-content" id="home" >
                     <div class="row"> 
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                         <a href="#"  data-toggle='modal' data-target='#newEmail' class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau message</a> 
                       
                         {% if emails %}
@@ -160,7 +160,7 @@
                 </div>
                 <div class="admin-content" id="profile" >
                     <div class="row"> 
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-xs-12 col-md-12">
                         <a href="#"  data-toggle='modal' data-target='#newEmail'   class="btn btn-xs btn-danger"><i class="fa fa-plus"></i> Nouveau message</a> 
                         {% if sent_emails|length > 0 %}
                         <form  action="" method="POST">
@@ -205,7 +205,7 @@
                 
                 <div class="admin-content" id="notification" > 
                     <div class="row"> 
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-xs-12 col-md-12">
                           <table class="table table-sacado table-striped table-hover standard_tab_sort">
                                 <thead>
                                     <tr>
@@ -254,7 +254,7 @@
                     <div class="row"> 
                         <form  action="" method="POST">
                         {% csrf_token %}  
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             {% for g in groups %}
                                 <a href="#" data-group_id = "{{ g.id }}" class="btn btn-default selector_group" style="background-color: {{ g.color }}; color: {{ g.color|contrast_color }}">   {{g.name}}
                                 </a>
@@ -263,7 +263,7 @@
                         </form>
                     </div>
                     <div class="row"> 
-                        <div class="col-sm-12 col-md-12" id="result_group">
+                        <div class="col-xs-12 col-md-12" id="result_group">
                         </div>
                     </div>
                 </div>
@@ -271,7 +271,7 @@
                     <div class="row">
                         <form  action="" method="POST">
                         {% csrf_token %}  
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <select name="student_choose" class="select2" id="student_choose">
                                 <option value="">Choisir un élève</option>
                                 {% for g in groups %}
@@ -286,13 +286,13 @@
                       </form>
                     </div>
                     <div class="row"> 
-                        <div class="col-sm-12 col-md-12" id="result_student">
+                        <div class="col-xs-12 col-md-12" id="result_student">
                         </div>
                     </div>
                 </div>
                 <div class="admin-content" id="task" > 
                     <div class="row"> 
-                      <div class="col-sm-12 col-md-12">
+                      <div class="col-xs-12 col-md-12">
                           <table class="table table-sacado table-striped table-hover standard_tab_sort">
                                 <thead>
                                     <tr>
@@ -328,7 +328,7 @@
                 </div>
                 <div class="admin-content" id="webinaires" >
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <a href="https://sacado.xyz/ressources/webinaires/webinaire2.mp4" target="_blank"><img src="https://sacado.xyz/ressources/webinaires/webinaire2.jpg" width="300px" /></a>
                         </div>
                     </div>

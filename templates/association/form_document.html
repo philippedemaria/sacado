@@ -41,7 +41,7 @@
         {% csrf_token %}
 
         <div class="row">
-            <div class="col-sm-12 col-lg-12">
+            <div class="col-xs-12 col-lg-12">
 
                 <div class="form-group">
                     {{ form.section.label_tag }}  
@@ -61,7 +61,7 @@
                 </div>
  
                 <div class="row">
-                    <div class="col-sm-12 col-lg-8">
+                    <div class="col-xs-12 col-lg-8">
                         <div class="form-group">
                             <input value="Enregistrer" type="submit" class="btn btn-primary"/>
                             <a href="javascript:history.back()"><input type="button" value="Annuler"
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     {% if document and request.user.user_type == 2 %}
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group">
                             <a href="{% url 'delete_document' document.id %}" class="btn btn-danger"  onclick="return TestDelete('ce document')">Supprimer ce document</a>
                         </div>

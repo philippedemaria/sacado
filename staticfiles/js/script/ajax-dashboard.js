@@ -1135,7 +1135,10 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             { alert("Votre recherche doit être affinée. Trop d'exercices possibles.") ; }
                         else 
                             { $("#search_result").html("").html(data["html"])  ;  }
-
+                        $(".search_div").not(':first').remove();
+                        $("#search_div").val("");
+                        $("#navbarLeft").removeClass("navbarLeft_show");
+                        $("#navbarLeft").addClass("navbarLeft_none");
 
                     }
                 });

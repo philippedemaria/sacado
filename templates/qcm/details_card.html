@@ -90,7 +90,7 @@
           <!-- Pop up de la date de la tache d'un exercice  -->
           <div id="detail_dateur{{relation.id}}" class="card-dateur"  > 
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">     
+                    <div class="col-xs-12 col-md-12 title">     
                         <span href="#card{{relation.id}}" class="select_task_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
                          Programmation de tâche  
                     </div>
@@ -103,7 +103,7 @@
           <!-- Pop up de la date de publication d'un exercice  -->
           <div id="detail_pub{{relation.id}}" class="card-dateur"  >
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">     
+                    <div class="col-xs-12 col-md-12 title">     
                         <span href="#card{{relation.id}}" class="select_publish_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
                          Date de publication
                     </div>
@@ -120,7 +120,7 @@
           =============================================================================================================-->
           <div id="detail_constraint{{relation.id}}" class="card-dateur"> 
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">  
+                    <div class="col-xs-12 col-md-12 title">  
                       <span href="#card{{relation.id}}" class="select_constraint_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>  
                        Contraintes 
                     </div>
@@ -128,13 +128,13 @@
               <hr style="padding:0px; margin:10px 0px"/>
 
                <div class="row">
-                    <div class="col-sm-12 col-md-12">               
+                    <div class="col-xs-12 col-md-12">               
                         <span class="explain">  Pour accéder à cet exercice, il faut réaliser le score minimum à l'exercice associé ou à tous les précédents.</span>  
                     </div>
                </div> 
 
                <div class="row">
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-xs-6 col-md-4">
                         <label  style="font-size: 10px;">Code Exo</label> <span id="is_exist{{relation.id}}" class="text-danger"></span><br>
                         <input type="type"  
                                 id="codeExo{{relation.id}}"  
@@ -145,15 +145,15 @@
                                 placeholder="bm4p8r31" 
                                 class="codeExo details_relation"  /> 
                     </div>
-                    <div class="col-sm-6 col-md-1">
+                    <div class="col-xs-6 col-md-1">
                         <label  style="font-size: 10px;">Tous</label><br>
                         <input type="checkbox"  id="all_of_them{{relation.id}}" data-relationship_id="{{relation.id}}" class="all_of_them" /> 
                     </div>
-                    <div class="col-sm-6 col-md-4">
+                    <div class="col-xs-6 col-md-4">
                         <label  style="font-size: 10px;">Score min.</label><br>
                         <input type="number"  id="scoreMin{{relation.id}}"  maxlength="3"  size="3" value="80" data-custom="0"  class="details_relation" />%
                     </div>
-                    <div class="col-sm-6 col-md-2">
+                    <div class="col-xs-6 col-md-2">
                         <a href="#" data-parcours_id="{{relation.parcours.id}}"  data-relationship_id="{{relation.id}}" id="save_constraint{{relation.id}}" class="save_constraint btn btn-danger">OK</a>
                     </div>
 
@@ -199,7 +199,7 @@
           =============================================================================================================-->
           <div id="details{{relation.id}}" class="card-dateur"  > 
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">
+                    <div class="col-xs-12 col-md-12 title">
                     <span href="#card{{relation.id}}" class="select_details_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>               
                         Contexte 
                     </div>
@@ -207,25 +207,25 @@
               <hr style="padding:0px; margin:10px 0px"/> 
 
                <div class="row">
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-xs-6 col-md-6">
                         <label  style="font-size: 12px;"><i class="fa fa-clock-o"></i> Durée estimée </label><br>
                         <input type="type" name="duration" data-relationship_id="{{relation.id}}" id="duration{{relation.id}}"  data-type ="2" data-custom=0  value="{{ relation.duration }}" class="details_relation" /> min.
                     </div>
                     {% if relation.exercise.supportfile.is_ggbfile %}
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-xs-6 col-md-6">
                         <label  style="font-size: 12px;"><i class="fa fa-save"></i> Situations </label><br>
                         <input type="type" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}"   data-type ="2" data-custom=0  value="{{ relation.situation  }}" class="details_relation" />
                         <label  style="font-size: 10px;"> Nombre mini requis  </label>
                     </div>
                     {% else %}
-                    <div class="col-sm-6 col-md-6">
+                    <div class="col-xs-6 col-md-6">
                         <label  style="font-size: 12px;">Nouvelle consigne </label><br>
                         <textarea style="font-size: 10px;width:110px" rows="3" name="situation" data-relationship_id="{{relation.id}}" id="situation{{relation.id}}" data-custom=0    data-type ="2"  class="details_relation form-control">{% if relation.instruction %}{{ relation.instruction  }}{% endif %}</textarea>
                     </div>
                     {% endif %}
                 </div> 
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <span class="select_details_close btn btn-xs btn-primary" data-relationship_id="{{relation.id}}">Valider</span>
                     </div>
                 </div> 
@@ -238,7 +238,7 @@
           =============================================================================================================-->
           <div id="share{{ relation.id }}" class="card-dateur"  > 
               <div class="row">
-                    <div class="col-sm-12 col-md-12   title">  
+                    <div class="col-xs-12 col-md-12   title">  
                       <span href="#card{{relation.id}}" class="select_share_close" data-relationship_id="{{relation.id}}"><i class="fa fa-times pull-right"></i></span>           
                          Redirections & Liens
                     </div>
@@ -273,7 +273,7 @@
 
         
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title"><span   class="select_skill_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>         
+                    <div class="col-xs-12 col-md-12 title"><span   class="select_skill_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>         
                         Compétences visées  
                     </div>
                </div> 
@@ -302,7 +302,7 @@
           {% if not relation.exercise.supportfile.is_ggbfile %}
           <div id="select_note{{ relation.id }}"  class="card-dateur"  >  
               <div class="row">
-                    <div class="col-sm-12 col-md-12 title">
+                    <div class="col-xs-12 col-md-12 title">
                     <span href="#card{{relation.id}}" class="select_note_close pull-right" data-relationship_id="{{relation.id}}"><i class="fa fa-times"></i></span>               
                         Notes 
                     </div>
@@ -310,26 +310,26 @@
               <hr style="padding:0px; margin:10px 0px"/> 
 
                <div class="row">
-                    <div class="col-sm-6 col-md-7">
+                    <div class="col-xs-6 col-md-7">
                         <label  style="font-size: 14px;">Sur ? </label>
                     </div>
-                    <div class="col-sm-6 col-md-5">
+                    <div class="col-xs-6 col-md-5">
                         <input type="number" step=0.5 min=0 name="mark" data-relationship_id="{{relation.id}}" id="mark{{relation.id}}" value="{% if  relation.is_mark %}{{ relation.mark }}{% endif %}" class="details_notes form-control" />  
                     </div>
                 </div>
  
                <div class="row {% if not relation.is_mark %}is_marked{% endif %}" id = "is_marked{{relation.id}}" >
-                    <div class="col-sm-6 col-md-7">
+                    <div class="col-xs-6 col-md-7">
                         <label  style="font-size: 14px;">Supprimer la note ? </label>
                     </div>
-                    <div class="col-sm-6 col-md-5">
+                    <div class="col-xs-6 col-md-5">
                         <input type="checkbox" class="no_marker"    data-relationship_id="{{relation.id}}"    />  
                     </div>
                 </div> 
  
 
                 <div class="row">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <span class="select_notes_close btn btn-xs btn-primary" data-relationship_id="{{relation.id}}">Valider</span>
                     </div>
                 </div> 

@@ -6,7 +6,7 @@
 <div class="row">
     {% for exercise in exercises  %}
         {% with supportfile=exercise.supportfile %}  
-        <div class="col-sm-12 col-md-6 col-lg-4">
+        <div class="col-xs-12 col-md-6 col-lg-4">
             <div class="form_card tweeter card_shadow" style="margin-top:20px; position:relative;">
                 <div class="parcours_div_support scrollbar" id="parcours_div_support{{ forloop.counter}}">
                     {% get_parcourses_from_level exercise teacher as parcourses %}
@@ -30,16 +30,16 @@
                     {% endif %}
                 </div>
                 <div class="row" style="border-bottom:1px solid #CCC;padding-bottom:5px; margin-bottom: 5px">
-                    <div class="col-sm-3">
+                    <div class="col-xs-3">
                         <a href="{% url 'update_supportfile' supportfile.id  %}" title="Configurer" class="label_my_own"><i class="bi bi-gear"></i></a>
                         <a href="{% url 'show_all_type_exercise' supportfile.id   %}" title="Voir" target="_blank" class="label_my_own"><i class="bi bi-eye"></i> </a>
                         <a href="javascript:void();"  title="Assigner à un parcours" class="parcours_selector_support label_my_own" data-loop="{{ forloop.counter}}"><i class="bi bi-box-arrow-up-right"></i></a>
                     </div>
-                    <div class="col-sm-6"> 
+                    <div class="col-xs-6"> 
                         <img src="{{ supportfile.qtype_logo.url  }}" width="20px" class="qtypes_logo" /> 
                         {{ supportfile.qtype_title  }} 
                     </div>
-                    <div class="col-sm-3" align='right'>
+                    <div class="col-xs-3" align='right'>
                         {% if supportfile.correction != "" %}
                             <span class="helper_tip" style="color:#222">
                                 <i class="fa fa-copyright text-{% if supportfile.is_display_correction %}light{% else %}mauve{% endif %}" style="font-size:18px;cursor:help"></i>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 exercise_body_shared consigne_small_font" style="min-height:50px; max-height: 300px">
+                    <div class="col-xs-12 exercise_body_shared consigne_small_font" style="min-height:50px; max-height: 300px">
                         {% if supportfile.qtype == 100 %}
                             {% if supportfile.imagefile %}
                             <img src="{{ supportfile.imagefile.url }}" height="270px" />
@@ -79,11 +79,11 @@
                     </div>                    
                 </div>
                 <div class="row">
-                    <div class="col-sm-12 exercise_body_shared" style="min-height:0px; max-height: 300px">
+                    <div class="col-xs-12 exercise_body_shared" style="min-height:0px; max-height: 300px">
                         {% if supportfile.qtype == 1 %} <!-- VF -->
                             <div class="row" style="padding-top: 20px;"> 
                                 {% for c in supportfile.supportchoices.all %}
-                                    <div class="col-sm-6" align='center'> 
+                                    <div class="col-xs-6" align='center'> 
                                         <li  class='sanspuce answer_box'>{{ c.answer|safe }}
                                         {% if c.is_correct %}
                                             <i class="fa fa-check text-success"></i>
@@ -98,10 +98,10 @@
                             {% for c in supportfile.supportchoices.all %}
                                 <div class="row" style="padding:5px 0px;border-bottom: 1px solid #CCC"> 
                                     {% if c.answer %}
-                                        <div class="col-sm-6"  style="font-size:14px;">
+                                        <div class="col-xs-6"  style="font-size:14px;">
                                             {{ c.answer|safe }}
                                         </div>
-                                        <div class="col-sm-6"  style="font-size:14px;">
+                                        <div class="col-xs-6"  style="font-size:14px;">
                                             <div class="answer_mini_box">{{ c.answerbis|safe }}</div>
                                         </div>
                                     {% endif %}
@@ -111,10 +111,10 @@
 
                             {% for choice in supportfile.supportchoices.all  %}
                             <div class="row quizz_item" style="padding: 10px; font-size:13px;{% if choice.is_correct %}border: 1px solid green;{% endif %}"> 
-                                <div class="col-sm-11" align='left' >
+                                <div class="col-xs-11" align='left' >
                                 {% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %}{{ choice.answer }}
                                 </div>       
-                                <div class="col-sm-1" align='left'>
+                                <div class="col-xs-1" align='left'>
                                     <input type="{% if supportfile.qtype == 3  %}radio{% else %}checkbox{% endif %}" name="answers" value="{{ choice.id }}"   />
                                 </div>
                             </div>
@@ -127,10 +127,10 @@
 
                             {% for choice in supportfile.supportchoices.all  %}
                             <div class="row " style="padding: 10px; font-size:18px"> 
-                                <div class="col-sm-6 quizz_item" align='center'>
+                                <div class="col-xs-6 quizz_item" align='center'>
                                 {% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %}{{ choice.answer }}
                                 </div>       
-                                <div class="col-sm-6 quizz_item" align='center'>
+                                <div class="col-xs-6 quizz_item" align='center'>
                                 {% if choice.imageanswerbis  %}<img src="{{ choice.imageanswerbis.url }}" height="80px" />{% endif %}{{ choice.answerbis }}
                                 </div>
                             </div>
@@ -153,22 +153,22 @@
                         {% elif supportfile.qtype == 7 %}<!-- Anagrammes -->
                             
                             <div class="row" style="margin-top:20px"> 
-                                <div class="col-sm-12 col-md-12" >
+                                <div class="col-xs-12 col-md-12" >
                                     Vous devez trouver {% if supportfile.nb_pseudo %}{{ supportfile.nb_pseudo }} sur les {% endif %}{{ supportfile.supportchoices.count }}  mots donc les anagrammes sont ci-dessous.   
                                 </div>
                             </div>
                             {% for choice in supportfile.supportchoices.all %}
                             <div class="row">
                                 {% if  choice.answer|wordcount > 1 %} 
-                                 <div class="col-sm-12 col-md-12">{{ choice.answer|filltheblanks_safe|safe }} </div>
+                                 <div class="col-xs-12 col-md-12">{{ choice.answer|filltheblanks_safe|safe }} </div>
                                 {% else %}
-                                <div class="col-sm-12 col-md-3" align='right'>
+                                <div class="col-xs-12 col-md-3" align='right'>
                                 {{ choice.answer|safe }} 
                                 </div>
-                                <div class="col-sm-1 col-md-1" align='left'>
+                                <div class="col-xs-1 col-md-1" align='left'>
                                   <i class="fa fa-caret-right"></i> 
                                 </div>
-                                <div class="col-sm-11 col-md-8" align='left'>
+                                <div class="col-xs-11 col-md-8" align='left'>
                                      <input type="text"    />
                                 </div>
                                 {% endif %}
@@ -188,7 +188,7 @@
  
                         {% elif supportfile.qtype == 9 %}<!-- Filltheblanks_safe -->
                             <div class="row" align="left"> 
-                                <div class="col-sm-12 col-md-12" >
+                                <div class="col-xs-12 col-md-12" >
                                     {% for choice in supportfile.supportchoices.all %}
                                         <div class="fill_the_blanks_text" style="text-align:left;font-size: 13px"> 
                                              {{ choice.answer|filltheblanks_safe|safe }}
@@ -201,7 +201,7 @@
                         {% elif supportfile.qtype == 10 %}<!-- Puzzle -->
 
                             <div class="row" style="margin-top:20px">
-                                <div class="col-sm-2 col-md-2" >
+                                <div class="col-xs-2 col-md-2" >
                                     {% for choice in supportfile.supportchoices.all %}
                                         <div class="quizz_choice"> 
                                             {{ choice.answer }} x {{ choice.answerbis }}
@@ -209,7 +209,7 @@
                                     {% endfor %}
                                 </div>
 
-                                <div class="col-sm-10 col-md-10" >
+                                <div class="col-xs-10 col-md-10" >
                                     {% for choice in supportfile.supportchoices.all %}
                                         <div class="quizz_choice"> 
                                             {% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="200px" />{% endif %} 
@@ -226,10 +226,10 @@
 
                         {% elif supportfile.qtype == 12 %}<!-- Mots mélés -->
                             <div class="row">
-                                <div class="col-sm-8" align='center'>
+                                <div class="col-xs-8" align='center'>
                                     {{ supportfile.grid|safe }}
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-xs-4">
                                     {% for choice in supportfile.supportchoices.all %}
                                         <li class="sanspuce">{{forloop.counter}}. {{ choice }}</li>
                                     {% endfor %}
@@ -313,7 +313,7 @@
 
                         {% elif supportfile.qtype == 19 %}<!-- Interface Python -->
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-xs-12">
                                      <div class="python_editor"><div class="nb_line">1 2 3 4 5 6 7 8 9 </div></div>
                                 </div>
                             </div> 
@@ -341,7 +341,7 @@
         </div>
         {% endwith %}
     {% empty %}
-        <div class="col-sm-4 col-md-4">
+        <div class="col-xs-4 col-md-4">
             <div class="alert alert-sacado">
                 Aucun exercice trouvé.
             </div>

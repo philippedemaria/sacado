@@ -29,13 +29,13 @@
     <form action="{% url 'group_to_teacher' %}" method="POST">
     {% csrf_token %}    
         <div class="row">
-            <div class="col-sm-12 col-md-4">
+            <div class="col-xs-12 col-md-4">
                     <h3>Enseignants</h3>
                 {% for teacher in teachers %}
                     <span class="btn btn-default" style="margin:2px" ><label><input type="radio" name="teacher" value="{{ teacher.user.id }}" /> {{ teacher}}</label></span><br>
                 {% endfor %}
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 {% regroup groups by level as level_list %}
                 {% for level in level_list %}
                     <h3>{{ level.grouper.name }}</h3>
@@ -47,7 +47,7 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-12 col-md-8">
+            <div class="col-xs-12 col-md-8">
                 <div class="form-group">
                     <input value="Enregistrer" type="submit" class="btn btn-primary"  id="test_students"  />
                     <a href="javascript:history.back()"><input type="button" value="Annuler"

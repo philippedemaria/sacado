@@ -44,14 +44,14 @@
         <form action="" method="POST" enctype='multipart/form-data'>
             {% csrf_token %}
                 <div class="row">
-                    <div class="col-sm-12 col-md-4 form_card">
+                    <div class="col-xs-12 col-md-4 form_card">
                         <div class="row ">
-                            <div class="col-sm-12 col-md-9">
+                            <div class="col-xs-12 col-md-9">
                                     {{ form.title.label_tag }}  
                                     {{ form.title |add_class:"form-control"  }}
                                     {{ form.title.errors }}
                             </div>
-                            <div class="col-sm-12  col-md-3 no_visu">
+                            <div class="col-xs-12  col-md-3 no_visu">
                                   {{ form.color.label_tag }}      
                                             <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                                 <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                         <div class="row {% if bibliotex or group %}no_visu{% endif %}">
-                            <div class="col-sm-12 col-md-12">
+                            <div class="col-xs-12 col-md-12">
 
                                 <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
                                     <small>   
@@ -74,10 +74,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4 no_visu">
+                    <div class="col-xs-12 col-md-4 no_visu">
                         <div class="form_card">
                             <div class="row ">
-                                <div class="col-sm-12 col-md-12" >
+                                <div class="col-xs-12 col-md-12" >
                                     {{ form.vignette.label_tag }}<br/>
                                     {{ form.vignette|add_class:"btn btn-default form-control"   }}
                                     {{ form.vignette.errors }}
@@ -86,7 +86,7 @@
                         </div>
 
                     </div>
-                    <div class="col-sm-12 col-md-4 setup_ggb no_visu">
+                    <div class="col-xs-12 col-md-4 setup_ggb no_visu">
                         <div class="form_card">
                             
                             <table class="table table-sacado borderless">
@@ -147,7 +147,7 @@
 
 
                 <div class="row setup_ggb {% if bibliotex or group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-4" >   
+                    <div class="col-xs-12 col-md-4" >   
                         <div class="form-group form_card"> 
                             <label>Affecter à mon groupe  </label> {% if group %}
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
@@ -161,7 +161,7 @@
                     </div>                            
 
 
-                    <div class="col-sm-12 col-md-4" >
+                    <div class="col-xs-12 col-md-4" >
                         <div class="form-group form_card"> 
                         {% if bibliotex or folder or group  %}                                
                         
@@ -184,7 +184,7 @@
                         {% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-4">
+                    <div class="col-xs-12 col-md-4">
                         <div class="form-group form_card">  
                             <label>Associer à un parcours  </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                 <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
@@ -207,7 +207,7 @@
 
 
                 <div class="row" style="margin-top:15px" >
-                    <div class="col-sm-12 col-md-7">
+                    <div class="col-xs-12 col-md-7">
                         <div class="form-group">
                             {% if bibliotex %}
                             <input value="Enregistrer" type="submit" class="btn btn-primary" id="click_button" name="save_form" />
@@ -218,7 +218,7 @@
                         </div>
                     </div>   
                     {% if bibliotex %}
-                        <div class="col-sm-12 col-md-5">
+                        <div class="col-xs-12 col-md-5">
 
  
                             <a href="{% url 'delete_bibliotex' bibliotex.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette biblioTex')" > 

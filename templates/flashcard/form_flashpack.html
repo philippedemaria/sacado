@@ -46,16 +46,16 @@
     	{% csrf_token %}
         {% if not parcours %}
         <div class="row no_visu">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="alert alert-sacado">
                     <div class="row">
-                        <div class="col-sm-4 col-md-4">
+                        <div class="col-xs-4 col-md-4">
                             {{ form.is_global.label_tag }}<br/><span style="font-size: 10px">Un flashpack annuel ne peut pas être intégré dans un dossier, ni dans un parcours. Il est accessible depuis <a href="{% url 'my_flashpacks' %}" style="border-bottom: dotted 1px">la liste des flashpacks</a>.</span>          
                         </div>
-                        <div class="col-sm-3 col-md-2">
+                        <div class="col-xs-3 col-md-2">
                             {{ form.is_global|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}
                         </div>
-                        <div class="col-sm-7 col-md-6"  style="font-size: 14px">
+                        <div class="col-xs-7 col-md-6"  style="font-size: 14px">
                             Un flashpack annuel suit un algorithme de répétitions espacées sur l'année entière avec une insertion de cartes selon le choix (configuration). Un flashpack par parcours (par défaut) ne suit pas d'algorithme. 
                         </div>
                     </div>
@@ -66,18 +66,18 @@
 
 
         <div class="row">
-            <div class="col-sm-12 col-md-8 form_card">
+            <div class="col-xs-12 col-md-8 form_card">
                 <div class="row">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <div class="row">
-                            <div class="col-sm-12 col-md-8">
+                            <div class="col-xs-12 col-md-8">
                                 <div class="form-group">
         				            {{ form.title.label_tag }}
         				            {{ form.title|add_class:"form-control" }}
                                     {{ form.title.errors }}
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-4 no_visu">
+                            <div class="col-xs-12 col-md-4 no_visu">
                                 <div class="form-group">
                                     {{ form.color.label_tag }}      
                                     <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -94,7 +94,7 @@
                             <input name="subject" id="id_subject" type="hidden" value="{% if flashpack %}{{ flashpack.subject.id }}{% endif %}" />
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6 no_visu">
+                    <div class="col-xs-12 col-md-6 no_visu">
                         <div class="form-group">
 				            {% if sacado_asso %}
 				            <div class="form-group"> 
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="row {% if flashpack or group %}no_visu{% endif %}">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label>Attribuer aux groupes proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span>
@@ -126,7 +126,7 @@
                             {% endif %}
                         </div>
 	                </div>	
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label><img src="{% static 'img/conseil.png' %}" width="25px"/> Aides et conseils :<br/>
                             Cocher, décocher les groupes pour choisir les dossiers.<br/>
                             <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, la biblioTex est partagée entre ces groupes.<br/>
@@ -137,7 +137,7 @@
                 </div>
                 {% if not flashpack.is_global %}
                 <div class="row {% if flashpack or group %}no_visu{% endif %}"  id="folders_is_global">
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label>Inclure dans les dossiers proposés</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -150,7 +150,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-6">
+                    <div class="col-xs-12 col-md-6">
                         <label>Associer aux parcours</label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                             <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                         </span> 
@@ -165,7 +165,7 @@
                     </div>
                 </div>
                 <div class="row no_visu" id="themes_is_global">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
                         <div class="form-group">
                             <label>Thèmes <em>utile pour organiser  et retrouver des flashcards  </em></label>
                             {{ form.themes|add_class:"form-control select2" }}
@@ -175,7 +175,7 @@
                 </div>
                 {% endif %}
             </div>
-            <div class="col-sm-12 col-md-4 setup_ggb no_visu">
+            <div class="col-xs-12 col-md-4 setup_ggb no_visu">
                 <div class="form_card">
 
                 <h4 class="thin"><i class="fa fa-cog"></i> Configuration </h4><hr/>
@@ -282,7 +282,7 @@
             </div>
         </div>
 	    <div class="row">
-	        <div class="col-sm-8 col-md-8"> 
+	        <div class="col-xs-8 col-md-8"> 
 	            <div class="form-group">
                     <input name="exercices" value="Enregistrer et créer les flashcards" type="submit" class="btn btn-primary" id="save_with_cards" />
 
@@ -293,7 +293,7 @@
 	        </div>
 
             {% if flashpack %}
-                <div class="col-sm-4 col-md-4">                                             
+                <div class="col-xs-4 col-md-4">                                             
                     <a href="{% url 'delete_flashpack' flashpack.id   %}" class="btn btn-danger" style="margin-left:5px" onclick="return TestDelete('cette biblioTex')" > 
                         <i class="fa fa-trash"> </i>   Supprimer
                     </a>

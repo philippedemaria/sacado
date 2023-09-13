@@ -50,7 +50,7 @@
 {% for r in relationtexs %} 
     <div class="row relationtex_sorter" style="margin-bottom:20px" data-relationtex_id ="{{r.id}}" style="cursor: move;">
         {% if request.user.user_type == 2 %}
-        <div class="col-sm-1 col-md-1 col-lg-1" >  
+        <div class="col-xs-1 col-md-1 col-lg-1" >  
             {% if request.user.is_superuser %}
             <li class="relative_div_exotex">  
                 <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="fa fa-fw fa-cogs"></i><span class="legend_exotex_parameter"> Configurer </span></a>
@@ -91,9 +91,9 @@
 
 
         </div>  
-        <div class="col-sm-11 col-md-11 col-lg-11" >         
+        <div class="col-xs-11 col-md-11 col-lg-11" >         
         {% else %}
-        <div class="col-sm-12 col-md-12 col-lg-12" > 
+        <div class="col-xs-12 col-md-12 col-lg-12" > 
         {% endif %}
         <div class="titles_details">
                 <span class="exotex_show_exercice">Exercice {{ forloop.counter}}.</span> 

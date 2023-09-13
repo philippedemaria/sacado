@@ -28,7 +28,7 @@
     <form action="" method="POST">
         {% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-4">
+            <div class="col-xs-12 col-md-4">
                 <div class="form-group">
                     <label>{{ user_form.username.label_tag }}</label>
                     {{ user_form.username |add_class:"form-control" }}
@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-12 col-md-4">
+            <div class="col-xs-12 col-md-4">
                 <div class="form-group" id="ajaxresult">
                     
                 </div>
@@ -47,21 +47,21 @@
 
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-2">
+            <div class="col-xs-12 col-md-2">
                 <div class="form-group">
                     <label>{{ user_form.civilite.label_tag }}</label>
                     {{ user_form.civilite  |add_class:"form-control select2" }}
                     {{ user_form.civilite.errors }}
                 </div>
             </div>
-            <div class="col-sm-12 col-md-5">
+            <div class="col-xs-12 col-md-5">
                 <div class="form-group">
                     <label>{{ user_form.last_name.label_tag }}</label>
                     {{ user_form.last_name  |add_class:"form-control" }}
                     {{ user_form.last_name.errors }}
                 </div>
             </div>
-            <div class="col-sm-12 col-md-5">
+            <div class="col-xs-12 col-md-5">
                 <div class="form-group">
                     <label>{{ user_form.first_name.label_tag }}</label>
                     {{ user_form.first_name  |add_class:"form-control" }}
@@ -70,14 +70,14 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ user_form.email.label_tag }}</label>
                     {{ user_form.email  |add_class:"form-control" }}
                     {{ user_form.email.errors }}
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ user_form.time_zone.label_tag }}</label>
                     {{ user_form.time_zone  |add_class:"form-control select2" }}
@@ -86,14 +86,14 @@
             </div>
         </div>   
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ form.level.label_tag }}</label>
                     {{ form.level |add_class:"form-control select2" }}
                     {{ form.level.errors }}
                 </div>
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>Groupe affecté</label>
                     <select name="group_ids" id="group_ids" multiple class="select2">
@@ -109,7 +109,7 @@
         </div>     
 
             <div class="row">
-                <div class="col-sm-12 col-md-6">
+                <div class="col-xs-12 col-md-6">
                     <div class="form-group">
                     Notification 
                         <table class="table table-sacado">
@@ -125,7 +125,7 @@
                 </div>
             </div>
         <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div class="form-group">
                         <input value="Enregistrer" type="submit" class="btn btn-primary" id="submitter"/>
                         <a href="javascript:history.back()">

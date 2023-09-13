@@ -74,7 +74,7 @@
 {% block body  %}  
 <section class="content_main"> 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             {% for fpage in first_pages %}
                 {% if fpage %}
                 <a href="{% url 'show_student_book' book.id fpage.number %}" class="btn btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}"> 
@@ -86,7 +86,7 @@
     </div>
     <hr/>
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="{{ page.css}}" style="font-size:20px">
                 {{ page.title }} <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
                 <span class="pull-right">- {{ n }} </span>
@@ -119,8 +119,17 @@
                                     </div>
                                 </div>
                                 {% if bloc.display_qr %} 
-                                <div style="margin-left:20px">  
-                                    <label>Compléments :</label> 
+                                <div>  
+                                    <label>
+                                        {% if bloc.correction_html %}
+                                            <a href="javascript:void(0);" data-target="#book_shower_correction" data-toggle="modal" >
+                                                <i class="bi bi-c-square text-success"></i>
+                                            </a> 
+                                            <div class="no_visu_on_load">{{ bloc.correction_html|safe }}</div>
+                                        {% endif %} 
+
+                                    Compléments :
+                                    </label>
                                     {% for a in bloc.appliquettes.all %}
                                         <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
                                     {% endfor %}
@@ -166,7 +175,21 @@
 </div>
 
 
-
+<div class="modal fade" id="book_shower_correction" tabindex="-1" role="dialog" aria-labelledby="book_shower_correction">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <input type="range" class="form-range" id="customRanger"  min="1" max="5" step="1" value="1">
+            </div>
+            <div class="modal-body" id="correction_shower_page_content">
+ 
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock  %}   

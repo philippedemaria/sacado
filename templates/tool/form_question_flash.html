@@ -47,21 +47,21 @@
 <section class="content_main"> 
     <form action="" method="POST"  enctype='multipart/form-data'>
     	{% csrf_token %}
-        <div class="col-sm-12">
+        <div class="col-xs-12">
             <div class="row">
-                <div class="col-sm-12 col-md-9 form_card">
+                <div class="col-xs-12 col-md-9 form_card">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-xs-6">
                             <label>Titre des questions flash <small>(optionnel)</small></label>
                             {{ form.title |add_class:"form-control"|attr:"value:Questions flash" }}
                             {{ form.title.errors }}
                         </div>
-                        <div class="col-sm-6 text-danger">
+                        <div class="col-xs-6 text-danger">
                             <label>Actuellement, les questions flash ne sont proposées qu'en Maths du CP à la 4è. Notre équipe développe les autres niveaux. </label>
                         </div>
                     </div>
                     <div class="row form-group">  
-                        <div class='col-sm-12 col-md-4'>
+                        <div class='col-xs-12 col-md-4'>
                             {% comment %}
                             <table class="table table-sacado borderless">
                                 <tr>
@@ -89,7 +89,7 @@
                             {{ form.nb_slide|add_class:"form-control" }}
                             {{ form.nb_slide.errors }}
                         </div>
-                        <div class="col-sm-12 col-md-5">
+                        <div class="col-xs-12 col-md-5">
                             {% comment %}
                             <label>Enseignement</label>
                             {{ form.subject|add_class:"form-control select2" }}
@@ -104,14 +104,14 @@
                         </div>
                     </div> 
                     <div class="row ">
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
                                 <label>Attribuer aux groupes</label> 
                                 {{ form.groups|add_class:"select_all"   }}
                                 {{ form.groups.errors }}
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
                                 <label>Attribuer aux dossiers</label> 
                                 <div id="cblist">
@@ -125,7 +125,7 @@
                             </div>
                         </div>
 
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-xs-12 col-md-4">
                             <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
                                 <label>Attribuer aux parcours</label> 
                                 <div id="pclist">                         
@@ -144,7 +144,7 @@
                 </div>            
 
                
-                <div class='col-sm-12 col-md-3'  style="height: 270px;">
+                <div class='col-xs-12 col-md-3'  style="height: 270px;">
                     <table class="table table-sacado borderless form_card   setup_ggb no_visu">
                         <tr style="display:none">
                             <td>{{ form.is_publish.label_tag }} <span class="helper_tip"> <i class="fa fa-question-circle"></i>
@@ -200,7 +200,7 @@
                     </table>
 
 
-                    <div class="col-sm-6 col-md-6 form_card"   style="margin-top: 20px;"> 
+                    <div class="col-xs-6 col-md-6 form_card"   style="margin-top: 20px;"> 
                         <a href="javascript:void(0);" data-toggle="modal" data-target="#ask_question" class="btn btn-sacado">Proposer <br/>un type de <br/>question flash</a>
                         <div id="sender_qf_ok" class="text-success"></div>
                     </div> 
@@ -210,7 +210,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-12" style="margin-top: 10px" id="question_choice_style">
+            <div class="col-xs-12 col-md-12" style="margin-top: 10px" id="question_choice_style">
                 {% if level %}
                 <table class="table table-hover borderless display1000" style="width:100%;" >
                     <thead> 
@@ -258,7 +258,7 @@
             </div> 
         </div>
 	    <div class="row">
-	        <div class="col-sm-6 col-md-6"> 
+	        <div class="col-xs-6 col-md-6"> 
 	            <div class="form-group">
 	                <input value="Générer" id="create_questions_flash" type="submit" class="btn btn-primary" />
 	                <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>
@@ -283,14 +283,14 @@
                 <form  action="" method="POST">
                     {% csrf_token %}
                     <div class="row">  
-                        <div class='col-sm-12'>
+                        <div class='col-xs-12'>
                             <div class='form-group'> 
                                 <input type="text" name="title" id="title"  class="form-control" required placeholder="Titre" />
                             </div>
                         </div>
                     </div>  
                     <div class="row">  
-                        <div class='col-sm-12'>
+                        <div class='col-xs-12'>
                             <div class='form-group'> 
                                 <select name="level" id="level"  class="form-control select2"  required>
                                     <option value="Maternelle">Maternelle</option>
@@ -311,14 +311,14 @@
                         </div>
                     </div>
                     <div class="row">  
-                        <div class='col-sm-12'>
+                        <div class='col-xs-12'>
                             <div class='form-group'> 
                                 <textarea name="enonce"  id="enonce"  class="form-control" required placeholder="Enoncé ou exemple"></textarea> 
                             </div>
                         </div>    
                     </div>
                     <div class="row">  
-                        <div class='col-sm-12'>
+                        <div class='col-xs-12'>
                             <div class='form-group'> 
                                 <a href="javascript:void(0);" id="send_qf_to_sacado" class="btn btn-sacado">Envoyer l'énoncé</a> 
                             </div>

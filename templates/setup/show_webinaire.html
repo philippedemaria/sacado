@@ -43,40 +43,40 @@
     <div style="margin-bottom: 5px ; padding:10px;font-size:1.2em; border-radius : 10px;background-color: #f1eef7 ;">
  
       <div class="row">
-          <div class="col-sm-12 col-md-12">
+          <div class="col-xs-12 col-md-12">
               <label>Titre : </label> {{ webinaire.title }}
           </div>
       </div>    
       <div class="row">
-          <div class="col-sm-12 col-md-12">
+          <div class="col-xs-12 col-md-12">
               <label>Date : </label> {{ webinaire.date_time|date:"d F Y à H:i:s" }} 
           </div>
       </div> 
       <div class="row">
-          <div class="col-sm-12 col-md-12">
+          <div class="col-xs-12 col-md-12">
               <label>Durée : </label> {{ webinaire.duration  }} min.
           </div>
       </div>
       <div class="row">
-          <div class="col-sm-12 col-md-12">
+          <div class="col-xs-12 col-md-12">
               <label>Sujet : </label> {{ webinaire.topic|safe }} 
           </div>    
       </div>
       {% if request.user.is_superuser %}
           <div class="alert alert-sacado"> <h4>Ce cadre n'est visible que par l'équipe SACADO</h4>
           <div class="row">        
-              <div class="col-sm-12 col-md-12">
+              <div class="col-xs-12 col-md-12">
                   <label> Participants  [{{ webinaire.users.count }}] : </label> {% for u in webinaire.users.all %} {{ u }} {% if not forloop.last %}, {% endif %} {% endfor %}
               </div>       
           </div>
           <div class="row">
-              <div class="col-sm-12 col-md-12">
+              <div class="col-xs-12 col-md-12">
                   <label>Date d'enregistrement : </label> {{ webinaire.date_created }}  
               </div>
           </div>  
           {% if  webinaire.date_created != webinaire.date_modified %}
               <div class="row">
-                  <div class="col-sm-12 col-md-12">
+                  <div class="col-xs-12 col-md-12">
                       <label>Date de modification : </label> {{ webinaire.date_modified }}  
                   </div>
               </div>  
@@ -86,7 +86,7 @@
 
 
       <div class="row">
-          <div class="col-sm-12 col-lg-12">
+          <div class="col-xs-12 col-lg-12">
               {% if webinaire.imagefile %}
                   <img src="{{ webinaire.imagefile.url }}" width="500px" />
               {% endif %}
@@ -98,7 +98,7 @@
  
         <div class="row" style="margin-top:20px">        
  
-            <div class="col-sm-6 col-md-3">
+            <div class="col-xs-6 col-md-3">
                                     <a href="javascript:history.back()"><input type="button" value="Retour"
                                                                class="btn btn-default "/></a>
             </div>

@@ -34,13 +34,13 @@
   
      
 <section class="content_main">
-    <div class="col-sm-12 col-md-12">
+    <div class="col-xs-12 col-md-12">
 
         <form action="" method="POST" enctype='multipart/form-data'> 
         {% if parcours %}<input type="hidden" id="is_parcours" value="1" name="is_parcours" /><input type="hidden" id="id_parcours" value="{{ parcours.id }}" name="id_parcours" />{% endif %}
         {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="col-xs-12 col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>Enseignements</label>
                         <select id="id_subject" name="subject" class="form-control select2">
@@ -53,7 +53,7 @@
 
 
 
-                <div class="col-sm-12 col-md-4 col-lg-3">
+                <div class="col-xs-12 col-md-4 col-lg-3">
                     <div class="form-group">
                         <label>Niveaux des exercices</label>
                         <select id="id_level" name="level" class="form-control select2" >
@@ -68,7 +68,7 @@
 
 
 
-                <div class="col-sm-12 col-md-4 col-lg-6">
+                <div class="col-xs-12 col-md-4 col-lg-6">
                     <div class="form-group">
                         <label>Thèmes </label> <span style="font-size:12px"><em>choisir un niveau puis un ou plusieurs thèmes ci-dessous.</em></span>
                         <select id="id_theme" name="theme" class="form-control select2" multiple>
@@ -80,7 +80,7 @@
 
             </div> 
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-xs-12 col-md-12">
                     <div id="loader">
                     </div>
                     <div id="content_exercises" class="list_choice">
@@ -175,7 +175,7 @@
 
         </form>
                 
-            <div class="col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px">
+            <div class="col-xs-12 col-md-12 col-lg-12" style="margin-top: 20px">
                 <div class="form-group">
                 {% if parcours.is_evaluation %}
                     <a href="{% url 'show_evaluation' parcours.id %}" class="btn btn-default" style="background-color:{{ parcours.color }};color:{{ parcours.color|contrast_color }}">Valider et retour à l'évaluation {{ parcours.title }}</a> 

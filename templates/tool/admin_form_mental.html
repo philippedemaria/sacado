@@ -89,17 +89,17 @@
     <form action="" method="POST"  enctype='multipart/form-data' class="form_card">
         {% csrf_token %}
         <div class="row">
-            <div class="col-sm-4 col-md-2 form-group">
+            <div class="col-xs-4 col-md-2 form-group">
                 <label>Niveaux</label>
                 {{ form.levels|add_class:"form-control select2 onselect" }}
                 {{ form.levels.errors }}
             </div> 
-            <div class="col-sm-4 col-md-2 form-group">
+            <div class="col-xs-4 col-md-2 form-group">
                 <label>Matières</label>
                 {{ form.subjects|add_class:"form-control select2 onselect" }}
                 {{ form.subjects.errors }}
             </div> 
-            <div class="col-sm-4 col-md-4 form-group">
+            <div class="col-xs-4 col-md-4 form-group">
                 <label>Thèmes </label>
                 {% if mental %} 
                     <a href="{%  url 'admin_create_update_mentaltitle' mental.mentaltitle.id %}"><i class="bi bi-pencil"></i></a> 
@@ -111,29 +111,29 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 col-md-8 form-group">
+            <div class="col-xs-12 col-md-8 form-group">
                 <label>Titre</label>
                 {{ form.content|add_class:"form-control" }}
                 {{ form.content.errors }}
             </div>
-            <div class="col-sm-3 col-md-2 form-group">
+            <div class="col-xs-3 col-md-2 form-group">
                 <label>Durée (sec.) </label>
                 {{ form.duration|add_class:"form-control"  }}
                 {{ form.duration.errors }}
             </div>
-            <div class="col-sm-3 col-md-1 form-group">
+            <div class="col-xs-3 col-md-1 form-group">
                 <label>Ordre</label>
                 {{ form.ranking|add_class:"form-control"  }}
                 {{ form.ranking.errors }}
             </div>
-            <div class="col-sm-6 col-md-1 form-group">
+            <div class="col-xs-6 col-md-1 form-group">
                 <label>En ligne ?</label><br/>
                 {{ form.is_display |attr:"data-toggle:toggle" |attr:"data-onstyle:success"|attr:"data-offstyle:danger"|attr:"data-on:Oui"|attr:"data-off:Non"}}
                 {{ form.is_display.errors }}
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-6 form-group">
+            <div class="col-xs-6 form-group">
                 <label>Variables : ( Séparer les variables par ; sans espace) </label>
                 {{ form.variables|add_class:"form-control play_alea" }}
                 {{ form.variables.errors }}
@@ -173,7 +173,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 form-group">
+            <div class="col-xs-6 form-group">
                 <label>Code Python : <small><span class="formula_answer">answer</span> en fonction des variables utilisées dans le code html/TeX. Séparateur de variable : _##_ </small></label>                
                 <div id="id_div_script"></div>
                 {{ form.script }}
@@ -182,7 +182,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12 form-group">
+            <div class="col-xs-12 form-group">
                 <div class="form-group">
                     <input value="Créer" type="submit" id="on_submit" class="btn btn-primary" name="mental"   />
                     <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

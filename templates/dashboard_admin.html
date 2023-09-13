@@ -432,12 +432,12 @@
                     </div>
   
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 ">
+                        <div class="col-xs-12 col-md-12 ">
                             <h3 class="thin">Seuils d'acquisition des savoir faire et compétences  <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}" style="font-size : 14px">Modifier</a></h3>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 ">
+                        <div class="col-xs-12 col-md-12 ">
                             {% if  data %}
                             <div class="progress">
                                 <div class="progress-bar progress-bar-danger" role="progressbar" style="width:{{ data.low   }}%">
@@ -474,12 +474,12 @@
 
     {% with school.get_data as data %}
     <div class="row">
-        <div class="col-sm-12 col-md-12 ">
+        <div class="col-xs-12 col-md-12 ">
             <h3 class="thin">Seuils d'acquisition des savoir faire et compétences  <a href="{% if sacado_asso %}{% url 'manage_stage' %}{% else %}#{% endif %}" style="font-size : 14px">Modifier</a></h3>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12 col-md-12 ">
+        <div class="col-xs-12 col-md-12 ">
             {% if  data %}
             <div class="progress">
                 <div class="progress-bar progress-bar-danger" role="progressbar" style="width:{{ data.low   }}%">

@@ -48,7 +48,7 @@
 
 <form action="{% url 'actioner_course' %}" method="POST" enctype='multipart/form-data'>
     <div class="row">    
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             {% csrf_token %}
             <div class="row">
                 <div class="col-xs-6 col-md-3 ">
@@ -114,7 +114,7 @@
                                          </tbody>
                                     </table>
                                     <div class="row" style="margin-top:10px">
-                                        <div class="col-sm-12 col-md-12">
+                                        <div class="col-xs-12 col-md-12">
                      
                                             <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces cours')"> 
                                                 <i class="fa fa-trash"> </i>   Supprimer la sélection
@@ -134,7 +134,7 @@
 
 {% if parcours_courses %} 
         <div class="row" style="margin-top:50px;padding-left: 15px;">
-            <div class="col-sm-12 col-md-12 alert alert-sacado">
+            <div class="col-xs-12 col-md-12 alert alert-sacado">
                 <img src="{% static 'img/conseil.png' %}"/> Pour désarchiver un cours, il suffit de désarchiver le parcours auquel il est lié.
             </div>
         </div>

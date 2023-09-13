@@ -47,7 +47,7 @@
 <section class="content_list"> 
     {%  if evaluations %} 
     <div class="row">
-            <div class="col-md-4  col-lg-3  col-sm-6">
+            <div class="col-md-4  col-lg-3  col-xs-6">
                 {%  for evaluation in  evaluations %} 
                 <div class="small-box-student" style="background-color:{{evaluation.color }};color:{{evaluation.color|contrast_color }};">
 
@@ -63,10 +63,10 @@
                 
 
                         <p>
-                            <div class="col-md-6  col-lg-6  col-sm-6">
+                            <div class="col-md-6  col-lg-6  col-xs-6">
                                 <i class="fa fa-clock-o"></i>  {{ evaluation.evaluation_duration }} min 
                             </div>
-                            <div class="col-md-6  col-lg-6  col-sm-6">
+                            <div class="col-md-6  col-lg-6  col-xs-6">
                                 {{ evaluation.nb_exercises }} exercice{{ evaluation.exercises.count|pluralize }} 
                             </div>
                         </p>
@@ -120,7 +120,7 @@
         </div>
     {% empty  %}  
     <div class="row">  
-        <div class="col-md-12 col-lg-12 col-sm-12" style="text-align: center">
+        <div class="col-md-12 col-lg-12 col-xs-12" style="text-align: center">
             <div class="alert alert-info">
                 <h1 class="thin"> Votre enseignant n'a pas encore publié de parcours.</h1>
                 <div style="border-radius: 50%;width:250px;height:250px; margin-right: auto; margin-left: auto; background-color: #FFF;text-align: center">

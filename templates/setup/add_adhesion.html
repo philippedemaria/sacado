@@ -39,7 +39,7 @@
  
 
     <div class="row">
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <h2 class="thin">Ajouter un enfant <small>(Si vous souhaitez ajouter plusieurs enfants, il faut faire cette manipulation plusieurs fois)</small></h2>
         </div>
     </form>
@@ -47,7 +47,7 @@
 
     <div class="row">
         <form action="" method="POST">{% csrf_token %}
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="card card_adhesion">
                     <div class="form-group">
                         {{ form.last_name.label_tag }}
@@ -78,7 +78,7 @@
                         <input name="level" value="" type="hidden" />
                     {% endif %}
                     <div class="row"> 
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 <label>Choisir un identifiant :</label>
                                 {{ form.username |add_class:"form-control username"|attr:"required" }}
@@ -88,14 +88,14 @@
                         </div>  
                     </div>       
                     <div class="row">
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-xs-12 col-md-6">
                             <div class="form-group">
                                 {{ form.password1.label_tag }} <small><em>Au moins 8 caractères</em></small>
                                 {{ form.password1 |add_class:"form-control"|attr:"required" }}
                                 {{ form.password1.errors }}
                             </div>
                         </div>  
-                        <div class="col-sm-12 col-md-6">
+                        <div class="col-xs-12 col-md-6">
                             <div class="form-group">
                                 {{ form.password2.label_tag }}
                                 {{ form.password2 |add_class:"form-control"|attr:"required" }}
@@ -108,7 +108,7 @@
             </div> 
                
 
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="card card_adhesion not_allowed_display" id="div_display">
                     <div class="form-group not_allowed_display" id="div_last_name">
                         <label>Nom : </label><span id="verif_last_name"></span>
@@ -132,7 +132,7 @@
                 </div>
 
                 <div class="row not_allowed_display" id="id_save">
-                    <div class="col-sm-12 col-md-12">
+                    <div class="col-xs-12 col-md-12">
      
                         <button type="submit" class="btn btn-primary">Valider l'inscription gratuite, période d'essai </button>   
      

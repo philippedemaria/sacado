@@ -48,7 +48,7 @@
     {% if folder %}
         {% if folder.author != folder.teacher and folder.teacher != request.user.teacher %}
         <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <div class="alert alert-info">
                     Le dossier est créé par <b>{{ folder.author }}</b> pour {% if folder.teacher.user.civilite == "Mme" %}sa{% else %}son{% endif %} collègue <b>{{ folder.teacher }}</b>
                 </div>
@@ -62,16 +62,16 @@
 
         <span style="display: none;">{{ form.groups|add_class:"select_all"}}</span>
 
-        <div class="col-sm-12 col-md-4 form_card">
+        <div class="col-xs-12 col-md-4 form_card">
             {% csrf_token %}
             <div class="row">
-                <div class="col-sm-12 col-md-8 col-lg-9">
+                <div class="col-xs-12 col-md-8 col-lg-9">
                         {{ form.title.label_tag }} <label> <small>(Inférieur à 18 lettres)</small></label>
                         {{ form.title |add_class:"form-control" }}
                         {{ form.title.errors }}
                 </div>
 
-                <div class="col-sm-12  col-md-4  col-lg-3 no_visu">
+                <div class="col-xs-12  col-md-4  col-lg-3 no_visu">
                       {{ form.color.label_tag }}      
                                 <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                     <div class="helper_tip_text" >La couleur permet une reconnaissance rapide.</div>
@@ -88,14 +88,14 @@
                 {{ form.level.as_hidden  }}
             {% else %}                
                 <div class="row">          
-                    <div class="col-sm-12 col-md-6" >
+                    <div class="col-xs-12 col-md-6" >
                         <div class="form-group">
                             <label> Enseignement :</label><br/>
                             {{ form.subject |add_class:"form-control select2" }}
                             {{ form.subject.errors }}
                         </div>
                     </div>    
-                    <div class="col-sm-12 col-md-6" >
+                    <div class="col-xs-12 col-md-6" >
                         <div class="form-group">
                             <label> Niveau :</label><br/>
                             {{ form.level |add_class:"form-control select2" }}
@@ -109,7 +109,7 @@
 
 
             <div class="row">
-                <div class="col-sm-12 col-md-6 {% if group %}no_visu{% endif %}" style="overflow-y: auto;height: 150px;">
+                <div class="col-xs-12 col-md-6 {% if group %}no_visu{% endif %}" style="overflow-y: auto;height: 150px;">
                     <label>Attribuer aux groupes </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents. <span class="text-danger">Vous ne voyez pas de groupe ? Aucun de vos groupes n'a le même enseignement ni le même niveau que ce dossier.</span></div>
                     </span> 
@@ -132,7 +132,7 @@
                     {% endif %}
                 </div>  
                 {% if group or folder %}
-                <div class="col-sm-12 col-md-6 no_visu" style="overflow-y: auto;height: 150px;">
+                <div class="col-xs-12 col-md-6 no_visu" style="overflow-y: auto;height: 150px;">
                     <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                     </span> 
@@ -140,7 +140,7 @@
                         {{ form.parcours.errors }} 
                 </div>
                 {% else %}
-                <div class="col-sm-12 col-md-6 no_visu">
+                <div class="col-xs-12 col-md-6 no_visu">
                     <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                     </span> 
@@ -154,13 +154,13 @@
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-4 no_visu" style="position: relative">            
-            <div class="col-sm-12 col-md-12 form_card">
+        <div class="col-xs-12 col-md-4 no_visu" style="position: relative">            
+            <div class="col-xs-12 col-md-12 form_card">
             {% include 'qcm/insert_vignettes.html' %}
             </div>
         </div>
 
-        <div class="col-sm-12 col-md-4">                      
+        <div class="col-xs-12 col-md-4">                      
             <table class="table table-sacado borderless no_visu form_card">
                     <tr>
                         <td>{{ form.is_publish.label_tag }}
@@ -218,7 +218,7 @@
 
 
     <div class="row" style="margin-top:40px">
-        <div class="col-sm-12 col-md-8">
+        <div class="col-xs-12 col-md-8">
             <div class="form-group">
  
                 <input value="Enregistrer" type="submit"  class="btn btn-primary" onclick="return check_if_checked()" />
@@ -227,7 +227,7 @@
             </div>
         </div> 
 
-        <div class="col-sm-12 col-md-4">
+        <div class="col-xs-12 col-md-4">
         {% if folder  %}
 
                 {% if group %}

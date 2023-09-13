@@ -31,7 +31,7 @@
 {% block body %}     
 <div class="content_main">
     <div class="row">  
-        <div class="col-sm-12 col-md-12">
+        <div class="col-xs-12 col-md-12">
             <div class="alert alert-sacado">
                 <li>Séléctionner l'établissement dans la liste.</li>                
                 <li>Pour la France : Vous devez connaitre le RNE de votre établissement à renseigner ici.</li>
@@ -42,7 +42,7 @@
     <form action="" method="POST">
     {% csrf_token %}    
                       <div class="row">
-                          <div class="col-sm-12 col-md-6">
+                          <div class="col-xs-12 col-md-6">
                               <div class="form-group"><label>Sélectionner le pays. <small>Pour la France, munissez-vous du RNE.</small></label>
                                   <select id="id_country_school" name="country_school" class="form-control select2" required>
                                       <option value=" ">--------------</option>
@@ -54,7 +54,7 @@
                           </div>
                       </div>
                       <div class="row">
-                          <div class="col-sm-12 col-md-6" id="select_town">
+                          <div class="col-xs-12 col-md-6" id="select_town">
                               <div class="form-group"><label>Sélectionner la ville</label>
                                   <select id="id_town_school" name="town_school" class="form-control select2">
                                   </select>
@@ -62,7 +62,7 @@
                           </div>
                       </div>
                       <div class="row"  id="select_rne">
-                          <div class="col-sm-12 col-md-6">
+                          <div class="col-xs-12 col-md-6">
                               <div class="form-group"><label>Renseigner le code RNE</label>
                                   <input type="text" name="rne" id="id_rne" class="form-control" maxlength="10" />
                               </div>
@@ -70,7 +70,7 @@
                       </div>
 
                       <div class="row">
-                          <div class="col-sm-12 col-md-6">
+                          <div class="col-xs-12 col-md-6">
                               <div class="form-group"><label>Sélectionner l'établissement</label>
                                   <select id="id_school" name="school" class="form-control select2 no_visu" required>
                                   </select>
@@ -78,7 +78,7 @@
                           </div>
                       </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group"> Vous n'avez pas trouvé votre établissement, <a href="#"  id="get_school_div">Nous contacter</a> .
                             </div>
                         </div>
@@ -92,7 +92,7 @@
 
 
         <div class="row">
-            <div class="col-sm-12 col-md-8">
+            <div class="col-xs-12 col-md-8">
                 <div class="form-group">
                     <input value="Rejoindre cet établissement" type="submit" class="btn btn-primary"   />
                     <a href="javascript:history.back()"><input type="button" value="Annuler"
@@ -106,13 +106,13 @@
 
         <div class="row " id="show_get_school_div"  >
 
-          <div class="col-sm-0 col-md-3">
+          <div class="col-xs-0 col-md-3">
 
  
 
           </div>
 
-          <div class="col-sm-12 col-md-6">
+          <div class="col-xs-12 col-md-6">
 
             <div class="form"> 
 

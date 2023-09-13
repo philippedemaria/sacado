@@ -40,7 +40,7 @@
  
 <section class="content_main">
     <div class="row">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-xs-12 col-md-6">
             <form  action="" method="POST" enctype='multipart/form-data'>
                 {% csrf_token %}
 
@@ -129,7 +129,7 @@
                     {% endif %} 
             </form>
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="col-xs-12 col-md-6">
 
             {% if school and  request.user.is_superuser %}
                 <h1 class="thin"> Initialisation </h1>   

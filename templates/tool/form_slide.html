@@ -36,7 +36,7 @@
 <section class="content_list"> 
 
         <div class="row">
-            <div class="col-sm-12 col-md-2">
+            <div class="col-xs-12 col-md-2">
                 <form action="#" method="POST"  >
                     <div class="quizz_list_question">
                         <ul id="slides_sortable_list">
@@ -50,13 +50,13 @@
                 <a href="{% url 'create_slide' diaporama.id %}" class="btn btn-primary">Nouvelle diapo</a>
             </div>
 
-            <div class="col-sm-12 col-md-10" >  
+            <div class="col-xs-12 col-md-10" >  
  
                 <form action="{% url 'create_slide' diaporama.id %}"  method = "POST"  enctype='multipart/form-data' >
                     {% csrf_token %}  
 
                     <div class="row">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 {{ form.title.label_tag }}  
                                 {{ form.title |add_class:"form-control" }}
@@ -66,7 +66,7 @@
                     </div>
                     <div class="row">
 
-                        <div class="col-sm-6 col-md-3">
+                        <div class="col-xs-6 col-md-3">
                             <div class="form-group">
                                 {{ form.is_publish.label_tag }}<br/>
                                 {{ form.is_publish |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
@@ -75,7 +75,7 @@
                         </div>  
                     </div>
                     <div class="row">                
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-xs-12 col-md-12">
                             <div class="form-group">
                                 {{ form.content.label_tag }}<br/>
                                 {{ form.content }}
@@ -84,7 +84,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <div class="form-group">
                                 <input value="{{ diaporama.id }}" id="diaporama_id" name="diaporama_id" type="hidden"  />
 

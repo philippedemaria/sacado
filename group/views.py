@@ -168,7 +168,7 @@ def student_dashboard(request,group_id):
         return template , context 
 
 
-    groups = student.students_to_group.all()
+    groups = student.students_to_group.filter(is_hidden=0)
 
     parcourses_on_fire = []
 
@@ -201,7 +201,7 @@ def student_dashboard(request,group_id):
     else :
 
         try :
-            group = student.students_to_group.first()
+            group = student.students_to_group.filter(is_hidden=0).first()
             folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         except :
             group = None

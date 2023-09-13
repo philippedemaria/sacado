@@ -24,14 +24,14 @@
     <form  action="" method="POST">
         {% csrf_token %}
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                     <label>{{ form.name.label_tag }}</label>
                     {{ form.name |add_class:"form-control" }}
                     {{ form.name.errors }}
                 </div>
             </div>
-            <div class="col-sm-12 col-md-4">
+            <div class="col-xs-12 col-md-4">
                 <div class="form-group">
                     <label>{{ form.share.label_tag }}</label> <br/>
                     {{ form.share|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-on:Oui"|attr:"data-off:Non"}}
@@ -41,7 +41,7 @@
         </div>
 <!--         
         <div class="row">
-            <div class="col-sm-12 col-md-4">
+            <div class="col-xs-12 col-md-4">
                 <div class="form-group">
                     <label>{{ form.users.label_tag }}</label>  <br/>
                     {{ form.users   }}
@@ -53,7 +53,7 @@
 
 
       <div class="row">
-            <div class="col-sm-12 col-md-12">
+            <div class="col-xs-12 col-md-12">
                 <table  id="standard_tab" class="table table-sacado  table-hover">
                     <thead>
                       <tr>
@@ -84,7 +84,7 @@
 
 
         <div class="row">
-            <div class="col-sm-12 col-md-12">                 
+            <div class="col-xs-12 col-md-12">                 
                 <div class="form-group">
                     <input value="Enregistrer" type="submit" class="btn btn-primary"/>            
                     <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

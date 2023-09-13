@@ -20,7 +20,7 @@
                     <div class="row">
  
                         {% for group in teacher.groups.all %}
-                            <div class="col-sm-6 card_modal_search exercise_body_shared">
+                            <div class="col-xs-6 card_modal_search exercise_body_shared">
                                 <div class="quizz_item" style="background-color:{{ group.color }}">
                                     <label  class="btn btn-sacado ">Groupe : {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
                                     <div class="form_card" style="padding : 15px 5px "><label>Dossiers associés</label>                         
@@ -39,7 +39,7 @@
 
                     </div>
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-xs-12">
                             <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer la BiblioTex <span id="this_document_label"></span></a>
                         </div>
                     </div>

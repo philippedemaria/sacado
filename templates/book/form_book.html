@@ -42,7 +42,7 @@
 <section class="content_main">             
     <form method="post" action="" enctype='multipart/form-data'>{% csrf_token %}
     <div class="row">
-        <div class="col-sm-12 col-md-3">
+        <div class="col-xs-12 col-md-3">
             <div class="form-group">
                 <label>{{ form.title.label_tag }}</label>
                 {{ form.title |add_class:"form-control" }}
@@ -59,7 +59,7 @@
                 {{ form.subject.errors }}
             </div>
         </div>    
-        <div class="col-sm-12 col-md-3">
+        <div class="col-xs-12 col-md-3">
             <div class="form-group">
                 <label>{{ form.ranking.label_tag }}</label>
                 {{ form.ranking|add_class:"form-control" }}
@@ -76,7 +76,7 @@
                 {{ form.imagefile.errors }}
             </div>
         </div>  
-        <div class="col-sm-12 col-md-3">
+        <div class="col-xs-12 col-md-3">
             <div class="form-group">
                 <label>{{ form.is_student.label_tag }}</label>
                 {{ form.is_student  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}
@@ -94,7 +94,7 @@
             </div>
         </div>    
   
-        <div class="col-sm-12 col-md-12">         
+        <div class="col-xs-12 col-md-12">         
             <button type="submit" class="btn btn-primary">Enregistrer</button>   
             <a href="javascript:history.back()" data-dismiss="modal" ><input type="button" value="Annuler" class="btn btn-default"   /></a>
         </div>

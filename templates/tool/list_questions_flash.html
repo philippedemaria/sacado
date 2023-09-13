@@ -84,7 +84,7 @@
                         <!-- Ajout de groupes par Ajax --->
                         <div id="affectation{{ q.id }}" class="card-skill no_visu_on_load"> 
                           <div class="row">
-                                <div class="col-sm-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{q.id}}"><i class="fa fa-times"></i></span>         
+                                <div class="col-xs-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{q.id}}"><i class="fa fa-times"></i></span>         
                                     Affecter aux Groupes 
                                 </div>
                            </div> 
@@ -145,7 +145,7 @@
             <div class="modal-body">
                 <form action="{% url 'print_qf_to_pdf' %}" method="POST">
                     <div class="row">            {% csrf_token %}
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <input type="hidden" id="index_idq" name="idq" />
                             <table class="table table-sacado borderless">
                                 <tr>
@@ -164,7 +164,7 @@
                         </div>    
                     </div>
                     <div class="row">
-                        <div class="col-sm-12 col-md-12"> 
+                        <div class="col-xs-12 col-md-12"> 
                             <div class="form-group">
                                 <input value="Valider" type="submit" class="btn btn-primary"/>
                                 <a href="javascript:history.back()"><input type="button" value="Annuler" class="btn btn-default "/></a>

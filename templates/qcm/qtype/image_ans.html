@@ -17,7 +17,7 @@
         <li class="this_slide" id="this_slide{{ forloop.counter }}">
 		    <div class="row"  align="left" style="margin-top:10px">
 		        {% if annoncement %}
-		            <div class="col-sm-12 col-lg-12 custom_content" style="max-height:90px">
+		            <div class="col-xs-12 col-lg-12 custom_content" style="max-height:90px">
 		            	{{ annoncement|safe }}
 		            </div>
 		        {% endif %}
@@ -25,7 +25,7 @@
 
 		    {% if not supportfile.is_written %}
 			<div class="row"> 
-				<div class="col-sm-12 col-sm-12" align='center'>
+				<div class="col-xs-12 col-xs-12" align='center'>
 				{% for choice in shufflesubchoices|index:forloop.counter0 %}
 					<span class="quizz_choice draggable"  data-loop="{{ forloop.counter0 }}" style="cursor: move;;z-index:99" >
 						{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{  choice.label }}
@@ -65,7 +65,7 @@
 				{% endwith %}	
 			{% endwith %}
 		    <div class="row validation">
-		    	<div class="col-sm-12 col-md-3" align="center"  >
+		    	<div class="col-xs-12 col-md-3" align="center"  >
 		            <a  href="#" class="nav_start btn btn-primary show_image_correction" data-supportfile_id="{{ supportfile.id }}"   
 		            	id="nav_start{{ forloop.counter }}" data-loop="{{ forloop.counter }}"><i class="fa fa-caret-right"></i> Valider </a>
 		        </div>
