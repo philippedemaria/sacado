@@ -309,6 +309,8 @@ define(['jquery', 'bootstrap'], function ($) {
             let subject_id = $("#subject_id").val();
             let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            $('#body_search_result').append("<i class='fa fa-spinner fa-pulse fa-2x'></i> Chargement en cours.") ;
+
             $.ajax(
                     {
                         type: "POST",
@@ -322,7 +324,8 @@ define(['jquery', 'bootstrap'], function ($) {
                         url : "../ajax_list_exotex",
                         success: function (data) {
 
-                            $('#body_search_result').html(data.html);
+                            $("#div_to_save").show(500);
+                            $('#body_search_result').html("").html(data.html);
                 
                         }
                     }
