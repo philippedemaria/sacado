@@ -305,9 +305,10 @@ def printer(request, relationtex_id, collection,output , obj):
             elements +=  r"\\ "
 
 
-            if correction : 
-                elements += r"\newpage"
-                elements += r"\centerline{ \fbox{Corrigé} }"
+        if correction : 
+            elements += r"\newpage"
+            elements += r"\centerline{ \fbox{Corrigé} }"
+            for relationtex in relationtexs :
                 if  relationtex.exotex.correction :
                     elements += relationtex.exotex.correction
 
