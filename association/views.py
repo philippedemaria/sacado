@@ -2155,8 +2155,8 @@ def direct_update_abonnement_gar(request):
 
   
     id_abonnement  = request.POST.get("idAbonnement")
-    debutValidite  = request.POST.get("debutValidite")
-    finValidite    = request.POST.get("finValidite")
+    debutValidite  = request.POST.get("debutValidite")+"T00:00:00.000000"
+    finValidite    = request.POST.get("finValidite")+"T00:00:00.000000"
     nbLicenceEleve = request.POST.get("nbLicenceEleve")
     is_primaire    = request.POST.get("is_primaire",None)
 
