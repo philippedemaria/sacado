@@ -32,7 +32,7 @@
     <!-- Ajout de groupes par Ajax --->
     <div id="affectation{{ docperso.id }}" class="card-skill no_visu_on_load"> 
       <div class="row">
-            <div class="col-xs-12 col-md-12 title"><span   class="select_div_group_close pull-right" data-relationship_id="{{docperso.id}}"><i class="fa fa-times"></i></span>         
+            <div class="col-xs-12 col-md-12 title"><span class="select_div_group_close pull-right" data-relationship_id="{{docperso.id}}"><i class="fa fa-times"></i></span>         
                 Affecter aux Groupes 
             </div>
        </div> 
@@ -46,8 +46,8 @@
     </div>
 </td>
 <td style="width:150px;" >
-    <div class="btn-group"  style="padding:0px;margin:0px;">
-        <a href="javascript:void();" class="btn btn-default btn-publisher sharer_docperso"   id="parcours_sharer{{docperso.id}}" 
+    <div class="btn-group" style="padding:0px;margin:0px;">
+        <a href="javascript:void();" class="btn btn-default btn-publisher sharer_docperso" id="parcours_sharer{{docperso.id}}" 
             data-parcours_id="{{docperso.id}}" data-statut="{{docperso.is_share }}">  
             <i class="fa fa-circle-o-notch"></i>
         </a><span class="legend-btn  legend-btn-{% if docperso.is_share %}success{% else  %}danger{% endif  %} size13" id="parcours_sharer_statut{{docperso.id}}"  >  

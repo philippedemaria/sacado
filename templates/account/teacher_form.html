@@ -244,7 +244,7 @@
                         <ul style="padding-left:0px;">
                         {% for g in teacher.groups.all %}
                             <li class="sanspuce">
-                                <a href="{% url 'show_group' g.id %}" style="color:{{g.color}}">{{ g.name }} </a><small>- {{ g.level.shortname|abreviation|safe }}  - {{ g.subject.shortname }}</small>
+                                <a href="{% url 'show_group' g.id %}" style="color:{% if g.is_hidden %}#CCC{% else %}{{g.color}}{% endif %}">{{ g.name }} </a><small>- {{ g.level.shortname|abreviation|safe }}  - {{ g.subject.shortname }}</small>
                             </li>
                         {% endfor %}
                         </ul>

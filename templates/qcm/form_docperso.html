@@ -43,9 +43,7 @@
 {% block body %}
 <section class="content_main"> 
     <form action="#" method="POST"  enctype='multipart/form-data'>
- 
         {% csrf_token %}
-
         <div class="row">
             <div class="col-xs-12 col-md-8 form_card">
                 <div class="row">
@@ -57,15 +55,15 @@
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
-				            {{ form.title.label_tag }}
-				            {{ form.title|add_class:"form-control" }}
-                            {{ form.title.errors }}
+			            {{ form.title.label_tag }}
+			            {{ form.title|add_class:"form-control" }}
+                        {{ form.title.errors }}
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-xs-12 col-md-6">
                         <div class="form-group"> 
-                            {{ form.file.label_tag }} <label><small>(50Ko )</small></label>
+                            {{ form.file.label_tag }} <label><small>(50Ko)</small></label>
                             {{ form.file|add_class:"btn btn-default" }}
                         </div>
                     </div>    
