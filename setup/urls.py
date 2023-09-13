@@ -115,6 +115,7 @@ urlpatterns = [
     path('e/<slug:code>', goto_exercise_after_qrcode, name='goto_exercise_after_qrcode'),
     path('a/<slug:code>', goto_appliquette_after_qrcode, name='goto_appliquette_after_qrcode'),
     path('b/<int:idbl>', goto_details_bloc_after_qrcode, name='goto_details_bloc_after_qrcode'),
+    path('c/<int:idbl>', goto_details_bloc_correction, name='goto_details_bloc_correction'), 
 ]
 
 

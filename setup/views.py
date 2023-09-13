@@ -2454,3 +2454,8 @@ def goto_appliquette_after_qrcode(request,code):
 def goto_details_bloc_after_qrcode(request,idbl):
     return redirect('display_details_bloc_by_qr', idbl )
 
+
+
+
+def goto_details_bloc_correction(request,idbl):
+    return redirect('display_details_bloc_correction', idbl )

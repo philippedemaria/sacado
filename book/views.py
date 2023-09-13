@@ -1075,6 +1075,9 @@ def print_latex_to_pdf(request,idch,idp):
                 exotexs = bloc.exotexs.all()
                 appliquettes = bloc.appliquettes.all()
 
+                if bloc.correction :
+                    elements += r"\textbf{Corrigé} : sacado.xyz/c/"+str(bloc.id)+" || "
+
                 if exercises.count() + exotexs.count() + appliquettes.count() > 0 : elements += r'\textbf{Supports} : '
 
                 for e in exercises :
@@ -1082,7 +1085,7 @@ def print_latex_to_pdf(request,idch,idp):
                 for e in exotexs :
                     elements +=  "tex : "+e.id +" | "
                 for a in appliquettes :
-                    elements +=  r" https://sacado.xyz/a/"+str(a.code)+" | "
+                    elements +=  r" sacado.xyz/a/"+str(a.code)+" | "
 
     elements +=  r"\end{document}"
     ################################################################# 
@@ -1549,6 +1552,22 @@ def display_details_bloc_by_qr(request,idbl):
     context = { 'bloc': bloc, 'exercises': exercises,'exotexs': exotexs,'appliquettes': appliquettes, 'use_this_css' : use_this_css     }
 
     return render(request, 'book/details_bloc_by_qr.html', context )
+
+
+
+
+def goto_details_bloc_correction(request,idbl):
+
+    bloc = Bloc.objects.get(pk=idbl)
+    use_this_css = "css/bookstyle_6.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
+    context = { 'bloc': bloc, }
+
+    return render(request, 'book/details_bloc_correction.html', context )
+
+
+
+
+
 
 
 

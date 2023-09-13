@@ -70,39 +70,6 @@
                     <h2>Activités complémentaires</h2>
                 </div>
 
-
-
-
-
-
-        {% if appliquettes %}
-        <div class="col-xs-12 col-md-6" align='center'> 
-            <h3>appliquettes</h3>      
-            {% for a in appliquettes %}
-                <li class="sanspuce"><a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank">{{ a.iframe|safe }}</a></li>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% if exercises %}
-        <div class="col-xs-12 col-md-3" align='center'>  
-            <h3>Exercices GGB</h3>              
-            {% for e in exercises %}
-               {% if e.supportfile.imagefile %}
-                    <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank"><img src="{{ e.supportfile.imagefile.url }}" width="300px"></a>
-                {% endif %}
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% if exotexs %}
-        <div class="col-xs-12 col-md-3">
-            <h3>Exo Latex</h3>             
-            {% for e in exotexs %}
-                <li><a href="{% url 'show_exotex' e.id %}" target="_blank">{{ e.title }}</a></li>
-            {% endfor %}
-        </div>
-        {% endif %}
-
-
 </section>
 
 
