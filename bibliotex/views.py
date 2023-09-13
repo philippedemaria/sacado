@@ -116,7 +116,7 @@ def printer(request, relationtex_id, collection,output , obj):
     linked_exercises   = request.POST.get("linked_exercises",None)
 
     columns   = request.POST.get("columns",None)
-
+    correction = request.POST.get("correction",None) 
 
     ## Création du texte dans le fichier tex   
     if relationtex_id == 0 : # 0 pour la méthode POST
@@ -150,7 +150,9 @@ def printer(request, relationtex_id, collection,output , obj):
         skills_printer     = request.POST.get("skills",None)  
         knowledges_printer = request.POST.get("knowledges",None)  
         relationtex_ids    = request.POST.getlist("relationtexs",None)
-        sf_skills_first_printer = request.POST.get("sf_skills_first",None)  
+        sf_skills_first_printer = request.POST.get("sf_skills_first",None) 
+
+
         
         today = datetime.now()
         if collection and relationtex_ids :
@@ -250,9 +252,6 @@ def printer(request, relationtex_id, collection,output , obj):
                 img_tableur = pref_image + 'is_tableur.png'
                 details += r'\includegraphics[scale=0.4]{'+img_tableur+r'}'
 
-
-
-
             try :
                 if request.POST.get("all_titles",None)   :
                     elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details +  skill_dpl
@@ -304,6 +303,13 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements +=  text_linked 
 
             elements +=  r"\\ "
+
+
+        if correction : 
+            elements += r"\newpage"
+            elements += r"\centerline{ \fbox{Corrigé} }"
+            if exotex.correction :
+                elements += relationtex.exotex.correction
 
     else : #pour la création d'un exercise ou son update*
 
