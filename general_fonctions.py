@@ -516,6 +516,10 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
                 for quiz in quizz:
                     quiz.students.add(*students)
 
+                docpersos = parcours.docpersos.all()
+                for docperso in docpersos:
+                    docperso.students.add(*students)
+
         # Assigne les parcours et leurs contenus 
         for parcours in group.group_parcours.filter(folders=None):
             parcours.students.add(*students)
@@ -547,6 +551,11 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
             quizz = parcours.quizz.all()
             for quiz in quizz:
                 quiz.students.add(*students)
+
+            docpersos = parcours.docpersos.all()
+            for docperso in docpersos:
+                docperso.students.add(*students)
+
 
 
     test = True

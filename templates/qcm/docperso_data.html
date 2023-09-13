@@ -12,19 +12,16 @@
 {% endblock %}
 <td>
  
- {{ docperso.title }}
+
+    {% if docperso.link %}
+        <a href="{{ docperso.link }}" target="_blank"><i class="bi bi-link"></i> {% if docperso.title %} {{ docperso.title }} {% else %} <label>{{docperso.link}}</label> {% endif %}</a> 
+    {% elif docperso.file %} 
+        <a href="{{ docperso.file.url }}" target="_blank"><i class="bi bi-file-earmark-arrow-down-fill"></i> {% if docperso.title %} {{ docperso.title }} {% else %} <label>Sans titre</label> {% endif %}</a> 
+    {% else %} 
+        {% if docperso.title %} {{ docperso.title }} {% else %} <label>Sans titre</label> {% endif %} [Sans lien !!] 
+    {% endif %}
 
 </td>  
-<td>
- 
- 
-
-</td>  
-<td  style="width:20px;">
- 
-       
- 
-</td>
 <td style="position:relative">
     <span id="new_group_affected{{ docperso.id}}">
     {% for g in  docperso.groups.all  %}
@@ -50,7 +47,7 @@
 </td>
 <td style="width:150px;" >
     <div class="btn-group"  style="padding:0px;margin:0px;">
-        <a href="#" class="btn btn-default btn-publisher parcours_sharer"   id="parcours_sharer{{docperso.id}}" 
+        <a href="javascript:void();" class="btn btn-default btn-publisher sharer_docperso"   id="parcours_sharer{{docperso.id}}" 
             data-parcours_id="{{docperso.id}}" data-statut="{{docperso.is_share }}">  
             <i class="fa fa-circle-o-notch"></i>
         </a><span class="legend-btn  legend-btn-{% if docperso.is_share %}success{% else  %}danger{% endif  %} size13" id="parcours_sharer_statut{{docperso.id}}"  >  
@@ -60,9 +57,9 @@
 </td>
 <td style="width:160px">
     <div class="btn-group"  style="padding:0px;margin:0px;">
-        <a href="#" class="btn btn-default btn-publisher docperso_publisher" id="docperso_publisher{{docperso.id}}" 
+        <a href="javascript:void();" class="btn btn-default btn-publisher docperso_publisher" id="docperso_publisher{{docperso.id}}" 
             data-is_disabled="{% if docperso.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
-            data-docperso_id="{{docperso.id}}" data-statut="{{docperso.is_publish }}">  
+            data-parcours_id="{{docperso.id}}" data-statut="{{docperso.is_publish }}">  
             <i class="fa fa-circle-o-notch"></i>
         </a><span class="legend-btn  legend-btn-{% if not docperso.is_publish %}danger{% else  %}success{% endif  %} size13" id="docperso_statut{{docperso.id}}"  >  
           {% if docperso.is_publish %} Publié  {% else %} Dépublié {% endif  %} 

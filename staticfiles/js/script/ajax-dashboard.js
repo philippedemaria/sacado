@@ -1824,7 +1824,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 let parcours_id = $(this).attr("data-parcours_id");
                 let statut = $(this).attr("data-statut");
                 let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-                if( $is_folder) {  is_folder = "yes" ; } else { is_folder = "no" ; }
+                if( $is_folder == 1) {  is_folder = "yes" ; } 
+                else if( $is_folder == 2) { is_folder = "docperso" ; } 
+                else { is_folder = "no" ; }
                 $.ajax(
                     {
                         type: "POST",
@@ -1851,6 +1853,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             sharer_parcours( $('.parcours_sharer') , '#parcours_sharer' ,'#parcours_sharer_statut' , 0 ) ;
             sharer_parcours( $('.sharer') , '#folder_sharer' ,'#folder_sharer_statut' , 1 ) ;
+            sharer_parcours( $('.sharer_docperso') , '#parcours_sharer' ,'#parcours_sharer_statut' , 2 ) ;
         // ==================================================================================================
         // ==================================================================================================
         // ============= Publication de parcours
@@ -1867,7 +1870,9 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
                 if( $("#is_quizz").val() ) {  is_quizz = "yes" ; } else { is_quizz = "no" ; }
 
-                if( $is_folder) {  is_folder = "yes" ; } else { is_folder = "no" ; }
+                if( $is_folder == 1) {  is_folder = "yes" ; } 
+                else if( $is_folder == 2) { is_folder = "docperso" ; } 
+                else { is_folder = "no" ; }
 
 
                 if( from == "2")  { url_from = "../../ajax/publish_parcours" ; } 
@@ -1942,7 +1947,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             publisher_parcours( $('.publisher_p') , '#parcours_publisher' ,'#parcours_statut' , 0 ) ;
             publisher_parcours( $('.publisher') , '#folder_publisher' ,'#folder_statut' , 1 ) ;
- 
+            publisher_parcours( $('.docperso_publisher') , '#docperso_publisher' ,'#docperso_statut' , 2 ) ;
         // ==================================================================================================
         // ==================================================================================================
         // ============= Affiche une fenetre modale personnalisée
@@ -1993,7 +1998,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         // ==================================================================================================
 
 
-            $('.prcrs_selector').on('change', function (event) {
+            $(document).on('change','.prcrs_selector' ,  function (event) {
 
                 let group_id = $(this).attr("data-group_id");
                 let status = $(this).attr("data-status");
@@ -2025,14 +2030,14 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             else 
                                 {$("#no_this_folder"+target_id).show();}
 
-
+                                $("#loader"+group_id).html() ;
                             }  
                         }) 
                     });
 
 
                 // Affiche dans la modal la liste des élèves du groupe sélectionné
-                $('.actiontarget').on('click', function (event) {
+                $(document).on('click', '.actiontarget' , function (event) {
                     let status = $(this).attr("data-status");
                     let target_id = $(this).attr("data-target_id");
                     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();

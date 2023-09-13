@@ -1696,6 +1696,21 @@ def ajax_affectation_to_group(request):
         for g in parcours.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
 
+
+    elif status == "docperso" :
+        docperso = Docperso.objects.get(pk=target_id)   
+        students = group.students.all()     
+        if checked == "false" :
+            docperso.groups.remove(group)
+            for student in students :
+                docperso.students.remove(student)
+        else :
+            docperso.groups.add(group)
+            docperso.students.set(group.students.all())
+
+        for g in docperso.groups.all():
+            html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
+
     else :
         folder   = Folder.objects.get(pk=target_id)
         if checked == "false" :
@@ -5842,7 +5857,9 @@ def ajax_sharer_parcours(request):
     parcours_id = request.POST.get("parcours_id")
     statut = request.POST.get("statut")
     is_folder = request.POST.get("is_folder")
- 
+
+    print(is_folder,statut,parcours_id)
+
     data = {}
     if statut=="true" or statut == "True":
         statut = 0
@@ -5861,10 +5878,11 @@ def ajax_sharer_parcours(request):
         data["noclass"] = "legend-btn-danger"
         data["label"]   = "Mutualisé"
 
-    is_folder = request.POST.get("is_folder")
  
     if is_folder == "no" :
         Parcours.objects.filter(pk = int(parcours_id)).update(is_share = statut)
+    elif is_folder == "docperso":
+        Docperso.objects.filter(pk = int(parcours_id)).update(is_share = statut)
     else :
         Folder.objects.filter(pk = int(parcours_id)).update(is_share = statut)
 
@@ -13968,8 +13986,6 @@ def my_docpersos(request):
 
     docpersos         = dataset.filter(folders=None)
     docpersos_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
-
-    print(docpersos_folders)
 
     list_folders, list_details = list(), list()
     for folder in docpersos_folders :

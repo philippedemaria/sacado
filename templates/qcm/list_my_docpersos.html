@@ -10,7 +10,7 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
 
     <script>
-        require(['script/ajax-bibliotex']);
+        require(['script/ajax-docperso']);
     </script> 
 {% endblock %} 
 
@@ -37,14 +37,8 @@
 {% block inside_folder %}
 <table class="table table-sacado table-hovered standard_tab_10_not_first"  style="width:100%" >
     <thead> 
-        <th style="width:20px"><input type="checkbox" class="class_select_all_these_items" data-document_id="{{list_folder.folder.id}}" /></th>
-        <th style="width:20px;">
-            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-            <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-is_favorite"></i> Accessible<br/>depuis un dossier <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un dossier </div>
-            </span>
-        </th>   
-        <th style="width:300px">Titre</th>
-        <th></th>     
+        <th style="width:20px"><input type="checkbox" class="class_select_all_these_items" data-document_id="{{list_folder.folder.id}}" /></th> 
+        <th style="width:300px">Titre</th>    
         <th>Groupe </th>
         <th  style="width:150px;" >Mutualisation</th>
         <th style="width:160px">Publication 
@@ -55,7 +49,7 @@
         </th> 
     </thead>
     <tbody>
-        {% for bibliotex  in list_folder.docpersos.all %} 
+        {% for docperso  in list_folder.docpersos.all %} 
             <tr> 
                 {% include 'qcm/docperso_data.html' %}
             </tr>
@@ -69,7 +63,7 @@
     <button class="btn btn-default" name="action" value="archiver" onclick="return TestArchive('ces biblioTex')"> 
         <i class="fa fa-archive"> </i>  {% if 'archive' in request.path %} Désarchiver {% else %} Archiver {% endif %}  la sélection
     </button>
-
+    <input name="is_folder" type="hidden" id="is_folder" value="docperso" />
 
     <button class="btn btn-default" name="action" value="deleter" onclick="return TestDelete('ces biblioTex')"> 
         <i class="fa fa-trash"> </i>   Supprimer la sélection
@@ -81,14 +75,8 @@
     <table class="table table-sacado table_list table-hovered  standard_tab_sort_not_first"  style="width:100%" >
         <thead> 
             <tr> 
-                <th style="width:10px;text-align: center"><input type="checkbox"  id="select_all_these_items" /></th>
-                <th style="width:20px;">
-                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                    <div class="helper_tip_text" style="text-align: right" ><i class="fa fa-star text-is_favorite"></i> Accessible<br/>depuis un groupe <br/> <i class="fa fa-star text-default"></i> Inaccessible<br/>depuis un groupe </div>
-                    </span>
-                </th>   
-                <th style="width:300px">Titre</th>
-                <th></th>     
+                <th style="width:10px;text-align: center"><input type="checkbox"  id="select_all_these_items" /></th>  
+                <th style="width:300px">Titre</th>  
                 <th>Groupe </th>
                 <th  style="width:150px;" >Mutualisation</th>
                 <th style="width:160px">Publication 
