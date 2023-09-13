@@ -2184,6 +2184,23 @@ def direct_update_abonnement_gar(request):
     body += "<publicCible>ELEVE</publicCible>"
     body += "</abonnement>"
 
+
+    try :
+        f = open('/var/www/sacado/logs/gar_connexions.log','a')
+        print("================  MODIFICATION GAR ================", file=f)
+        print("===> date_start : ", file=f)
+        print(date_start, file=f)
+        print("===> date_stop : ", file=f)
+        print(date_stop, file=f)
+        print("===> id_abonnement : ", file=f)
+        print(id_abonnement, file=f)
+        print("===> body : ", file=f)
+        print(body, file=f)
+        f.close()
+    except :
+        pass 
+
+
     host   = "https://abonnement.gar.education.fr/"+id_abonnement  # Adresse d'envoi
     directory = '/home/sacado/'
     r   = requests.post(host, data=body, headers=header, cert=(directory + 'sacado.xyz-PROD-2021.pem', directory + 'sacado_prod.key'))
