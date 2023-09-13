@@ -1,5 +1,6 @@
 from django import forms
-from .models import Exotex , Bibliotex , Relationtex 
+from .models import Exotex , Bibliotex , Relationtex
+from qcm.models import Exercise 
 from socle.models import Knowledge , Skill
 from django.db.models import Q 
 
@@ -27,7 +28,8 @@ class ExotexForm(forms.ModelForm):
 				self.fields['level']	     = forms.ModelChoiceField(queryset=levels,  required=True)  
 				self.fields['level'].initial =  knowledge.level.id
 				self.fields['theme'].initial =  knowledge.theme.id
-
+				exercises = Exercise.objects.filter( knowledge = knowledge)
+				self.fields['exercises']     = forms.ModelMultipleChoiceField(queryset=exercises)
 			else :
 				skills = Skill.objects.all()
 			
@@ -35,7 +37,7 @@ class ExotexForm(forms.ModelForm):
 				self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
 			
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
-			 
+			   	 
 
 
 
@@ -56,8 +58,9 @@ class SetExotexForm(forms.ModelForm):
 			if knowledge :
 				skills = knowledge.theme.subject.skill.all()
 				knowledges = Knowledge.objects.filter(Q(level_id = knowledge.level.id )|Q(level_id = knowledge.level.id-1 ))
-				self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=True)  
-				self.fields['knowledges'].required = False
+				self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False)  
+				exercises = Exercise.objects.filter( knowledge = knowledge)
+				self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False )
 			else :
 				skills = Skill.objects.all()
 
@@ -66,6 +69,8 @@ class SetExotexForm(forms.ModelForm):
 			self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
 			 
+
+
 class BibliotexForm(forms.ModelForm):
 	class Meta:
 		model = Bibliotex 

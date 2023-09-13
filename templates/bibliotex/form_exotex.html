@@ -55,10 +55,7 @@ ul#id_skills li{
             {% csrf_token %}
             <div class="row" id="standard_layer">
                 {% if knowledge %}
-                        <input value="{{ knowledge.theme.subject.id }}" name="subject" id="id_subject" type="hidden" />
-                        <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
-                        <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
-                        <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
+
                 <div class="row">
                     <div class="col-xs-12 col-md-4">
                         <div class="form-group">
@@ -100,6 +97,12 @@ ul#id_skills li{
                                 {{ form.knowledge.errors }}
                             </div>
                         </div>
+                    {% else %}  
+
+                        <input value="{{ knowledge.theme.subject.id }}" name="subject" id="id_subject" type="hidden" />
+                        <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
+                        <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
+                        <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
                     {% endif %}
                 {% else %}  
                 <div class="row">
@@ -313,6 +316,7 @@ ul#id_skills li{
                         </div>               
                     </div> 
                 </div>  
+                {% if knowledge %}
                 <div class="row">
                     <div class="col-xs-12 col-md-12">                        
                         <div class="form-group">                        
@@ -322,7 +326,8 @@ ul#id_skills li{
                                                   
                         </div>
                     </div> 
-                </div>  
+                </div> 
+                {% endif %}
                 <div class="row" style="margin-top:15px" >
                     <div class="col-xs-3 col-md-3">
                         <div class="form-group">
