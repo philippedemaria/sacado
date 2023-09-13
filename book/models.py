@@ -395,7 +395,6 @@ class Bloc(models.Model):
 
     exercises    = models.ManyToManyField(Exercise, blank=True, related_name='blocs', verbose_name="Exercices connexes")
     exotexs      = models.ManyToManyField(Exotex  , blank=True, related_name='blocs', verbose_name="ExoTex connexes")
-
     appliquettes = models.ManyToManyField(Appliquette, blank=True, related_name='blocs', verbose_name="Appliquettes")
 
 

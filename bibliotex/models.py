@@ -6,7 +6,7 @@ from group.models import  Group
 from django.utils import timezone
 from account.models import Student, Teacher, ModelWithCode, generate_code, User
 from socle.models import  Knowledge, Level , Theme, Skill , Subject 
-from qcm.models import Folder , Parcours , Course , Relationship
+from qcm.models import Folder , Parcours , Course , Relationship , Exercise
 from django.apps import apps
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import Q, Min, Max
@@ -34,22 +34,22 @@ class Exotex(models.Model):
     content = models.TextField( verbose_name="Enoncé en LaTeX")
     content_html = RichTextUploadingField( blank=True,  verbose_name="Enoncé pour html") 
 
-    author = models.ForeignKey(Teacher, related_name="author_exotexs", on_delete=models.PROTECT, editable=False)
+    author = models.ForeignKey(Teacher, related_name="author_exotexs", on_delete=models.CASCADE, editable=False)
     #### pour validation si le qcm est noté
     calculator = models.BooleanField(default=0, verbose_name="Calculatrice ?")
     #### pour donner une date de remise
  
-    date_created = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
+    date_created  = models.DateTimeField(auto_now_add=True, verbose_name="Date de création")
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
  
     duration = models.PositiveIntegerField(default=15, blank=True, verbose_name="Durée estimée - en minutes")
 
     ###### Socle
-    subject = models.ForeignKey(Subject, default =1 , on_delete=models.PROTECT,  related_name='subject_exotexs', verbose_name="Enseignement associé")
-    knowledge = models.ForeignKey(Knowledge,  null=True, on_delete=models.PROTECT,  related_name='knowledge_exotexs', verbose_name="Savoir faire associé")
-    level = models.ForeignKey(Level, related_name="level_exotexs", on_delete=models.PROTECT, verbose_name="Niveau")
-    theme = models.ForeignKey(Theme, related_name="theme_exotexs", on_delete=models.PROTECT, verbose_name="Thème")
-    skills = models.ManyToManyField(Skill, blank=True, related_name='skills_exotexs', verbose_name="Compétences ciblées")
+    subject    = models.ForeignKey(Subject, default =1 , on_delete=models.CASCADE,  related_name='subject_exotexs', verbose_name="Enseignement associé")
+    knowledge  = models.ForeignKey(Knowledge,  null=True, on_delete=models.CASCADE,  related_name='knowledge_exotexs', verbose_name="Savoir faire associé")
+    level      = models.ForeignKey(Level, related_name="level_exotexs", on_delete=models.CASCADE, verbose_name="Niveau")
+    theme      = models.ForeignKey(Theme, related_name="theme_exotexs", on_delete=models.CASCADE, verbose_name="Thème")
+    skills     = models.ManyToManyField(Skill, blank=True, related_name='skills_exotexs', verbose_name="Compétences ciblées")
     knowledges = models.ManyToManyField(Knowledge, blank=True,  default="",  related_name='other_knowledge_exotexs', verbose_name="Savoir faire associés complémentaires")
 
     is_share     = models.BooleanField(default=1, verbose_name="Mutualisé ?")
@@ -59,14 +59,16 @@ class Exotex(models.Model):
     is_corrected = models.BooleanField(default=0, verbose_name="Correction ?")
     is_annals    = models.BooleanField(default=0, verbose_name="Annale ?")
 
-    point = models.PositiveIntegerField(  default=0,  blank=True, null=True ,  verbose_name="Points") 
-    correction = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
+    point           = models.PositiveIntegerField( default=0,  blank=True, null=True ,  verbose_name="Points") 
+    correction      = models.TextField( blank=True, default="", null=True, verbose_name="Corrigé")
     correction_html = RichTextUploadingField( blank=True,  verbose_name="Correction pour html") 
-    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    ranking         = models.PositiveIntegerField( default=0,  blank=True, null=True, editable=False)
 
-    bloc_id = models.PositiveIntegerField(  blank=True, null=True, editable=False) # permet de lier un bloc à un exotex
-
+    bloc_id = models.PositiveIntegerField( blank=True, null=True, editable=False) # permet de lier un bloc à un exotex
     is_read = models.BooleanField(default=0, verbose_name="Relu et vérifié ?")
+
+    exercises = models.ManyToManyField(Exercise, blank=True, related_name='exotexs', verbose_name="Exercices connexes")
+
 
 
     def __str__(self):    

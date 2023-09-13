@@ -1556,7 +1556,7 @@ def display_details_bloc_by_qr(request,idbl):
 
 
 
-def goto_details_bloc_correction(request,idbl):
+def display_details_bloc_correction(request,idbl):
 
     bloc = Bloc.objects.get(pk=idbl)
     use_this_css = "css/bookstyle_6.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
