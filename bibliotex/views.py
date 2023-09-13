@@ -308,9 +308,16 @@ def printer(request, relationtex_id, collection,output , obj):
         if correction : 
             elements += r"\newpage"
             elements += r"\centerline{ \fbox{Corrigé} }"
+            k=1
             for relationtex in relationtexs :
                 if  relationtex.exotex.correction :
+                    elements += r"\exercice{Exercice "+ str(k) + r"} "
                     elements += relationtex.exotex.correction
+                    elements += r" \vspace{0.2cm}"
+                else :
+                    elements += r"\exercice{Exercice "+ str(k) + r"} - Non corrigé"
+                    elements += r" \vspace{0.2cm}"
+                k+=1
 
     else : #pour la création d'un exercise ou son update*
 
