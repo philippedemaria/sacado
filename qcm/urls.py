@@ -544,6 +544,11 @@ urlpatterns = [
     path('ajax_publish_docperso', ajax_publish_docperso, name='ajax_publish_docperso'),
 
 
+    path('my_docpersos', my_docpersos, name='my_docpersos'),
+    path('my_docpersos_archives', my_docpersos_archives, name='my_docpersos_archives'),
+
+
+
     ####################################    Organiser  ##########################################
     path('ajax_add_chapter', ajax_add_chapter, name='ajax_add_chapter'),
     path('ajax_rename_chapter', ajax_rename_chapter, name='ajax_rename_chapter'),

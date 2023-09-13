@@ -13953,6 +13953,85 @@ def list_docpersos_group(request,idg):
 
 
 
+def my_docpersos(request):
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
+    request.session["folder_id"] = None
+    request.session["group_id"] = None    
+    request.session["parcours_id"] = False
+    teacher = request.user.teacher
+
+    dataset_user = teacher.docpersos
+    dataset      = dataset_user.filter(is_archive=0)
+
+    docpersos         = dataset.filter(folders=None)
+    docpersos_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
+
+    print(docpersos_folders)
+
+    list_folders, list_details = list(), list()
+    for folder in docpersos_folders :
+        docs_folders = dict()
+        fld = Folder.objects.get(pk=folder)
+        docs_folders["folder"]    = fld
+        docs_folders["docpersos"] = dataset.filter(folders=folder).order_by("levels")  
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
+            list_folders.append(docs_folders)
+
+
+    groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
+
+    nb_archive = dataset_user.filter(  is_archive=1).count()
+
+    return render(request, 'qcm/list_my_docpersos.html',  { 'list_folders': list_folders , 'docpersos': docpersos , 'teacher': teacher,  'groups': groups,   'nb_archive' : nb_archive  })
+
+
+
+def my_docpersos_archives(request):
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Courses"
+
+    request.session["folder_id"] = None
+    request.session["group_id"] = None    
+    request.session["parcours_id"] = False
+    teacher = request.user.teacher
+
+    dataset_user = teacher.docpersos
+    dataset      = dataset_user.filter(is_archive=1)
+
+    docpersos         = dataset.filter(folders=None)
+    docpersos_folders = dataset.values_list("folders", flat=True).exclude(folders=None).distinct().order_by("folders")
+
+
+    list_folders, list_details = list(), list()
+    for folder in docpersos_folders :
+        docs_folders = dict()
+        fld = Folder.objects.get(pk=folder)
+        docs_folders["folder"]    = fld
+        docs_folders["docpersos"] = dataset.filter(folders=folder).order_by("levels")  
+
+        these_details = (fld.title, fld.level, fld.subject)
+        if not these_details in list_details : 
+            list_details.append(these_details)
+            list_folders.append(docs_folders)
+
+
+    groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
+
+    nb_archive = dataset_user.filter(is_archive=1).count()
+
+    return render(request, 'qcm/list_my_docpersos.html',  { 'list_folders': list_folders , 'docpersos': docpersos , 'teacher': teacher,  'groups': groups,   'nb_archive' : nb_archive  })
+
+
+
+
+
 def create_docperso_parcours(request,idp=0):
 
     parcours , folder , group = None ,  None, None

@@ -11,7 +11,11 @@
         require(['script/ajax-docperso']);
     </script>  
  
-
+    {% if not docperso %}
+    <script>
+        require(['script/ajax-docperso-create']);
+    </script>  
+    {% endif %}
 
 
 {% endblock %}
@@ -135,6 +139,16 @@
                                     </span> 
                                 </td>
                                 <td> {{ form.stop|add_class:"form-control datetimepicker"}}</td>
+                                <td>{{ form.stop.errors }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form.is_archive.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                        <div class="helper_tip_text">Visible depuis ses groupes.</div>
+                                    </span> 
+                                </td>
+                                <td> {{ form.is_archive |attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                <td>{{ form.is_archive.errors }}</td>
                             </tr>
                     </table>
                 </div>

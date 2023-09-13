@@ -1,0 +1,15 @@
+<li class="dropdown">
+    <a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-action"> Nouveau document</a>
+
+    <ul id="products-menu" class="dropdown-menu clearfix pull-right" role="menu">
+
+        {% if parcours %}
+        <li> <a href="{% url 'create_docperso_parcours' parcours.id %}"  > Créer un document </a> </li>
+        {% else %}
+        <li> <a href="{% url 'create_docperso_parcours' 0 %}"  > Créer un document </em></a> </li>
+        {% endif %}
+         
+        <li class="divider"></li>
+         <li><a href="{% url 'my_bibliotex_archives' %}">Mes documents archivés ({% if nb_archive %}{{ nb_archive }}{% else %}0{% endif %})</a></li> 
+    </ul>
+</li> 

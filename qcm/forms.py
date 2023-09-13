@@ -175,22 +175,36 @@ class DocpersoForm(forms.ModelForm):
 			shared_groups = teacher.teacher_group.filter(level = group.level , subject = group.subject,is_hidden=0 )
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teacher")
+
+			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['groups'].initial = group
+
+			folders  = group.group_folders.order_by("title")
+			self.fields['folders']	      = forms.ModelMultipleChoiceField(queryset=folders, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['folders'].initial = folder
+	 
+			parcours                = group.group_parcours.filter(is_trash=0,is_archive=0).order_by("title")
+			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['parcours'].initial = prcs
+
+
+
 		else :
 			groups        = teacher.groups.filter( is_hidden=0 ) 
 			shared_groups = teacher.teacher_group.filter( is_hidden=0 )
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teacher")
  
-		self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
-		self.fields['groups'].initial = group
+			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=groups, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['groups'].initial = group
 
-		folders  = group.group_folders.order_by("title")
-		self.fields['folders']	      = forms.ModelMultipleChoiceField(queryset=folders, widget=forms.CheckboxSelectMultiple, required=False)
-		self.fields['folders'].initial = folder
- 
-		parcours                = group.group_parcours.filter(is_trash=0,is_archive=0).order_by("title")
-		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
-		self.fields['parcours'].initial = prcs
+			folders  = teacher.teacher_folders.order_by("title")
+			self.fields['folders']	      = forms.ModelMultipleChoiceField(queryset=folders, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['folders'].initial = folder
+	 
+			parcours                = teacher.teacher_parcours.filter(is_trash=0,is_archive=0).order_by("title")
+			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['parcours'].initial = prcs
 		
 
 	def clean_content(self):

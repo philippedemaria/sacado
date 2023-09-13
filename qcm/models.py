@@ -2881,6 +2881,8 @@ class Docperso(models.Model):
 
     is_share   = models.BooleanField(default=0, verbose_name="Mutualisé ?")
     is_publish = models.BooleanField(default=0, verbose_name="Publié ?")
+    is_archive = models.BooleanField(default=0, verbose_name="Archive ?")
+
 
     start = models.DateTimeField(null=True, blank=True, verbose_name="Début de publication")
     stop  = models.DateTimeField(null=True, blank=True, verbose_name="Fin de publication")
