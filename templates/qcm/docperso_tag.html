@@ -33,7 +33,7 @@
 
                         <div class="btn-group"  style="padding:0px;margin:0px;">
                             <a href="javascript:void(0);" class="btn btn-default btn-publisher publisher_docperso {% if docperso.is_publish %} selected_doc{% endif  %}"  
-                                data-from="{% if parcours %}3{% else %}2{% endif %}" id="docperso_publisher{{docperso.id}}" data-docperso_id="{{docperso.id}}">  
+                                data-from="2" id="docperso_publisher{{docperso.id}}" data-docperso_id="{{docperso.id}}">  
                                 <i class="fa fa-circle-o-notch"></i>
                             </a><span class="legend-btn legend-btn-{% if not docperso.is_publish %}danger{% else  %}success{% endif  %} size15" id="docperso_publisher_clic{{docperso.id}}" style="cursor:auto" >  
                               {% if docperso.is_publish %} Publié  {% else %} Non publié {% endif  %} 

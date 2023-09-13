@@ -1476,9 +1476,7 @@ define(['jquery','bootstrap'], function ($) {
  
                 let docperso_id = $(this).data("docperso_id");
                 let from_url    = $(this).data("from");
-
-                console.log(from_url);
-
+ 
                 if (from_url == '2') { this_url = '../../ajax_publish_docperso' ;} else { this_url = '../../../ajax_publish_docperso' ;}
 
                 if ($(this).hasClass("selected_doc")){

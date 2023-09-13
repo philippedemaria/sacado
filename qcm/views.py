@@ -14259,7 +14259,7 @@ def ajax_publish_docperso(request):
 
     docperso_id = request.POST.get('docperso_id', None)
     statut = request.POST.get("statut")
-    form = request.POST.get("from")
+ 
     data = {}
     if statut=="true" or statut == "True":
         statut = 0
