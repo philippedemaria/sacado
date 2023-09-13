@@ -1569,7 +1569,7 @@ def ajax_list_exotex(request):
     level      = Level.objects.get(pk=level_id)
     waitings   = level.waitings.filter(theme__subject_id = subject_id).order_by("theme") 
     data = dict()
-    data['html'] = render_to_string('bibliotex/ajax_list_exotexs.html', {'waitings' : waitings , })
+    data['html'] = render_to_string('bibliotex/ajax_list_exotexs.html', {'waitings' : waitings , 'teacher' : teacher })
 
     return JsonResponse(data)
 
