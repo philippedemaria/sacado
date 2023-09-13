@@ -144,7 +144,12 @@ h1, .h1, h2, .h2, h3, .h3 {
 
 
 .search_div{
-  margin-bottom: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    background-color: #9274C7;
+    padding:10;
+    border-radius: 40px;
+
 }
  
 .advises {
