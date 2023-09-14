@@ -28,14 +28,15 @@ class ExotexForm(forms.ModelForm):
 				self.fields['level']	     = forms.ModelChoiceField(queryset=levels,  required=True)  
 				self.fields['level'].initial =  knowledge.level.id
 				self.fields['theme'].initial =  knowledge.theme.id
-				exercises = Exercise.objects.filter( knowledge = knowledge)
+				exercises = Exercise.objects.filter( knowledge__level = knowledge.level)
 				self.fields['exercises']     = forms.ModelMultipleChoiceField(queryset=exercises,  required=False)
 			else :
 				skills = Skill.objects.all()
 			
 				self.fields['subject']	  = forms.ModelChoiceField(queryset=subjects,  required=True) 
 				self.fields['level']	  = forms.ModelChoiceField(queryset=levels,  required=True)         
-			
+				exercises = Exercise.objects.filter( knowledge__level__in = levels)
+				self.fields['exercises']     = forms.ModelMultipleChoiceField(queryset=exercises,  required=False)
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
 			   	 
 
