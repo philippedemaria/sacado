@@ -95,6 +95,15 @@
                                                     {% else %}
                                                       <img src="{% static 'img/no_calculator.png' %}"  width="30px" />
                                                     {% endif  %}
+
+                                                {% for e in exotex.exercises.all %}
+                                                    <a href="{% url 'show_this_exercise' e.id %}" target="_blank">#{{ e.id }}</a>
+                                                {% empty %}
+                                                    <small class="text-danger">Aucun support GGB</small>
+                                                {% endfor %}
+
+
+                                                    
                                                 <div class="admin_exotex" id="exotex_content_html{{ exotex.id }}">
                                                 {{ exotex.content_html|safe}}
                                                 </div>
@@ -103,6 +112,11 @@
                                                 {{ exotex.correction_html|safe}}
                                                 </div>
                                                 {% endif %}
+
+
+
+
+
 
                                            </td>
                                         </tr>

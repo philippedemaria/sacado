@@ -524,7 +524,7 @@ def my_exotexs(request):
 
     teacher = request.user.teacher 
     exos = Exotex.objects.filter( Q(author=teacher)|Q(teachers=teacher) )
-    return render(request, 'bibliotex/list_exotexs.html', {'exos': exos,  })
+    return render(request, 'bibliotex/list_exotexs.html', {'exos': exos,  'teacher':teacher , })
 
 
 def compile_html(request,nf):
