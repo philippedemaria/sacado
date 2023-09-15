@@ -274,7 +274,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
                     ctnt =  relationtex.exotex.content
 
-                elements += r"\begin{GeneriqueT}{Exercice "+str(j)+r"}{\;}"+str_elements +r" \\"+ctnt+r"\end{GeneriqueT}"
+                elements += r"\begin{GeneriqueT}{Exercice }{\;}"+str_elements +r" \\"+ctnt+r"\end{GeneriqueT}"
 
             else :
                 try :
