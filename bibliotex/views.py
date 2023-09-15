@@ -252,7 +252,7 @@ def printer(request, relationtex_id, collection,output , obj):
             details_skills = details +  skill_dpl
 
             if request.POST.get("print_frame",None) :
-
+                str_elements = ""
                 # impression des savoir faire
                 if not sf_skills_first_printer and knowledges_printer :  
                     k_display = relationtex.exotex.knowledge.name
