@@ -230,11 +230,6 @@ def index(request):
             request.session["tdb"] = "Groups"
             if request.session.has_key("subtdb"): del request.session["subtdb"]
 
-            if request.user.closure : 
-                if request.user.closure < today :
-                    messages.error(request,"Votre adhésion est terminée.")  
-                    return redirect("logout")
-
             template, context = student_dashboard(request, 0)
 
         elif request.user.is_parent:  ## parent
