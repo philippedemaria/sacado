@@ -274,7 +274,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
                     ctnt =  relationtex.exotex.content
 
-                elements += r"\begin{GeneriqueT}{Exercice "+str(i)+r"}{\;}"+str_elements +r" \\"+ctnt+r"\end{GeneriqueT}"
+                elements += r"\begin{GeneriqueT}{Exercice "+str(j)+r"}{\;}"+str_elements +r" \\"+ctnt+r"\end{GeneriqueT}"
 
             else :
                 try :
@@ -315,7 +315,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
 
             if linked_exercises :
- 
+
                 relationships = relationtex.relationships.filter(is_publish=1).order_by("ranking")
                 if relationships.count() > 0 :
                     elements +=  r"\\ \vspace{0,1cm}"                
