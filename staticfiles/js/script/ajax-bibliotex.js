@@ -289,6 +289,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             size  = $("#customRange").val() ; 
             $("#projection_div").attr("style","font-size:"+size+"rem");
             $("#projection_div").find("td").attr("style","font-size:"+size+"rem");
+            $("#projection_div").find("li").attr("style","font-size:"+size+"rem");
         });
 
 
