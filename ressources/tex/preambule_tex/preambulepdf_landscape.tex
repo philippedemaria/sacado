@@ -250,3 +250,10 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \setlength{\parindent}{0cm}
 \usepackage[left=1cm,right=1cm,top=1cm,bottom=1.5cm]{geometry}
 \usepackage{multicol}
+
+
+\newenvironment{GeneriqueT}[2]{%
+\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
+title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
+{%
+\end{tcolorbox}\par}

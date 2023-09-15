@@ -214,9 +214,6 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements +=r" \hline " 
                 elements +=r"\end{tabular}"
  
-                
-
-
         for relationtex in relationtexs :
         
             skills_display = ""
@@ -252,45 +249,73 @@ def printer(request, relationtex_id, collection,output , obj):
                 img_tableur = pref_image + 'is_tableur.png'
                 details += r'\includegraphics[scale=0.4]{'+img_tableur+r'}'
 
-            try :
-                if request.POST.get("all_titles",None)   :
-                    elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details +  skill_dpl
+            details_skills = details +  skill_dpl
+
+            if request.POST.get("print_frame",None) :
+
+                # impression des savoir faire
+                if not sf_skills_first_printer and knowledges_printer :  
+                    k_display = relationtex.exotex.knowledge.name
+                    str_elements = r"\savoirs{  \item " +  k_display 
+                    if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
+                    elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
+                    else : kws = []
+                    for k in kws : 
+                        str_elements += r" \item " +  k.name  
+                    str_elements += r"}"
+
+                if output == "html_cor" :
+                    if  relationtex.correction : ctnt =  relationtex.correction
+                    else                       : ctnt =  relationtex.exotex.correction
+                elif output == "html" :
+                    if  relationtex.content : ctnt =  relationtex.content
+                    else                    : ctnt =  relationtex.exotex.content
                 else :
-                    elements += r"\exercice{Exercice "+ str(j) + r"} "+ details +   skill_dpl 
-            except :
-                elements += r"\exercice{Exercice "+ str(j) + r"} "+ details +   skill_dpl
-            
-            j+=1
 
-            # impression des savoir faire
-            if not sf_skills_first_printer and knowledges_printer :  
-                k_display = relationtex.exotex.knowledge.name
-                elements += r"\savoirs{  \item " +  k_display 
-                if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
-                elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
-                else : kws = []
-                for k in kws : 
-                    elements += r" \item " +  k.name  
-                elements += r"}"
+                    ctnt =  relationtex.exotex.content
 
+                elements += r"\begin{GeneriqueT}{Exercice "+str(i)+r"}{\;}"+str_elements +r" \\"+ctnt+r"\end{GeneriqueT}"
 
-
-            elements += r" \vspace{0.2cm}"
-
-            if output == "html_cor" :
-                if  relationtex.correction : ctnt =  relationtex.correction
-                else                       : ctnt =  relationtex.exotex.correction
-            elif output == "html" :
-                if  relationtex.content : ctnt =  relationtex.content
-                else                    : ctnt =  relationtex.exotex.content
             else :
+                try :
+                    if request.POST.get("all_titles",None)   :
+                        elements += r"\exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details_skills
+                    else :
+                        elements += r"\exercice{Exercice "+ str(j) + r"} "+ details_skills
+                except :
+                    elements += r"\exercice{Exercice "+ str(j) + r"} "+ details_skills
+                
 
-                ctnt =  relationtex.exotex.content
+                # impression des savoir faire
+                if not sf_skills_first_printer and knowledges_printer :  
+                    k_display = relationtex.exotex.knowledge.name
+                    elements += r"\savoirs{  \item " +  k_display 
+                    if relationtex.knowledges.count()          : kws =  relationtex.knowledges.all()
+                    elif  relationtex.exotex.knowledges.count(): kws =  relationtex.exotex.knowledges.all()
+                    else : kws = []
+                    for k in kws : 
+                        elements += r" \item " +  k.name  
+                    elements += r"}"
 
-            elements += ctnt
+
+
+                elements += r"\\ \vspace{0.2cm} "
+
+                if output == "html_cor" :
+                    if  relationtex.correction : ctnt =  relationtex.correction
+                    else                       : ctnt =  relationtex.exotex.correction
+                elif output == "html" :
+                    if  relationtex.content : ctnt =  relationtex.content
+                    else                    : ctnt =  relationtex.exotex.content
+                else :
+
+                    ctnt =  relationtex.exotex.content
+
+                elements += ctnt
 
 
             if linked_exercises :
+ 
                 relationships = relationtex.relationships.filter(is_publish=1).order_by("ranking")
                 if relationships.count() > 0 :
                     elements +=  r"\\ \vspace{0,1cm}"                
@@ -318,7 +343,7 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements += r"\exercice{Exercice "+ str(k) + r"} - Non corrigé"
                     elements += r" \vspace{0.2cm}"
                 k+=1
-
+        j+=1
     else : #pour la création d'un exercise ou son update*
 
         try :
