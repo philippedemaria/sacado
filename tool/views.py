@@ -1100,11 +1100,6 @@ def ajax_show_detail_question(request):
     return JsonResponse(data)  
 
 
- 
-
-
-
-
 def ajax_affectation_to_group(request):
     group_id    = request.POST.get('group_id') 
     status      = request.POST.get('status')
@@ -1116,13 +1111,26 @@ def ajax_affectation_to_group(request):
     html        = ""
     change_link = "no"
  
-    quizz   = Quizz.objects.get(pk=target_id)
+    quizz       = Quizz.objects.get(pk=target_id)
+    folders     = quizz.folders.all()
+    parcourses  = quizz.parcours.all()
+    students    = group.students.all()     
+
     if checked == "false" :
         quizz.groups.remove(group)
+        for folder in folders :
+            quizz.folders.remove(folder)
+        for parcours in parcourses :
+            quizz.parcours.remove(parcours)
+        for student in students :
+            quizz.students.remove(student)    
     else :
         quizz.groups.add(group)
-        groups = (group,)
-        attribute_all_documents_of_groups_to_all_new_students(groups)
+        quizz.folders.set(folders)
+        quizz.parcours.set(parcourses)
+        quizz.students.set(students) 
+
+
     for g in quizz.groups.all():
         html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
     change_link = "change"

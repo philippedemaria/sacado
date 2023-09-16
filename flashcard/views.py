@@ -1259,12 +1259,27 @@ def ajax_affectation_to_group(request):
     change_link = "no"
  
     flashpack   = Flashpack.objects.get(pk=target_id)
+    folders     = flashpack.folders.all()
+    parcourses  = flashpack.parcours.all()
+    students    = group.students.all()     
+
     if checked == "false" :
         flashpack.groups.remove(group)
+        for folder in folders :
+            flashpack.folders.remove(folder)
+        for parcours in parcourses :
+            flashpack.parcours.remove(parcours)
+        for student in students :
+            flashpack.students.remove(student)    
     else :
         flashpack.groups.add(group)
-        groups = (group,)
-        attribute_all_documents_of_groups_to_all_new_students(groups)
+        flashpack.folders.set(folders)
+        flashpack.parcours.set(parcourses)
+        flashpack.students.set(students) 
+
+
+
+        
     for g in flashpack.groups.all():
         html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
     change_link = "change"

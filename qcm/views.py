@@ -1698,18 +1698,29 @@ def ajax_affectation_to_group(request):
 
 
     elif status == "docperso" :
-        docperso = Docperso.objects.get(pk=target_id)   
+        docperso = Docperso.objects.get(pk=target_id)  
+
+        folders     = docperso.folders.all()
+        parcourses  = docperso.parcours.all()
         students = group.students.all()     
+
         if checked == "false" :
             docperso.groups.remove(group)
+            for folder in folders :
+                docperso.folders.remove(folder)
+            for parcours in parcourses :
+                docperso.parcours.remove(parcours)
             for student in students :
-                docperso.students.remove(student)
+                docperso.students.remove(student)    
         else :
             docperso.groups.add(group)
-            docperso.students.set(group.students.all())
+            docperso.folders.set(folders)
+            docperso.parcours.set(parcourses)
+            docperso.students.set(students) 
 
         for g in docperso.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
+
 
     else :
         folder   = Folder.objects.get(pk=target_id)

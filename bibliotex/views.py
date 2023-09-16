@@ -1930,17 +1930,29 @@ def ajax_affectation_to_group(request):
     checked     = request.POST.get('checked')
 
     group       = Group.objects.get(pk=group_id)
+    students    = group.students.all() 
     data        = {}
     html        = ""
     change_link = "no"
  
     bibliotex   = Bibliotex.objects.get(pk=target_id)
+    folders     = bibliotex.folders.all()
+    parcourses  = bibliotex.parcours.all()
+
     if checked == "false" :
         bibliotex.groups.remove(group)
+        for folder in folders :
+            bibliotex.folders.remove(folder)
+        for parcours in parcourses :
+            bibliotex.parcours.remove(parcours)
+        for student in students :
+            bilbiotex.students.remove(student)    
     else :
         bibliotex.groups.add(group)
-        groups = (group,)
-        attribute_all_documents_of_groups_to_all_new_students(groups)
+        bibliotex.folders.set(folders)
+        bibliotex.parcours.set(parcourses)
+        bibliotex.students.set(students)  
+
     for g in bibliotex.groups.all():
         html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
     change_link = "change"
@@ -1950,7 +1962,6 @@ def ajax_affectation_to_group(request):
     return JsonResponse(data)
 
 
- 
 
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_sharer_parcours(request):  
