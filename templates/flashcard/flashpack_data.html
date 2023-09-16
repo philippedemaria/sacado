@@ -66,11 +66,11 @@
         <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
     {% endfor %}
     </span>
-    <span class="select_div_group"  data-relationship_id="{{flashpack.id}}"   title="Ajouter des groupes" ><i class="fa fa-plus-circle helper_tip"></i></span> 
+    <span class="select_div_group"  data-relationship_id="{{flashpack.id}}"  data-folder_id="{% if list_folder.folder %}{{ list_folder.folder.id }}{% endif %}"   title="Ajouter des groupes" ><i class="fa fa-plus-circle helper_tip"></i></span> 
     <!-- Ajout de groupes par Ajax --->
-    <div id="affectation{{ flashpack.id }}" class="card-skill no_visu_on_load"> 
+    <div id="affectation{{ flashpack.id }}-{% if list_folder.folder %}{{ list_folder.folder.id }}{% endif %}" class="card-skill no_visu_on_load"> 
       <div class="row">
-            <div class="col-xs-12 col-md-12 title"><span class="select_div_group_close pull-right" data-relationship_id="{{flashpack.id}}"><i class="fa fa-times"></i></span>         
+            <div class="col-xs-12 col-md-12 title"><span class="select_div_group_close pull-right" data-relationship_id="{{flashpack.id}}" data-folder_id="{% if list_folder.folder %}{{ list_folder.folder.id }}{% endif %}"><i class="fa fa-times"></i></span>         
                 Affecter aux Groupes 
             </div>
        </div> 
@@ -82,6 +82,8 @@
               </label>{% if not forloop.last %}<br>{% endif %}
         {% endfor %}
     </div>
+
+
 </td>
 <td style="width:150px;" >
     <div class="btn-group"  style="padding:0px;margin:0px;">

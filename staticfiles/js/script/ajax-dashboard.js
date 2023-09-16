@@ -1960,8 +1960,8 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
             function display_custom_modal($actionner,$target){
   
-                $(document).on('click', $actionner , function (event) {
-                    let relationship_id = $(this).data("relationship_id");
+                $actionner.on('click', function (event) {
+                    let relationship_id = $(this).attr("data-relationship_id");
                     $($target+relationship_id).toggle();
                     $($target+relationship_id).focus();
                 });
@@ -1969,27 +1969,51 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             } ;
 
 
-            display_custom_modal('.coefficients',"#coefficient");
-            display_custom_modal('.action_task',"#task_detail");
-            display_custom_modal('.select_task',"#detail_dateur");
-            display_custom_modal('.select_publish',"#detail_pub");
-            display_custom_modal('.select_details',"#details");
-            display_custom_modal('.sharered',"#share");
-            display_custom_modal('.select_skills',"#skill");
-            display_custom_modal('.select_constraint',"#detail_constraint");
-            display_custom_modal('.select_note',"#select_note");
+            display_custom_modal($('.coefficients'),"#coefficient");
+            display_custom_modal($('.action_task'),"#task_detail");
+            display_custom_modal($('.select_task'),"#detail_dateur");
+            display_custom_modal($('.select_publish'),"#detail_pub");
+            display_custom_modal($('.select_details'),"#details");
+            display_custom_modal($('.sharered'),"#share");
+            display_custom_modal($('.select_skills'),"#skill");
+            display_custom_modal($('.select_constraint'),"#detail_constraint");
+            display_custom_modal($('.select_note'),"#select_note");
 
-            display_custom_modal('.select_task_close',"#detail_dateur");
-            display_custom_modal('.select_publish_close',"#detail_pub");
-            display_custom_modal('.select_details_close',"#details");
-            display_custom_modal('.select_share_close',"#share");
-            display_custom_modal('.select_skill_close',"#skill");
-            display_custom_modal('.select_constraint_close',"#detail_constraint");
-            display_custom_modal('.select_note_close',"#select_note");
-            display_custom_modal('.select_coefficient_close',"#coefficient");
+            display_custom_modal($('.select_task_close'),"#detail_dateur");
+            display_custom_modal($('.select_publish_close'),"#detail_pub");
+            display_custom_modal($('.select_details_close'),"#details");
+            display_custom_modal($('.select_share_close'),"#share");
+            display_custom_modal($('.select_skill_close'),"#skill");
+            display_custom_modal($('.select_constraint_close'),"#detail_constraint");
+            display_custom_modal($('.select_note_close'),"#select_note");
+            display_custom_modal($('.select_coefficient_close'),"#coefficient");
 
-            display_custom_modal('.select_div_group',"#affectation"); 
-            display_custom_modal('.select_div_group_close',"#affectation");
+
+
+            function display_group_modal($actionner,$target){
+  
+                $(document).on('click', $actionner , function (event) {
+                    let relationship_id = $(this).data("relationship_id");
+                    var folder_id = $(this).data("folder_id");
+                    if (typeof folder_id === "undefined") { folder_id = "" ; }
+
+                    var this_target = $($target+relationship_id+"-"+folder_id) ;
+ 
+                    if (this_target.hasClass('no_visu_on_load'))
+                        { this_target.removeClass('no_visu_on_load') ; this_target.css('display','block'); }
+                    else
+                        { this_target.addClass('no_visu_on_load'); this_target.css('display','none');  }
+                    this_target.focus();
+                });
+
+            } ;
+
+
+
+
+
+            display_group_modal('.select_div_group',"#affectation"); 
+            display_group_modal('.select_div_group_close',"#affectation");
 
         // ==================================================================================================
         // ==================================================================================================
