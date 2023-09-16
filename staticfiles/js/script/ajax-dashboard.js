@@ -1961,7 +1961,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             function display_custom_modal($actionner,$target){
   
                 $(document).on('click', $actionner , function (event) {
-                    let relationship_id = $(this).attr("data-relationship_id");
+                    let relationship_id = $(this).data("relationship_id");
                     $($target+relationship_id).toggle();
                     $($target+relationship_id).focus();
                 });
