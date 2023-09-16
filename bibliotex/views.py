@@ -284,7 +284,7 @@ def printer(request, relationtex_id, collection,output , obj):
                         elements += r"\exercice{Exercice "+ str(j) + r"} "+ details_skills
                 except :
                     elements += r"\exercice{Exercice "+ str(j) + r"} "+ details_skills
-                
+                j+=1
 
                 # impression des savoir faire
                 if not sf_skills_first_printer and knowledges_printer :  
@@ -325,9 +325,9 @@ def printer(request, relationtex_id, collection,output , obj):
                         text_linked += r"\sacado{"+str(exercise.supportfile.code ) + r"} \; "
                     elements +=  text_linked 
 
-                exercises =  relationtex.exotex.exercises.order_by("ranking")
-                for e in exercises :
-                    elements +=  "exe : "+e.supportfile.code +" | "
+                # exercises =  relationtex.exotex.exercises.order_by("ranking")
+                # for e in exercises :
+                #     elements +=  "exe : "+e.supportfile.code +" | "
 
 
 
@@ -348,7 +348,7 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements += r"\exercice{Exercice "+ str(k) + r"} - Non corrigé"
                     elements += r" \vspace{0.2cm}"
                 k+=1
-        j+=1
+       
     else : #pour la création d'un exercise ou son update*
 
         try :
