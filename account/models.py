@@ -783,7 +783,7 @@ class Teacher(models.Model):
 
 
     def has_groups(self):
-        return self.groups.all() | self.teacher_group.all()
+        return self.groups.filter(is_hidden=0) | self.teacher_group.filter(is_hidden=0)
         
 
     def nb_boolean_multi_subjects(self):
