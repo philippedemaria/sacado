@@ -1107,15 +1107,15 @@ def ajax_affectation_to_group(request):
     checked     = request.POST.get('checked')
 
     group       = Group.objects.get(pk=group_id)
+    folders     = group.group_folders.all()
+    parcourses  = group.group_parcours.all()
+    students    = group.students.all() 
+    
     data        = {}
     html        = ""
     change_link = "no"
  
     quizz       = Quizz.objects.get(pk=target_id)
-    folders     = quizz.folders.all()
-    parcourses  = quizz.parcours.all()
-    students    = group.students.all()     
-
     if checked == "false" :
         quizz.groups.remove(group)
         for folder in folders :

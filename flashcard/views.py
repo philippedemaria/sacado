@@ -1254,14 +1254,15 @@ def ajax_affectation_to_group(request):
     checked     = request.POST.get('checked')
 
     group       = Group.objects.get(pk=group_id)
+    folders     = group.group_folders.all()
+    parcourses  = group.group_parcours.all()
+    students    = group.students.all() 
+    
     data        = {}
     html        = ""
     change_link = "no"
  
     flashpack   = Flashpack.objects.get(pk=target_id)
-    folders     = flashpack.folders.all()
-    parcourses  = flashpack.parcours.all()
-    students    = group.students.all()     
 
     if checked == "false" :
         flashpack.groups.remove(group)
@@ -1279,7 +1280,7 @@ def ajax_affectation_to_group(request):
 
 
 
-        
+
     for g in flashpack.groups.all():
         html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
     change_link = "change"

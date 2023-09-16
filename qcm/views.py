@@ -1680,6 +1680,10 @@ def ajax_affectation_to_group(request):
     checked     = request.POST.get('checked')
 
     group       = Group.objects.get(pk=group_id)
+    folders     = group.group_folders.all()
+    parcourses  = group.group_parcours.all()
+    students    = group.students.all()    
+    
     data        = {}
     html        = ""
     change_link = "no"
@@ -1699,10 +1703,6 @@ def ajax_affectation_to_group(request):
 
     elif status == "docperso" :
         docperso = Docperso.objects.get(pk=target_id)  
-
-        folders     = docperso.folders.all()
-        parcourses  = docperso.parcours.all()
-        students = group.students.all()     
 
         if checked == "false" :
             docperso.groups.remove(group)

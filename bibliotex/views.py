@@ -1930,14 +1930,15 @@ def ajax_affectation_to_group(request):
     checked     = request.POST.get('checked')
 
     group       = Group.objects.get(pk=group_id)
+    folders     = group.group_folders.all()
+    parcourses  = group.group_parcours.all()
     students    = group.students.all() 
+
     data        = {}
     html        = ""
     change_link = "no"
  
     bibliotex   = Bibliotex.objects.get(pk=target_id)
-    folders     = bibliotex.folders.all()
-    parcourses  = bibliotex.parcours.all()
 
     if checked == "false" :
         bibliotex.groups.remove(group)
