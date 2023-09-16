@@ -1693,10 +1693,12 @@ def ajax_affectation_to_group(request):
         parcours = Parcours.objects.get(pk=target_id)        
         if checked == "false" :
             parcours.groups.remove(group)
+            change_link = "change"
         else :
             parcours.groups.add(group)
             groups = (group,)
             attribute_all_documents_of_groups_to_all_new_students(groups)
+            change_link = "no_change"
         for g in parcours.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
 
@@ -1711,7 +1713,9 @@ def ajax_affectation_to_group(request):
             for parcours in parcourses :
                 docperso.parcours.remove(parcours)
             for student in students :
-                docperso.students.remove(student)    
+                docperso.students.remove(student)  
+            change_link = "change"   
+
         else :
             docperso.groups.add(group)
             docperso.students.set(students) 
@@ -1724,13 +1728,16 @@ def ajax_affectation_to_group(request):
         folder   = Folder.objects.get(pk=target_id)
         if checked == "false" :
             folder.groups.remove(group)
+            change_link = "change"
         else :
             folder.groups.add(group)
             groups = (group,)
             attribute_all_documents_of_groups_to_all_new_students(groups)
+            change_link = "no_change"
+
         for g in folder.groups.all():
             html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
-        change_link = "change"
+
 
     data['html']        = html
     data['change_link'] = change_link

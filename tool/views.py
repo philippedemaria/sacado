@@ -1123,15 +1123,15 @@ def ajax_affectation_to_group(request):
         for parcours in parcourses :
             quizz.parcours.remove(parcours)
         for student in students :
-            quizz.students.remove(student)    
+            quizz.students.remove(student) 
+        change_link = "change" 
     else :
         quizz.groups.add(group)
         quizz.students.set(students) 
 
-
     for g in quizz.groups.all():
         html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
-    change_link = "change"
+
 
     data['html']        = html
     data['change_link'] = change_link

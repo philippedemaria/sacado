@@ -1947,14 +1947,14 @@ def ajax_affectation_to_group(request):
         for parcours in parcourses :
             bibliotex.parcours.remove(parcours)
         for student in students :
-            bilbiotex.students.remove(student)    
+            bilbiotex.students.remove(student) 
+        change_link = "change"
     else :
         bibliotex.groups.add(group)
         bibliotex.students.set(students)  
 
     for g in bibliotex.groups.all():
         html += "<small>"+g.name +" (<small>"+ str(g.just_students_count())+"</small>)</small> "
-    change_link = "change"
 
     data['html']        = html
     data['change_link'] = change_link

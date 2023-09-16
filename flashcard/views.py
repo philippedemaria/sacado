@@ -1271,12 +1271,11 @@ def ajax_affectation_to_group(request):
         for parcours in parcourses :
             flashpack.parcours.remove(parcours)
         for student in students :
-            flashpack.students.remove(student)    
+            flashpack.students.remove(student) 
+        change_link = "change"
     else :
         flashpack.groups.add(group)
         flashpack.students.set(students) 
-
-
 
 
     for g in flashpack.groups.all():
