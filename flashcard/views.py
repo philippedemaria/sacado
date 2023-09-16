@@ -1257,7 +1257,7 @@ def ajax_affectation_to_group(request):
     folders     = group.group_folders.all()
     parcourses  = group.group_parcours.all()
     students    = group.students.all() 
-    
+
     data        = {}
     html        = ""
     change_link = "no"
@@ -1274,8 +1274,6 @@ def ajax_affectation_to_group(request):
             flashpack.students.remove(student)    
     else :
         flashpack.groups.add(group)
-        flashpack.folders.set(folders)
-        flashpack.parcours.set(parcourses)
         flashpack.students.set(students) 
 
 

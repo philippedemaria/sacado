@@ -1110,7 +1110,7 @@ def ajax_affectation_to_group(request):
     folders     = group.group_folders.all()
     parcourses  = group.group_parcours.all()
     students    = group.students.all() 
-    
+
     data        = {}
     html        = ""
     change_link = "no"
@@ -1126,8 +1126,6 @@ def ajax_affectation_to_group(request):
             quizz.students.remove(student)    
     else :
         quizz.groups.add(group)
-        quizz.folders.set(folders)
-        quizz.parcours.set(parcourses)
         quizz.students.set(students) 
 
 

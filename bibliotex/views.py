@@ -1950,8 +1950,6 @@ def ajax_affectation_to_group(request):
             bilbiotex.students.remove(student)    
     else :
         bibliotex.groups.add(group)
-        bibliotex.folders.set(folders)
-        bibliotex.parcours.set(parcourses)
         bibliotex.students.set(students)  
 
     for g in bibliotex.groups.all():

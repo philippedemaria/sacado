@@ -1683,7 +1683,7 @@ def ajax_affectation_to_group(request):
     folders     = group.group_folders.all()
     parcourses  = group.group_parcours.all()
     students    = group.students.all()    
-    
+
     data        = {}
     html        = ""
     change_link = "no"
@@ -1714,8 +1714,6 @@ def ajax_affectation_to_group(request):
                 docperso.students.remove(student)    
         else :
             docperso.groups.add(group)
-            docperso.folders.set(folders)
-            docperso.parcours.set(parcourses)
             docperso.students.set(students) 
 
         for g in docperso.groups.all():
