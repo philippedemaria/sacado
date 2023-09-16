@@ -1880,7 +1880,7 @@ def ajax_set_exotex_in_bibliotex(request):
             relationtex.skills.set(skills)
             relationtex.knowledges.set(knowledges)
             relationtex.students.set(stds)
-            relationtex.relationships.set(exercises)
+            relationtex.exercises.set(exercises)
             data["statut"]  = "True"
             data["class"]   = "btn btn-success"
             data["noclass"] = "btn btn-danger"

@@ -107,7 +107,7 @@ class BibliotexForm(forms.ModelForm):
 class RelationtexForm(forms.ModelForm):
 	class Meta:
 		model = Relationtex 
-		fields = ('content','calculator','duration','skills','knowledges','is_python','is_scratch','is_tableur','start','stop','correction','is_publish_cor','point')
+		fields = ('content','calculator','duration','skills','knowledges','is_python','is_scratch','is_tableur','start','stop','correction','is_publish_cor','point','exercises')
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
@@ -116,11 +116,11 @@ class RelationtexForm(forms.ModelForm):
 		if teacher:
 			subjects = teacher.subjects.all()
 			levels   = teacher.levels.order_by("ranking")
- 
 			skills = Skill.objects.filter(subject__in=subjects)
-			knowledges = Knowledge.objects.filter(theme__subject__in=subjects,level__in=levels )   
+			knowledges = Knowledge.objects.filter(theme__subject__in=subjects,level__in=levels )  
+			exercises  = Exercise.objects.filter(knowledge__in=knowledges) 
 			self.fields['skills']	  = forms.ModelMultipleChoiceField(queryset=skills,  required=True)   
 			self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False) 
-
+			self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False) 
 
  

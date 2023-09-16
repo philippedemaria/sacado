@@ -122,6 +122,16 @@
                     </div> 
                 </div>
             </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-12">    
+                    <div class="form-group">      
+                        <label>Associer un exercice GGB <small>(Falcultatif)</small>    </label>
+                        {{ form.exercises.label_tag }}                        
+                        {{ form.exercises|add_class:"form-control select2" }}
+                        {{ form.exercises.errors }}
+                    </div>
+                </div>
+            </div>
             <div class="row" style="margin-top:15px" >
                 <div class="col-xs-3 col-md-3">
                     <div class="form-group">
