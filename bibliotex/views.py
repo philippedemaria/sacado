@@ -2246,7 +2246,7 @@ def ajax_individualise_exotex(request):
     students = relationtex.bibliotex.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
     std_r = relationtex.students.all()
     if std_r.count() :
-        students = std_b.intersection(std_r).order_by("user__last_name")
+        students = std_r.intersection(std_r).order_by("user__last_name")
     context = { 'students': students ,  "relationtex" : relationtex }
     data["html"] = render_to_string('bibliotex/ajax_individualise_exercise.html',context)
     data["title"] = "Individualiser l'exercice "+relationtex.exotex.title
