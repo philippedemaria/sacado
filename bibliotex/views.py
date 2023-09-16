@@ -1853,8 +1853,7 @@ def ajax_set_exotex_in_bibliotex(request):
 
     bibliotex   = Bibliotex.objects.get(pk = bibliotex_id) 
     exotex      = Exotex.objects.get(pk = exotex_id)
-    skills      = exotex.skills.all()
-    knowledges  = exotex.knowledges.all()
+
 
     statut = request.POST.get("statut")
 
@@ -1870,6 +1869,9 @@ def ajax_set_exotex_in_bibliotex(request):
         data["class"]   = "btn btn-danger"
         data["noclass"] = "btn btn-success"
     else:
+        skills      = exotex.skills.all()
+        knowledges  = exotex.knowledges.all()
+        exercises   = exotex.exercises.all()
         try :        
             relationtex = Relationtex.objects.create(   bibliotex_id=bibliotex_id, exotex_id = exotex_id, ranking = 100,  
                                                         teacher = request.user.teacher, calculator = exotex.calculator,  duration =exotex.duration , 
@@ -1878,7 +1880,7 @@ def ajax_set_exotex_in_bibliotex(request):
             relationtex.skills.set(skills)
             relationtex.knowledges.set(knowledges)
             relationtex.students.set(stds)
-
+            relationtex.relationships.set(exercises)
             data["statut"]  = "True"
             data["class"]   = "btn btn-success"
             data["noclass"] = "btn btn-danger"
