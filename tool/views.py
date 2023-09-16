@@ -571,14 +571,14 @@ def ajax_chargethemes_quizz(request):
         if thms_id[0] != "" :
             for thm_id in thms_id :
                 th = Theme.objects.get(pk=thm_id)
-                quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1 , is_random=0 ).exclude(teacher=teacher)) 
+                quizz.update(Quizz.objects.filter(subject_id = id_subject, themes=th, levels = level , is_share = 1 , is_random=0 )) 
         else :
-            quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1 , is_random=0 ).exclude(teacher=teacher))  
+            quizz.update(Quizz.objects.filter(subject_id = id_subject, levels = level , is_share = 1 , is_random=0 ))  
     else :
         thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
         data['themes'] = list(thms)
  
-        quizzes = Quizz.objects.filter( subject_id = id_subject,  is_share = 1 , levels = level , is_random=0).exclude(teacher=teacher)
+        quizzes = Quizz.objects.filter( subject_id = id_subject,  is_share = 1 , levels = level , is_random=0)
         quizz.update( quizzes )         
 
     data['html'] = render_to_string('tool/ajax_list_quizz_shared.html', {'quizz' : quizz, })

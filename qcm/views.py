@@ -2375,9 +2375,9 @@ def ajax_all_parcourses(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if is_eval == 2 :
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1 ).exclude( teacher=teacher).exclude(exercises = None) 
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1 ).exclude(exercises = None) 
     else :   
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval).exclude(teacher=teacher).exclude(exercises = None) 
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval).exclude(exercises = None) 
 
     if subject_id : 
         subject = Subject.objects.get(pk=subject_id)
@@ -2464,7 +2464,7 @@ def ajax_all_folders(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
     keywords = request.POST.get('keywords',None)
 
-    base = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id), is_share = 1 , subject_id = subject_id ).exclude(teacher=teacher)
+    base = Folder.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id), is_share = 1 , subject_id = subject_id )
 
     if int(level_id) > 0 :
         base = base.filter( level_id = level_id )
@@ -2775,7 +2775,7 @@ def ajax_chargethemes_parcours(request):
 
     thms = level.themes.values_list('id', 'name').filter(subject_id=id_subject).order_by("name")
     data['themes'] = list(thms)
-    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, exercises__level_id = level_id ,is_trash=0).exclude(teacher=teacher).order_by('author').distinct()
+    parcourses = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id),is_share = 1, exercises__level_id = level_id ,is_trash=0).order_by('author').distinct()
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : parcourses, })
 

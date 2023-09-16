@@ -918,7 +918,7 @@ def ajax_search_flashpack_by_level(request):
     subject_id =  request.POST.get("id_subject",None)  
     id_annale  = request.POST.get('is_annale',None)
 
-    base = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher = teacher ),is_share = 1).exclude(teacher=teacher)
+    base = Flashpack.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher = teacher ),is_share = 1)
     
     if subject_id :    
         teacher_id = get_teacher_id_by_subject_id(subject_id)        
@@ -966,37 +966,37 @@ def ajax_search_flashpack(request):
                 if keywords :
                     for theme_id in theme_ids :
                         theme = Theme.objects.get(pk = theme_id)
-                        fs = Flashpack.objects.filter(is_share = 1,   levels = level,  themes = theme  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        fs = Flashpack.objects.filter(is_share = 1,   levels = level,  themes = theme  ).order_by('teacher').distinct() 
 
                         flashpacks.update(fs)
 
                 else :
                     for theme_id in theme_ids :
                         theme = Theme.objects.get(pk = theme_id)
-                        fs =  Flashpack.objects.filter(is_share = 1, themes = theme ,  levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                        fs =  Flashpack.objects.filter(is_share = 1, themes = theme ,  levels = level ).order_by('teacher').distinct() 
                         flashpacks.update(fs)
 
                     
             else :
                 if keywords :            
-                    flashpacks = Flashpack.objects.filter(is_share = 1,  teacher__user__school = teacher.user.school ,  levels = level  ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    flashpacks = Flashpack.objects.filter(is_share = 1,  teacher__user__school = teacher.user.school ,  levels = level  ).order_by('teacher').distinct() 
 
                 else :
-                    flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                    flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).order_by('teacher').distinct() 
 
         else :
             if keywords:
-                flashpacks = Flashpack.objects.filter(  is_share = 1,levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                flashpacks = Flashpack.objects.filter(  is_share = 1,levels = level ).order_by('teacher').distinct() 
             
             else :
-                flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).exclude(teacher=teacher).order_by('teacher').distinct() 
+                flashpacks = Flashpack.objects.filter(is_share = 1, levels = level ).order_by('teacher').distinct() 
     
     else :
         if keywords:
-            flashpacks = Flashpack.objects.filter(is_share = 1  ).exclude(teacher=teacher).order_by('author','ranking').distinct()
+            flashpacks = Flashpack.objects.filter(is_share = 1  ).order_by('author','ranking').distinct()
         
         else :
-            flashpacks = Flashpack.objects.filter(is_share = 1 ).exclude(teacher=teacher).order_by('teacher').distinct()
+            flashpacks = Flashpack.objects.filter(is_share = 1 ).order_by('teacher').distinct()
 
     data['html'] = render_to_string('flashcard/ajax_list_flashpacks.html', {'flashpacks' : flashpacks, 'teacher' : teacher ,  })
  
