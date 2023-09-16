@@ -324,8 +324,14 @@ def printer(request, relationtex_id, collection,output , obj):
                     for relationship in relationships :
                         if relationship.is_publish and relationship.document_id == 0 :
                             text_linked += r"\sacado{"+str(relationship.ranking + 1 ) + r"} \; "
- 
                     elements +=  text_linked 
+
+                exercises =  relationtex.exotex.exercises.all() 
+                for e in exercises :
+                    elements +=  "exe : "+e.supportfile.code +" | "
+
+
+
 
             elements +=  r"\\ "
 
