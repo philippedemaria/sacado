@@ -316,14 +316,13 @@ def printer(request, relationtex_id, collection,output , obj):
 
             if linked_exercises :
 
-                relationships = relationtex.relationships.filter(is_publish=1).order_by("ranking")
+                exercises = relationtex.exercises.filter(is_publish=1).order_by("ranking")
                 if relationships.count() > 0 :
                     elements +=  r"\\ \vspace{0,1cm}"                
                     text_linked = ""
 
-                    for relationship in relationships :
-                        if relationship.is_publish and relationship.document_id == 0 :
-                            text_linked += r"\sacado{"+str(relationship.ranking + 1 ) + r"} \; "
+                    for exercise in exercises :
+                        text_linked += r"\sacado{"+str(exercise.supportfile.code ) + r"} \; "
                     elements +=  text_linked 
 
                 exercises =  relationtex.exotex.exercises.all() 
@@ -1653,7 +1652,7 @@ def link_to_relationship(request,idr):
 
     if request.method == "POST" :
         relationships = request.POST.getlist("relationships")
-        relationtex.relationships.set(relationships)
+        relationtex.exercises.set(relationships)
         return redirect( 'show_bibliotex' , relationtex.bibliotex.id ) 
 
 
