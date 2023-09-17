@@ -1,6 +1,6 @@
 define(['jquery','bootstrap'], function ($) {
     $(document).ready(function () {
-        console.log("chargement JS ajax-parcours.js OK");
+        console.log("chargement JS ajax-quizz-shared.js OK");
 
  
  
@@ -37,8 +37,6 @@ define(['jquery','bootstrap'], function ($) {
 
                         { for (let i = 0; i < themes.length; i++) {
                                     
-
-                                    console.log(themes[i]);
                                     let themes_id = themes[i][0];
                                     let themes_name =  themes[i][1]  ;
                                     let option = $("<option>", {
@@ -138,6 +136,7 @@ define(['jquery','bootstrap'], function ($) {
                     url: "../ajax_clone_quizz",
                     success: function (data) {
                         alert(data.validation);
+                        $("#duplication_modal").modal('hide');
 
                     },
                         cache: false,

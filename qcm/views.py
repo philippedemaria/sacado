@@ -4189,7 +4189,7 @@ def show_parcours(request, idf = 0, id=0):
     parcours_folder_id = request.session.get("folder_id",None)
     request.session["parcours_id"] = parcours.id
 
-    docpersos = parcours.docpersos.filter(folders=folder).order_by("ranking")
+    docpersos  = parcours.docpersos.filter(folders=folder).order_by("ranking")
     bibliotexs = parcours.bibliotexs.filter(folders=folder)
     quizzes    = parcours.quizz.filter(is_random=0,folders=folder)
     flashpacks = parcours.flashpacks.filter(folders=folder)

@@ -3,6 +3,9 @@
 {% load item_tags %}
 
 
+
+
+
 <div class="modal fade" id="duplication_modal" tabindex="-1" role="dialog" aria-labelledby="duplication_modal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content" >
@@ -10,41 +13,40 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h2>Duplication dans vos groupes de la BibiloTex : <span id="this_document_title"></span></h2>
+                <h2>Duplication de : <span id="this_document_title"></span></h2>
             </div>
             <div class="modal-body">
-                <p>Voici vos groupes avec leurs dossiers éventuels et leurs parcours. Cocher <b>les groupes ou les dossiers ou les parcours</b> dans lesquels vous souhaitez placer ou rattacher votre BiblioTex. Si un parcours est partagé, ne le cocher qu'une seule fois.</p>
+                <p>Voici vos groupes avec leurs dossiers éventuels et leurs parcours. Cocher les emplacements dans lesquels vous souhaitez placer ou rattacher votre Quizz. Si un parcours est partagé, ne le cocher qu'une seule fois.</p>
                 <form action="" method="POST" enctype='multipart/form-data' id="duplicate_form"> 
-                    {% csrf_token %}
-                    <input type="hidden" name="this_document_id" id="this_document_id" />
+                    {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">
- 
-                        {% for group in teacher.groups.all %}
-                            <div class="col-xs-6 card_modal_search exercise_body_shared">
-                                <div class="quizz_item" style="background-color:{{ group.color }}">
-                                    <label  class="btn btn-sacado ">Groupe : {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" /> </label> 
-                                    <div class="form_card" style="padding : 15px 5px "><label>Dossiers associés</label>                         
-                                    {% for folder in  group.group_folders.all  %}
-                                        <div class="quizz_item" style="background-color:{{ folder.color }};color:{{ folder.color|contrast_color}}"> 
-                                            <label class="btn btn-sacado full_width">{{ folder.title|truncatechars:29  }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label> <label>Parcours associés</label>    
-                                            {% for parcours in folder.parcours.all %}
-                                                <label class="btn btn-default full_width">{{ parcours.title }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
-                                            {% endfor %}
-                                        </div>
-                                    {% endfor %} 
+                    {% for group in teacher.has_groups %}
+                    <div class="col-xs-6 card_modal_search exercise_body_shared">
+                        <div class="quizz_item" style="background-color:{{ group.color }}">
+                            <label  class="btn btn-sacado">Groupe : {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" class="group_name" /> </label> 
+                            <div class="form_card no_visu_on_load" style="padding : 15px 5px "><label>Dossiers associés</label>                         
+                            {% for folder in  group.folders_not_in_trash %}
+                                <div class="quizz_item" style="background-color:{{ folder.color }};color:{{ folder.color|contrast_color}}"> 
+                                    <label class="btn btn-sacado full_width">{{ folder.title|truncatechars:29  }} <input type="checkbox" name="folders" value="{{ folder.id }}" class="folder_name" /></label> 
+                                    <div class="no_visu_on_load">
+                                    <label>Parcours associés</label>    
+                                    {% for parcours in folder.parcours_not_in_trash %}
+                                        <label class="btn btn-default full_width">{{ parcours.title }} <input type="checkbox" name="parcourses" value="{{ parcours.id }}" /></label>
+                                    {% endfor %}
                                     </div>
                                 </div>
+                            {% endfor %} 
                             </div>
-                        {% endfor %} 
-
+                        </div>
+                    </div>
+                    {% endfor %} 
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
-                            <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer la BiblioTex <span id="this_document_label"></span></a>
+                            <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer  <span id="this_document_label"></span></a>
                         </div>
                     </div>
-                </form> 
-                <small class="text-green_index"><em>Pour modifier mes niveaux, aller dans Mon compte ou sur votre avatar puis dans Mon profil ou <a href="{% url 'profile' %}">cliquer ici</a></em></small>          
+                </form>        
             </div>
         </div>
     </div> 

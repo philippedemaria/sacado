@@ -1343,13 +1343,9 @@ class Folder(models.Model):
 
   
     def only_students_folder(self):
-
- 
         only_students = self.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
- 
         return only_students    
  
-
 
     def min_score(self,student):
         """
@@ -1474,6 +1470,13 @@ class Folder(models.Model):
 
     def nb_parcours_is_publish(self):
         return self.parcours.filter(is_evaluation=0, is_publish=1, is_trash=0).count()
+
+
+    def parcours_not_in_trash(self):
+        return self.parcours.filter(is_trash=0) 
+
+
+
 
 
     def parcours_is_not_archived(self):

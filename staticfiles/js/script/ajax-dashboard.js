@@ -2670,6 +2670,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
  
+        $(document).on('click', ".group_name" , function () {
+
+                if ($(this).is(':checked')) { $(this).parent().next().show(500);}
+                else  { $(this).parent().next().hide(500);}
+             });
+
+
+
+
+        $(document).on('click', ".folder_name" , function () {
+
+                if ($(this).is(':checked')) { $(this).parent().next().show(500);}
+                else  { $(this).parent().next().hide(500);}
+             });
         // $('#on_line').on('click', function (event) { 
         //       $('.this_card').addClass("show_div_for_payment"); 
         //       $('#show_on_line').removeClass("show_div_for_payment"); 

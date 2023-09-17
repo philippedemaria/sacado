@@ -423,9 +423,9 @@ def ajax_clone_quizz(request):
             quizz.qrandoms.add(qr)
         for t in themes :
             quizz.themes.add(t)
-
-        quizz.folders.set(folders)    
+  
         quizz.parcours.set(parcourses)
+        quizz.folders.set(folders)          
         quizz.groups.set(groups)
 
         students = set()
@@ -615,7 +615,7 @@ def list_quizzes(request):
     request.session["subtdb"] = "Quizz"
 
     is_archive = False
-    nba = teacher.teacher_quizz.filter(  is_archive=1).count()
+    nba = teacher.teacher_quizz.filter(  is_archive=1 ).count()
 
     groups = teacher.has_groups() # pour ouvrir le choix de la fenetre modale pop-up
 

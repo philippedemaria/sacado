@@ -16,54 +16,42 @@
         <img src="{{ quizz.vignette.url }}" width="60px" height="60px"  />
     {% else %} 
         <i class="fa fa-square fa-3x" style="color:{{ quizz.color }}"></i>
-    {% endif %}<br/>
-    <small>{% if quizz.start %}<i class="bi bi-calendar3"></i>{% else %}{{ quizz.date_modified|date:"d N Y"}}{% endif %}</small>
+    {% endif %}
 </td>
-<td>
-    {{ quizz.title }}     
-    {% if quizz.is_random %}
-        <span class="helper_tip">  <span style="border:2px solid #d81b60; border-radius:30px; font-size:14px;padding:0px 4px"><i class="fa fa-bolt text-maroon"></i></span>
-            <div class="helper_tip_no_width" >Thèmes : 
-                {% for m in quizz.mental_activities %}
-                    <li class="sanspuce"><i class="fa fa-caret-right fa-xs"></i> {{ m }}</li>
-                {% endfor %}
-            </div>
-        </span> 
-    {% endif %}
- 
-    {% if  quizz.is_publish %}
-        <div class="text-success"><small>publié</small> 
-            <span class="helper_tip text-success"> <sup><i class="fa fa-question-circle"></i></sup>
-            <div class="helper_tip_text" >
-                Les élèves du.des groupe.s désigné.s peuvent le lire depuis leur parcours.
-            </div>
-            </span>
-        </div> 
-    {% elif quizz.start  %}
-        <div class="text-danger"><small>{{ quizz.start|date:"d N Y H:i" }}</small>  {% if  quizz.stop %}   <small>{{ quizz.stop|date:"d N Y H:i" }}</small></div> {% endif %}
-    {% else %} 
-        <div class="text-danger">
-            <small>dépublié</small> 
-        </div>
-    {% endif %}
-    {% if quizz.is_share %}
-        <div class="text-success">
-             <small>mutualisé</small>  
-       </div>
-    {% else %} 
-        <div class="text-danger">
-            <small>privé</small> 
-        </div>
-    {% endif %}
-    {{ quizz.duration|time_done }}
-    <i class="bi bi-upc"></i>
-    <small>{{ quizz.code }}</small>
+<td >
+    {{ quizz.title }}  
+
+    <div class="quizz_action"  style="font-size:14px"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="bi bi-plus-circle-dotted"></i></a> 
+        <span style="font-size:10px">
+            <b>
+            {{ quizz.questions.all|length }} question{% if quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</b>
+        </span>-<small>{{ quizz.duration|time_done }}</small>
+
+        {% if  quizz.is_numeric and  quizz.is_video %}
+        <span class="quizz_action text-info"  style="font-size:14px"><i class="fa fa-gamepad"></i> Vidéo projection à support numérique </span>
+    {% elif not quizz.is_numeric and  not quizz.is_video %}
+        {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}
+        <span class="quizz_action"  style="font-size:14px"><a href="{% url 'play_printing_teacher'  quizz.id   %}" ><i class="bi bi-printer"></i> Fiches réponses </a> </span>    
+        {% endif  %}
+    {% elif not quizz.is_numeric and  quizz.is_video %}
+        <span class="text-primary" style="margin-bottom: 10px;font-size:14px"><i class="bi bi-webcam"></i> Vidéoprojection</span>
+    {% else  %}
+        <span class="text-warning" style="margin-bottom: 10px;font-size:14px"><i class="fa fa-desktop"></i> Version numérique</span> 
+    {% endif  %}
+    </div>      
 </td>
 
-<td>
-    {% for p in quizz.parcours.all %}
-        {% if list_folder.folder %}<a href="{% url 'show_parcours' list_folder.folder.id  p.id %}"  style="font-size:14px">{{ p }}</a>{% else %}<a href="{% url 'show_parcours' 0 p.id %}"  style="font-size:14px">{{ p }}</a>{% endif %}{% if not forloop.last %}, {% endif %} 
-    {% endfor %}
+
+
+
+
+
+
+
+<td  style="width:20px;">
+ 
+        <a href="{% url 'update_quizz' quizz.id  %}"  > <i class="fa fa-edit  fa-xs"></i></a>
+ 
 </td>
 <td style="position:relative">
     <span id="new_group_affected{{ quizz.id}}">
@@ -126,50 +114,29 @@
     </span>
     {% endif %}
 </td>
-<td> 
-    <div class="quizz_action"  style="font-size:14px"><a href="{% url 'create_question'  quizz.id 0 %}" ><i class="bi bi-plus-circle-dotted"></i> Ajouter/modifier des questions</a> 
-        <span style="font-size:10px">
-            <b>{% if quizz.is_random %}
-            {{ quizz.nb_slide }}
-            {% else %}
-            {{ quizz.questions.all|length }}
-            {% endif  %} question{% if quizz.nb_slide > 1 or quizz.questions.all|length > 1 %}s{% endif %}</b>
+
+<td style="width:150px;" >
+    <div class="btn-group"  style="padding:0px;margin:0px;">
+        <a href="#" class="btn btn-default btn-publisher quizz_sharer"   id="quizz_sharer{{quizz.id}}" 
+            data-parcours_id="{{quizz.id}}" data-statut="{{quizz.is_share }}">  
+            <i class="fa fa-circle-o-notch"></i>
+        </a><span class="legend-btn  legend-btn-{% if quizz.is_share %}success{% else  %}danger{% endif  %} size13" id="quizz_sharer_statut{{quizz.id}}"  >  
+          {% if quizz.is_share %} Mutualisé  {% else %} Privé {% endif  %} 
         </span>
-    </div>  
-
-
-
-
-    {% if  quizz.is_numeric and  quizz.is_video %}
-        <div class="quizz_action text-info"  style="font-size:14px"><i class="fa fa-gamepad"></i> Vidéo projection à support numérique </div>
-    {% elif not quizz.is_numeric and  not quizz.is_video %}
-        {% if quizz.qrandoms.count > 0 or quizz.questions.count > 0 %}
-        <div class="quizz_action"  style="font-size:14px"><a href="{% url 'play_printing_teacher'  quizz.id   %}" ><i class="bi bi-printer"></i> Créer les fiches réponses imprimables</a> </div>    
-        {% else  %}
-        <div class="alert-danger" style="padding:5px;border-radius:5px;"><i class="fa fa-ban"></i> Aucune question actuellement</div> 
-        {% endif  %}
-    {% elif not quizz.is_numeric and  quizz.is_video %}
-        <div class="text-primary" style="margin-bottom: 10px;font-size:14px"><i class="bi bi-webcam"></i> Vidéoprojection {% if  quizz.is_random %}à questions aléatoires{% endif %} </div>
-    {% else  %}
-        <div class="text-{% if  quizz.is_random %}maroon{% else %}warning{% endif %}" style="margin-bottom: 10px;font-size:14px"><i class="fa fa-desktop"></i> Version numérique {% if  quizz.is_random %}à questions aléatoires{% endif %} </div> 
-    {% endif  %}
-
-    <div style="font-size:14px">
-    <a href="{% url 'update_quizz' quizz.id  %}" title="Modifier le quizz"> 
-        <i class="bi bi-pencil"></i> <small>Modifier </small>   
-    </a>
-
-    {% if sacado_asso %} 
-        | <a href="{% url 'clone_quizz' quizz.id  %}" title="Cloner le quizz" onclick="return clone('le quizz' , '{{ quizz.title }}' )"> 
-            <i class="bi bi-clouds"></i> <small>Cloner</small>  
-        </a>  
-        | <a href="#" data-toggle='modal' data-target='#quizz_to_pdf_modal' data-title="{{ quizz.title }}"  data-idq="{{ quizz.id }}"  class="quizz_to_pdf_modal"  title="Télécharger le quizz en pdf"><i class="bi bi-file-pdf"></i> <small>Imprimer</small>  </a> |
-    {% else %}| 
-        <a href="#" title="Version établissement requise"><i class="bi bi-clouds"></i> <small>Cloner</small>   </a> |    
-        <a href="#" title="Version établissement requise"><i class="bi bi-file-pdf"></i> <small>Imprimer</small>   </a> |
-    {% endif  %}
-
- 
-    <a href="{% url 'delete_quizz'  quizz.id %}"  class="quizz_action text-danger"   style="font-size:14px" onclick="return TestDelete('ce quizz')"><i class="bi bi-trash"></i>  <small>Supprimer</small>  </a> 
     </div>
 </td>
+<td style="width:160px">
+    <div class="btn-group"  style="padding:0px;margin:0px;">
+        <a href="#" class="btn btn-default btn-publisher quizz_publisher" id="quizz_publisher{{quizz.id}}" 
+            data-is_disabled="{% if quizz.shared_group_list|length > 0  %}1{% else %}0{% endif %}"
+            data-bibliotex_id="{{quizz.id}}" data-statut="{{quizz.is_publish }}">  
+            <i class="fa fa-circle-o-notch"></i>
+        </a><span class="legend-btn  legend-btn-{% if not quizz.is_publish %}danger{% else  %}success{% endif  %} size13" id="quizz_statut{{quizz.id}}"  >  
+          {% if quizz.is_publish %} Publié  {% else %} Dépublié {% endif  %} 
+        </span>
+    </div>
+    {% if quizz.start  %}
+        <div class="text-danger"><small>{{ quizz.start|date:"d N Y H:i" }}</small>  {% if  quizz.stop %}   <small>{{ quizz.stop|date:"d N Y H:i" }}</small></div> {% endif %}
+    {% endif %} 
+</td>
+ 

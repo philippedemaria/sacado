@@ -97,8 +97,6 @@ class Group(ModelWithCode):
         return image
  
 
-
-
     def parcours_counter(self,teacher):
         """
         Donne le nombre total de parcours/évaluations, le nombre de visibles et de publiés du groupe
@@ -148,6 +146,9 @@ class Group(ModelWithCode):
 
 
 
+    def folders_not_in_trash(self):
+        return self.group_folders.filter(subject = self.subject, level=self.level, is_trash=0)
+
     
 
 
@@ -160,8 +161,7 @@ class Group(ModelWithCode):
         return data
 
     def parcours_visible(self):
-        parcours = self.parcours.filter(is_publish = 1, subject = self.subject, level=self.level, is_trash=0 , folders= None)
-        return parcours
+        return self.parcours.filter(is_publish = 1, subject = self.subject, level=self.level, is_trash=0 , folders= None)
 
 
 
