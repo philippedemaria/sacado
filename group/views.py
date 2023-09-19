@@ -168,7 +168,7 @@ def student_dashboard(request,group_id):
         return template , context 
 
 
-    groups = student.students_to_group.filter(is_hidden=0)
+    groups = student.students_to_group.filter( is_hidden=0)
 
     parcourses_on_fire = []
 
