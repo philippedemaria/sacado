@@ -2027,7 +2027,7 @@ def passwordResetConfirmView(request, code ):
         if form.is_valid():
             get_new_password = Newpassword.objects.get(code = code)
             users = User.objects.filter(email = get_new_password.email, user_type=2)
-            cpt = 0
+
             for u in users :
                 u.password = make_password(request.POST.get('password1'))
                 u.save()
@@ -2035,13 +2035,6 @@ def passwordResetConfirmView(request, code ):
                 send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[get_new_password.email])
 
 
-            #     cpt += 1
-            # if cpt > 1 :
-            #     msg = "Bonjour, \n\n Plusieurs comptes sont associés à cette adresse email : "+ get_new_password.email +"\n\n Votre mot de passe " + request.POST.get('password1') + "\nest attribué à chaque compte associé à cette adresse mail.\n\n Ceci est un mail automatique, ne pas répondre."
-            # else :
-            #     msg = "Bonjour, \n\n Votre mot de passe : " + request.POST.get('password1') + "\nest attribué.\n\n Ceci est un mail automatique, ne pas répondre."
- 
-            # send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[get_new_password.email, ])
         return render(request, 'registration/password_reset_complete.html', { })
 
 
