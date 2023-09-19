@@ -199,7 +199,7 @@ def student_dashboard(request,group_id):
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
 
     else :
-        template =  "group/dashboard_group.html"
+ 
         try :
             group = student.students_to_group.filter(is_hidden=0).first()
             folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
