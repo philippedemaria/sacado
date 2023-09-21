@@ -146,23 +146,6 @@ def create_bibliotex_from_tex(request) :
             else :
                 ex['corhtml']=""
             exos.append(ex)
-            ex=dict()
-            ex['titre']=bloc(exo,'titreexo')
-            ex['eno']=bloc(exo,'eno')
-            ex['cor']=bloc(exo,'cor')
-            toHtml(ex['eno'])
-            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read())             
-            if ex['cor']!="" :
-                    toHtml(ex['cor'])
-                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read())
-            else :
-                ex['corhtml']=""
-            exos.append(ex)
-
-
-
-
-
 
         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills })  
 
