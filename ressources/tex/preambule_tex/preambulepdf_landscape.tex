@@ -257,3 +257,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 {%
 \end{tcolorbox}\par}
+
+
+\newcommand{\point}[1]{\vspace{0.1cm}\multido{}{#1}{ \dotfill \medskip \endgraf}}
+\newcommand{\ligne}[1]{\vspace{0.1cm}\multido{}{#1}{ {\color{cqcqcq}\hrulefill} \medskip \endgraf}}
