@@ -34,14 +34,6 @@
             <div class="row">
                 <div class="col-xs-12 col-md-8">
                     <div class="row">
-
-                        <div class="col-xs-12 col-md-12">
-                            <div class="form-group">
-                                {{ form.content.label_tag }}<br/>
-                                {{ form.content|add_class:"form-control"|attr:"rows:15"   }}
-                                {{ form.content.errors }}
-                            </div>
-                        </div>
                         <div class="col-xs-12 col-md-3">
                             <div class="form-group">
                                 Compétences ciblées<br>
@@ -108,18 +100,6 @@
                                 </tr> 
 
                         </table>
-                </div>
-            </div>
-            <div class="row" style="margin:0px; background-color: #F0F0F0;padding:10px;">
-                <label><a href="#"  id="enable_correction">Ajouter une correction</a> <small>(Falcultatif)</small>    </label>
-                <div id="enable_correction_div">
-                    <div class="col-xs-12 col-md-12">                        
-                        <div class="form-group"> 
-                            {{ form.correction.label_tag }}                        
-                            {{ form.correction|add_class:"form-control"|attr:"rows:15" }}
-                            {{ form.correction.errors }}
-                        </div>
-                    </div> 
                 </div>
             </div>
             <div class="row">

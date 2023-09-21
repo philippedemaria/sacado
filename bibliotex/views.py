@@ -89,6 +89,21 @@ def affectation_students_folders_groups(nf,group_ids,folder_ids):
 
 
 
+def escape_multido(ctnt) : 
+    ctnt = ctnt.replace(r"\point{1}","")
+    ctnt = ctnt.replace(r"\point{2}","")
+    ctnt = ctnt.replace(r"\point{3}","")
+    ctnt = ctnt.replace(r"\point{4}","")
+    ctnt = ctnt.replace(r"\point{5}","")
+    ctnt = ctnt.replace(r"\point{6}","")
+    ctnt = ctnt.replace(r"\point{7}","")
+    ctnt = ctnt.replace(r"\point{8}","")
+    ctnt = ctnt.replace(r"\point{9}","")
+    ctnt = ctnt.replace(r"\point{10}","")
+    ctnt = ctnt.replace(r"\point{11}","")
+    return ctnt
+
+
 def printer(request, relationtex_id, collection,output , obj):
     """affiche un exo ou une collection d'exercices, soit en pdf (output="pdf")
     soit en html (output="html") """
@@ -110,10 +125,11 @@ def printer(request, relationtex_id, collection,output , obj):
     if relationtex_id == 0 : elements +=r"\setlength{\columnseprule}{1pt}\setlength{\columnseprule}{1pt}"
     elements +=r"\begin{document}"+"\n"
 
-    print_title = request.POST.get("print_title",None)  
-    new_title   = request.POST.get("new_title",None) 
+    print_title        = request.POST.get("print_title",None)  
+    new_title          = request.POST.get("new_title",None) 
     texte_supplement   = request.POST.get("texte_supplement",None)
     linked_exercises   = request.POST.get("linked_exercises",None)
+    multido            = request.POST.get("multido",None)
 
     columns   = request.POST.get("columns",None)
     correction = request.POST.get("correction",None) 
@@ -265,14 +281,13 @@ def printer(request, relationtex_id, collection,output , obj):
                     str_elements += r"}"
 
                 if output == "html_cor" :
-                    if  relationtex.correction : ctnt =  relationtex.correction
-                    else                       : ctnt =  relationtex.exotex.correction
+                    ctnt =  relationtex.exotex.correction
                 elif output == "html" :
-                    if  relationtex.content : ctnt =  relationtex.content
-                    else                    : ctnt =  relationtex.exotex.content
-                else :
-
                     ctnt =  relationtex.exotex.content
+                else :
+                    ctnt =  relationtex.exotex.content
+
+                    if not multido : ctnt = escape_multido(ctnt) 
 
                 elements += r"\begin{GeneriqueT}{Exercice }{\;}"+str_elements +r" \\"+ctnt+r"\end{GeneriqueT}"
 
@@ -302,15 +317,12 @@ def printer(request, relationtex_id, collection,output , obj):
                 elements += r"\\ \vspace{0.2cm} "
 
                 if output == "html_cor" :
-                    if  relationtex.correction : ctnt =  relationtex.correction
-                    else                       : ctnt =  relationtex.exotex.correction
+                    ctnt =  relationtex.exotex.correction
                 elif output == "html" :
-                    if  relationtex.content : ctnt =  relationtex.content
-                    else                    : ctnt =  relationtex.exotex.content
-                else :
-
                     ctnt =  relationtex.exotex.content
-
+                else :
+                    ctnt =  relationtex.exotex.content
+                    if not multido : ctnt = escape_multido(ctnt) 
                 elements += ctnt
 
 
@@ -356,16 +368,12 @@ def printer(request, relationtex_id, collection,output , obj):
                 relationtex = Relationtex.objects.get(pk = relationtex_id)
                 title       =  relationtex.exotex.title
                 if output == "html_cor" :
-                    if  relationtex.correction != "" : ctnt =  relationtex.correction
-                    else                       : ctnt =  relationtex.exotex.correction
+                    ctnt =  relationtex.exotex.correction
                 elif output == "html" :
-                    if  relationtex.content != "" :
-                        ctnt =  relationtex.content 
-                    else :
-                        ctnt =  relationtex.exotex.content 
+                    ctnt =  relationtex.exotex.content 
                 else :
                     ctnt =  relationtex.exotex.content 
-
+                    if not multido : ctnt = escape_multido(ctnt) 
 
             else : 
                 exotex = Exotex.objects.get(pk = relationtex_id)
@@ -377,7 +385,7 @@ def printer(request, relationtex_id, collection,output , obj):
                     ctnt =  exotex.content 
                 else :
                     ctnt =  exotex.content 
-
+                if not multido : ctnt = escape_multido(ctnt) 
         except :
             exotex = Exotex.objects.get(pk = relationtex_id)
             title  =  exotex.title
@@ -388,9 +396,8 @@ def printer(request, relationtex_id, collection,output , obj):
             else :
                 ctnt =  exotex.content 
 
-
         ctnt = ctnt.replace(r"\mathcal","")
-
+        if not multido : ctnt = escape_multido(ctnt) 
         document       = "relationtex" + str(relationtex_id)
         author         = "Équipe SACADO"
 
@@ -488,19 +495,17 @@ def printer_bibliotex_by_student(bibliotex):
         
         j+=1
 
-        if  relationtex.content : ctnt =  relationtex.content
-        else                    : ctnt =  relationtex.exotex.content
+        ctnt =  relationtex.exotex.content
+        
+        if not multido : ctnt = escape_multido(ctnt) 
 
         elements += r"\vspace{0,2cm}\\"
         elements += ctnt
         elements += r"\vspace{0,2cm}\\"
 
-        if  relationtex.is_publish_cor and  relationtex.exotex.correction :
+        if  relationtex.is_publish_cor  :
             elements += r"\textbf{ Correction :} \\"
-            if relationtex.correction :
-                elements += relationtex.correction
-            else :
-                elements += relationtex.exotex.correction
+            elements += relationtex.exotex.correction
             elements += r"\vspace{0,2cm}\\"
  
 
@@ -790,11 +795,8 @@ def update_relationtex(request, id):
     relationtex = Relationtex.objects.get(id=id)
     bibliotex_id = relationtex.bibliotex.id
 
-    if relationtex.content : content = relationtex.content
-    else : content = relationtex.exotex.content
-
-    if relationtex.correction : correction = relationtex.correction
-    else : correction = relationtex.exotex.correction
+    content = relationtex.exotex.content
+    correction = relationtex.exotex.correction
 
     teacher = request.user.teacher
     form = RelationtexForm(request.POST or None, request.FILES or None, instance = relationtex , teacher = teacher , initial = { 'content' : content , 'correction' : correction } )
@@ -882,10 +884,7 @@ def print_exotex_by_student(request,ide):
     relationtex = Relationtex.objects.get(pk=ide)
 
     elements +=r"\begin{document}"+"\n"
-    if relationtex.content : 
-        elements += relationtex.content
-    else :
-        elements += relationtex.exotex.content
+    elements += relationtex.exotex.content
     elements +=  r"\end{document}"
     ################################################################# 
     ################################################################# Attention ERREUR si non modif
@@ -1875,7 +1874,7 @@ def ajax_set_exotex_in_bibliotex(request):
             relationtex = Relationtex.objects.create(   bibliotex_id=bibliotex_id, exotex_id = exotex_id, ranking = 100,  
                                                         teacher = request.user.teacher, calculator = exotex.calculator,  duration =exotex.duration , 
                                                         is_python = exotex.is_python,is_scratch =exotex.is_scratch,is_tableur =exotex.is_tableur,is_print = 0,
-                                                        is_publish = 1,  correction=exotex.correction ,is_publish_cor = 0 )
+                                                        is_publish = 1)
             relationtex.skills.set(skills)
             relationtex.knowledges.set(knowledges)
             relationtex.students.set(stds)

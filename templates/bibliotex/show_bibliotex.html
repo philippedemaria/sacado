@@ -106,7 +106,7 @@
 
 
             {% elif request.user.user_type == 0 and r.is_publish_cor %}
-                {% if r.correction  or r.exotex.correction  %}
+                {% if r.exotex.correction  %}
                     <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction"><i class="fa fa-copyright" title="Correction"></i></a>
                 {% endif %}
             {% endif %}
@@ -192,11 +192,7 @@
         <div class="body_exotex">
 
             <div id="content{{ r.exotex.id }}" class="relationtex{{ r.id }} {% if not r.is_publish %}no_visu_on_load_important{% endif %}">
-                {% if r.content_html %}
-                {{ r.content_html|safe }}
-                {% else %}
                 {{ r.exotex.content_html|safe }}
-                {% endif %}
             </div>  
             {% if request.user.is_teacher %}
                 {% if r.correction  or r.exotex.correction  %}<hr/>
@@ -216,11 +212,8 @@
 
                     <div id="correction{{ r.id }}" class="no_visu_on_load {% if r.is_publish_cor %}exotex_correction{% else %}exotex_correction_no_display{% endif %}"> 
                  
-                            {% if r.correction_html %}
-                                {{ r.correction_html|safe }} 
-                            {% else %}
-                                {{ r.exotex.correction_html|safe }} 
-                            {% endif %}
+
+                        {{ r.exotex.correction_html|safe }} 
                       
                     </div>            
                 {% endif %}
@@ -229,13 +222,8 @@
                     <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction" > Correction <i class="fa fa-caret-down"></i></a>
                     <a href="#" class="expand_video_correction" data-exotex_id="{{ r.id }}"><i class="bi bi-webcam"></i> </a>
                     <div id="correction{{ r.id }}" class="no_visu_on_load {% if r.is_publish_cor %}exotex_correction{% else %}exotex_correction_no_display{% endif %}"> 
-                 
-                            {% if r.correction_html %}
-                                {{ r.correction_html|safe }} 
-                            {% else %}
-                                {{ r.exotex.correction_html|safe }} 
-                            {% endif %}
-                      
+
+                        {{ r.exotex.correction_html|safe }} 
                     </div>
 
                 {% endif %}

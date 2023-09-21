@@ -112,4 +112,6 @@ urlpatterns = [
 
     path('change_publications_in_all_exotex/<int:idf>/<int:idb>', change_publications_in_all_exotex, name='change_publications_in_all_exotex'),
 
+
+
  ]

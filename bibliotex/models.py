@@ -200,8 +200,6 @@ class Relationtex(models.Model):
 
     exotex = models.ForeignKey(Exotex,  on_delete=models.CASCADE,   related_name='relationtexs', editable= False)
     bibliotex = models.ForeignKey(Bibliotex, on_delete=models.CASCADE,  related_name='relationtexs',  editable= False)
-    content = models.TextField( null=True, blank=True, verbose_name="Enoncé en LaTeX")
-    content_html = models.TextField( null=True, blank=True,  editable= False)
     
     teacher = models.ForeignKey(Teacher, related_name="teacher_relationtexs", on_delete=models.PROTECT, editable=False)
     #### pour validation si le qcm est noté
@@ -227,9 +225,7 @@ class Relationtex(models.Model):
 
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
     point = models.PositiveIntegerField(  default=0,  blank=True, null=True ,  verbose_name="Points") 
-    correction = models.TextField( blank=True, default="", null=True, verbose_name="Enoncé")
     is_publish_cor = models.BooleanField(default=0, verbose_name="Publié ?")
-    correction_html = models.TextField( blank=True, default="", null=True,  editable= False)
 
     courses = models.ManyToManyField(Course, related_name="relationtexs", blank=True, verbose_name="Cours éventuel"  )
     students = models.ManyToManyField(Student, related_name="relationtexs", blank=True, editable=False)
