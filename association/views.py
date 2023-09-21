@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import  permission_required,user_passes_test
 from association.models import *
 from association.forms import *
 from account.models import User, Student, Teacher, Parent ,  Response , Connexion
+from bibliotex.models import Relationtex
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
 from school.models import School
 from school.forms import SchoolForm
@@ -24,7 +25,7 @@ from group.models import Group
 from school.gar import *
 from setup.models import Formule
 from setup.forms import FormuleForm
-from socle.models import Level
+from socle.models import Level, Subject
 from qcm.models import Supportfile
 #################################################################################
 import os
@@ -51,6 +52,129 @@ import xlwt
 import uuid
 import json 
 from subprocess import run 
+
+
+
+#################################################################
+# Tex to BiblioTex
+#################################################################
+
+
+
+#################################################################
+# Importation d'une fiche d'exos pour creer une bibliotex
+#################################################################
+
+def import_bbtex(request,file) :
+    tmpdir="association/tmp/"
+
+
+
+    def bloc(texte,commande):
+        if "\\"+commande+"{" not in texte :
+            return ""
+        deb=texte[texte.index("\\"+commande+"{")+len(commande)+2:]  
+        niv=1
+        for i in range(1,len(deb)) :
+            if deb[i]=='{' and deb[i-1]!='\\' : niv+=1
+            if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
+            if niv==0 :
+                return deb[0:i]
+    def conversion(html) :
+        f=open("ressources/fichesexos/translitterations.txt")
+        for l in f :
+            [old,new]=l.split(r"%")
+            old=old.strip()
+            new=new.strip()
+            html=html.replace(old,new)
+        return html 
+
+    def toHtml(tex) :
+        if tex=="" : return ""
+        f=open(tmpdir+"tmptex.tex","w")
+        f.write(r"\documentclass{article}")
+        f.write(r"\begin{document}")
+        f.write(tex)
+        f.write("\n\n\end{document}")
+        f.close()
+        run(["make4ht","tmptex.tex",'mathjax'],cwd=tmpdir)
+        f=open(tmpdir+"tmptex.html","r")
+        html=f.read()
+        f.close()
+        f=open(tmpdir+"tmptex.html","w")
+        f.write(conversion(html))
+        f.close()
+    
+    def extraitBody(html) :
+        deb=html.index("<body>")+6
+        fin=html.index("</body>")
+        html=html[deb:fin].replace('\\(','$').replace('\\)','$')
+        return html 
+        
+
+
+
+
+
+
+
+@user_passes_test(user_is_board)
+def create_bibliotex_from_tex(request) :
+
+    levels = Level.objects.order_by("ranking")
+    post = False
+    skills , knowledges = [], []
+    context = { 'levels' : levels , 'post' : post } 
+
+    if request.method == "POST" :
+        post = True
+        this_file = request.FILES["this_file"]
+        level     = request.POST.get("level")
+        knowledges = level.knowledges.all()
+        skills = Skill.objects.filter(subject_id=1) 
+ 
+        Lexos  = this_file.split("\\exo")
+
+        exos=[]
+        for exo in Lexos[2:] :
+            ex=dict()
+            ex['titre']=bloc(exo,'titreexo')
+            ex['eno']=bloc(exo,'eno')
+            ex['cor']=bloc(exo,'cor')
+            toHtml(ex['eno'])
+            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read())             
+            if ex['cor']!="" :
+                    toHtml(ex['cor'])
+                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read())
+            else :
+                ex['corhtml']=""
+            exos.append(ex)
+            ex=dict()
+            ex['titre']=bloc(exo,'titreexo')
+            ex['eno']=bloc(exo,'eno')
+            ex['cor']=bloc(exo,'cor')
+            toHtml(ex['eno'])
+            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read())             
+            if ex['cor']!="" :
+                    toHtml(ex['cor'])
+                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read())
+            else :
+                ex['corhtml']=""
+            exos.append(ex)
+
+
+
+
+
+
+        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills })  
+
+    return render(request, 'association/create_bibliotex_from_tex.html', context )
+
+
+
+
+
 
 #################################################################
 # Suppression des fichiers non utilisés
