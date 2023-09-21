@@ -116,9 +116,6 @@ def import_bbtex(request,file) :
 
 
 
-
-
-@user_passes_test(user_is_superuser)
 def create_bibliotex_from_tex(request) :
 
     levels = Level.objects.order_by("ranking")
