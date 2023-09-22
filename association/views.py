@@ -100,7 +100,7 @@ def toHtml(tex) :
     f.close()
     run(["make4ht","tmptex.tex",'mathjax'],cwd=tmpdir)
     f=open(tmpdir+"tmptex.html","r")
-    html=f.read()
+    html=f.read().decode('utf8')
     f.close()
     f=open(tmpdir+"tmptex.html","w")
     f.write(conversion(html))
@@ -143,10 +143,10 @@ def create_bibliotex_from_tex(request) :
             ex['eno']=bloc(exo,'eno')
             ex['cor']=bloc(exo,'cor')
             toHtml(ex['eno'])
-            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read())             
+            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read().decode('utf8'))             
             if ex['cor']!="" :
                     toHtml(ex['cor'])
-                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read())
+                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read().decode('utf8'))
             else :
                 ex['corhtml']=""
             exos.append(ex)
