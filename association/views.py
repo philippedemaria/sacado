@@ -66,7 +66,7 @@ from subprocess import run
 #################################################################
 
 
-tmpdir="association/tmp/"+str(request.user.id)+"/"
+tmpdir="association/tmp/"
 
 
 
@@ -80,7 +80,7 @@ def bloc(texte,commande):
         if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
         if niv==0 :
             return deb[0:i]
-            
+
 def conversion(html) :
     f=open("ressources/fichesexos/translitterations.txt")
     for l in f :
