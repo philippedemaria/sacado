@@ -139,9 +139,9 @@ def create_bibliotex_from_tex(request) :
         exos=[]
         for exo in Lexos[2:] :
             ex=dict()
-            ex['titre']=bloc(exo,'titreexo')
-            ex['eno']=bloc(exo,'eno')
-            ex['cor']=bloc(exo,'cor') 
+            ex['titre'] = bloc(exo,'titreexo')
+            ex['eno']   = bloc(exo,'eno')
+            ex['cor']   = bloc(exo,'cor') 
             toHtml(ex['eno'])
             ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
             if ex['cor']!="" :
@@ -151,7 +151,7 @@ def create_bibliotex_from_tex(request) :
                 ex['corhtml']=""
             exos.append(ex)
 
-        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills })  
+        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills } )  
 
     return render(request, 'association/create_bibliotex_from_tex.html', context )
 
