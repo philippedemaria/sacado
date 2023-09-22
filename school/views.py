@@ -528,6 +528,31 @@ def push_student_group(request):
 
 
 
+def create_student_profile_inside_this_group(group) : 
+
+    first_name = str(group.teacher.user.first_name).replace(" ", "")
+    last_name  = str(group.teacher.user.last_name).replace(" ","") 
+    name       = last_name + "_e-test"
+    username   = get_username_teacher(request,name)
+    password   = make_password("sacado2020")  
+    email      = group.teacher.user.email
+
+    if group.students.filter( user__username__contains=name).count() == 0 :
+        user,created = User.objects.get_or_create(username=username , defaults= { 'last_name' : last_name, 'first_name' : first_name,  'password' : password , 'email' : "", 'user_type' : 0})
+
+        if created :
+            code = str(uuid.uuid4())[:8]                 
+            student,created = Student.objects.get_or_create(user=user, level=group.level, code=code)
+            group.students.add(student)
+        else :
+            student = Student.objects.get(user=user)
+    else :
+        student = False
+    return student
+
+
+
+
 #@is_manager_of_this_school
 def new_group(request):
 	
@@ -549,9 +574,11 @@ def new_group(request):
 
 			try :
 				if stdts :
-					include_students(request , stdts,group)
+					include_students(request , stdts,group)        
 			except :
 				pass
+
+			create_student_profile_inside_this_group(group)
 
 			return redirect('school_groups')
 		else :
