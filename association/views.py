@@ -127,9 +127,10 @@ def create_bibliotex_from_tex(request) :
     if request.method == "POST" :
         post = True
         this_file = request.FILES["this_file"]
-        level     = request.POST.get("level")
+        level_id   = request.POST.get("level")
+        level      = Level.objects.get(pk=level_id)
         knowledges = level.knowledges.all()
-        skills = Skill.objects.filter(subject_id=1) 
+        skills     = Skill.objects.filter(subject_id=1) 
  
         Lexos  = this_file.split("\\exo")
 
