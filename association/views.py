@@ -66,7 +66,7 @@ from subprocess import run
 #################################################################
 
 
-tmpdir="association/tmp/"
+tmpdir="ressources/fichesexos/tmp/"
 
 
 
