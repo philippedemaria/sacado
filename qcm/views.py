@@ -2047,7 +2047,7 @@ def list_parcours_group(request,id):
     sequences   = bases.filter( is_sequence=1).order_by("ranking")
 
     ###efface le realtime de plus de 30min
-    clear_realtime(parcourses , today.now() ,  1800 )
+    #clear_realtime(parcourses , today.now() ,  1800 )
  
     bibliotexs = group.bibliotexs.filter(folders=None)
     quizzes    = group.quizz.filter(is_random=0,folders=None)
@@ -2115,14 +2115,10 @@ def list_sub_parcours_group(request,idg,idf):
     docpersos  = folder.docpersos.filter(parcours=None)
     qflashs     = folder.quizz.filter(is_random=1,parcours=None).order_by("-date_modified")
 
-
-
-
-
     accordion    = get_accordion(None, quizzes, bibliotexs, flashpacks)
 
     ###efface le realtime de plus de 2 h
-    clear_realtime(parcourses , today.now() ,  1800 )
+    #clear_realtime(parcourses , today.now() ,  1800 )
 
 
     context = { 'parcourses': parcourses , 'evaluations': evaluations , 'teacher' : teacher , 'group' : group ,  'folder' : folder, 'sequences' : sequences ,  'quizzes' : quizzes ,  

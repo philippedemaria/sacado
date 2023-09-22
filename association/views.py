@@ -65,52 +65,53 @@ from subprocess import run
 # Importation d'une fiche d'exos pour creer une bibliotex
 #################################################################
 
-def import_bbtex(request,file) :
-    tmpdir="association/tmp/"
+
+tmpdir="association/tmp/"+str(request.user.id)+"/"
 
 
 
-    def bloc(texte,commande):
-        if "\\"+commande+"{" not in texte :
-            return ""
-        deb=texte[texte.index("\\"+commande+"{")+len(commande)+2:]  
-        niv=1
-        for i in range(1,len(deb)) :
-            if deb[i]=='{' and deb[i-1]!='\\' : niv+=1
-            if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
-            if niv==0 :
-                return deb[0:i]
-    def conversion(html) :
-        f=open("ressources/fichesexos/translitterations.txt")
-        for l in f :
-            [old,new]=l.split(r"%")
-            old=old.strip()
-            new=new.strip()
-            html=html.replace(old,new)
-        return html 
+def bloc(texte,commande):
+    if "\\"+commande+"{" not in texte :
+        return ""
+    deb=texte[texte.index("\\"+commande+"{")+len(commande)+2:]  
+    niv=1
+    for i in range(1,len(deb)) :
+        if deb[i]=='{' and deb[i-1]!='\\' : niv+=1
+        if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
+        if niv==0 :
+            return deb[0:i]
+            
+def conversion(html) :
+    f=open("ressources/fichesexos/translitterations.txt")
+    for l in f :
+        [old,new]=l.split(r"%")
+        old=old.strip()
+        new=new.strip()
+        html=html.replace(old,new)
+    return html 
 
-    def toHtml(tex) :
-        if tex=="" : return ""
-        f=open(tmpdir+"tmptex.tex","w")
-        f.write(r"\documentclass{article}")
-        f.write(r"\begin{document}")
-        f.write(tex)
-        f.write("\n\n\end{document}")
-        f.close()
-        run(["make4ht","tmptex.tex",'mathjax'],cwd=tmpdir)
-        f=open(tmpdir+"tmptex.html","r")
-        html=f.read()
-        f.close()
-        f=open(tmpdir+"tmptex.html","w")
-        f.write(conversion(html))
-        f.close()
+def toHtml(tex) :
+    if tex=="" : return ""
+    f=open(tmpdir+"tmptex.tex","w")
+    f.write(r"\documentclass{article}")
+    f.write(r"\begin{document}")
+    f.write(tex)
+    f.write("\n\n\end{document}")
+    f.close()
+    run(["make4ht","tmptex.tex",'mathjax'],cwd=tmpdir)
+    f=open(tmpdir+"tmptex.html","r")
+    html=f.read()
+    f.close()
+    f=open(tmpdir+"tmptex.html","w")
+    f.write(conversion(html))
+    f.close()
+
+def extraitBody(html) :
+    deb=html.index("<body>")+6
+    fin=html.index("</body>")
+    html=html[deb:fin].replace('\\(','$').replace('\\)','$')
+    return html 
     
-    def extraitBody(html) :
-        deb=html.index("<body>")+6
-        fin=html.index("</body>")
-        html=html[deb:fin].replace('\\(','$').replace('\\)','$')
-        return html 
-        
 
 
 
