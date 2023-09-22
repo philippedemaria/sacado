@@ -100,7 +100,7 @@ def toHtml(tex) :
     f.close()
     run(["make4ht","tmptex.tex",'mathjax'],cwd=tmpdir)
     f=open(tmpdir+"tmptex.html","r")
-    html=f.read().decode('utf8')
+    html=f.read() 
     f.close()
     f=open(tmpdir+"tmptex.html","w")
     f.write(conversion(html))
