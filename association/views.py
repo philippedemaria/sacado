@@ -25,7 +25,7 @@ from group.models import Group
 from school.gar import *
 from setup.models import Formule
 from setup.forms import FormuleForm
-from socle.models import Level, Subject
+from socle.models import Level, Subject , Skill
 from qcm.models import Supportfile
 #################################################################################
 import os
@@ -109,7 +109,7 @@ def toHtml(tex) :
 def extraitBody(html) :
     deb=html.index("<body>")+6
     fin=html.index("</body>")
-    html=html[deb:fin].replace('\\(','$').replace('\\)','$')
+    html=html[deb:fin].replace(r'\(','$').replace(r'\)','$')
     return html 
     
 
@@ -126,13 +126,15 @@ def create_bibliotex_from_tex(request) :
 
     if request.method == "POST" :
         post = True
-        this_file = request.FILES["this_file"]
+        this_file  = request.FILES["this_file"]
         level_id   = request.POST.get("level")
         level      = Level.objects.get(pk=level_id)
         knowledges = level.knowledges.all()
         skills     = Skill.objects.filter(subject_id=1) 
  
-        Lexos  = this_file.split("\\exo")
+        reader = this_file.read().decode('utf8')
+
+        Lexos  = reader.split(r"\exo")
 
         exos=[]
         for exo in Lexos[2:] :
