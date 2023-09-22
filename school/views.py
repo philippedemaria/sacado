@@ -526,9 +526,29 @@ def push_student_group(request):
 	return redirect('school_groups')
  
 
+def get_username_teacher(request ,ln):
+    """
+    retourne un username
+    """
+    ok = True
+    i = 0
+    code = str(uuid.uuid4())[:3] 
+    if request.user.school :
+        suffixe = request.user.school.country.name[2]
+    else :
+        suffixe = ""
+    name = str(ln).replace(" ","_")    
+    un = name + "_" + suffixe + code 
 
+    while ok:
+        if User.objects.filter(username=un).count() == 0:
+            ok = False
+        else:
+            i += 1
+            un = un + str(i)
+    return un 
 
-def create_student_profile_inside_this_group(group) : 
+def create_student_profile_inside_this_group(request,group) : 
 
     first_name = str(group.teacher.user.first_name).replace(" ", "")
     last_name  = str(group.teacher.user.last_name).replace(" ","") 
@@ -569,6 +589,9 @@ def new_group(request):
 	if request.method == "POST" :
 		if form.is_valid():
 			group = form.save()
+			group.studentprofile = 1
+			group.is_gar = school.gar
+			group.save()
 			stdts = request.POST.get("students")
 			sharing_teachers(request,group,teachers)
 
@@ -578,7 +601,7 @@ def new_group(request):
 			except :
 				pass
 
-			create_student_profile_inside_this_group(group)
+			create_student_profile_inside_this_group(request,group)
 
 			return redirect('school_groups')
 		else :
