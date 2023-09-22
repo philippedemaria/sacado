@@ -132,7 +132,7 @@ def create_bibliotex_from_tex(request) :
         knowledges = level.knowledges.all()
         skills     = Skill.objects.filter(subject_id=1) 
  
-        reader = this_file.read().decode('utf8')
+        reader = this_file.read().encode('utf8')
 
         Lexos  = reader.split(r"\exo")
 
@@ -141,12 +141,12 @@ def create_bibliotex_from_tex(request) :
             ex=dict()
             ex['titre']=bloc(exo,'titreexo')
             ex['eno']=bloc(exo,'eno')
-            ex['cor']=bloc(exo,'cor')
+            ex['cor']=bloc(exo,'cor') 
             toHtml(ex['eno'])
-            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read().decode('utf8'))             
+            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read().encode('utf8'))             
             if ex['cor']!="" :
                     toHtml(ex['cor'])
-                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read().decode('utf8'))
+                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read().encode('utf8'))
             else :
                 ex['corhtml']=""
             exos.append(ex)
