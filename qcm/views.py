@@ -14186,6 +14186,12 @@ def docperso_actioner(request) :
 
     teacher = request.user.teacher 
     idbs = request.POST.getlist("selected_docpersos")
+
+    print(  request.POST.get("action") == "deleter"  )
+
+
+    print(  "ids " ,  request.POST.getlist("selected_docpersos") )
+
     if  request.POST.get("action") == "deleter" :  
         for idb in idbs :
             docperso = Docperso.objects.get(id=idb) 

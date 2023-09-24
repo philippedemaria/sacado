@@ -4,10 +4,10 @@
 {% load item_tags %}
 
  
-{% block out_of_folder %}
+ 
 <td>
-    {% if not quizz.is_archive %}
-    <input type="checkbox"  class ="items_to_be_selected"  />
+    {% if not docperso.is_archive %}
+    	<input type="checkbox" name="selected_docpersos" value="{{ docperso.id}}" class ="these_items_to_be_selected{{list_folder.docperso.id}}" />
     {% endif  %}
 </td>
-{% endblock %}
+ 
