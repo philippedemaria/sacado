@@ -148,6 +148,15 @@
                                 <td> {{ form.is_archive |attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
                                 <td>{{ form.is_archive.errors }}</td>
                             </tr>
+                            <tr>
+                                <td>{{ form.is_share.label_tag }} 
+                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i>  
+                                        <div class="helper_tip_text">Mutualisé entre les enseignants de l'établissement.</div>
+                                    </span> 
+                                </td>
+                                <td> {{ form.is_share |attr:"data-toggle:toggle"|attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+                                <td>{{ form.is_share.errors }}</td>
+                            </tr>
                     </table>
                 </div>
             </div>
