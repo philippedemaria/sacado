@@ -732,20 +732,20 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    $(document).on('click',"#grplist input:checkbox",function(){
-        $("input:checkbox[name='groups']").prop("checked",false);
-        $(this).prop("checked",true);
-    });
+    // $(document).on('click',"#grplist input:checkbox",function(){
+    //     $("input:checkbox[name='groups']").prop("checked",false);
+    //     $(this).prop("checked",true);
+    // });
 
-    $(document).on('click',"#cblist input:checkbox",function(){
-        $("input:checkbox[name='folders']").prop("checked",false);
-        $(this).prop("checked",true);
-    });
+    // $(document).on('click',"#cblist input:checkbox",function(){
+    //     $("input:checkbox[name='folders']").prop("checked",false);
+    //     $(this).prop("checked",true);
+    // });
 
-    $(document).on('click',"#pclist input:checkbox",function(){
-        $("input:checkbox[name='parcours']").prop("checked",false);
-        $(this).prop("checked",true);
-    });
+    // $(document).on('click',"#pclist input:checkbox",function(){
+    //     $("input:checkbox[name='parcours']").prop("checked",false);
+    //     $(this).prop("checked",true);
+    // });
         
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
