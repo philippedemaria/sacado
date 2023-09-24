@@ -506,6 +506,12 @@ def set_up_by_level_subject(group, student):
                 except : pass
 
 
+
+
+
+                
+
+
 @login_required(login_url= 'index')
 def all_set_up_sacado(request):
 

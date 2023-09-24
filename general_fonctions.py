@@ -286,38 +286,34 @@ def attribute_all_documents_to_student(parcourses,student):
         for p in parcourses:
             p.students.add(student)
 
-            relationships = p.parcours_relationship.all()
+            relationships = p.parcours_relationship.filter(is_share=1)
             for r in relationships:
                 r.students.add(student)
 
-            customexercises = p.parcours_customexercises.all()
+            customexercises = p.parcours_customexercises.filter(is_share=1)
             for c in customexercises:
                 c.students.add(student)
 
-            courses = p.course.all()
+            courses = p.course.filter(is_share=1)
             for course in courses:
                 course.students.add(student)
 
-            bibliotexs = p.bibliotexs.all()
+            bibliotexs = p.bibliotexs.filter(is_share=1)
             for b in bibliotexs:
                 b.students.add(student)
 
-            flashpacks = p.flashpacks.all()
+            flashpacks = p.flashpacks.filter(is_share=1)
             for f in flashpacks:
                 f.students.add(student)
 
-            quizz = p.quizz.all()
+            quizz = p.quizz.filter(is_share=1)
             for q in quizz:
                 q.students.add(student)
 
 
-            docpersos = p.docpersos.all()
+            docpersos = p.docpersos.filter(is_share=1)
             for d in docpersos:
                 d.students.add(student)
-
-
-
-
 
         test = True
     except :
@@ -332,29 +328,33 @@ def attribute_all_documents_to_students(parcourses, students ):
         for p in parcourses:
             p.students.set(students)
 
-            relationships = p.parcours_relationship.all()
+            relationships = p.parcours_relationship.filter(is_share=1)
             for r in relationships:
                 r.students.set(students)
 
-            customexercises = p.parcours_customexercises.all()
+            customexercises = p.parcours_customexercises.filter(is_share=1)
             for c in customexercises:
                 c.students.set(students)
 
-            courses = p.course.all()
+            courses = p.course.filter(is_share=1)
             for course in courses:
                 course.students.set(students)
 
-            bibliotexs = p.bibliotexs.all()
+            bibliotexs = p.bibliotexs.filter(is_share=1)
             for b in bibliotexs:
                 b.students.set(students)
 
-            flashpacks = p.flashpacks.all()
+            flashpacks = p.flashpacks.filter(is_share=1)
             for f in flashpacks:
                 f.students.set(students)
 
-            quizz = p.quizz.all()
+            quizz = p.quizz.filter(is_share=1)
             for q in quizz:
                 q.students.set(students)
+
+            docpersos = p.docpersos.filter(is_share=1)
+            for d in docpersos:
+                d.students.add(student)
 
         test = True
     except :
@@ -367,70 +367,84 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
     # Assigne les dossiers et leurs contenus à partir d'un groupe
     try :
         for group in groups :
-            for folder in group.group_folders.all():
+            for folder in group.group_folders.filter(is_share=1):
                 folder.students.add(student)
 
-                for parcours in folder.parcours.all():
+                for parcours in folder.parcours.filter(is_share=1):
                     parcours.students.add(student)
 
-                    relationships = parcours.parcours_relationship.all()
+                    relationships = parcours.parcours_relationship.filter(is_share=1)
                     for r in relationships:
                         r.students.add(student)
 
-                    customexercises = parcours.parcours_customexercises.all()
+                    customexercises = parcours.parcours_customexercises.filter(is_share=1)
                     for c in customexercises:
                         c.students.add(student)
 
-                    courses = parcours.course.all()
+                    courses = parcours.course.filter(is_share=1)
                     for course in courses:
                         course.students.add(student)
 
 
-                    flashpacks = parcours.flashpacks.all()
+                    flashpacks = parcours.flashpacks.filter(is_share=1)
                     for flashpack in flashpacks:
                         flashpack.students.add(student)
-                        for flashcard in flashpack.flashcards.all():
+                        for flashcard in flashpack.flashcards.filter(is_share=1):
                             flashcard.students.add(student)
 
-                    bibliotexs = parcours.bibliotexs.all()
+                    bibliotexs = parcours.bibliotexs.filter(is_share=1)
                     for bibliotex in bibliotexs:
                         bibliotex.students.add(student)
                         for r in bibliotex.relationtexs.all():
                             r.students.add(student)
                         
-                    quizz = parcours.quizz.all()
+                    quizz = parcours.quizz.filter(is_share=1)
                     for quiz in quizz:
                         quiz.students.add(student)
+
+
+                    docpersos = parcours.docpersos.filter(is_share=1)
+                    for d in docpersos :
+                        d.students.add(student)
+
+
             # Assigne les parcours et leurs contenus 
             for parcours in group.group_parcours.filter(folders=None):
                 parcours.students.add(student)
-                relationships = parcours.parcours_relationship.all()
+                relationships = parcours.parcours_relationship.filter(is_share=1)
                 for r in relationships:
                     r.students.add(student)
 
-                customexercises = parcours.parcours_customexercises.all()
+                customexercises = parcours.parcours_customexercises.filter(is_share=1)
                 for c in customexercises:
                     c.students.add(student)
 
-                courses = parcours.course.all()
+                courses = parcours.course.filter(is_share=1)
                 for course in courses:
                     course.students.add(student)
 
-                flashpacks = parcours.flashpacks.all()
+                flashpacks = parcours.flashpacks.filter(is_share=1)
                 for flashpack in flashpacks:
                     flashpack.students.add(student)
-                    for flashcard in flashpack.flashcards.all():
+                    for flashcard in flashpack.flashcards.filter(is_share=1):
                         flashcard.students.add(student)
 
-                bibliotexs = parcours.bibliotexs.all()
+                bibliotexs = parcours.bibliotexs.filter(is_share=1)
                 for bibliotex in bibliotexs:
                     bibliotex.students.add(student)
                     for r in bibliotex.relationtexs.all():
                         r.students.add(student)
                     
-                quizz = parcours.quizz.all()
+                quizz = parcours.quizz.filter(is_share=1)
                 for quiz in quizz:
                     quiz.students.add(student)
+
+
+                docpersos = parcours.docpersos.filter(is_share=1)
+                for d in docpersos:
+                    d.students.add(student)
+
+
         test = True
     except :
         test = False
@@ -446,33 +460,38 @@ def remove_all_documents_of_groups_to_a_student(group, student):
 
         for parcours in student.students_to_parcours.filter(subject=group.subject):
             parcours.students.remove(student)
-            relationships = parcours.parcours_relationship.all()
+            relationships = parcours.parcours_relationship.filter(is_share=1)
             for r in relationships:
                 r.students.remove(student)
 
-            customexercises = parcours.parcours_customexercises.all()
+            customexercises = parcours.parcours_customexercises.filter(is_share=1)
             for c in customexercises:
                 c.students.remove(student)
 
-            courses = parcours.course.all()
+            courses = parcours.course.filter(is_share=1)
             for course in courses:
                 course.students.remove(student)
 
-            flashpacks = parcours.flashpacks.all()
+            flashpacks = parcours.flashpacks.filter(is_share=1)
             for flashpack in flashpacks:
                 flashpack.students.remove(student)
-                for flashcard in flashpack.flashcards.all():
+                for flashcard in flashpack.flashcards.filter(is_share=1):
                     flashcard.students.remove(student)
 
-            bibliotexs = parcours.bibliotexs.all()
+            bibliotexs = parcours.bibliotexs.filter(is_share=1)
             for bibliotex in bibliotexs:
                 bibliotex.students.remove(student)
                 for r in bibliotex.relationtexs.all():
                     r.students.remove(student)
                 
-            quizz = parcours.quizz.all()
+            quizz = parcours.quizz.filter(is_share=1)
             for quiz in quizz:
                 quiz.students.remove(student)
+
+            docpersos = parcours.docpersos.filter(is_share=1)
+            for d in docpersos:
+                d.students.remove(student)
+
         test = True
     except :
         test = False
@@ -491,41 +510,41 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
 
 
     for group in groups :
-        for folder in group.group_folders.all():
+        for folder in group.group_folders.filter(is_share=1):
             folder.students.add(*students)
 
-            for parcours in folder.parcours.all():
+            for parcours in folder.parcours.filter(is_share=1):
                 parcours.students.add(*students)
 
-                relationships = parcours.parcours_relationship.all()
+                relationships = parcours.parcours_relationship.filter(is_share=1)
                 for r in relationships:
                     r.students.add(*students)
 
-                customexercises = parcours.parcours_customexercises.all()
+                customexercises = parcours.parcours_customexercises.filter(is_share=1)
                 for c in customexercises:
                     c.students.add(*students)
 
-                courses = parcours.course.all()
+                courses = parcours.course.filter(is_share=1)
                 for course in courses:
                     course.students.add(*students)
 
-                flashpacks = parcours.flashpacks.all()
+                flashpacks = parcours.flashpacks.filter(is_share=1)
                 for flashpack in flashpacks:
                     flashpack.students.add(*students)
-                    for flashcard in flashpack.flashcards.all():
+                    for flashcard in flashpack.flashcards.filter(is_share=1):
                         flashcard.students.add(*students)
 
-                bibliotexs = parcours.bibliotexs.all()
+                bibliotexs = parcours.bibliotexs.filter(is_share=1)
                 for bibliotex in bibliotexs:
                     bibliotex.students.add(*students)
                     for r in bibliotex.relationtexs.all():
                         r.students.add(*students)
 
-                quizz = parcours.quizz.all()
+                quizz = parcours.quizz.filter(is_share=1)
                 for quiz in quizz:
                     quiz.students.add(*students)
 
-                docpersos = parcours.docpersos.all()
+                docpersos = parcours.docpersos.filter(is_share=1)
                 for docperso in docpersos:
                     docperso.students.add(*students)
 
@@ -533,35 +552,35 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
         for parcours in group.group_parcours.filter(folders=None):
             parcours.students.add(*students)
 
-            relationships = parcours.parcours_relationship.all()
+            relationships = parcours.parcours_relationship.filter(is_share=1)
             for r in relationships:
                 r.students.add(*students)
 
-            customexercises = parcours.parcours_customexercises.all()
+            customexercises = parcours.parcours_customexercises.filter(is_share=1)
             for c in customexercises:
                 c.students.add(*students)
 
-            courses = parcours.course.all()
+            courses = parcours.course.filter(is_share=1)
             for course in courses:
                 course.students.add(*students)
 
-            flashpacks = parcours.flashpacks.all()
+            flashpacks = parcours.flashpacks.filter(is_share=1)
             for flashpack in flashpacks:
                 flashpack.students.add(*students)
-                for flashcard in flashpack.flashcards.all():
+                for flashcard in flashpack.flashcards.filter(is_share=1):
                     flashcard.students.add(*students)
 
-            bibliotexs = parcours.bibliotexs.all()
+            bibliotexs = parcours.bibliotexs.filter(is_share=1)
             for bibliotex in bibliotexs:
                 bibliotex.students.add(*students)
                 for r in bibliotex.relationtexs.all():
                     r.students.add(*students)
 
-            quizz = parcours.quizz.all()
+            quizz = parcours.quizz.filter(is_share=1)
             for quiz in quizz:
                 quiz.students.add(*students)
 
-            docpersos = parcours.docpersos.all()
+            docpersos = parcours.docpersos.filter(is_share=1)
             for docperso in docpersos:
                 docperso.students.add(*students)
 
@@ -576,7 +595,7 @@ def attribute_all_documents_of_groups_to_all_new_students(groups):
 def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  student):
 
     for folder in folders :
-        parcourses = folder.parcours.all() # récupération des parcours
+        parcourses = folder.parcours.filter(is_share=1) # récupération des parcours
         #clone du dossier
         folder.pk = None
         folder.teacher = teacher
@@ -584,13 +603,14 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
         folder.groups.add(group)
         folder.students.add(student)
         for parcours in parcourses :
-            relationships   = parcours.parcours_relationship.all() # récupération des relations
-            courses         = parcours.course.all() # récupération des relations
-            customexercises = parcours.parcours_customexercises.all() # récupération des customexercises
-            quizzes         = parcours.quizz.all() # récupération des quizzes
-            flashpacks      = parcours.flashpacks.all() # récupération des flashpacks
-            bibliotexs      = parcours.bibliotexs.all() # récupération des bibliotexs
+            relationships   = parcours.parcours_relationship.filter(is_share=1) # récupération des relations
+            courses         = parcours.course.filter(is_share=1) # récupération des relations
+            customexercises = parcours.parcours_customexercises.filter(is_share=1) # récupération des customexercises
+            quizzes         = parcours.quizz.filter(is_share=1) # récupération des quizzes
+            flashpacks      = parcours.flashpacks.filter(is_share=1) # récupération des flashpacks
+            bibliotexs      = parcours.bibliotexs.filter(is_share=1) # récupération des bibliotexs
             is_sequence     = parcours.is_sequence
+            docpersos       = parcours.docpersos.filter(is_share=1) # récupération des bibliotexs
             #clone du parcours
             parcours.pk = None
             parcours.teacher = teacher
@@ -617,6 +637,18 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
 
             else :
 
+                for docperso in docpersos:
+                    docperso.pk = None
+                    docperso.teacher = teacher
+                    docperso.is_publish = 1
+                    docperso.is_archive = 0
+                    docperso.is_share = 0
+                    docperso.students.add(student)
+                    docperso.parcours.add(parcours)
+                    docperso.groups.add(group)
+                    docperso.folders.add(folder)
+                    docperso.levels.add(group.level)
+
                 for c  in customexercises : 
                     skills     = c.skills.all() 
                     knowledges = c.knowledges.all() 
@@ -631,7 +663,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
 
                 n_r = []
                 for course in courses : 
-                    relationships_c  = course.relationships.all() 
+                    relationships_c  = course.relationships.filter(is_share=1) 
                     course.pk      = None
                     course.parcours = parcours
                     course.teacher = teacher
@@ -663,7 +695,7 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
 
 
                 for quizz in quizzes :  
-                    questions = quizz.questions.all()    
+                    questions = quizz.questions.filter(is_share=1)    
                     themes    = quizz.themes.all()  
                     levels    = quizz.levels.all()  
 
@@ -735,13 +767,14 @@ def duplicate_all_folders_of_group_to_a_new_student(group , folders, teacher,  s
 def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher,  student):
  
     for parcours in parcourses :
-        relationships   = parcours.parcours_relationship.all() # récupération des relations
-        courses         = parcours.course.all() # récupération des relations
-        customexercises = parcours.parcours_customexercises.all() # récupération des customexercises
-        quizzes         = parcours.quizz.all() # récupération des quizzes
-        flashpacks      = parcours.flashpacks.all() # récupération des flashpacks
-        bibliotexs      = parcours.bibliotexs.all() # récupération des bibliotexs
+        relationships   = parcours.parcours_relationship.filter(is_share=1) # récupération des relations
+        courses         = parcours.course.filter(is_share=1) # récupération des relations
+        customexercises = parcours.parcours_customexercises.filter(is_share=1) # récupération des customexercises
+        quizzes         = parcours.quizz.filter(is_share=1) # récupération des quizzes
+        flashpacks      = parcours.flashpacks.filter(is_share=1) # récupération des flashpacks
+        bibliotexs      = parcours.bibliotexs.filter(is_share=1) # récupération des bibliotexs
         is_sequence     = parcours.is_sequence
+        docpersos       = parcours.docpersos.filter(is_share=1) # récupération des bibliotexs
         #clone du parcours
         parcours.pk = None
         parcours.teacher = teacher
@@ -782,7 +815,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
 
             n_r = []
             for course in courses : 
-                relationships_c  = course.relationships.all() 
+                relationships_c  = course.relationships.filter(is_share=1) 
                 course.pk      = None
                 course.parcours = parcours
                 course.teacher = teacher
@@ -814,7 +847,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
 
 
             for quizz in quizzes :  
-                questions = quizz.questions.all()    
+                questions = quizz.questions.filter(is_share=1)     
                 themes    = quizz.themes.all()  
                 levels    = quizz.levels.all()  
 
@@ -861,7 +894,7 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
                 bibliotex.levels.set(levels)
 
             for flashpack in flashpacks :  
-                flashcards = flashpack.flashcards.all()    
+                flashcards = flashpack.flashcards.filter(is_share=1) 
                 themes     = flashpack.subjects.all()  
                 levels     = flashpack.levels.all()    
  
@@ -878,6 +911,16 @@ def duplicate_all_parcours_of_group_to_a_new_student(group , parcourses, teacher
                 flashpack.themes.set(themes)
                 flashpack.levels.set(levels)
 
+            for docperso in docpersos:
+                docperso.pk = None
+                docperso.teacher = teacher
+                docperso.is_publish = 1
+                docperso.is_archive = 0
+                docperso.is_share = 0
+                docperso.students.add(student)
+                docperso.parcours.add(parcours)
+                docperso.groups.add(group)
+                docperso.levels.add(group.level)
 
 def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) :
 
@@ -887,11 +930,12 @@ def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) 
         # Récupératin des doc du parcours
         relationships   = parcours.parcours_relationship.all() # récupération des relations
         courses         = parcours.course.all() # récupération des relations
-        customexercises = parcours.parcours_customexercises.all() # récupération des customexercises
-        quizzes         = parcours.quizz.all() # récupération des quizzes
-        flashpacks      = parcours.flashpacks.all() # récupération des flashpacks
-        bibliotexs      = parcours.bibliotexs.all() # récupération des bibliotexs
+        customexercises = parcours.parcours_customexercises.filter(is_share=1)  # récupération des customexercises
+        quizzes         = parcours.quizz.filter(is_share=1) # récupération des quizzes
+        flashpacks      = parcours.flashpacks.filter(is_share=1)  # récupération des flashpacks
+        bibliotexs      = parcours.bibliotexs.filter(is_share=1)  # récupération des bibliotexs
         is_sequence     = parcours.is_sequence
+        docpersos       = parcours.docpersos.filter(is_share=1)  # récupération des bibliotexs
         #clone du parcours
         if not is_delete :
             parcours.pk      = None
@@ -1026,6 +1070,8 @@ def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) 
                     if not is_delete :
                         bibliotex.themes.set(themes)
                         bibliotex.levels.set(levels)
+                    if folder :
+                        bibliotex.folders.add(folder)
             except :
                 raison += " Bibliotex non récupéré."
 
@@ -1048,8 +1094,33 @@ def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) 
                         flashpack.parcours.add(parcours)
                         flashpack.themes.set(themes)
                         flashpack.levels.set(levels)
+                    if folder :
+                        flashpack.folders.add(folder)
+
             except :
                 raison += " Flashpack non récupéré."
+
+
+
+            try :  
+                for docperso in docpersos:
+                    flashcards = docperso.flashcards.all()    
+                    themes     = docperso.themes.all()  
+                    levels     = docperso.levels.all()   
+                    docperso.pk = None
+                    docperso.teacher = teacher
+                    docperso.is_publish = 1
+                    docperso.is_archive = 0
+                    docperso.is_share = 0
+                    docperso.students.add(student)
+                    docperso.parcours.add(parcours)
+                    docperso.levels.set(levels)
+                    if folder :
+                        docperso.folders.add(folder)
+            except :
+                raison += " Document non récupéré."
+
+
 
     if len(raison) : is_test = True
     else           : is_test = False
