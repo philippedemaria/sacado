@@ -7138,6 +7138,7 @@ li .list_no_indent{
   margin: 0px 20px 26px 5px;
   max-height: 234px;
 }
+
 .box:hover {
   box-shadow: 0 4px 10px rgba(0,0,0,0.35);
 }

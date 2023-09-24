@@ -66,7 +66,7 @@
                                 <td>
                                     <a href="{% url 'update_teacher' teacher.id %}">{{ teacher.last_name }}  {{ teacher.first_name }}</a>   
 
-                                    {% if teacher.teacher.helping_right  %}
+                                    {% if request.user.is_superuser and teacher.teacher.helping_right  %}
                                     <a href="{% url 'get_the_teacher_profile' teacher.id %}" class="pull-right"><i class="fa fa-wrench"></i></a>  
                                     {% endif %}
                                 </td>
