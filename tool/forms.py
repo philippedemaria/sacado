@@ -125,8 +125,8 @@ class QuizzForm(forms.ModelForm):
 		coteacher_parcours = teacher.coteacher_parcours.filter(is_archive=0,is_trash=0) 
 		all_parcours = parcours|coteacher_parcours
 
-		groups =  teacher.groups.all() 
-		teacher_groups = teacher.teacher_group.all() 
+		groups =  teacher.groups.filter(is_hidden = 0) 
+		teacher_groups = teacher.teacher_group.filter(is_hidden = 0) 
 		all_groups = groups|teacher_groups
 
 		if group :
@@ -175,8 +175,8 @@ class QFlashForm(forms.ModelForm):
 
 		super(QFlashForm, self).__init__(*args, **kwargs)
 
-		groups =  teacher.groups.all() 
-		teacher_groups = teacher.teacher_group.all() 
+		groups =  teacher.groups.filter(is_hidden = 0) 
+		teacher_groups = teacher.teacher_group.filter(is_hidden = 0) 
 		all_groups = groups|teacher_groups
 
 		if teacher.subjects.count() == 1 :
@@ -226,7 +226,7 @@ class DiaporamaForm(forms.ModelForm):
  
 		self.fields['levels'] = forms.ModelMultipleChoiceField(queryset=teacher.levels.order_by("ranking"), required=False)
 		self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
-		self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=teacher.groups.all(), required=False)
+		self.fields['groups'] = forms.ModelMultipleChoiceField(queryset=teacher.groups.filter(is_hidden = 0) , required=False)
  
 
 	def clean_content(self):

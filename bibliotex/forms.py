@@ -93,8 +93,8 @@ class BibliotexForm(forms.ModelForm):
 		coteacher_parcours = teacher.coteacher_parcours.filter(is_archive=0,is_trash=0) 
 		all_parcours = parcours|coteacher_parcours
 
-		groups =  teacher.groups.all() 
-		teacher_groups = teacher.teacher_group.all() 
+		groups =  teacher.groups.filter(is_hidden = 0) 
+		teacher_groups = teacher.teacher_group.filter(is_hidden = 0) 
 		all_groups = groups|teacher_groups
 
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=True)
