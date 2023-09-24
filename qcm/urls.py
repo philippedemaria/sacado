@@ -536,6 +536,8 @@ urlpatterns = [
 
     ####################################     Les documents perso  ##########################################
 
+    path('create_docperso_folder/<int:idf>', create_docperso_folder, name='create_docperso_folder'),
+
     path('list_docpersos_group/<int:idg>', list_docpersos_group, name='list_docpersos_group'),  
     path('create_docperso_parcours/<int:idp>', create_docperso_parcours, name='create_docperso_parcours'),
     path('update_docperso/<int:idp>/<int:idd>', update_docperso, name='update_docperso'),

@@ -14081,6 +14081,43 @@ def my_docpersos_archives(request):
     return render(request, 'qcm/list_my_docpersos.html',  { 'list_folders': list_folders , 'docpersos': docpersos , 'teacher': teacher,  'groups': groups,   'nb_archive' : nb_archive  })
 
 
+def create_docperso_folder(request,idf=0):
+
+    parcours , group = None , None
+
+    idg = request.session.get("group_id",None)
+ 
+    folder = Folder.objects.get(pk=idf)
+  
+    if idg : 
+        group = Group.objects.get(pk=idg)
+
+    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher,parcours = parcours , folder = folder , group = group )
+
+    if form.is_valid():
+        nf = form.save(commit=False)
+        nf.teacher = request.user.teacher
+        if idg : nf.subject = group.subject
+        nf.save()
+        if idf : 
+            folder = Folder.objects.get(pk=idf)
+            nf.folders.add(folder)
+            nf.students.set(folder.students.all())
+        if idg : 
+            group = Group.objects.get(pk=idg)
+            nf.groups.add(group)
+            nf.levels.add(group.level)
+            nf.students.set(group.students.all())
+
+        messages.success(request, 'Le document a été créé avec succès !')
+        return redirect("list_parcours_group", idg)
+
+    else:
+        print(form.errors)
+
+    context = {'form': form,   'docperso': None ,   'group': group , 'folder': folder    }
+
+    return render(request, 'qcm/form_docperso.html', context)
 
 
 
