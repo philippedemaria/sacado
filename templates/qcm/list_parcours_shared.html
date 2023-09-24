@@ -19,9 +19,7 @@
   
 {% block page_title %}
 
-    {% if group %} 
-        <span style="color:{{ group.color|contrast_color_title }}"><i class="fa fa-th"></i> {{ group.name }} <img width="25px" src="{% static 'img/angle-right.png' %}"/></span>
-    {% endif  %} 
+
     {% if parcours %} 
         {% include 'qcm/breadcrumb.html' %}
      {% endif  %}   
@@ -105,22 +103,22 @@
                
     <div class="row">
         <div class="col-xs-12 col-md-12">
-
+        {% comment %}
             <div class="alert alert-sacado">            
                 
-
+         
                     <img src="{% static 'img/conseil.png' %}" height="40px" />
 
                 <span id="before_choice"> 
                     Lors de votre recherche, vos parcours ne vous sont pas montrés. Ils sont déjà à vous. Seuls les parcours de votre établissement et de l'équipe SACADO vous sont proposés.  Les niveaux et enseignements proposés sont ceux de votre profil. Si vous souhaitez plus de niveaux ou plus d'enseignements, <a href="{% url 'profile' %}" >ajoutez-les dans votre profil</a>.
                 </span>
-                {% comment %}
+
                 <span class="no_visu_on_load" id="after_choice"> Adapter l'affichage de votre recherche
                         <input id="listing"  type="checkbox" data-toggle="toggle" data-onstyle="primary" data-offstyle="default" data-on="Liste" data-off="Vignettes" data-width="130"/> 
                 </span>
-                {% endcomment %}
+            
             </div>
-
+        {% endcomment %}
         </div>
     </div>
                 

@@ -5406,7 +5406,7 @@ def exercise_parcours_duplicate(request):
             except :
                 pass
 
-        data["validation"] = "Duplication réussie. Retrouvez-le depuis le menu Groupes."
+        data["validation"] = "Duplication réussie."
     else :
         data["validation"] = "Duplication abandonnée." 
 
