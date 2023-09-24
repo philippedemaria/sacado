@@ -75,8 +75,8 @@ urlpatterns = [
 
     path('replace_exercise_into_parcours', replace_exercise_into_parcours, name='replace_exercise_into_parcours'), #Déplacer un execice de parcours
 
-    path('actioner_pef', actioner_pef, name='actioner_pef'), #archiver ou supprimer une sélection
-
+    path('actioner_folder', actioner_folder, name='actioner_folder'), #archiver ou supprimer une sélection
+    path('actioner_parcours', actioner_parcours, name='actioner_parcours'), #archiver ou supprimer une sélection
     path('actioner_course', actioner_course, name='actioner_course'), #archiver ou supprimer une sélection
 
 

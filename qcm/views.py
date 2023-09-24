@@ -13759,7 +13759,69 @@ def ajax_subparcours_check(request):
 
 
 
-def actioner_pef(request):
+def actioner_folder(request):
+
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
+
+    idfs = request.POST.getlist("selected_folders")
+
+    if  request.POST.get("action") == "deleter" :  
+
+        for idf in idfs :
+            folder = Folder.objects.get(id=idf)
+            for parcours in folder.parcours.all():
+                parcours.students.clear()
+
+                if not authorizing_access(teacher, parcours, False ):
+                    messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
+                    return redirect('index')
+
+                studentanswers = Studentanswer.objects.filter(parcours = parcours)
+                for s in studentanswers :
+                    s.delete()
+                parcours.is_trash=1
+                parcours.save()
+            folder.is_trash=1
+            folder.save()
+
+ 
+    elif request.POST.get("action") == "archiver" :  
+
+ 
+        for idf in idfs :
+            folder = Folder.objects.get(id=idf) 
+            folder.is_archive = 1
+            folder.is_favorite = 0
+            folder.save()
+            subparcours = folder.parcours.all()
+            for p in subparcours :
+                p.is_archive = 1
+                p.is_favorite = 0
+                p.save()
+ 
+    else :
+
+        for idf in idfs :
+            folder = Folder.objects.get(id=idf) 
+            folder.is_archive = 0
+            folder.is_favorite = 0
+            folder.save()
+            subparcours = folder.parcours.all()
+            for p in subparcours :
+                p.is_archive = 0
+                p.is_favorite = 0
+                p.save()
+
+    return redirect('parcours')
+
+
+
+
+def actioner_parcours(request):
 
     try :
         teacher = request.user.teacher
@@ -13786,24 +13848,6 @@ def actioner_pef(request):
             parcours.is_trash=1
             parcours.save()
  
-
-        for idf in idfs :
-            folder = Folder.objects.get(id=idf)
-            for parcours in folder.parcours.all():
-                parcours.students.clear()
-
-                if not authorizing_access(teacher, parcours, False ):
-                    messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
-                    return redirect('index')
-
-                studentanswers = Studentanswer.objects.filter(parcours = parcours)
-                for s in studentanswers :
-                    s.delete()
-                parcours.is_trash=1
-                parcours.save()
-            folder.delete()
-
- 
     elif request.POST.get("action") == "archiver" :  
  
 
@@ -13813,18 +13857,6 @@ def actioner_pef(request):
             parcours.is_favorite = 0
             parcours.save()
  
-
-        for idf in idfs :
-            folder = Folder.objects.get(id=idf) 
-            folder.is_archive = 1
-            folder.is_favorite = 0
-            folder.save()
-            subparcours = folder.parcours.all()
-            for p in subparcours :
-                p.is_archive = 1
-                p.is_favorite = 0
-                p.save()
- 
     else :
 
         for idp in idps :
@@ -13833,19 +13865,11 @@ def actioner_pef(request):
             parcours.is_favorite = 0
             parcours.save()
 
-
-        for idf in idfs :
-            folder = Folder.objects.get(id=idf) 
-            folder.is_archive = 0
-            folder.is_favorite = 0
-            folder.save()
-            subparcours = folder.parcours.all()
-            for p in subparcours :
-                p.is_archive = 0
-                p.is_favorite = 0
-                p.save()
-
     return redirect('parcours')
+
+
+
+
 
 
 
