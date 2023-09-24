@@ -13675,7 +13675,7 @@ def delete_folder(request,id,idg):
         return redirect('index')
 
     folder  = Folder.objects.get(id=id)
-    if folder.teacher.user.id == 2480 :
+    if folder.teacher.user.id != 2480 :
         messages.error(request, "  !!!  Redirection automatique  !!! Suppression interdite.")
         return redirect('index')
 
