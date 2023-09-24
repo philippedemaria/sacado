@@ -506,8 +506,8 @@ a.btn-connex:hover{
 
   background-color:#5d4391;
   font-size : 20px;
-    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
-    -moz-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
 }
 
 
@@ -2106,7 +2106,7 @@ a.btn-connex:hover{
 
 
 #pricing .card   .sub_header {
-  font-weight: 5p00;
+  font-weight: 500;
   font-variant: small-caps;
   font-size: 20px;
 }
@@ -2130,7 +2130,7 @@ a.btn-connex:hover{
 }
 
 #pricing .card   .plus {
-  margin: 29px 0x;
+  margin: 29px 0px;
 }
 
 #pricing .card .list-group-item {
@@ -2230,14 +2230,14 @@ a.btn-connex:hover{
 .pricing_box .container .card{
     width: 350px;
     -webkit-box-shadow: 0 0 10px rgba(184, 168, 214, 0.5);
-    -moz- box-shadow: 0 0 10px rgba(184, 168, 214, 0.5);
+    -moz-box-shadow: 0 0 10px rgba(184, 168, 214, 0.5);
     box-shadow: 0 0 10px rgba(184, 168, 214, 0.5);
 }
 
 .pricing_box .container .card:hover{
     width: 350px;
     -webkit-box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
-    -moz- box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
+    -moz-box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
     box-shadow: 0 0 20px rgba(91, 65, 139, 0.5);
 }
 
