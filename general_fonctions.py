@@ -310,6 +310,15 @@ def attribute_all_documents_to_student(parcourses,student):
             for q in quizz:
                 q.students.add(student)
 
+
+            docpersos = p.docpersos.all()
+            for d in docpersos:
+                d.students.add(student)
+
+
+
+
+
         test = True
     except :
         test = False
