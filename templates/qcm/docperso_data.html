@@ -2,6 +2,12 @@
 {% load static %}
 {% load item_tags %}
 
+
+{% block this_actioner %}
+<form action="{% url 'flashpack_actioner' %}" method="POST" enctype='multipart/form-data'> 
+{% endblock %}
+
+
  
 {% block out_of_folder %}
 <td>

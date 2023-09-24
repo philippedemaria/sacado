@@ -14181,6 +14181,37 @@ def delete_docperso(request, idd, idp=0):
         return redirect("list_parcours_group", idg)
 
 
+
+def docperso_actioner(request) :
+
+    teacher = request.user.teacher 
+    idbs = request.POST.getlist("selected_docpersos")
+    if  request.POST.get("action") == "deleter" :  
+        for idb in idbs :
+            docperso = Docperso.objects.get(id=idb) 
+            docperso.delete()
+
+    elif  request.POST.get("action") == "archiver" :  
+        for idb in idbs :
+            docperso = Docperso.objects.get(id=idb) 
+            docperso.is_archive = 1
+            docperso.is_favorite = 0
+            docperso.save()
+
+    else : 
+        for idb in idbs :
+            docperso = Docperso.objects.get(id=idb) 
+            docperso.is_archive = 0
+            docperso.is_favorite = 0
+            docperso.save()
+     
+    return redirect('my_docpersos')
+
+
+
+
+
+
 def duplicate_parcours_organiser(request,idch):
 
     idg = request.session.get("group_id",None)

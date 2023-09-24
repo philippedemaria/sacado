@@ -547,7 +547,7 @@ urlpatterns = [
     path('my_docpersos', my_docpersos, name='my_docpersos'),
     path('my_docpersos_archives', my_docpersos_archives, name='my_docpersos_archives'),
 
-
+    path('docperso_actioner', docperso_actioner, name='docperso_actioner'),
 
     ####################################    Organiser  ##########################################
     path('ajax_add_chapter', ajax_add_chapter, name='ajax_add_chapter'),

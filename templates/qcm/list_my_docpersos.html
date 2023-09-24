@@ -29,7 +29,7 @@
 
 
 {% block this_actioner %}
-    <form action="{% url 'bibliotex_actioner' %}" method="POST" enctype='multipart/form-data'> 
+    <form action="{% url 'docperso_actioner' %}" method="POST" enctype='multipart/form-data'> 
 {% endblock %}
 
 
@@ -37,7 +37,7 @@
 {% block inside_folder %}
 <table class="table table-sacado table-hovered standard_tab_10_not_first"  style="width:100%" >
     <thead> 
-        <th style="width:20px"><input type="checkbox" class="class_select_all_these_items" data-document_id="{{list_folder.folder.id}}" /></th> 
+        <th style="width:20px"><input type="checkbox" name="selected_docpersos" class="class_select_all_these_items" data-document_id="{{list_folder.folder.id}}" /></th> 
         <th style="width:300px">Titre</th>    
         <th>Groupe </th>
         <th  style="width:150px;" >Mutualisation</th>
