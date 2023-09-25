@@ -1083,7 +1083,7 @@ def peuplate_parcours(request,id):
         messages.error(request, "  !!!  Redirection automatique  !!! Violation d'accès. Contacter SACADO...")
         return redirect('index')
 
-    form = ParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher , folder = None ,   group = group)
+    form = ParcoursForm(request.POST or None , instance=parcours, teacher = parcours.teacher ,  group = group)
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -1155,7 +1155,7 @@ def peuplate_parcours_evaluation(request,id):
 
 
 
-    form = ParcoursForm(request.POST or None , instance=parcours, teacher = teacher , folder = None,   group = None )
+    form = ParcoursForm(request.POST or None , instance=parcours, teacher = teacher ,   group = None )
     relationships = Relationship.objects.filter(parcours=parcours).prefetch_related('exercise__supportfile').order_by("ranking")
     """ affiche le parcours existant avant la modif en ajax""" 
     exercises = parcours.exercises.filter(supportfile__is_title=0).order_by("theme","knowledge__waiting","knowledge","ranking")
@@ -2903,31 +2903,31 @@ def get_form(request, parcours, teacher ,  group_id, folder_id):
         if folder_id and group_id :
             folder = Folder.objects.get(pk=folder_id)
             group  = Group.objects.get(pk=group_id)
-            form   = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = group  , initial= {   'folders':  [folder],  'groups':  [group], 'subject': folder.subject , 'level': folder.level }  )
+            form   = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher ,   group = group  , initial= {    'groups':  [group], 'subject': folder.subject , 'level': folder.level }  )
         elif group_id :
             group = Group.objects.get(pk=group_id)
             level = group.level.name
-            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None,   group = group , initial= { 'groups': [group],  'subject': group.subject , 'level': group.level } )
+            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher ,  group = group , initial= { 'groups': [group],  'subject': group.subject , 'level': group.level } )
         elif folder_id :
             folder = Folder.objects.get(pk=folder_id)
-            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = folder,   group = None  , initial= { 'folders':  [folder],  'subject': folder.subject , 'level': folder.level }  )
+            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher ,  group = None  , initial= { 'subject': folder.subject , 'level': folder.level }  )
         else :
-            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher , folder = None,   group = None   )
+            form = ParcoursForm(request.POST or None, request.FILES or None, instance=parcours, teacher=teacher ,   group = None   )
 
     else :
         if folder_id and group_id :
             folder = Folder.objects.get(pk=folder_id)
             group  = Group.objects.get(pk=group_id)
-            form   = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = folder,   group = group , initial= {   'folders':  [folder],  'groups':  [group], 'subject': folder.subject , 'level': folder.level } )
+            form   = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher ,   group = group , initial= {    'groups':  [group], 'subject': folder.subject , 'level': folder.level } )
         elif group_id :
             group = Group.objects.get(pk=group_id)
             level = group.level.name
-            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = None,   group = group , initial= { 'groups': [group],  'subject': group.subject , 'level': group.level } )
+            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher ,   group = group , initial= { 'groups': [group],  'subject': group.subject , 'level': group.level } )
         elif folder_id :
             folder = Folder.objects.get(pk=folder_id)
-            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = folder,   group = None , initial= { 'folders':  [folder],  'subject': folder.subject , 'level': folder.level } )
+            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher ,   group = None , initial= {  'subject': folder.subject , 'level': folder.level } )
         else :            
-            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher , folder = None,   group = None  )
+            form = ParcoursForm(request.POST or None, request.FILES or None,  teacher=teacher ,    group = None  )
 
     return form
 
@@ -9483,7 +9483,7 @@ def ajax_charge_folders(request):
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
             fldrs.update(group.group_folders.values_list("id","title").filter(subject=group.subject, level=group.level, is_trash=0))
-            
+
         data['folders'] =  list( fldrs )
     else :
         data['folders'] =  []
@@ -14092,7 +14092,7 @@ def create_docperso_folder(request,idf=0):
     if idg : 
         group = Group.objects.get(pk=idg)
 
-    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher,parcours = parcours , folder = folder , group = group )
+    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher,  group = group )
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -14135,7 +14135,7 @@ def create_docperso_parcours(request,idp=0):
     if idg : 
         group = Group.objects.get(pk=idg)
 
-    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher,parcours = parcours , folder = folder , group = group )
+    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher,  group = group )
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -14187,7 +14187,7 @@ def update_docperso(request, idp,idd):
     if idg : 
         group = Group.objects.get(pk=idg)
             
-    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher, parcours = parcours , folder = folder , group = group, instance=docperso  )
+    form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher,  group = group, instance=docperso  )
 
 
     if form.is_valid():

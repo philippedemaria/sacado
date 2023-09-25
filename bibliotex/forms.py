@@ -83,10 +83,6 @@ class BibliotexForm(forms.ModelForm):
 		group   = kwargs.pop('group')
 		super(BibliotexForm, self).__init__(*args, **kwargs)
  
- 
-		if group : all_folders = group.group_folders.filter(is_archive=0,is_trash=0)
-		else : all_folders = teacher.teacher_folders.filter(is_archive=0,is_trash=0) 
-
 		groups =  teacher.groups.filter(is_hidden = 0) 
 		teacher_groups = teacher.teacher_group.filter(is_hidden = 0) 
 		all_groups = groups|teacher_groups

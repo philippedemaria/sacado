@@ -35,7 +35,6 @@ class ParcoursForm(forms.ModelForm):
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
-		folder  = kwargs.pop('folder')
 		group   = kwargs.pop('group')
 		super(ParcoursForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
@@ -47,32 +46,19 @@ class ParcoursForm(forms.ModelForm):
 				shared_groups = teacher.teacher_group.filter(group_folders=folder, level = group.level,is_hidden=0)
 			except :
 				shared_groups = teacher.teacher_group.filter(is_hidden=0)
-			
-			if folder and group :
-				all_folders = group.group_folders.filter(level = group.level, subject = group.subject,is_trash=0)				
-				groups      = folder.groups.filter(level=folder.level,group_folders=folder,is_hidden=0)
- 
-			elif folder :
 
-				all_folders = teacher.teacher_folders.filter(level = folder.level, subject = folder.subject,is_trash=0)				
-				groups      = folder.groups.filter(level=folder.level,group_folders=folder,is_hidden=0)
-
-			elif group :
-				all_folders = group.group_folders.filter(level = group.level, subject = group.subject,is_trash=0)		
+			if group :		
 				groups      = teacher.groups.filter(level=group.level,is_hidden=0 )
-
 			else :
-				all_folders = teacher.teacher_folders.filter(is_trash=0)	
 				groups      = teacher.groups.filter(is_hidden=0 )
 
 
 			these_groups  = groups|shared_groups
 			all_groups    = these_groups.order_by("teachers").distinct()
-
 			self.fields['groups']  = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("level","name"), widget=forms.CheckboxSelectMultiple,  required=False)
 			self.fields['subject'] = forms.ModelChoiceField(queryset=teacher.subjects.all(),  required=False)
 			self.fields['level']   = forms.ModelChoiceField(queryset=teacher.levels.exclude(pk=13).order_by("ranking"),  required=False)
-			self.fields['folders'] = forms.ModelMultipleChoiceField(queryset=all_folders.order_by("level","title"), widget=forms.CheckboxSelectMultiple,  required=False)
+
 
 	def clean(self):
 		"""
@@ -162,12 +148,11 @@ class DocpersoForm(forms.ModelForm):
 	class Meta:
 		model = Docperso
 		fields = '__all__'
+		exclude=("folders",'parcours')
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		group   = kwargs.pop('group')
-		folder  = kwargs.pop('folder')
-		prcs    = kwargs.pop('parcours')
 		super(DocpersoForm, self).__init__(*args, **kwargs)
 		self.fields['stop'].required = False
 		if teacher and group :
@@ -179,16 +164,6 @@ class DocpersoForm(forms.ModelForm):
 			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=all_groups, widget=forms.CheckboxSelectMultiple, required=False)
 			self.fields['groups'].initial = group
 
-			folders  = group.group_folders.order_by("title")
-			self.fields['folders']	      = forms.ModelMultipleChoiceField(queryset=folders, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['folders'].initial = folder
-	 
-			parcours                = group.group_parcours.filter(is_trash=0,is_archive=0).order_by("title")
-			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['parcours'].initial = prcs
-
-
-
 		else :
 			groups        = teacher.groups.filter( is_hidden=0 ) 
 			shared_groups = teacher.teacher_group.filter( is_hidden=0 )
@@ -198,14 +173,7 @@ class DocpersoForm(forms.ModelForm):
 			self.fields['groups']	  = forms.ModelMultipleChoiceField(queryset=groups, widget=forms.CheckboxSelectMultiple, required=False)
 			self.fields['groups'].initial = group
 
-			folders  = teacher.teacher_folders.order_by("title")
-			self.fields['folders']	      = forms.ModelMultipleChoiceField(queryset=folders, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['folders'].initial = folder
-	 
-			parcours                = teacher.teacher_parcours.filter(is_trash=0,is_archive=0).order_by("title")
-			self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset=parcours, widget=forms.CheckboxSelectMultiple, required=False)
-			self.fields['parcours'].initial = prcs
-		
+
 
 	def clean_content(self):
 		file = self.cleaned_data['file']

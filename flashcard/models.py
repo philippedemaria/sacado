@@ -141,9 +141,10 @@ class Flashpack(models.Model):
     is_global    = models.BooleanField(default=0, verbose_name="Flashpack annuel ?")
 
     groups       = models.ManyToManyField(Group, blank=True, related_name="flashpacks" ) 
-    parcours     = models.ManyToManyField(Parcours, blank=True, related_name="flashpacks"  ) 
-    folders      = models.ManyToManyField(Folder, blank=True, related_name="flashpacks"  ) 
+    parcours     = models.ManyToManyField(Parcours, blank=True, related_name="flashpacks", editable=False  ) 
+    folders      = models.ManyToManyField(Folder, blank=True, related_name="flashpacks", editable=False  ) 
     students     = models.ManyToManyField(Student, blank=True, related_name="flashpacks", editable=False)
+ 
 
     def __str__(self):
         return self.title 

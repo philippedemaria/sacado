@@ -109,15 +109,18 @@
 
 
             <div class="row">
-                <div class="col-xs-12 col-md-6 {% if group %}no_visu{% endif %}" style="overflow-y: auto;height: 150px;">
+                <div class="col-xs-12 col-md-12{% if group %}no_visu{% endif %}" style="overflow-y: auto;height: 150px;">
+
+                    <div class="form-group">
                     <label>Attribuer aux groupes </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents. <span class="text-danger">Vous ne voyez pas de groupe ? Aucun de vos groupes n'a le même enseignement ni le même niveau que ce dossier.</span></div>
                     </span> 
+                    <div class="alert alert-sacado">
                     {% if group or folder %}
                         {{ form.groups  }}
                         {{ form.groups.errors }}
                     {% else %}
-                        <div class="form-group" id="grplist">
+
                             {% if teacher.nb_boolean_multi_subjects %}
                                 <label class="text-danger"><i class="fa fa-warning"></i> Choisir un enseignement et un niveau.</label>
                             {% else %}        
@@ -128,29 +131,11 @@
                                 {{ form.groups  }}
                                 {{ form.groups.errors }}
                             {% endif %} 
-                        </div>                        
+                  
                     {% endif %}
+                    </div>                    
+                    </div>                          
                 </div>  
-                {% if group or folder %}
-                <div class="col-xs-12 col-md-6 no_visu" style="overflow-y: auto;height: 150px;">
-                    <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                    </span> 
-                        {{ form.parcours|add_class:"select_all_parcours" }}
-                        {{ form.parcours.errors }} 
-                </div>
-                {% else %}
-                <div class="col-xs-12 col-md-6 no_visu">
-                    <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                    </span> 
-                    <div class="form-group" id="pclist">
-                         <div class="alert alert-sacado">
-                            <p style="font-size:12px">Choisir au moins un groupe.</p>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
             </div>
         </div>
 

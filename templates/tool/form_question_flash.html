@@ -103,44 +103,68 @@
                             
                         </div>
                     </div> 
-                    <div class="row ">
-                        <div class="col-xs-12 col-md-4">
-                            <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
-                                <label>Attribuer aux groupes</label> 
-                                {{ form.groups|add_class:"select_all"   }}
+                    <div class="row setup_ggb {% if bibliotex or group %}no_visu{% endif %}">
+                        <div class="col-xs-12 col-md-4" >   
+                            <div class="form-group form_card"> 
+                                <label>Affecter à mon groupe  </label> {% if group %}
+                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                            <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+                                        </span> {% endif %}
+                                <div class="alert alert-sacado" style="overflow-y: auto;height: 200px;"  id="grplist">
+                                {{ form.groups|add_class:"select_all" }}
                                 {{ form.groups.errors }}
+                                </div>
+                            </div>
+                        </div>                            
+
+
+                        <div class="col-xs-12 col-md-4" >
+                            <div class="form-group form_card">
+                            {% if quizz or folder or group  %}                                
+                            
+                                <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                </span>
+                                <div class="alert alert-sacado" style="overflow-y: auto;height: 200px;" id="cblist"> 
+                                    {% for folder in group.folders_not_in_trash %}  
+                                        <label for="id_folders_{{forloop.counter}}">
+                                            <input type="checkbox" id="id_folders_{{forloop.counter}}" class="select_folders" name="folders" value="{{folder.id}}" {% if folder.id in bibliotex.folders.all %}checked{% endif %} /> {{folder.title}}
+                                        </label>
+                                            <br/>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+
+                                <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                </span> 
+                                <div class="alert alert-sacado"style="overflow-y: auto;height: 200px;" id="cblist">
+                                    <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un groupe.</label>
+                                </div>
+
+                            {% endif %}
                             </div>
                         </div>
                         <div class="col-xs-12 col-md-4">
-                            <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
-                                <label>Attribuer aux dossiers</label> 
-                                <div id="cblist">
-                                {% if group %}
-                                {{ form.folders|add_class:"select_folders"   }}
-                                {{ form.folders.errors }}
+                            <div class="form-group form_card">  
+                                <label>Associer à un parcours  </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                                </span>                                          
+                                {% if quizz  or folder  %}
+                                    <div class="alert alert-sacado"  style="overflow-y: auto;height: 200px;" id="pclist">
+                                    {% for parcours in  folder.parcours_not_in_trash %}  
+                                        <label for="id_folders_{{forloop.counter}}">
+                                            <input type="checkbox" id="id_folders_{{forloop.counter}}"  name="parcours" value="{{parcours.id}}" {% if parcours.id in bibliotex.parcours.all %}checked{% endif %} /> {{parcours.title}}</label><br/>
+                                    {% endfor %}
+                                    </div>
                                 {% else %}
-                                    <small>Choisir au moins un groupe</small>
+                                    <div class="alert alert-sacado" id="pclist" style="overflow-y: auto;height: 200px;">
+                                        <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un dossier.</label>
+                                    </div>
                                 {% endif %}
-                                </div>                                
                             </div>
                         </div>
-
-                        <div class="col-xs-12 col-md-4">
-                            <div class="exercise_body_shared no_visu form_card" style="height: 270px;">
-                                <label>Attribuer aux parcours</label> 
-                                <div id="pclist">                         
-                                {% if group %}
-                                {{ form.parcours|add_class:"select_all_parcours"   }}
-                                {{ form.parcours.errors }}
-                                {% else %}
-                                    <small>Choisir au moins un groupe</small>
-                                {% endif %}
-                                </div>                                
-                            </div>
-                        </div>
-
-
-                    </div>  
+                    </div> 
                 </div>            
 
                

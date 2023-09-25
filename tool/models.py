@@ -467,8 +467,8 @@ class Quizz(ModelWithCode):
     groups       = models.ManyToManyField(Group, blank=True, related_name="quizz" ) 
     questions    = models.ManyToManyField(Question, blank=True, related_name="quizz" , editable=False)  
     qrandoms     = models.ManyToManyField(Qrandom, blank=True, related_name="quizz" , editable=False)  
-    parcours     = models.ManyToManyField(Parcours, blank=True, related_name="quizz"  ) 
-    folders      = models.ManyToManyField(Folder, blank=True, related_name="quizz"  ) 
+    parcours     = models.ManyToManyField(Parcours, blank=True, related_name="quizz"  , editable=False) 
+    folders      = models.ManyToManyField(Folder, blank=True, related_name="quizz"  , editable=False) 
     
     students     = models.ManyToManyField(Student, blank=True,  related_name="quizz",   editable=False)
 
