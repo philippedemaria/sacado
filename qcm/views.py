@@ -9479,12 +9479,12 @@ def ajax_charge_folders(request):
 
  
     if len(group_ids) :
-        flds = set()
+        fldrs = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
-            flds.update(group.group_folders.values_list("id","title").filter(is_trash=0))
-
-        data['folders'] =  list( flds )
+            fldrs.update(group.group_folders.values_list("id","title").filter(subject=group.subject, level=group.level, is_trash=0))
+            
+        data['folders'] =  list( fldrs )
     else :
         data['folders'] =  []
  

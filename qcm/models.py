@@ -1187,6 +1187,8 @@ class Parcours(ModelWithCode):
     def teacher_group_list(self,teacher):
         groups = self.groups.filter(teacher=teacher)
         return groups
+
+
 #############################################################################################################################################
 #############################################################################################################################################
 ##############################               IA                             #################################################################
@@ -1477,6 +1479,8 @@ class Folder(models.Model):
 
 
 
+    def not_in_trash(self):
+        return self.filter(is_trash=0) 
 
 
     def parcours_is_not_archived(self):

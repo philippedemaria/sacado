@@ -284,7 +284,7 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
-        $('.select_all').on('change', function (event) {
+        $(document).on('change', '.select_all', function (event) {
 
             var valeurs = [];
             $(".select_all").each(function() {

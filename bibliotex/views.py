@@ -1231,7 +1231,7 @@ def create_bibliotex(request,idf=0):
     else :
         folder = None
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder, group = group,  initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher,  group = group,  initial = { 'groups'  : [group] } )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -1262,7 +1262,6 @@ def update_bibliotex(request, id):
 
     request.session["tdb"] = "Documents"  
     request.session["subtdb"] = "Bibliotex"
-
     teacher = request.user.teacher
     bibliotex = Bibliotex.objects.get(id=id)
     folder_id = request.session.get("folder_id",None)
@@ -1278,7 +1277,7 @@ def update_bibliotex(request, id):
         folder = None
 
 
-    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher , folder = folder, group = group, initial ={'groups':[group],'folders':[folder] }  )
+    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher ,group = group  )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -1309,13 +1308,11 @@ def update_bibliotex(request, id):
     else:
         print(form.errors)
 
-    context = {'form': form, 'bibliotex': bibliotex,   }
+    context = {'form': form, 'bibliotex': bibliotex, 'group' : group , 'folder' : folder  }
 
     return render(request, 'bibliotex/form_bibliotex.html', context)
 
 
-
- 
 
 
 def create_bibliotex_from_parcours(request,idp=0):
@@ -1333,7 +1330,11 @@ def create_bibliotex_from_parcours(request,idp=0):
 
     parcours = Parcours.objects.get(id=idp)
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder,  group = group, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, initial = {  'groups'  : [group]  } )
+    
+    sem = request.POST.getlist('folders')
+    form.fields['folders'].choices = [(sem, sem)]
+
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -1809,8 +1810,10 @@ def ajax_charge_folders(request):
         prcs  = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
-            fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
-            prcs.update(group.group_parcours.values_list("id","title").filter(is_trash=0,folders=None))
+            fldrs.update(group.group_folders.values_list("id","title").filter(subject=group.subject, level=group.level, is_trash=0))
+            prcs.update(group.group_parcours.values_list("id","title").filter(subject=group.subject, level=group.level,is_trash=0,folders=None))
+
+            print(fldrs)
         data['folders'] =  list( fldrs )
         data['parcours'] =  list( prcs )
     else :
@@ -1830,16 +1833,13 @@ def ajax_charge_parcours(request):
         parcourses = set()
         for folder_id in folder_ids :
             folder = Folder.objects.get(pk=folder_id)
-            parcourses.update(folder.parcours.values_list("id","title").filter(is_trash=0))
+            parcourses.update(folder.parcours.values_list("id","title").filter(subject=folder.subject, level=folder.level,is_trash=0))
 
         data['parcours'] =  list( parcourses )
     else :
         data['parcours'] =  []
 
     return JsonResponse(data)
-
-
-
 
 
 

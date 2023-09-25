@@ -117,7 +117,7 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
         });
 
         let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-        url_ = "../../../tool/ajax_charge_folders" ;
+        url_ = "../../ajax_charge_folders" ;
         $.ajax(
             {
                 type: "POST",
@@ -131,7 +131,7 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
                 success: function (data) {
 
                     folders = data["folders"] ; 
-                    $('#flist').empty("");
+                    $('#cblist').empty("");
 
                     if (folders.length >0)
                     { for (let i = 0; i < folders.length ; i++) {
@@ -139,7 +139,7 @@ define(['jquery',  'bootstrap',  'config_toggle'], function ($) {
                                 let folders_id = folders[i][0]; 
                                 let folders_name =  folders[i][1] ; 
 
-                                $('#flist').append('<label for="cb'+Number(folders_id)+'"><input type="checkbox" id="cb'+Number(folders_id)+'" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
+                                $('#cblist').append('<label for="cb'+Number(folders_id)+'"><input type="checkbox" id="cb'+Number(folders_id)+'" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
                             }
                     }
 

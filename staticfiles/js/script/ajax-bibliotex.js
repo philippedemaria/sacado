@@ -51,8 +51,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                         if (themes.length >0)
                         { for (let i = 0; i < themes.length; i++) {
                                     
-
-                                    console.log(themes[i]);
+ 
                                     let themes_id = themes[i][0];
                                     let themes_name =  themes[i][1]  ;
                                     let option = $("<option>", {
@@ -698,7 +697,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             let folders_id = folders[i][0]; 
                             let folders_name =  folders[i][1] ; 
 
-                            $('#cblist').append('<label for="cb'+Number(folders_id)+'"><input type="checkbox" id="cb'+Number(folders_id)+'" class="select_folders" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
+                            $('#cblist').append('<label for="id_folders_'+i+'"><input type="checkbox" id="id_folders_'+i+'" class="select_folders" name="folders" value="'+Number(folders_id)+'" /> '+folders_name+'</label><br/>')
                         }
                     }
 
@@ -713,7 +712,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                             let parcours_id = parcours[i][0]; 
                             let parcours_name =  parcours[i][1] ; 
 
-                            $('#pclist').append('<label for="cp'+Number(parcours_id)+'"><input type="checkbox" id="cp'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
+                            $('#pclist').append('<label for="id_parcours_'+i+'"><input type="checkbox" id="id_parcours_'+i+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
                         }
                     }
 
@@ -725,27 +724,27 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
             }
         )
     });
-
+// 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // imposer un checkbox like a radio button
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    $(document).on('click',"#grplist input:checkbox",function(){
-        $("input:checkbox[name='groups']").prop("checked",false);
-        $(this).prop("checked",true);
-    });
+    // $(document).on('click',"#grplist input:checkbox",function(){
+    //     $("input:checkbox[name='groups']").prop("checked",false);
+    //     $(this).prop("checked",true);
+    // });
 
-    $(document).on('click',"#cblist input:checkbox",function(){
-        $("input:checkbox[name='folders']").prop("checked",false);
-        $(this).prop("checked",true);
-    });
+    // $(document).on('click',"#cblist input:checkbox",function(){
+    //     $("input:checkbox[name='folders']").prop("checked",false);
+    //     $(this).prop("checked",true);
+    // });
 
-    $(document).on('click',"#pclist input:checkbox",function(){
-        $("input:checkbox[name='parcours']").prop("checked",false);
-        $(this).prop("checked",true);
-    });
+    // $(document).on('click',"#pclist input:checkbox",function(){
+    //     $("input:checkbox[name='parcours']").prop("checked",false);
+    //     $(this).prop("checked",true);
+    // });
         
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -790,7 +789,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                                 let parcours_id = parcours[i][0]; 
                                 let parcours_name =  parcours[i][1] ; 
 
-                                $('#pclist').append('<label for="cp'+Number(parcours_id)+'"><input type="checkbox" id="cp'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
+                                $('#pclist').append('<label for="id_parcours_'+i+'"><input type="checkbox" id="id_parcours_'+i+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
                             }
                     }
 

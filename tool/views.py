@@ -801,7 +801,6 @@ def create_quizz_folder(request,idf):
 
 
 
-
 @login_required(login_url= 'index')
 def create_quizz_parcours(request,idp):
     
@@ -1187,6 +1186,8 @@ def ajax_charge_groups_level(request):  # utilisé par form_folder aussi
 
     return JsonResponse(data)
 
+
+
 @login_required(login_url= 'index')
 def ajax_charge_folders(request):  
 
@@ -1199,8 +1200,8 @@ def ajax_charge_folders(request):
         prcs  = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
-            fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
-            prcs.update(group.group_parcours.values_list("id","title").filter(is_trash=0,folders=None))
+            fldrs.update(group.group_folders.values_list("id","title").filter(subject=group.subject, level=group.level, is_trash=0))
+            prcs.update(group.group_parcours.values_list("id","title").filter(subject=group.subject, level=group.level,is_trash=0,folders=None))
         data['folders'] =  list( fldrs )
         data['parcours'] =  list( prcs )
     else :
@@ -1221,7 +1222,7 @@ def ajax_charge_parcours(request): # utilisé par form_quizz et form_folder auss
         parcourses = set()
         for folder_id in folder_ids :
             folder = Folder.objects.get(pk=folder_id)
-            parcourses.update(folder.parcours.values_list("id","title").filter(is_trash=0))
+            parcourses.update(folder.parcours.values_list("id","title").filter(subject=folder.subject, level=folder.level,is_trash=0))
 
         data['parcours'] =  list( parcourses )
     else :

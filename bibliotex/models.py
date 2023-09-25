@@ -117,8 +117,8 @@ class Bibliotex(models.Model):
 
     folders  = models.ManyToManyField(Folder, blank=True,  related_name="bibliotexs", editable=False)
     groups   = models.ManyToManyField(Group,  blank=True,  related_name="bibliotexs",  verbose_name="Groupe éventuel" )
-    parcours = models.ManyToManyField(Parcours, blank=True, related_name="bibliotexs", editable=False  ) 
-
+    parcours = models.ManyToManyField(Parcours, blank=True, related_name="bibliotexs", editable=False) 
+ 
     exotexs  = models.ManyToManyField(Exotex,  through="Relationtex", related_name="bibliotexs", editable=False)
     students = models.ManyToManyField(Student, related_name="bibliotexs", editable=False)
 

@@ -1421,8 +1421,8 @@ def ajax_charge_folders(request):
         lvls  = set()
         for group_id in group_ids :
             group = Group.objects.get(pk=group_id)
-            fldrs.update(group.group_folders.values_list("id","title").filter(is_trash=0))
-            prcs.update(group.group_parcours.values_list("id","title").filter(is_trash=0,folders=None))
+            fldrs.update(group.group_folders.values_list("id","title").filter(subject=group.subject, level=group.level, is_trash=0))
+            prcs.update(group.group_parcours.values_list("id","title").filter(subject=group.subject, level=group.level,is_trash=0,folders=None))
             thms.update(group.level.themes.values_list('id', 'name').filter(subject =group.subject))
             lvls.update((group.level.id,))
         data['folders']  =  list( fldrs )
@@ -1452,7 +1452,7 @@ def ajax_charge_parcours(request): # utilisé par form_quizz et form_folder auss
         parcourses = set()
         for folder_id in folder_ids :
             folder = Folder.objects.get(pk=folder_id)
-            parcourses.update(folder.parcours.values_list("id","title").filter(is_trash=0))
+            parcourses.update(folder.parcours.values_list("id","title").filter(subject=folder.subject, level=folder.level,is_trash=0))
 
         data['parcours'] =  list( parcourses )
     else :
@@ -1472,8 +1472,8 @@ def ajax_charge_parcours_without_folder(request): # utilisé que par form_folder
         parcourses = set()
         for groups_id in groups_ids :
             group = Group.objects.get(pk=groups_id)
-            parcourses.update(group.group_parcours.values_list("id","title").filter(is_trash=0))
-
+            parcourses.update(group.group_parcours.values_list("id","title").filter(subject=group.subject, level=group.level,is_trash=0))
+ 
         data['parcours'] =  list( parcourses )
     else :
         data['parcours'] =  []
