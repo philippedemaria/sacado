@@ -223,7 +223,7 @@ def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde
     if request.user.is_teacher:
         teacher_target = request.user.teacher
         school_target  = teacher_target.user.school
-        users          = User.objects.filter(last_name=school_target.user.last_name , first_name=teacher_target.user.first_name , school=school_target , user_type=2).exclude()
+        users          = User.objects.filter(last_name=teacher_target.user.last_name , first_name=teacher_target.user.first_name , school=school_target , user_type=2).exclude()
         
         if request.method== "POST" :
             user_id = request.POST.get("user_id",None) # Enseignant qui donne ses documents
