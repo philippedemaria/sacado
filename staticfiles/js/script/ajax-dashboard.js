@@ -1876,7 +1876,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
                 if( from == "2")  { url_from = "../../ajax/publish_parcours" ; } 
-                else if (from == "0") {  url_from = "../../../ajax/publish_parcours" ;} 
+                else if (from == "0") {  url_from = "../../ajax/publish_parcours" ;} 
                 else  { url_from = "ajax/publish_parcours" ;} 
 
 
