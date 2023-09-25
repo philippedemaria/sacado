@@ -4191,7 +4191,7 @@ def show_parcours(request, idf = 0, id=0):
     flashpacks = parcours.flashpacks.filter(folders=folder)
     qflashs    = parcours.quizz.filter(is_random=1,folders=folder).order_by("-date_modified")
 
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, folder = folder , group = group ,  initial={'parcours': parcours ,   'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher,  group = group ,  initial={ 'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
     context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 
                 'relationships_customexercises': relationships_customexercises, 'idf' : idf , 'bibliotexs' : bibliotexs , 'quizzes' : quizzes , 'flashpacks' : flashpacks , 'qflashs' : qflashs , 
