@@ -118,43 +118,43 @@ from subprocess import run
 #     return html 
 
 
-# def create_bibliotex_from_tex(request) :
+def create_bibliotex_from_tex(request) :
 
-#     levels = Level.objects.order_by("ranking")
-#     post = False
-#     skills , knowledges = [], []
-#     context = { 'levels' : levels , 'post' : post } 
+    levels = Level.objects.order_by("ranking")
+    post = False
+    skills , knowledges = [], []
+    context = { 'levels' : levels , 'post' : post } 
 
-#     if request.method == "POST" :
-#         post = True
-#         this_file  = request.FILES["this_file"]
-#         level_id   = request.POST.get("level")
-#         level      = Level.objects.get(pk=level_id)
-#         knowledges = level.knowledges.all()
-#         skills     = Skill.objects.filter(subject_id=1) 
+    if request.method == "POST" :
+        post = True
+        this_file  = request.FILES["this_file"]
+        level_id   = request.POST.get("level")
+        level      = Level.objects.get(pk=level_id)
+        knowledges = level.knowledges.all()
+        skills     = Skill.objects.filter(subject_id=1) 
  
-#         reader = this_file.read().decode('utf8')
+        reader = this_file.read().decode('utf8')
 
-#         Lexos  = reader.split(r"\exo")
+        Lexos  = reader.split(r"\exo")
 
-#         exos=[]
-#         for exo in Lexos[2:] :
-#             ex=dict()
-#             ex['titre'] = bloc(exo,'titreexo')
-#             ex['eno']   = bloc(exo,'eno')
-#             ex['cor']   = bloc(exo,'cor') 
-#             toHtml(ex['eno'])
-#             ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
-#             if ex['cor']!="" :
-#                     toHtml(ex['cor'])
-#                     ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
-#             else :
-#                 ex['corhtml']=""
-#             exos.append(ex)
+        exos=[]
+        for exo in Lexos[2:] :
+            ex=dict()
+            ex['titre'] = bloc(exo,'titreexo')
+            ex['eno']   = bloc(exo,'eno')
+            ex['cor']   = bloc(exo,'cor') 
+            toHtml(ex['eno'])
+            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
+            if ex['cor']!="" :
+                    toHtml(ex['cor'])
+                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
+            else :
+                ex['corhtml']=""
+            exos.append(ex)
 
-#         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills } )  
+        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills } )  
 
-#     return render(request, 'association/create_bibliotex_from_tex.html', context )
+    return render(request, 'association/create_bibliotex_from_tex.html', context )
 
 
 
