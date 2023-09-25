@@ -66,95 +66,95 @@ from subprocess import run
 #################################################################
 
 
-tmpdir="ressources/fichesexos/tmp/"
+# tmpdir="ressources/fichesexos/tmp/"
 
-def bloc(texte,commande):
-    if "\\"+commande+"{" not in texte :
-    return ""
-    deb=texte[texte.index("\\"+commande+"{")+len(commande)+2:]  
-    niv=1
-    for i in range(1,len(deb)) :
-    if deb[i]=='{' and deb[i-1]!='\\' : niv+=1
-    if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
-    if niv==0 :
-        return deb[0:i]
+# def bloc(texte,commande):
+#     if "\\"+commande+"{" not in texte :
+#         return ""
+#     deb=texte[texte.index("\\"+commande+"{")+len(commande)+2:]  
+#     niv=1
+#     for i in range(1,len(deb)) :
+#         if deb[i]=='{' and deb[i-1]!='\\' : niv+=1
+#         if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
+#     if niv==0 :
+#         return deb[0:i]
 
-def conversion(tex) : 
-    "prepare le fichier tex pour facililiter le boulot de mak4ht"
-    f=open(tmpdir+"translitterations.txt")
-    for l in f :
-    [old,new]=l.split(r"%")
-    old=old.strip()
-    new=new.strip()
-    if old[-1].isalpha() : # c'est une commande type \toto, il faut que le caractere suivant ne soit pas une lettre.
-        p=re.compile(old.replace("\\",r"\\") +"([^a-zA-Z])")
-        tex=p.sub(new.replace("\\",r"\\")+r"\1",tex)
-    else :
-        tex=tex.replace(old,new)
+# def conversion(tex) : 
+#     "prepare le fichier tex pour facililiter le boulot de mak4ht"
+#     f=open(tmpdir+"translitterations.txt")
+#     for l in f :
+#     [old,new]=l.split(r"%")
+#     old=old.strip()
+#     new=new.strip()
+#     if old[-1].isalpha() : # c'est une commande type \toto, il faut que le caractere suivant ne soit pas une lettre.
+#         p=re.compile(old.replace("\\",r"\\") +"([^a-zA-Z])")
+#         tex=p.sub(new.replace("\\",r"\\")+r"\1",tex)
+#     else :
+#         tex=tex.replace(old,new)
 
-    return tex
-
-
-def toHtml(tex) :
-    if tex=="" : return ""
-    f=open(tmpdir+"tmptex.tex","w",encoding="utf-8")
-    f.write(r"\documentclass{article}")
-    f.write(r"\begin{document}")
-    f.write(conversion(tex))
-    f.write("\n\n\end{document}")
-    f.close()
-    run(["make4ht","tmptex.tex","-u",'mathjax,charset=utf-8'],cwd=tmpdir)
-    f=open(tmpdir+"tmptex.html","r")
-    html=f.read() 
-    f.close()
-    return html
-
-def extraitBody(html) :
-    deb=html.index("<body")+5 # pour un raison etrange, le > est parfois separé de <body
-    while html[deb]!='>' :
-        deb+=1
-    fin=html.index("</body>")
-    html=html[deb+1:fin].replace(r'\(','$').replace(r'\)','$')
-    return html 
+#     return tex
 
 
-def create_bibliotex_from_tex(request) :
+# def toHtml(tex) :
+#     if tex=="" : return ""
+#     f=open(tmpdir+"tmptex.tex","w",encoding="utf-8")
+#     f.write(r"\documentclass{article}")
+#     f.write(r"\begin{document}")
+#     f.write(conversion(tex))
+#     f.write("\n\n\end{document}")
+#     f.close()
+#     run(["make4ht","tmptex.tex","-u",'mathjax,charset=utf-8'],cwd=tmpdir)
+#     f=open(tmpdir+"tmptex.html","r")
+#     html=f.read() 
+#     f.close()
+#     return html
 
-    levels = Level.objects.order_by("ranking")
-    post = False
-    skills , knowledges = [], []
-    context = { 'levels' : levels , 'post' : post } 
+# def extraitBody(html) :
+#     deb=html.index("<body")+5 # pour un raison etrange, le > est parfois separé de <body
+#     while html[deb]!='>' :
+#         deb+=1
+#     fin=html.index("</body>")
+#     html=html[deb+1:fin].replace(r'\(','$').replace(r'\)','$')
+#     return html 
 
-    if request.method == "POST" :
-        post = True
-        this_file  = request.FILES["this_file"]
-        level_id   = request.POST.get("level")
-        level      = Level.objects.get(pk=level_id)
-        knowledges = level.knowledges.all()
-        skills     = Skill.objects.filter(subject_id=1) 
+
+# def create_bibliotex_from_tex(request) :
+
+#     levels = Level.objects.order_by("ranking")
+#     post = False
+#     skills , knowledges = [], []
+#     context = { 'levels' : levels , 'post' : post } 
+
+#     if request.method == "POST" :
+#         post = True
+#         this_file  = request.FILES["this_file"]
+#         level_id   = request.POST.get("level")
+#         level      = Level.objects.get(pk=level_id)
+#         knowledges = level.knowledges.all()
+#         skills     = Skill.objects.filter(subject_id=1) 
  
-        reader = this_file.read().decode('utf8')
+#         reader = this_file.read().decode('utf8')
 
-        Lexos  = reader.split(r"\exo")
+#         Lexos  = reader.split(r"\exo")
 
-        exos=[]
-        for exo in Lexos[2:] :
-            ex=dict()
-            ex['titre'] = bloc(exo,'titreexo')
-            ex['eno']   = bloc(exo,'eno')
-            ex['cor']   = bloc(exo,'cor') 
-            toHtml(ex['eno'])
-            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
-            if ex['cor']!="" :
-                    toHtml(ex['cor'])
-                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
-            else :
-                ex['corhtml']=""
-            exos.append(ex)
+#         exos=[]
+#         for exo in Lexos[2:] :
+#             ex=dict()
+#             ex['titre'] = bloc(exo,'titreexo')
+#             ex['eno']   = bloc(exo,'eno')
+#             ex['cor']   = bloc(exo,'cor') 
+#             toHtml(ex['eno'])
+#             ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
+#             if ex['cor']!="" :
+#                     toHtml(ex['cor'])
+#                     ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
+#             else :
+#                 ex['corhtml']=""
+#             exos.append(ex)
 
-        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills } )  
+#         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills } )  
 
-    return render(request, 'association/create_bibliotex_from_tex.html', context )
+#     return render(request, 'association/create_bibliotex_from_tex.html', context )
 
 
 
