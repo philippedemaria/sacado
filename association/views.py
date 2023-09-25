@@ -68,53 +68,54 @@ from subprocess import run
 
 tmpdir="ressources/fichesexos/tmp/"
 
+def bloc(texte,commande):
+    if "\\"+commande+"{" not in texte :
+    return ""
+    deb=texte[texte.index("\\"+commande+"{")+len(commande)+2:]  
+    niv=1
+    for i in range(1,len(deb)) :
+    if deb[i]=='{' and deb[i-1]!='\\' : niv+=1
+    if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
+    if niv==0 :
+        return deb[0:i]
+
+def conversion(tex) : 
+    "prepare le fichier tex pour facililiter le boulot de mak4ht"
+    f=open(tmpdir+"translitterations.txt")
+    for l in f :
+    [old,new]=l.split(r"%")
+    old=old.strip()
+    new=new.strip()
+    if old[-1].isalpha() : # c'est une commande type \toto, il faut que le caractere suivant ne soit pas une lettre.
+        p=re.compile(old.replace("\\",r"\\") +"([^a-zA-Z])")
+        tex=p.sub(new.replace("\\",r"\\")+r"\1",tex)
+    else :
+        tex=tex.replace(old,new)
+
+    return tex
 
 
-# def bloc(texte,commande):
-#     if "\\"+commande+"{" not in texte :
-#         return ""
-#     deb=texte[texte.index("\\"+commande+"{")+len(commande)+2:]  
-#     niv=1
-#     for i in range(1,len(deb)) :
-#         if deb[i]=='{' and deb[i-1]!='\\' : niv+=1
-#         if deb[i]=='}' and deb[i-1]!='\\' : niv-=1
-#         if niv==0 :
-#             return deb[0:i]
+def toHtml(tex) :
+    if tex=="" : return ""
+    f=open(tmpdir+"tmptex.tex","w",encoding="utf-8")
+    f.write(r"\documentclass{article}")
+    f.write(r"\begin{document}")
+    f.write(conversion(tex))
+    f.write("\n\n\end{document}")
+    f.close()
+    run(["make4ht","tmptex.tex","-u",'mathjax,charset=utf-8'],cwd=tmpdir)
+    f=open(tmpdir+"tmptex.html","r")
+    html=f.read() 
+    f.close()
+    return html
 
-# def conversion(html) :
-#     f=open("ressources/fichesexos/translitterations.txt")
-#     for l in f :
-#         [old,new]=l.split(r"%")
-#         old=old.strip()
-#         new=new.strip()
-#         html=html.replace(old,new)
-#     return html 
-
-# def toHtml(tex) :
-#     if tex=="" : return ""
-#     f=open(tmpdir+"tmptex.tex","w")
-#     f.write(r"\documentclass{article}")
-#     f.write(r"\begin{document}")
-#     f.write(tex)
-#     f.write("\n\n\end{document}")
-#     f.close()
-#     run(["make4ht","tmptex.tex",'mathjax'],cwd=tmpdir)
-#     f=open(tmpdir+"tmptex.html","r")
-#     html=f.read() 
-#     f.close()
-#     f=open(tmpdir+"tmptex.html","w")
-#     f.write(conversion(html))
-#     f.close()
-
-# def extraitBody(html) :
-#     deb=html.index("<body>")+6
-#     fin=html.index("</body>")
-#     html=html[deb:fin].replace(r'\(','$').replace(r'\)','$')
-#     return html 
-    
-
-
-
+def extraitBody(html) :
+    deb=html.index("<body")+5 # pour un raison etrange, le > est parfois separé de <body
+    while html[deb]!='>' :
+        deb+=1
+    fin=html.index("</body>")
+    html=html[deb+1:fin].replace(r'\(','$').replace(r'\)','$')
+    return html 
 
 
 def create_bibliotex_from_tex(request) :
@@ -154,7 +155,6 @@ def create_bibliotex_from_tex(request) :
         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills } )  
 
     return render(request, 'association/create_bibliotex_from_tex.html', context )
-
 
 
 

@@ -72,7 +72,7 @@
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Vue Html</label>
-                            {{ exo.eno }}
+                            {{ exo.enohtml | safe }}
                     </div>
                 </div>
                 <div class="row">
@@ -82,7 +82,7 @@
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Corrigé Html</label>
-                            {{ exo.cor }}
+                            {{ exo.corhtml | safe }}
                     </div>
                 </div>
                 <div class="row">
