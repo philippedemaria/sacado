@@ -367,43 +367,43 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
     # Assigne les dossiers et leurs contenus à partir d'un groupe
     try :
         for group in groups :
-            for folder in group.group_folders.filter(is_share=1):
+            for folder in group.group_folders.filter(is_trash=0):
                 folder.students.add(student)
 
-                for parcours in folder.parcours.filter(is_share=1):
+                for parcours in folder.parcours.filter(is_trash=0):
                     parcours.students.add(student)
 
-                    relationships = parcours.parcours_relationship.filter(is_share=1)
+                    relationships = parcours.parcours_relationship.all()
                     for r in relationships:
                         r.students.add(student)
 
-                    customexercises = parcours.parcours_customexercises.filter(is_share=1)
+                    customexercises = parcours.parcours_customexercises.all()
                     for c in customexercises:
                         c.students.add(student)
 
-                    courses = parcours.course.filter(is_share=1)
+                    courses = parcours.course.all()
                     for course in courses:
                         course.students.add(student)
 
 
-                    flashpacks = parcours.flashpacks.filter(is_share=1)
+                    flashpacks = parcours.flashpacks.all()
                     for flashpack in flashpacks:
                         flashpack.students.add(student)
-                        for flashcard in flashpack.flashcards.filter(is_share=1):
+                        for flashcard in flashpack.flashcards.all():
                             flashcard.students.add(student)
 
-                    bibliotexs = parcours.bibliotexs.filter(is_share=1)
+                    bibliotexs = parcours.bibliotexs.all()
                     for bibliotex in bibliotexs:
                         bibliotex.students.add(student)
                         for r in bibliotex.relationtexs.all():
                             r.students.add(student)
                         
-                    quizz = parcours.quizz.filter(is_share=1)
+                    quizz = parcours.quizz.all()
                     for quiz in quizz:
                         quiz.students.add(student)
 
 
-                    docpersos = parcours.docpersos.filter(is_share=1)
+                    docpersos = parcours.docpersos.all()
                     for d in docpersos :
                         d.students.add(student)
 
@@ -411,42 +411,43 @@ def attribute_all_documents_of_groups_to_a_new_student(groups, student):
             # Assigne les parcours et leurs contenus 
             for parcours in group.group_parcours.filter(folders=None):
                 parcours.students.add(student)
-                relationships = parcours.parcours_relationship.filter(is_share=1)
+                relationships = parcours.parcours_relationship.all()
                 for r in relationships:
                     r.students.add(student)
 
-                customexercises = parcours.parcours_customexercises.filter(is_share=1)
+                customexercises = parcours.parcours_customexercises.all()
                 for c in customexercises:
                     c.students.add(student)
 
-                courses = parcours.course.filter(is_share=1)
+                courses = parcours.course.all()
                 for course in courses:
                     course.students.add(student)
 
-                flashpacks = parcours.flashpacks.filter(is_share=1)
+                flashpacks = parcours.flashpacks.all()
                 for flashpack in flashpacks:
                     flashpack.students.add(student)
-                    for flashcard in flashpack.flashcards.filter(is_share=1):
+                    for flashcard in flashpack.flashcards.all():
                         flashcard.students.add(student)
 
-                bibliotexs = parcours.bibliotexs.filter(is_share=1)
+                bibliotexs = parcours.bibliotexs.all()
                 for bibliotex in bibliotexs:
                     bibliotex.students.add(student)
                     for r in bibliotex.relationtexs.all():
                         r.students.add(student)
                     
-                quizz = parcours.quizz.filter(is_share=1)
+                quizz = parcours.quizz.all()
                 for quiz in quizz:
                     quiz.students.add(student)
 
 
-                docpersos = parcours.docpersos.filter(is_share=1)
+                docpersos = parcours.docpersos.all()
                 for d in docpersos:
                     d.students.add(student)
 
 
         test = True
     except :
+
         test = False
 
     return test

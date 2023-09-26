@@ -805,7 +805,6 @@ def insert_students_to_this_group(request, id):
 
     if request.method == "POST" :
         stdts = request.POST.get("students")
-        print(stdts)
         if stdts : 
             if len(stdts) > 0 :
                 include_students(request , stdts, group)
