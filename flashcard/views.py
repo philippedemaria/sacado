@@ -167,7 +167,7 @@ def create_flashpack(request, idf=0):
     else :
         folder = None
 
-    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, initial = {  'groups'  : [group] } )
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -213,7 +213,7 @@ def update_flashpack(request, id):
 
     flashpack = Flashpack.objects.get(id=id)
 
-    form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher , group = group   )
+    form = FlashpackForm(request.POST or None, instance=flashpack, teacher = teacher , group = group, folder = folder,    )
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save(commit=False)
@@ -253,7 +253,7 @@ def create_flashpack_from_parcours(request, idp=0):
 
     parcours = Parcours.objects.get(id=idp)
 
-    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, initial = { 'groups'  : [group] ,  } )
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, folder = folder,  initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
 
     if form.is_valid():
         nf = form.save(commit=False)
@@ -294,7 +294,7 @@ def create_flashpack_sequence(request, id):
 
     parcours = Parcours.objects.get(id=id)
 
-    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group,  initial = {  'groups'  : [group] } )
+    form = FlashpackForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, folder = folder,  initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
 
     if form.is_valid():
         nf = form.save(commit=False)

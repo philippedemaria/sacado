@@ -2895,8 +2895,8 @@ class Docperso(models.Model):
     stop  = models.DateTimeField(null=True, blank=True, verbose_name="Fin de publication")
 
     groups   = models.ManyToManyField(Group, blank=True, related_name="docpersos" ) 
-    folders  = models.ManyToManyField(Folder, blank=True, related_name="docpersos", editable=False )     
-    parcours = models.ManyToManyField(Parcours, blank=True, related_name="docpersos" , editable=False ) 
+    folders  = models.ManyToManyField(Folder, blank=True, related_name="docpersos"  )    
+    parcours = models.ManyToManyField(Parcours, blank=True, related_name="docpersos"  ) 
     levels   = models.ManyToManyField(Level, blank=True, related_name="docpersos"  ) 
     subject  = models.ForeignKey(Subject, blank=True, related_name="docpersos", default=1, on_delete=models.CASCADE, editable=False ) 
 

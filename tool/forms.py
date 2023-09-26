@@ -107,14 +107,24 @@ class QuizzForm(forms.ModelForm):
 	class Meta:
 		model = Quizz
 		fields = '__all__'
-		exclude = ('folders','parcours')
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
+		folder  = kwargs.pop('folder')
 		group   = kwargs.pop('group')
 
 		super(QuizzForm, self).__init__(*args, **kwargs)
 		
+
+		if group : all_folders = group.group_folders.filter(is_archive=0,is_trash=0)
+		else : all_folders = teacher.teacher_folders.filter(is_archive=0,is_trash=0) 
+
+		if folder : parcours = folder.parcours.filter(is_archive=0,is_trash=0)
+		else : parcours =  teacher.teacher_parcours.filter(is_archive=0,is_trash=0)
+
+		coteacher_parcours = teacher.coteacher_parcours.filter(is_archive=0,is_trash=0) 
+		all_parcours = parcours|coteacher_parcours
+
 		groups =  teacher.groups.filter(is_hidden = 0) 
 		teacher_groups = teacher.teacher_group.filter(is_hidden = 0) 
 		all_groups = groups|teacher_groups
@@ -126,7 +136,8 @@ class QuizzForm(forms.ModelForm):
 
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.order_by("ranking"), required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=True)
- 
+		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
+		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset = all_folders.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
 
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
@@ -159,7 +170,8 @@ class QFlashForm(forms.ModelForm):
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
 		group = kwargs.pop('group')
-
+		folder = kwargs.pop('folder')
+		parcours = kwargs.pop('parcours')
 
 		super(QFlashForm, self).__init__(*args, **kwargs)
 
@@ -172,6 +184,7 @@ class QFlashForm(forms.ModelForm):
 		else :
 			self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 
+
 		if teacher.user.is_superuser :  levels = Level.objects.exclude(pk=13).order_by("ranking")
 		else : levels = Level.objects.exclude(pk__gt=8).order_by("ranking")
 		#teacher.levels.order_by("ranking")
@@ -180,7 +193,12 @@ class QFlashForm(forms.ModelForm):
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=False)
 
 		if group : 
+			self.fields['folders']  = forms.ModelMultipleChoiceField(queryset=group.group_folders.all(), widget=forms.CheckboxSelectMultiple, required=False)
+			self.fields['parcours']  = forms.ModelMultipleChoiceField(queryset=group.group_parcours.filter(is_trash=0,is_archive=0).order_by("title"), widget=forms.CheckboxSelectMultiple, required=False)
 			self.fields['groups'].initial = group
+
+		if folder : self.fields['folders'].initial = folder
+		if parcours : self.fields['parcours'].initial = parcours
 
 
 class ChoiceForm(forms.ModelForm):

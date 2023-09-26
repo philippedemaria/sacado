@@ -21,7 +21,7 @@
  
 
 {% block page_title %}
-  
+    {% include 'bibliotex/logo.html' %}    
 
     {% include 'qcm/breadcrumb.html' %}
     
@@ -164,25 +164,23 @@
                     <div class="col-xs-12 col-md-4" >
                         <div class="form-group form_card">
                         {% if bibliotex or folder or group  %}                                
+
+                            
                         
                             <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                 <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                             </span>
-                            <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;" id="cblist"> 
-                                {% for folder in group.folders_not_in_trash %}  
-                                    <label for="id_folders_{{forloop.counter}}">
-                                        <input type="checkbox" id="id_folders_{{forloop.counter}}" class="select_folders" name="folders" value="{{folder.id}}" {% if folder.id in bibliotex.folders.all %}checked{% endif %} /> {{folder.title}}
-                                    </label>
-                                        <br/>
-                                {% endfor %}
+                            <div class="alert alert-sacado" style="overflow-y: auto;height: 200px;" id="cblist"> 
+                                {{ form.folders|add_class:"select_folders" }}
+                                {{ form.folders.errors }}
                             </div>
                         {% else %}
 
                             <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                 <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                             </span> 
-                            <div class="alert alert-sacado form-group"style="overflow-y: auto;height: 200px;" id="cblist">
-                                <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un groupe.</label>
+                            <div class="alert alert-sacado"style="overflow-y: auto;height: 200px;" id="cblist">
+                                <label class="text-danger"><i class="fa fa-warning"></i>Cocher/décocher au moins un groupe.</label>
                             </div>
 
                         {% endif %}

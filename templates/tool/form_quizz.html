@@ -24,7 +24,7 @@
  
 
 {% block page_title %}
-
+    <span class="sacado_color_text"><i class="bi bi-aspect-ratio"></i></span>  
     {% include 'qcm/breadcrumb.html' %}
 
     {% if quizz %} <img src="{% static 'img/angle-right.png' %}" width="25px"/> <small> Configuration</small> {% else %} Nouveau quizz {% endif %}
@@ -83,29 +83,62 @@
                     </div>
                 </div>
                 {% endif %}
-                <div class="no_visu" style="margin-top:15px">
-                    {% if sacado_asso %}                 
-                        <div class="form-group">
-                            {{ form.vignette.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i> <span style="font-size:12px">(facultatif)</span>
-                                        <div class="helper_tip_text" >Format recommandé: l:300px h:313px (100Ko) <br>La vignette se superpose à la couleur du parcours qui ne sera pas visible selon la taille de l'image. </div>
-                                    </span> 
-                            {{ form.vignette|add_class:"btn btn-default" }} 
-                            {{ form.vignette.errors }}
+                <div class="row {% if group %}no_visu{% endif %}">
+                    <div class="col-xs-12 col-md-6"  >
+                        <label>Attribuer aux groupes</label>
+                        <div class="alert alert-sacado form-group" id="grplist">                          
+                            {{ form.groups|add_class:"select_all"   }}
+                            {{ form.groups.errors }}
                         </div>
-                        {% if parcours_is_folder %}   
-                        <input name="id_subject" type="hidden" id="id_subject"  value="{{ group.subject.id}}" />
-                        {% endif %}   
-                    {% else %} 
-                        <div class="alert alert-sacado">
-                            <small>L'utilisation d'image est réservée à la version établissement.</small>
-                        </div>
-                    {% endif %} 
+	                </div>	
+                    <div class="col-xs-12 col-md-6">
+                        <label><img src="{% static 'img/conseil.png' %}" width="25px"/> <small>Aides et conseils : <br/>Cocher, décocher les groupes pour affiner les dossiers.<br/>
+                        <i class="fa fa-warning"></i> Lorsque plusieurs groupes sont cochés, le quizz est partagé entre ces groupes.</small></label>
+                    </div> 
                 </div>
+                <div class="row no_visu">
+                    <div class="col-xs-12 col-md-12">
+                        <label>Inclure dans les dossiers </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class="alert alert-sacado form-group" id="cblist">
+                            {% if quizz or folder or group %}
+                                {{ form.folders|add_class:"select_folders" }}
+                                {{ form.folders.errors }}
+                            {% else %}
+                                <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un groupe.</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row no_visu">
+                    <div class="col-xs-12 col-md-12 form-group" >
+                        <label>Associer aux parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                            <div class="helper_tip_text_right" >Facultatif, mais permet d'organiser ses documents.</div>
+                        </span> 
+                        <div class=" alert alert-sacado form-group" id="pclist">
+                            {% if quizz or folder  %}
+                                    {{ form.parcours|add_class:"select_all_parcours" }}
+                                    {{ form.parcours.errors }} 
+                            {% else %}
+                                <label class="text-danger"><i class="fa fa-warning"></i> Aucun parcours associé. <br/> <br/> Décocher puis cocher un dossier pour activer les parcours.</label>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="position_group_folder" class="form-group">
+                    {% if group %}<label>Ce quizz est attribué au groupe : {{ group }}</label>{% endif %}
+                    {% if folder %}<li class="sanspuce"><label>dans le  dossier  {{ folder }}</label></li>{% endif %}
+                    {% if parcours %}<li class="sanspuce"><label>pour le parcours {{ parcours }}</label></li>{% endif %}
+                </div>
+
+
             </div>
 
 
             <div class="col-xs-12 col-md-4 ">
-                <div class="col-xs-12 col-md-12 form_card  {% if not request.user.is_superuser %}setup_ggb{% endif %}">
+                <div class="col-xs-12 col-md-12 form_card  {% if not request.user.is_superuser %}setup_ggb no_visu{% endif %}">
                     <table class="table table-sacado borderless" style="margin-bottom:0px">
                         {% if request.user.is_superuser %}
                         <tr>
@@ -161,6 +194,9 @@
                                 <td>{{ form.is_back|attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}  </td>
                             </tr>
                     </table> 
+                </div>
+                <div class="col-xs-12 col-md-12 form_card no_visu" style="margin-top:15px">
+                    {% include 'qcm/insert_vignettes.html' %}
                 </div>
             </div>
 
@@ -254,75 +290,6 @@
                 </div>  
             </div>
         </div>
-
-                <div class="row setup_ggb {% if bibliotex or group %}no_visu{% endif %}">
-                        <div class="col-xs-12 col-md-4" >   
-                            <div class="form-group form_card"> 
-                                <label>Affecter à mon groupe  </label> {% if group %}
-                                        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                            <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
-                                        </span> {% endif %}
-                                <div class="alert alert-sacado" style="overflow-y: auto;height: 200px;"  id="grplist">
-                                {{ form.groups|add_class:"select_all" }}
-                                {{ form.groups.errors }}
-                                </div>
-                            </div>
-                        </div>                            
-
-
-                        <div class="col-xs-12 col-md-4" >
-                            <div class="form-group form_card">
-                            {% if quizz or folder or group  %}                                
-                            
-                                <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                                </span>
-                                <div class="alert alert-sacado" style="overflow-y: auto;height: 200px;" id="cblist"> 
-                                    {% for folder in group.folders_not_in_trash %}  
-                                        <label for="id_folders_{{forloop.counter}}">
-                                            <input type="checkbox" id="id_folders_{{forloop.counter}}" class="select_folders" name="folders" value="{{folder.id}}" {% if folder.id in bibliotex.folders.all %}checked{% endif %} /> {{folder.title}}
-                                        </label>
-                                            <br/>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-
-                                <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                                </span> 
-                                <div class="alert alert-sacado"style="overflow-y: auto;height: 200px;" id="cblist">
-                                    <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un groupe.</label>
-                                </div>
-
-                            {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-4">
-                            <div class="form-group form_card">  
-                                <label>Associer à un parcours  </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                    <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
-                                </span>                                          
-                                {% if quizz  or folder  %}
-                                    <div class="alert alert-sacado"  style="overflow-y: auto;height: 200px;" id="pclist">
-                                    {% for parcours in  folder.parcours_not_in_trash %}  
-                                        <label for="id_folders_{{forloop.counter}}">
-                                            <input type="checkbox" id="id_folders_{{forloop.counter}}"  name="parcours" value="{{parcours.id}}" {% if parcours.id in bibliotex.parcours.all %}checked{% endif %} /> {{parcours.title}}</label><br/>
-                                    {% endfor %}
-                                    </div>
-                                {% else %}
-                                    <div class="alert alert-sacado" id="pclist" style="overflow-y: auto;height: 200px;">
-                                        <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un dossier.</label>
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div> 
-
-
-
-
-
-
 	    <div class="row">
 
 	        <div class="col-xs-6 col-md-6"> 

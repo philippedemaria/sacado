@@ -1036,7 +1036,7 @@ def create_bibliotex_sequence(request,id):
 
     parcours = Parcours.objects.get(id=id)
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, folder = folder,  group = group, initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, group = group,  folder = folder,  initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours]  } )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -1242,7 +1242,7 @@ def create_bibliotex(request,idf=0):
     else :
         folder = None
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher,  group = group,  initial = { 'groups'  : [group] } )
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher,  group = group, folder = folder , initial = {  'groups'  : [group] , 'folders' : [folder] } )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -1288,7 +1288,7 @@ def update_bibliotex(request, id):
         folder = None
 
 
-    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher ,group = group  )
+    form = BibliotexForm(request.POST or None, request.FILES or None, instance=bibliotex, teacher = teacher ,group = group , folder = folder    )
 
     if form.is_valid():
         nf = form.save(commit = False) 
@@ -1341,7 +1341,11 @@ def create_bibliotex_from_parcours(request,idp=0):
 
     parcours = Parcours.objects.get(id=idp)
 
-    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, group = group, initial = {  'groups'  : [group]  } )
+
+
+
+
+    form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, group = group,  folder = folder,  initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours] } )
     
     sem = request.POST.getlist('folders')
     form.fields['folders'].choices = [(sem, sem)]
@@ -1611,8 +1615,10 @@ def exercise_bibliotex_peuplate(request, id):
 
     group_id  = request.session.get("group_id",None)
     folder_id = request.session.get("folder_id",None)
-
-    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels ,'waitings' : waitings , 'level' : level , 'subject' : subject ,'folder_id' : folder_id  ,'group_id' : group_id   }
+    group , folder = None, None
+    if group_id  : group  = Group.objects.get(pk=group_id)
+    if folder_id : folder = Folder.objects.get(pk=folder_id)
+    context   = { 'bibliotex': bibliotex, 'relationtexs': relationtexs , 'teacher': teacher, 'skills' : skills, 'levels' : levels ,'waitings' : waitings , 'level' : level , 'subject' : subject ,'folder' : folder  ,'group' : group   ,'folder_id' : folder_id  ,'group_id' : group_id   }
 
     return render(request, 'bibliotex/form_peuplate_bibliotex.html', context )
  

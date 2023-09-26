@@ -646,22 +646,17 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
                     parcours = data["parcours"] ; 
-                    
-                    if (parcours){
+                    $('#pclist').empty("");
 
-                        $('#pclist').empty("");
-                        if (parcours.length >0)
-                        { for (let i = 0; i < parcours.length ; i++) {
-                                    
-                                let parcours_id = parcours[i][0]; 
-                                let parcours_name =  parcours[i][1] ; 
+                    if (parcours.length >0)
+                    { for (let i = 0; i < parcours.length ; i++) {
+                                
+                            let parcours_id = parcours[i][0]; 
+                            let parcours_name =  parcours[i][1] ; 
 
-                                $('#pclist').append('<label for="cp'+Number(parcours_id)+'"><input type="checkbox" id="cp'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
-                            }
-                        }  
-                                              
-                    }     
-
+                            $('#pclist').append('<label for="cp'+Number(parcours_id)+'"><input type="checkbox" id="cp'+Number(parcours_id)+'" name="parcours" value="'+Number(parcours_id)+'" /> '+parcours_name+'</label><br/>')
+                        }
+                    }
 
 
 

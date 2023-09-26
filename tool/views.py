@@ -346,7 +346,6 @@ def all_quizzes(request):
     if folder_id : folder = Folder.objects.get(pk=folder_id)
     if parcours_id : parcours = Parcours.objects.get(pk=parcours_id)
     
-
     user_ids = user_list_of_school(teacher)
     quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids  , is_random=0  ).exclude(teacher = teacher )
 
@@ -358,9 +357,11 @@ def all_quizzes(request):
  
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "Quizz"
+ 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None)
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'group':group , 'folder':folder , 'parcours':parcours }) 
-
+ 
+ 
  
 @login_required(login_url= 'index')
 def ajax_shared_quizzes(request):
@@ -375,7 +376,7 @@ def ajax_shared_quizzes(request):
     request.session["subtdb"] = "Quizz"
 
 
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None )
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None, folder = None )
     return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher   })
 
 
@@ -706,9 +707,9 @@ def create_quizz(request):
 
     if teacher.subjects.count() == 1 :
         subject = teacher.subjects.first()
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, initial = {'subject': subject , 'groups'  : [group] } )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
     else :
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, initial = {  'groups'  : [group] } )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = { 'folders'  : [folder] ,  'groups'  : [group] } )
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "Quizz"
  
@@ -745,9 +746,9 @@ def create_quizz_sequence(request,id) :
 
     if teacher.subjects.count() == 1 :
         subject = teacher.subjects.first()
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group,initial = {'subject': subject ,  'groups'  : [group] } )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder, initial = {'subject': subject , 'folders'  : [folder] ,  'groups'  : [group] } )
     else :
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder )
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "Quizz"
  
@@ -783,10 +784,10 @@ def create_quizz_folder(request,idf):
     group_id   = request.session.get("group_id",None)
     if group_id :
         group = Group.objects.get(pk=group_id )
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group,  initial = { 'subject' : folder.subject  ,  'groups' : [group] }   )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : folder.subject , 'folders' : [folder]   ,  'groups' : [group] }   )
     else :
         group = None
-        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group,  initial = { 'subject' : folder.subject   }   )
+        form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : folder.subject , 'folders' : [folder]   }   )
 
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "Quizz"
@@ -825,7 +826,7 @@ def create_quizz_parcours(request,idp):
     if folder_id : folder = Folder.objects.get(pk=folder_id )
     else : folder = None
 
-    form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group,  initial = { 'subject' : parcours.subject ,   'groups' : [group] }   )
+    form = QuizzForm(request.POST or None, request.FILES or None , teacher = teacher , group = group, folder = folder,  initial = { 'subject' : parcours.subject , 'folders' : [folder] , 'parcours' : [parcours]   ,  'groups' : [group] }   )
 
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "Quizz"
@@ -865,7 +866,7 @@ def update_quizz(request,id):
     else : folder = None
 
 
-    form = QuizzForm(request.POST or None, request.FILES or None , instance = quizz , teacher = teacher , group = group )
+    form = QuizzForm(request.POST or None, request.FILES or None , instance = quizz , teacher = teacher , group = group, folder = folder, )
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "Quizz"
     if form.is_valid():
@@ -3966,10 +3967,10 @@ def create_questions_flash(request,idl):
 
     if idl : 
         level = Level.objects.get(pk=idl)
-        form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , initial= {   'levels':  [level], } )
+        form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc, initial= {   'levels':  [level], } )
     else :
         level = None
-        form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp )
+        form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc )
 
 
     request.session["tdb"] = "Tools"
@@ -4049,7 +4050,7 @@ def create_questions_flash_inside_parcours(request,idp):
         prc = Parcours.objects.get(pk=prc_id)
     else : prc = None
 
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp ,  initial= {   'levels':  [level], } )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = grp , folder = fld , parcours = prc , initial= {   'levels':  [level], } )
 
     request.session["tdb"] = "Tools"
     request.session["subtdb"] = "QFlash"
@@ -4171,7 +4172,7 @@ def delete_all_questions_flash(request):
 def admin_test_mental(request,id):
 
     teacher = request.user.teacher
-    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = None )
+    form = QFlashForm(request.POST or None, request.FILES or None , teacher = teacher , group = None , folder = None , parcours = None )
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "QFlash"
     mental = Mental.objects.get(pk=id)

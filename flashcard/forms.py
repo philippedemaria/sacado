@@ -70,22 +70,36 @@ class FlashpackForm(forms.ModelForm):
  
 	class Meta:
 		model = Flashpack
-		exclude = ('flashcards','folders','parcours')
+		exclude = ('flashcards',)
 
 	def __init__(self, *args, **kwargs):
 		teacher = kwargs.pop('teacher')
-		group   = kwargs.pop('group')
+		group   = kwargs.pop('group')		
+		folder  = kwargs.pop('folder')
 
 		super(FlashpackForm, self).__init__(*args, **kwargs)
+		
+		if group : all_folders = group.group_folders.filter(is_archive=0,is_trash=0)
+		else : all_folders = teacher.teacher_folders.filter(is_archive=0,is_trash=0) 
+
+		if folder : parcours = folder.parcours.filter(is_archive=0,is_trash=0)
+		else : parcours =  teacher.teacher_parcours.filter(is_archive=0,is_trash=0)
+
+		coteacher_parcours = teacher.coteacher_parcours.filter(is_archive=0,is_trash=0) 
+		all_parcours = parcours|coteacher_parcours
 
 		groups =  teacher.groups.filter(is_hidden = 0) 
 		teacher_groups = teacher.teacher_group.filter(is_hidden = 0) 
 		all_groups = groups|teacher_groups
 
+
+
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=teacher.levels.order_by("ranking"), required=False)
 		self.fields['subject']  = forms.ModelChoiceField(queryset=teacher.subjects.all(), required=False)
 		self.fields['groups']   = forms.ModelMultipleChoiceField(queryset=all_groups.order_by("teachers","level"), widget=forms.CheckboxSelectMultiple, required=True)
-
+		self.fields['parcours'] = forms.ModelMultipleChoiceField(queryset = all_parcours.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
+		self.fields['folders']  = forms.ModelMultipleChoiceField(queryset = all_folders.order_by("level"), widget=forms.CheckboxSelectMultiple,  required=False)
+ 
 
 	def clean_content(self):
 		content = self.cleaned_data['imagefile']
