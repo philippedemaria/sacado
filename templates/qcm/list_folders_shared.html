@@ -19,8 +19,8 @@
   
 {% block page_title %}
 
-        <i class="bi bi-folder" style="color:{{ group.color }}"></i>  
-        {% include 'qcm/breadcrumb.html' %}
+
+        {% include 'qcm/breadcrumb.html' %} <img src="{% static 'img/angle-right.png' %}"/> 
         <small> Les dossiers mutualisés  </small>
 
 {% endblock %}
