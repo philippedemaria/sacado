@@ -955,9 +955,6 @@ class Parcours(ModelWithCode):
         return data
 
 
-
-
-
     def get_details_for_min_score(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
         relationships    =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ) 
@@ -1075,8 +1072,6 @@ class Parcours(ModelWithCode):
  
         return data
 
- 
-
     def is_pending_correction(self):
         """
         Correction en attente
@@ -1101,7 +1096,6 @@ class Parcours(ModelWithCode):
             test = True
         return test
 
- 
     def nb_exercices_and_cours(self):
 
         data = {}
@@ -1176,10 +1170,8 @@ class Parcours(ModelWithCode):
 
         return data
 
-
     def qflash(self):
         return  self.quizz.filter(is_random=1)
-
 
     def teacher_folders(self,teacher):
         return  self.folders.filter(teacher=teacher)
