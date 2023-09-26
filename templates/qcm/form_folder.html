@@ -109,11 +109,11 @@
 
 
             <div class="row">
-                <div class="col-xs-12 col-md-12 {% if group %}no_visu{% endif %}" style="overflow-y: auto;height: 150px;">
+                <div class="col-xs-12 col-md-12 form-group {% if group %}no_visu{% endif %}">
                     <label>Attribuer aux groupes </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents. <span class="text-danger">Vous ne voyez pas de groupe ? Aucun de vos groupes n'a le même enseignement ni le même niveau que ce dossier.</span></div>
                     </span>                    
-                    <div class="alert alert-sacado" style="overflow-y: auto;height: 200px;">  
+                    <div class="alert alert-sacado"  style="overflow-y: auto;height: 200px;">  
                     {% if group or folder %}
                         {{ form.groups  }}
                         {{ form.groups.errors }}
@@ -136,7 +136,7 @@
             </div>
             <div class="row">
                 {% if group or folder %}
-                <div class="col-xs-12 col-md-12 no_visu" style="overflow-y: auto;height: 150px;">
+                <div class="col-xs-12 col-md-12 no_visu">
                     <label>Inclure les parcours </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                         <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                     </span>                            
