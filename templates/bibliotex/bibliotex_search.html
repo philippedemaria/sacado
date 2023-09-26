@@ -62,31 +62,40 @@
         </div>
 
 
-        <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                Savoir faire ciblés <small>{{ bibliotex.knowledges|length }}</small>
-                <span class="helper_tip"> <i class="bi bi-eye"></i>
-                    <div class="helper_tip_no_width" >
-                        {% for k in bibliotex.knowledges %}
-                            <li style="font-variant-caps:normal;list-style: square">{{ k.name }}</li>
-                        {% endfor %}
+        <div class="row box_shared_label_last"> 
+            <div class="col-xs-6 col-md-6 col-lg-6">
+
+                <div class="row"> 
+                    <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                        Savoir faire ciblés <small>{{ bibliotex.knowledges|length }}</small>
+                        <span class="helper_tip"> <i class="bi bi-eye"></i>
+                            <div class="helper_tip_no_width" >
+                                {% for k in bibliotex.knowledges %}
+                                    <li style="font-variant-caps:normal;list-style: square">{{ k.name }}</li>
+                                {% endfor %}
+                            </div>
+                        </span>
+                    </div> 
+                </div>
+
+                <div class="row"> 
+                    <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
+                        Compétences ciblées <small>{{ bibliotex.skills|length }}</small>
+                        <span class="helper_tip"> <i class="bi bi-eye"></i>
+                            <div class="helper_tip_text" >
+                                {% for s in bibliotex.skills %}
+                                    <li style="font-variant-caps:normal;list-style: square">{{ s.name }}</li>
+                                {% endfor %}
+
+                            </div>
+                        </span>
                     </div>
-                </span>
+                </div> 
             </div> 
-        </div>
-
-        <div class="row"> 
-            <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                Compétences ciblées <small>{{ bibliotex.skills|length }}</small>
-                <span class="helper_tip"> <i class="bi bi-eye"></i>
-                    <div class="helper_tip_text" >
-                        {% for s in bibliotex.skills %}
-                            <li style="font-variant-caps:normal;list-style: square">{{ s.name }}</li>
-                        {% endfor %}
-
-                    </div>
-                </span>
-            </div>
+            <div class="col-xs-6 col-md-6 col-lg-6"  align="center">
+                <hr/>
+                <label><small>{{ bibliotex.teacher.user.first_name }}   {{ bibliotex.teacher.user.last_name }}  </small></label>
+            </div> 
         </div> 
     </div>    
 </div>   
