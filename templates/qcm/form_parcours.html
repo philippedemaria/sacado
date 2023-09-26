@@ -124,9 +124,10 @@
                 </div>
             </div>
             <div class="row">
-                    <div class="col-xs-12 col-md-12" >
-                        <div class="form-group form_card">
-                        {% if parcours or folder or group  %}                                
+                    <div class="col-xs-12 col-md-12 form_card" >
+
+                        
+                        {% if folder or group  %}                                
                         
                             <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                 <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
@@ -145,11 +146,11 @@
                                 <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                             </span> 
                             <div class="alert alert-sacado"style="overflow-y: auto;height: 200px;" id="cblist">
-                                <label class="text-danger"><i class="fa fa-warning"></i>Choisir au moins un groupe.</label>
+                                <label class="text-danger"><i class="fa fa-warning"></i>Cocher/décocher au moins un groupe.</label>
                             </div>
 
                         {% endif %}
-                        </div>
+         
                     </div>
             </div>
         </div>
