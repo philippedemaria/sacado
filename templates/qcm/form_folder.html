@@ -147,7 +147,7 @@
                             <div class="alert alert-sacado"  style="overflow-y: auto;height: 200px;" id="pclist">
                             {% for parcours in  folder.parcours.all %}
                                 <label for="id_folders_{{forloop.counter}}">
-                                    <input type="checkbox" id="id_folders_{{forloop.counter}}"  name="parcours" value="{{parcours.id}}" checked /> {{parcours.title}} <small>[{{ parcours.students.count }}é]</small></label><br/>
+                                    <input type="checkbox" id="id_folders_{{forloop.counter}}"  name="parcours" value="{{parcours.id}}" checked /> {{parcours.title}}</label><br/>
                             {% endfor %}
                             </div>
                         {% else %}
