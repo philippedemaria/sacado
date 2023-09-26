@@ -2388,18 +2388,14 @@ def ajax_all_parcourses(request):
 
     base = base.order_by('teacher').distinct() 
 
-    if len(theme_ids) > 0 and theme_ids[0] != '' :
-        nbase = set()
-        for p in base :
-            if str(p.get_theme().id) in theme_ids :
-                nbase.add(p)
-        base = nbase 
-
- 
+    # if len(theme_ids) > 0 and theme_ids[0] != '' :
+    #     nbase = set()
+    #     for p in base :
+    #         if p.get_theme().intersection(theme_ids) :
+    #             nbase.add(p)
+    #     base = nbase 
 
     data['html'] = render_to_string('qcm/ajax_list_parcours.html', {'parcourses' : base, 'teacher' : teacher ,  })
- 
-
 
     return JsonResponse(data)
 
@@ -4192,7 +4188,7 @@ def show_parcours(request, idf = 0, id=0):
     flashpacks = parcours.flashpacks.filter(folders=folder)
     qflashs    = parcours.quizz.filter(is_random=1,folders=folder).order_by("-date_modified")
 
-    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher,  group = group ,  initial={ 'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
+    form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher,  group = group ,  folder = folder ,   initial={ 'subject': parcours.subject , 'levels': parcours.level , 'groups': group })
  
     context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 
                 'relationships_customexercises': relationships_customexercises, 'idf' : idf , 'bibliotexs' : bibliotexs , 'quizzes' : quizzes , 'flashpacks' : flashpacks , 'qflashs' : qflashs , 
