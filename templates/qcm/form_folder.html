@@ -112,56 +112,31 @@
                 <div class="col-xs-12 col-md-12{% if group %}no_visu{% endif %}" style="overflow-y: auto;height: 150px;">
 
                     <div class="form-group">
-                        <label>Attribuer aux groupes </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                            <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents. <span class="text-danger">Vous ne voyez pas de groupe ? Aucun de vos groupes n'a le même enseignement ni le même niveau que ce dossier.</span></div>
-                        </span> 
-                        <div class="alert alert-sacado">
-                        {% if group or folder %}
-                            {{ form.groups|add_class:"select_all"  }}
-                            {{ form.groups.errors }}
-                        {% else %}
+                    <label>Attribuer aux groupes </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                        <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents. <span class="text-danger">Vous ne voyez pas de groupe ? Aucun de vos groupes n'a le même enseignement ni le même niveau que ce dossier.</span></div>
+                    </span> 
+                    <div class="alert alert-sacado">
+                    {% if group or folder %}
+                        {{ form.groups  }}
+                        {{ form.groups.errors }}
+                    {% else %}
 
-                                {% if teacher.nb_boolean_multi_subjects %}
-                                    <label class="text-danger"><i class="fa fa-warning"></i> Choisir un enseignement et un niveau.</label>
-                                {% else %}        
-                                    <label>Affecter à mes groupes :</label> {% if group %}
-                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                        <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
-                                    </span> {% endif %}
-                                    {{ form.groups|add_class:"select_all"  }}
-                                    {{ form.groups.errors }}
-                                {% endif %} 
-                        {% endif %}
-                        </div>                    
+                            {% if teacher.nb_boolean_multi_subjects %}
+                                <label class="text-danger"><i class="fa fa-warning"></i> Choisir un enseignement et un niveau.</label>
+                            {% else %}        
+                                <label>Affecter à mes groupes :</label> {% if group %}
+                                <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
+                                    <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {{ group.name }} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
+                                </span> {% endif %}
+                                {{ form.groups  }}
+                                {{ form.groups.errors }}
+                            {% endif %} 
+                  
+                    {% endif %}
+                    </div>                    
                     </div>                          
                 </div>  
             </div>
-
-
-            <div class="row form-group">
-                <div class="col-xs-12 col-md-12{% if group %}no_visu{% endif %}">
-                        <label>Inclure des parcours  </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                            <div class="helper_tip_text" >Pour plus de parcours, cocher/décocher les groupes.</div>
-                        </span>                                          
-                        {% if folder  %}
-                            <div class="alert alert-sacado"  style="overflow-y: auto;height: 200px;" id="pclist">
-                            {% for parcours in  folder.parcours.all %}
-                                <label for="id_folders_{{forloop.counter}}">
-                                    <input type="checkbox" id="id_folders_{{forloop.counter}}"  name="parcours" value="{{parcours.id}}" checked /> {{parcours.title}}</label><br/>
-                            {% endfor %}
-                            </div>
-                        {% else %}
-                            <div class="alert alert-sacado form-group" id="pclist" style="overflow-y: auto;height: 200px;">
-                                <label class="text-danger"><i class="fa fa-warning"></i> Choisir au moins un dossier.</label>
-                            </div>
-                        {% endif %}
-                </div>
-                    
-            </div>
-
-
-
-
         </div>
 
         <div class="col-xs-12 col-md-4 no_visu" style="position: relative">            
