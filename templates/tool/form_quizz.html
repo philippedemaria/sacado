@@ -280,7 +280,7 @@
                                 <div class="alert alert-sacado" style="overflow-y: auto;height: 200px;" id="cblist"> 
                                     {% for folder in group.folders_not_in_trash %}  
                                         <label for="id_folders_{{forloop.counter}}">
-                                            <input type="checkbox" id="id_folders_{{forloop.counter}}" class="select_folders" name="folders" value="{{folder.id}}" {% if folder.id in bibliotex.folders.all %}checked{% endif %} /> {{folder.title}}
+                                            <input type="checkbox" id="id_folders_{{forloop.counter}}" class="select_folders" name="folders" value="{{folder.id}}" {% if folder in quizz.folders.all %}checked{% endif %} /> {{folder.title}}
                                         </label>
                                             <br/>
                                     {% endfor %}
@@ -306,7 +306,7 @@
                                     <div class="alert alert-sacado"  style="overflow-y: auto;height: 200px;" id="pclist">
                                     {% for parcours in  folder.parcours_not_in_trash %}  
                                         <label for="id_folders_{{forloop.counter}}">
-                                            <input type="checkbox" id="id_folders_{{forloop.counter}}"  name="parcours" value="{{parcours.id}}" {% if parcours.id in bibliotex.parcours.all %}checked{% endif %} /> {{parcours.title}}</label><br/>
+                                            <input type="checkbox" id="id_folders_{{forloop.counter}}"  name="parcours" value="{{parcours.id}}" {% if parcours in quizz.parcours.all %}checked{% endif %} /> {{parcours.title}}</label><br/>
                                     {% endfor %}
                                     </div>
                                 {% else %}
