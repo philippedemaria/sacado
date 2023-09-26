@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block page_title %}
-       {% include 'qcm/breadcrumb.html' %} <img src="{% static 'img/angle-right.png' %}"/><small>  Flashpacks mutualisés </small>  
+       {% include 'qcm/breadcrumb.html' %} <small>  Flashpacks mutualisés </small>  
 
 
 {% block page_menu_right %}
@@ -122,8 +122,7 @@
                             <a href="javascript:void();" class="btn btn-primary" id="duplicate_button_action"  data-dismiss="modal"  >Dupliquer le Flashpack <span id="this_document_label"></span></a>
                         </div>
                     </div>
-                </form> 
-                <small class="text-green_index"><em>Pour modifier mes niveaux, aller dans Mon compte ou sur votre avatar puis dans Mon profil ou <a href="{% url 'profile' %}">cliquer ici</a></em></small>          
+                </form>          
             </div>
         </div>
     </div> 

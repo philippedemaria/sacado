@@ -336,6 +336,17 @@ def all_quizzes(request):
 
     teacher = request.user.teacher 
 
+    group_id = request.session.get("group_id",None)
+    folder_id = request.session.get("folder_id",None)
+    parcours_id = request.session.get("parcours_id",None)
+
+    group, folder, parcours = None, None, None
+
+    if group_id : group = Group.objects.get(pk=group_id)
+    if folder_id : folder = Folder.objects.get(pk=folder_id)
+    if parcours_id : parcours = Parcours.objects.get(pk=parcours_id)
+    
+
     user_ids = user_list_of_school(teacher)
     quizzes = Quizz.objects.filter(is_share = 1 , teacher_id__in = user_ids  , is_random=0  ).exclude(teacher = teacher )
 
@@ -348,7 +359,7 @@ def all_quizzes(request):
     request.session["tdb"] = "Documents"
     request.session["subtdb"] = "Quizz"
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher, group = None)
-    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'parcours':parcours }) 
+    return render(request, 'tool/all_quizzes.html', {'quizzes': quizzes , 'form': form, 'teacher':teacher , 'group':group , 'folder':folder , 'parcours':parcours }) 
 
  
 @login_required(login_url= 'index')

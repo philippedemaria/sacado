@@ -41,9 +41,20 @@ def list_flashpacks(request):
 
     if request.user.is_authenticated :
         if request.user.is_teacher :
+
+            group_id = request.session.get("group_id",None)
+            folder_id = request.session.get("folder_id",None)
+            parcours_id = request.session.get("parcours_id",None)
+
+            group, folder, parcours = None, None, None
+
+            if group_id : group = Group.objects.get(pk=group_id)
+            if folder_id : folder = Folder.objects.get(pk=folder_id)
+            if parcours_id : parcours = Parcours.objects.get(pk=parcours_id)
+
             teacher = request.user.teacher
             flashpacks = Flashpack.objects.filter(teacher__user = request.user)
-            return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher })
+            return render(request, 'flashcard/all_flashpacks.html', {'flashpacks': flashpacks, 'teacher' : teacher,  'group':group , 'folder':folder , 'parcours':parcours })
         else :
             student = request.user.student
             today = time_zone_user(request.user)

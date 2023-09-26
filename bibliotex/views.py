@@ -914,11 +914,22 @@ def print_exotex_by_student(request,ide):
 #########################################################################################################################################
 #########################################################################################################################################
 def bibliotexs(request):
- 
+
+    group_id = request.session.get("group_id",None)
+    folder_id = request.session.get("folder_id",None)
+    parcours_id = request.session.get("parcours_id",None)
+
+    group, folder, parcours = None, None, None
+
+    if group_id : group = Group.objects.get(pk=group_id)
+    if folder_id : folder = Folder.objects.get(pk=folder_id)
+    if parcours_id : parcours = Parcours.objects.get(pk=parcours_id)
+
+
     bibliotexs = Bibliotex.objects.all()
     teacher = request.user.teacher
 
-    return render(request, 'bibliotex/all_bibliotexs.html', {'bibliotexs': bibliotexs,'teacher': teacher })
+    return render(request, 'bibliotex/all_bibliotexs.html', {'bibliotexs': bibliotexs,'teacher': teacher,'group': group,'folder': folder,'parcours': parcours })
 
 
  
@@ -1438,6 +1449,7 @@ def duplicate_bibliotex(request):
         bibliotex.parcours.set(parcourses)
         bibliotex.groups.set(groups)
 
+        group_str = ""
         students = set()
         for fldr_id in folders :
             folder = Folder.objects.get(pk=fldr_id)
@@ -1448,6 +1460,7 @@ def duplicate_bibliotex(request):
         for grp_id in groups :
             group = Group.objects.get(pk=grp_id)
             students.update( group.students.all() )
+            group_str += group.name+". "
 
         bibliotex.students.set(students)
 
@@ -1464,7 +1477,7 @@ def duplicate_bibliotex(request):
             relationtex.courses.set(courses)
 
 
-        data["validation"] = "Duplication réussie. Retrouvez-la depuis le menu Groupes."
+        data["validation"] = "Duplication réussie. Retrouvez la biblioTex dans "+group_str
     else :
         data["validation"] = "Duplication abandonnée. La BiblioTex n'est pas reconnue." 
 
