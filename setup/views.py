@@ -187,7 +187,7 @@ def index(request):
                             }
  
             else :
-                grps = teacher.groups.filter(is_hidden=0).order_by("ranking")
+                grps = teacher.groups.filter(is_hidden=0) 
                 shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True)
                 # sgps = []
                 # for sg_id in shared_grps_id :
