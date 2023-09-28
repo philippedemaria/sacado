@@ -1537,7 +1537,51 @@ define(['jquery','bootstrap'], function ($) {
 
 
 
+        function sorter_document($div_class , $exercise_class, $format ) {
 
+                $($div_class).sortable({
+                    cursor: "move",
+                    swap: true,    
+                    animation: 150,
+                    distance: 10,
+                    revert: true,
+                    tolerance: "pointer" , 
+                    start: function( event, ui ) { 
+                           $(ui.item).css("box-shadow", "10px 5px 10px gray"); 
+                       },
+                    stop: function (event, ui) {
+
+                        var valeurs = "";
+
+                        $($exercise_class).each(function() {
+
+                            let value = $(this).data("id"); 
+                            valeurs = valeurs + value +"-";
+  
+                        });
+ 
+
+                        if ($format == 1 ){ url = "../../../bibliotex/ajax_bibliotex_sorter"  ;  }
+                        else if ($format == 2 ){ url = "../../../qcm/ajax_docperso_sorter"  ;}
+                        else if ($format == 3 ){ url = "../../../tool/ajax_quizz_sorter"  ;}
+                        else if ($format == 4 ){ url = "../../../flashcard/ajax_flashpack_sorter"  ;}
+
+                        $(ui.item).css("box-shadow", "0 1px 2px rgba(0,0,0,0.3)");  
+
+                        $.ajax({
+                                data:   { 'valeurs': valeurs  } ,    
+                                type: "POST",
+                                dataType: "json",
+                                url: url
+                            }); 
+                        }
+                    });
+                }
+
+        sorter_document('#bibliotex_sortable',".sorter_bibliotex",1) ;
+        sorter_document('#docperso_sortable',".sorter_docperso",2) ;
+        sorter_document('#quizz_sortable',".sorter_quizz",3) ;
+        sorter_document('#flashpack_sortable',".sorter_flashpack",4) ;
 
 
 

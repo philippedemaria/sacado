@@ -1485,6 +1485,35 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
 
 
 
+        sorter_group('#group_sortable',".sorter_group") ;
+
+        function sorter_group($div_class , $exercise_class ) {
+
+            $($div_class).sortable({
+                start: function( event, ui ) { 
+                       $(ui.item).css("box-shadow", "4px 2px 4px gray");
+                   }, 
+                stop: function (event, ui) {
+                    var valeurs = "";
+                    $($exercise_class ).each(function() {
+                        let id = $(this).attr("data-id"); 
+                        valeurs = valeurs + id +"-";
+                    });
+                    $(ui.item).css("box-shadow",  "2px 1px 2px gray");
+
+    
+                    this_url =  "group/ajax_group_sorter"  ;                   
+  
+                    $.ajax({
+                            data:   { 'valeurs': valeurs    } ,   
+                            type: "POST",
+                            dataType: "json",
+                            url: this_url,
+                        }); 
+                    }
+                });
+
+            }
 
 
 

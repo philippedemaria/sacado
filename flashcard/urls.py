@@ -78,6 +78,6 @@ urlpatterns = [
     path('update_flashpack_academy/<int:id>', update_flashpack_academy, name='update_flashpack_academy'),
     path('delete_flashpack_academy/<int:id>', delete_flashpack_academy, name='delete_flashpack_academy'),
 
-
+    path('ajax_flashpack_sorter', ajax_flashpack_sorter, name='ajax_flashpack_sorter'),
 
 ] 

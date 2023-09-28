@@ -550,7 +550,7 @@ urlpatterns = [
     path('my_docpersos_archives', my_docpersos_archives, name='my_docpersos_archives'),
 
     path('docperso_actioner', docperso_actioner, name='docperso_actioner'),
-
+    path('ajax_docperso_sorter', ajax_docperso_sorter, name='ajax_docperso_sorter'),
     ####################################    Organiser  ##########################################
     path('ajax_add_chapter', ajax_add_chapter, name='ajax_add_chapter'),
     path('ajax_rename_chapter', ajax_rename_chapter, name='ajax_rename_chapter'),

@@ -151,304 +151,306 @@
         </div>
 
 
-        <div class="col-xs-12 col-md-12 col-lg-12" style="margin-top:0px">
+        <div class="col-xs-12 col-md-12 col-lg-12" style="margin-top:0px" id="group_sortable">
             <div class="row"></div>
-            {% for group in groups %}
-                {% get_group_parcours_counter group  teacher as data %}
-                    <!-- small box -->
-                    <div class="small-box" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}">
-                        <!-- modal qui affiche la liste des élèves -->
-                        <div class="group_show   no_visu_on_load" id="group_show{{group.id }}"> 
-                            <form action="" method="POST">
-                            {% csrf_token %}
-                            <a href="#" class="vue menuaction" data-toggle='modal' style="float:left; margin-right:10px"
-                               data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> 
-                               <span class="label label-default" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"> {{ data.count_students }}<i class="fa fa-users"></i>
-                               </span>
-                            </a>
-                            </form>
-                            <font style="color:{{ group.color }}">
-                                {% for s in data.students %} 
-                                    <a href="{% url 'detail_student_all_views'  s.user__id   %}" class="small_users"> {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}</a>{% if not forloop.last %}, {% endif %}
-                                {% endfor %}
-                            </font>
-                        </div>
+                {% for group in groups %}
+                    {% get_group_parcours_counter group  teacher as data %}
+                        <!-- small box -->
+                        <div class="small-box sorter_group" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}" data-id="{{group.id}}" >
+                            <!-- modal qui affiche la liste des élèves -->
+                            <div class="group_show   no_visu_on_load" id="group_show{{group.id }}"> 
+                                <form action="" method="POST">
+                                {% csrf_token %}
+                                <a href="#" class="vue menuaction" data-toggle='modal' style="float:left; margin-right:10px"
+                                   data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> 
+                                   <span class="label label-default" style="background-color:{{ group.color }};color:{{ group.color|contrast_color }}"> {{ data.count_students }}<i class="fa fa-users"></i>
+                                   </span>
+                                </a>
+                                </form>
+                                <font style="color:{{ group.color }}">
+                                    {% for s in data.students %} 
+                                        <a href="{% url 'detail_student_all_views'  s.user__id   %}" class="small_users"> {{s.user__last_name|lower|capfirst}} {{s.user__first_name|lower|capfirst}}</a>{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </font>
+                            </div>
 
 
-                        <!-- Legende de la small-box -->
-                        <div class="inner" style="color:white;opacity:0.9"><br/>
-                            <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"14" }} </span>{% if group.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
- 
-
-                                {% if group.is_task_exists %}
-                                    <a  href="{% url 'group_tasks' group.id  %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:13px;margin-top:8px;"><i class="fa fa-calendar-check"></i> Tâche en cours </a>
-                                {% endif %}
-                         
-                             <br/> <br/>
-                            {% if teacher != group.teacher or group.is_shared %}
-                            <span class="shared_group"> Co-animation 
-                                 <i class="fa fa-info-circle"></i>
-                                    <div class="modal_helper_tip_text" > 
-                                        <small>{{ group.teacher }} (Propriétaire)</small><br>
-                                        {% for gs in group.group_sharingteacher.all %}
-                                            <small>{{ gs.teacher }} ({% if gs.role %}Editeur{% else %}Lecteur{% endif %})</small>{% if not forloop.last %}<br>{% endif %}
-                                        {% endfor %}
-                                    </div>
-                            </span>
-                            {% endif %}
-                        </div>
-
-                            
+                            <!-- Legende de la small-box -->
+                            <div class="inner" style="color:white;opacity:0.9"><br/>
+                                <span style="color:{{ group.color|contrast_color }};font-size: 35px">
+                                    {% if group.labelname %}{{ group.labelname |truncatechars:"14" }}{% else %}{{ group.name |truncatechars:"14" }}{% endif %}
+                                </span>{% if group.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
      
-                        <div class="small-box-footer" >
-                            <div class="row">                                      
-                                <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;margin-top: 7px">
-                                    Dossiers favoris  
-                                   <small> ({{ data.nb_folders }}) - 
-                                        {{ data.nb_folders_published }} publié{{ data.nb_folders_published|pluralize }}  
-                                    </small>
-                                </div>
-                            </div>
-                            <div class="row">                                      
-                                <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;">
-                                    Parcours favoris  
-                                    <small> ({{ data.nb_parcours_favorite }}) - 
-                                        {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  
-                                    </small>
 
-                                </div>
-                            </div>
-                            <div class="row">                                      
-                                <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px">
-                                    Evaluation{{ data.nb_evaluation_favorite|pluralize }} favorite{{ data.nb_evaluation_favorite|pluralize }} <small> ({{ data.nb_evaluation_favorite }}) - {{  data.nb_evaluation }} passée{{ data.nb_evaluation|pluralize }}</small>
-                                </div>
-                            </div>
-                            <div class="row">                                      
-                                <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
-                                    <a href="{% url 'list_parcours_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
-                                        Accéder aux documents                             
-                                        {% if group.is_pending_correction %}
-                                            <i class="fa fa-copyright pull-right" style="font-size:12px; margin-top:5px" title="Copies à corriger" ></i> 
-                                        {% endif %}
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="row">                    
-                                <div class="col-lg-4 col-xs-4" style="padding-right:0px">
-                                    <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer le groupe"><i class="bi bi-gear"></i></a> 
-                                    <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Voir les détails du groupe"><i class="bi bi-arrow-right-circle"></i></a> 
-                                    <a href="{% url 'homeless_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Oublis de matériel"><i class="bi bi-bell"></i></a> 
-                                </div>
-
-                                <div class="col-lg-4 col-xs-4" style="padding-right:0px;padding-top:5px;text-align:right">
-                                    <a  href="{% url 'result_group_exercise'  group.id %}"  style="font-size:15px; color:{{ group.color|contrast_color }};" title="Lien interne" ><span class="small_displayer"><i class="fa fa-mortar-board"></i> Suivis </span></a><a  href="{% url 'result_group_exercise'  group.id %}" target="_blank" title="Lien externe" > <img src="{% static 'img/external-link_white.png' %}"  width="8px" ></a>
-                                </div> 
-                                <div class="col-lg-4 col-xs-4" style="padding-right:0px" align="right">
-
-                                    {% if not is_gar_check  and group.student_view %}
-                                    <a href="{% url 'switch_teacher_student' group.id %}" class="label_small_box" style=" color:{{ group.color|contrast_color }};" title="Prendre la vue élève"><i class="bi bi-eyeglasses"></i></a> 
+                                    {% if group.is_task_exists %}
+                                        <a  href="{% url 'group_tasks' group.id  %}" class="pull-right" style="color:{{ group.color|contrast_color }}; font-size:13px;margin-top:8px;"><i class="fa fa-calendar-check"></i> Tâche en cours </a>
                                     {% endif %}
-                                    <a  href="{% url 'insert_students_to_this_group' group.id %}" class="label_small_box group_shower" style="font-size:15px; color:{{ group.color|contrast_color }};"
-                                    title="Ajouter des élèves"><i class="bi bi-person-plus"></i></a>
-                                    <a  href="javascript:void();" class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"
-                                    title="Liste des élèves"><i class="fa fa-users"></i></a>   
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-            {% empty %}
-                {% if is_gar_check %}
-                    <div class="row">
-                        <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-sacado"> 
-                            <h1>Bienvenue dans l'univers SACADO avec le GAR</h1>
-                            <img src="{% static 'img/approche_gar.png' %}" width="80px" style="float:left" /> L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.<br/>
-                            Avec cette version , vous pouvez directemet récupérer les dossiers, les parcours et les documents classés par thèmes et les assigner à vos groupes en quelques clics, créer des évaluations, exporter les résultats en CSV ou en tableur et découvrir l'ensemble des outils SACADO. 
-                            <span class="pull-right">L'équipe SACADO </span>
-                        </div>
-
-                        <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-danger"> 
-                            <h1><b>IMPERATIF avec l'usage du GAR</h1>
-                            Vous devez vérifier vos niveaux d'enseignement et matières avant toute utilisation.
-                            <a href="{% url 'profile' %}">Mon profil & Notifications</a>
-                            <hr/>
-                            Aucun groupe ne vous est affecté. Vérifier que votre référent numérique établissement vous a bien assigné vos groupes.
-                        </div>
-
-                    </div> 
-                    {% if  request.user.school.is_primaire %}    
-                        {% for group_prim in group_prims %}
-                            <div class="small-box" style="background-color:{{ group_prim.color }};color:{{ group_prim.color|contrast_color }}">
-                                <!-- modal qui affiche la liste des élèves -->
-                                <div class="group_show   no_visu_on_load" id="group_show{{group_prim.id }}"> 
-                                    <font style="font-size:12px;color:{{ group_prim.color }}" class="thin">
-                                        {% for s in group_prim.students.all|dictsort:"user.last_name" %} 
-                                            {{s.user.last_name|lower|capfirst}} {{s.user.first_name|lower|capfirst}}{% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </font>
-                                </div>
-                                <!-- Legende de la small-box -->
-                                <div class="inner" style="color:white;opacity:0.9"><br/>
-                                    <span style="color:{{ group_prim.color|contrast_color }};font-size: 35px">{{ group_prim.name |truncatechars:"14" }} </span>{% if group_prim.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br><br/><br><br>
-                                            <a href="{% url 'get_this_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};" onclick="return get_this_group('{{ group_prim.name }}')"><span class="small_displayer"> Récupérer ce groupe ?</span></a>  
-                                </div>
-
-     
-
-
-
-                                <div class="small-box-footer" >
-                                    <div class="row">                    
-                                        <div class="col-lg-12 col-xs-12" style="padding-right:0px">
-                                            <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group_prim.id }}" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-users"></i>
-                                                <span class="helper_tip small_displayer"  style="color:{{ group_prim.color|contrast_color }};"> 
-                                                   Voir les élève{{ data.snt|pluralize }} ?
-                                                </span> 
-                                            </a>   
+                             
+                                 <br/> <br/>
+                                {% if teacher != group.teacher or group.is_shared %}
+                                <span class="shared_group"> Co-animation 
+                                     <i class="fa fa-info-circle"></i>
+                                        <div class="modal_helper_tip_text" > 
+                                            <small>{{ group.teacher }} (Propriétaire)</small><br>
+                                            {% for gs in group.group_sharingteacher.all %}
+                                                <small>{{ gs.teacher }} ({% if gs.role %}Editeur{% else %}Lecteur{% endif %})</small>{% if not forloop.last %}<br>{% endif %}
+                                            {% endfor %}
                                         </div>
+                                </span>
+                                {% endif %}
+                            </div>
+
+                                
+         
+                            <div class="small-box-footer" >
+                                <div class="row">                                      
+                                    <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;margin-top: 7px">
+                                        Dossiers favoris  
+                                       <small> ({{ data.nb_folders }}) - 
+                                            {{ data.nb_folders_published }} publié{{ data.nb_folders_published|pluralize }}  
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="row">                                      
+                                    <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px;">
+                                        Parcours favoris  
+                                        <small> ({{ data.nb_parcours_favorite }}) - 
+                                            {{ data.nb_parcours_visible }} publié{{ data.nb_parcours_visible|pluralize }}  
+                                        </small>
+
+                                    </div>
+                                </div>
+                                <div class="row">                                      
+                                    <div class="col-lg-12 col-xs-12" style="padding-right:0px;font-size: 12px">
+                                        Evaluation{{ data.nb_evaluation_favorite|pluralize }} favorite{{ data.nb_evaluation_favorite|pluralize }} <small> ({{ data.nb_evaluation_favorite }}) - {{  data.nb_evaluation }} passée{{ data.nb_evaluation|pluralize }}</small>
+                                    </div>
+                                </div>
+                                <div class="row">                                      
+                                    <div class="col-lg-12 col-xs-12" style="padding-right:10px; margin-bottom: 18px; margin-top: 12px">
+                                        <a href="{% url 'list_parcours_group' group.id  %}" class="btn btn-default btn-accueil" style="width:280px;color:{{ group.color}}"> 
+                                            Accéder aux documents                             
+                                            {% if group.is_pending_correction %}
+                                                <i class="fa fa-copyright pull-right" style="font-size:12px; margin-top:5px" title="Copies à corriger" ></i> 
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="row">                    
+                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px">
+                                        <a href="{% url 'update_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Configurer le groupe"><i class="bi bi-gear"></i></a> 
+                                        <a href="{% url 'show_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Voir les détails du groupe"><i class="bi bi-arrow-right-circle"></i></a> 
+                                        <a href="{% url 'homeless_group' group.id  %}" class="label_small_box" style="font-size:15px; color:{{ group.color|contrast_color }};" title="Oublis de matériel"><i class="bi bi-bell"></i></a> 
+                                    </div>
+
+                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px;padding-top:5px;text-align:right">
+                                        <a  href="{% url 'result_group_exercise'  group.id %}"  style="font-size:15px; color:{{ group.color|contrast_color }};" title="Lien interne" ><span class="small_displayer"><i class="fa fa-mortar-board"></i> Suivis </span></a><a  href="{% url 'result_group_exercise'  group.id %}" target="_blank" title="Lien externe" > <img src="{% static 'img/external-link_white.png' %}"  width="8px" ></a>
+                                    </div> 
+                                    <div class="col-lg-4 col-xs-4" style="padding-right:0px" align="right">
+
+                                        {% if not is_gar_check  and group.student_view %}
+                                        <a href="{% url 'switch_teacher_student' group.id %}" class="label_small_box" style=" color:{{ group.color|contrast_color }};" title="Prendre la vue élève"><i class="bi bi-eyeglasses"></i></a> 
+                                        {% endif %}
+                                        <a  href="{% url 'insert_students_to_this_group' group.id %}" class="label_small_box group_shower" style="font-size:15px; color:{{ group.color|contrast_color }};"
+                                        title="Ajouter des élèves"><i class="bi bi-person-plus"></i></a>
+                                        <a  href="javascript:void();" class="label_small_box group_shower" data-group_id="{{group.id }}" style="font-size:15px; color:{{ group.color|contrast_color }};"
+                                        title="Liste des élèves"><i class="fa fa-users"></i></a>   
                                     </div>
                                 </div>
                             </div>
-                        {% empty %}
-                            <div class="alert alert-sacado">En attente d'inscription...</div>
-                        {% endfor %}
-                    {% endif %}
-                {% else %}
-                    {% if teacher.groups.count == 0 %} 
+                        </div>
+
+                {% empty %}
+                    {% if is_gar_check %}
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="introduction_teacher"> 
-                                    <div id="set_up_title"  class="set_up_title">
-                                        Bienvenue dans l'univers <span class="sacado_menu">SACADO</span>  
+                            <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-sacado"> 
+                                <h1>Bienvenue dans l'univers SACADO avec le GAR</h1>
+                                <img src="{% static 'img/approche_gar.png' %}" width="80px" style="float:left" /> L'esprit SACADO se base sur des exercices auto corrigés à variables didactiques aléatoires. Chaque exercice est rattaché à un savoir faire du programme du MENJS.<br/>
+                                Avec cette version , vous pouvez directemet récupérer les dossiers, les parcours et les documents classés par thèmes et les assigner à vos groupes en quelques clics, créer des évaluations, exporter les résultats en CSV ou en tableur et découvrir l'ensemble des outils SACADO. 
+                                <span class="pull-right">L'équipe SACADO </span>
+                            </div>
+
+                            <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-danger"> 
+                                <h1><b>IMPERATIF avec l'usage du GAR</h1>
+                                Vous devez vérifier vos niveaux d'enseignement et matières avant toute utilisation.
+                                <a href="{% url 'profile' %}">Mon profil & Notifications</a>
+                                <hr/>
+                                Aucun groupe ne vous est affecté. Vérifier que votre référent numérique établissement vous a bien assigné vos groupes.
+                            </div>
+
+                        </div> 
+                        {% if  request.user.school.is_primaire %}    
+                            {% for group_prim in group_prims %}
+                                <div class="small-box" style="background-color:{{ group_prim.color }};color:{{ group_prim.color|contrast_color }}">
+                                    <!-- modal qui affiche la liste des élèves -->
+                                    <div class="group_show   no_visu_on_load" id="group_show{{group_prim.id }}"> 
+                                        <font style="font-size:12px;color:{{ group_prim.color }}" class="thin">
+                                            {% for s in group_prim.students.all|dictsort:"user.last_name" %} 
+                                                {{s.user.last_name|lower|capfirst}} {{s.user.first_name|lower|capfirst}}{% if not forloop.last %}, {% endif %}
+                                            {% endfor %}
+                                        </font>
+                                    </div>
+                                    <!-- Legende de la small-box -->
+                                    <div class="inner" style="color:white;opacity:0.9"><br/>
+                                        <span style="color:{{ group_prim.color|contrast_color }};font-size: 35px">{{ group_prim.name |truncatechars:"14" }} </span>{% if group_prim.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br><br/><br><br>
+                                                <a href="{% url 'get_this_group' group_prim.id  %}" class="label_small_box" style="font-size:15px; color:{{ group_prim.color|contrast_color }};" onclick="return get_this_group('{{ group_prim.name }}')"><span class="small_displayer"> Récupérer ce groupe ?</span></a>  
                                     </div>
 
-                                    <div id="set_up_subtitle"    align="center">
-                                    SACADO propose des parcours d'apprentissage composés de cours, de quiz et d'exercices auto-corrigés à variables didactiques aléatoires.<br/>Suivez les résultats de vos élèves et indivisualisez les supports en fonction de leur réussite.
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-6" align='center' id="manual_install">
-                                            <a href="{% url 'create_group' %}"  class="auto_install set_up_round" style="padding-top: 50px"> 
-                                                Je veux créer<br/>   mon premier groupe 
-                                            </a> 
-                                        </div>
-                                        <div class="col-xs-6" align='center' id="auto_install">
-                                            <a href="javascript:void();" id="show_auto_install" class="auto_install set_up_round" style="padding-top: 50px"> 
-                                                Je veux créer<br/>  tous mes <br/>groupes 
-                                            </a> 
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-12" align='center'>
-                                            <div id="div_auto_install" class="auto_install_body no_visu_on_load">
-                                                <div class="set_up_sacado" align='center'>
-                                                    Je veux créer  mes groupes et leur associer tous les documents  <span class="sacado_menu">SACADO </span><br/> <small>Il ne faut pas inscrire mes élèves. Chaque groupe contient un code à donner à vos élèves pour qu'ils s'inscrivent eux-même.</small>
+         
 
 
 
-                                                    <hr/>
-                                                    <div align='left' style="padding-left:10px;"> 
-                                                        <form action="{% url 'all_set_up_sacado' %}" method="POST" enctype="form/data" id="set_up">
-                                                            {% csrf_token %}
-                                                            {{ form_groups.management_form }}
-                                                            <div id="formsetZone">
-                                                                <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
-                                                                {% for form in form_groups %} 
-                                                                    {{ form.id }}
-                                                                    <div class="row">
-                                                                        <div class="col-xs-12 col-md-2" align='left'><label>Nom :</label> <br/>{{ form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
-                                                                        <div class="col-xs-12 col-md-2" align='left'><label>Enseignement :</label><br/> {{ form.subject |attr:"required"|add_class:"form-control select2  border_violet" }}</div>
-                                                                        <div class="col-xs-12 col-md-2" align='left'><label>Niveau :</label> <br/>{{ form.level|attr:"required"|add_class:"form-control select2  border_violet" }}</div>
-                                                                        <div class="col-xs-12 col-md-2"><label>Contenus sacado ?</label> <br/> {{ form_groups.empty_form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</div>
-                                                                    </div>
-                                                                {% endfor %}
-                                                            </div>
-                                                            <div class="row" style="margin-top:20px;">
-                                                                <div class="col-xs-12 col-md-12" >
-                                                                    <a href="javascript:void();" id="set_up_add_more_group"  class="set_up_add_more_group btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter un groupe </a><br/><br/>
-                                                                </div>                            
-                                                            </div>
-                                                            <div class="row" style="margin-top:20px;" id="div_start_the_set_up">
-                                                                <button type="submit" class="btn btn-primary" id="start_the_set_up">Lancer l'installation</button>
-
-                                                                <a href="javascript:void();" class="btn btn-default reset_the_set_up">Revenir à l'accueil</a>
-
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
+                                    <div class="small-box-footer" >
+                                        <div class="row">                    
+                                            <div class="col-lg-12 col-xs-12" style="padding-right:0px">
+                                                <a  href="javascript:void();"  class="label_small_box group_shower" data-group_id="{{group_prim.id }}" style="font-size:15px; color:{{ group_prim.color|contrast_color }};"><i class="fa fa-users"></i>
+                                                    <span class="helper_tip small_displayer"  style="color:{{ group_prim.color|contrast_color }};"> 
+                                                       Voir les élève{{ data.snt|pluralize }} ?
+                                                    </span> 
+                                                </a>   
                                             </div>
-                                            <div id="div_manual_install"  class="manual_install_body no_visu_on_load">
-
-                                                <div class="row">
-                                                    <div class="col-xs-12" align='center' style="line-height:30px;font-size:25px;margin-top:5px;margin-bottom:35px;">
-                                                        <i class="bi bi-person-circle icon_size"></i> <span class="semi_bold">Avec la version Enseignant</span>, 3 étapes de configuration.
-                                                    </div>
-                                                </div>
-
-                                                <div align="center">
-                                                    <img src="{% static 'img/modules.png' %}" width="500" /><br/>
-                                                </div>
-
-
-                                                <div class="row">
-                                                    <div class="round" style="margin-top: 30px;padding-top:15px;margin-bottom: 10px;font-size:25px;background-color:#0960B5;color:white; "> 
-                                                         <a href="{% url 'profile' %}">
-                                                            <h1>1.</h1>   Configurer <br> 
-                                                          mon compte
-                                                        <h1 class="sacado_menu">SACADO </h1>
-                                                        </a>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="row">
-                                                    <div class="col-xs-12" align='center' style="line-height:30px;font-size:25px;margin-top: 30px;">
-                                                         <i class="bi bi-people icon_size"></i><span class="semi_bold"> Avec la version Etablissement</span>, créer des évaluations auto-corrigées, exporter les résultats en CSV ou en tableur, mutualiser vos parcours, co-animer, créer vos rituels et bien  plus encore... 
-                                                        La version Etablissement ne coute rien aux enseignants. L'abonnement est pris en charge par l'établissement. <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a><br/>
-                                                        Bonne prise en main. <br/>L'équipe SACADO.
-                                                    </div>
-                                                    <div class="col-xs-12" style="line-height:30px;margin-top: 30px;">
-                                                    <a href="javascript:void();" class="btn btn-default reset_the_set_up">Revenir à l'accueil</a>
-                                                    </div>
-                                                </div>
-                                            </div>                                             
                                         </div>
                                     </div>
-                                </div>                            
-                            </div>
-                        </div>    
-                        <div class="row" align="center" id="sacado_logo_white" >
-                            <div class="col-lg-12 col-xs-12">
-                                <img src="{% static 'img/sacado_logo_white.png' %}" />
-                            </div>
-                        </div>
-                        <script id="rowToClone" type="text/template">
-                            <div id="duplicate">
-                                <div class="row">
-                                    <div class="col-xs-12 col-md-2"><label>Nom : </label> <br/>{{ form_groups.empty_form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
-                                    <div class="col-xs-12 col-md-2"><label>Enseignement :</label> <br/> {{ form_groups.empty_form.subject|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
-                                    <div class="col-xs-12 col-md-2"><label>Niveau :</label> <br/> {{ form_groups.empty_form.level|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
-                                    <div class="col-xs-12 col-md-2"><label>Contenus sacado ?</label> <br/> {{ form_groups.empty_form.recuperation |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}</div>
-                                    <div class="col-xs-12 col-md-2 delete_button_question"><br/></div>
                                 </div>
-                            </div>
-                        </script> <div id="div_feed_back" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
-                    {% e
-                        lse %}  
-                        <div class="row">
-                            <div class="col-lg-12 col-xs-12">
-                                <p></p>
-                                <div class="round" style="margin-top: 30px;margin-bottom: 10px;background-color: #00B999 ; font-size:25px ; color:white; ">
-                                    <a href="{% url 'create_group' %}" ><h1>2.</h1> Créer <br/>   
-                                      mon premier groupe</a>
-               
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% endif %}
+                            {% empty %}
+                                <div class="alert alert-sacado">En attente d'inscription...</div>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        {% if teacher.groups.count == 0 %} 
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="introduction_teacher"> 
+                                        <div id="set_up_title"  class="set_up_title">
+                                            Bienvenue dans l'univers <span class="sacado_menu">SACADO</span>  
+                                        </div>
 
-            {% endfor %}
+                                        <div id="set_up_subtitle"    align="center">
+                                        SACADO propose des parcours d'apprentissage composés de cours, de quiz et d'exercices auto-corrigés à variables didactiques aléatoires.<br/>Suivez les résultats de vos élèves et indivisualisez les supports en fonction de leur réussite.
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-6" align='center' id="manual_install">
+                                                <a href="{% url 'create_group' %}"  class="auto_install set_up_round" style="padding-top: 50px"> 
+                                                    Je veux créer<br/>   mon premier groupe 
+                                                </a> 
+                                            </div>
+                                            <div class="col-xs-6" align='center' id="auto_install">
+                                                <a href="javascript:void();" id="show_auto_install" class="auto_install set_up_round" style="padding-top: 50px"> 
+                                                    Je veux créer<br/>  tous mes <br/>groupes 
+                                                </a> 
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12" align='center'>
+                                                <div id="div_auto_install" class="auto_install_body no_visu_on_load">
+                                                    <div class="set_up_sacado" align='center'>
+                                                        Je veux créer  mes groupes et leur associer tous les documents  <span class="sacado_menu">SACADO </span><br/> <small>Il ne faut pas inscrire mes élèves. Chaque groupe contient un code à donner à vos élèves pour qu'ils s'inscrivent eux-même.</small>
+
+
+
+                                                        <hr/>
+                                                        <div align='left' style="padding-left:10px;"> 
+                                                            <form action="{% url 'all_set_up_sacado' %}" method="POST" enctype="form/data" id="set_up">
+                                                                {% csrf_token %}
+                                                                {{ form_groups.management_form }}
+                                                                <div id="formsetZone">
+                                                                    <input id="qtype" value="{{ qtype }}" name="qtype" type="hidden" />
+                                                                    {% for form in form_groups %} 
+                                                                        {{ form.id }}
+                                                                        <div class="row">
+                                                                            <div class="col-xs-12 col-md-2" align='left'><label>Nom :</label> <br/>{{ form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
+                                                                            <div class="col-xs-12 col-md-2" align='left'><label>Enseignement :</label><br/> {{ form.subject |attr:"required"|add_class:"form-control select2  border_violet" }}</div>
+                                                                            <div class="col-xs-12 col-md-2" align='left'><label>Niveau :</label> <br/>{{ form.level|attr:"required"|add_class:"form-control select2  border_violet" }}</div>
+                                                                            <div class="col-xs-12 col-md-2"><label>Contenus sacado ?</label> <br/> {{ form_groups.empty_form.recuperation  |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</div>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                                <div class="row" style="margin-top:20px;">
+                                                                    <div class="col-xs-12 col-md-12" >
+                                                                        <a href="javascript:void();" id="set_up_add_more_group"  class="set_up_add_more_group btn btn-sacado" ><i class="bi bi-plus-circle"></i> Ajouter un groupe </a><br/><br/>
+                                                                    </div>                            
+                                                                </div>
+                                                                <div class="row" style="margin-top:20px;" id="div_start_the_set_up">
+                                                                    <button type="submit" class="btn btn-primary" id="start_the_set_up">Lancer l'installation</button>
+
+                                                                    <a href="javascript:void();" class="btn btn-default reset_the_set_up">Revenir à l'accueil</a>
+
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="div_manual_install"  class="manual_install_body no_visu_on_load">
+
+                                                    <div class="row">
+                                                        <div class="col-xs-12" align='center' style="line-height:30px;font-size:25px;margin-top:5px;margin-bottom:35px;">
+                                                            <i class="bi bi-person-circle icon_size"></i> <span class="semi_bold">Avec la version Enseignant</span>, 3 étapes de configuration.
+                                                        </div>
+                                                    </div>
+
+                                                    <div align="center">
+                                                        <img src="{% static 'img/modules.png' %}" width="500" /><br/>
+                                                    </div>
+
+
+                                                    <div class="row">
+                                                        <div class="round" style="margin-top: 30px;padding-top:15px;margin-bottom: 10px;font-size:25px;background-color:#0960B5;color:white; "> 
+                                                             <a href="{% url 'profile' %}">
+                                                                <h1>1.</h1>   Configurer <br> 
+                                                              mon compte
+                                                            <h1 class="sacado_menu">SACADO </h1>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="row">
+                                                        <div class="col-xs-12" align='center' style="line-height:30px;font-size:25px;margin-top: 30px;">
+                                                             <i class="bi bi-people icon_size"></i><span class="semi_bold"> Avec la version Etablissement</span>, créer des évaluations auto-corrigées, exporter les résultats en CSV ou en tableur, mutualiser vos parcours, co-animer, créer vos rituels et bien  plus encore... 
+                                                            La version Etablissement ne coute rien aux enseignants. L'abonnement est pris en charge par l'établissement. <a href="{% url 'ask_school_adhesion' %}" class="btn btn-warning">Opter pour la version établissement</a><br/>
+                                                            Bonne prise en main. <br/>L'équipe SACADO.
+                                                        </div>
+                                                        <div class="col-xs-12" style="line-height:30px;margin-top: 30px;">
+                                                        <a href="javascript:void();" class="btn btn-default reset_the_set_up">Revenir à l'accueil</a>
+                                                        </div>
+                                                    </div>
+                                                </div>                                             
+                                            </div>
+                                        </div>
+                                    </div>                            
+                                </div>
+                            </div>    
+                            <div class="row" align="center" id="sacado_logo_white" >
+                                <div class="col-lg-12 col-xs-12">
+                                    <img src="{% static 'img/sacado_logo_white.png' %}" />
+                                </div>
+                            </div>
+                            <script id="rowToClone" type="text/template">
+                                <div id="duplicate">
+                                    <div class="row">
+                                        <div class="col-xs-12 col-md-2"><label>Nom : </label> <br/>{{ form_groups.empty_form.name|attr:"required"|add_class:"form-control border_violet" }}</div>
+                                        <div class="col-xs-12 col-md-2"><label>Enseignement :</label> <br/> {{ form_groups.empty_form.subject|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
+                                        <div class="col-xs-12 col-md-2"><label>Niveau :</label> <br/> {{ form_groups.empty_form.level|attr:"required"|add_class:"form-control select2 border_violet" }}</div>
+                                        <div class="col-xs-12 col-md-2"><label>Contenus sacado ?</label> <br/> {{ form_groups.empty_form.recuperation |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non" }}</div>
+                                        <div class="col-xs-12 col-md-2 delete_button_question"><br/></div>
+                                    </div>
+                                </div>
+                            </script> <div id="div_feed_back" {% if not form.retroaction.value   %} class="checkbox_no_display"{% endif %}>
+                        {% e
+                            lse %}  
+                            <div class="row">
+                                <div class="col-lg-12 col-xs-12">
+                                    <p></p>
+                                    <div class="round" style="margin-top: 30px;margin-bottom: 10px;background-color: #00B999 ; font-size:25px ; color:white; ">
+                                        <a href="{% url 'create_group' %}" ><h1>2.</h1> Créer <br/>   
+                                          mon premier groupe</a>
+                   
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                {% endfor %}
 
 
      

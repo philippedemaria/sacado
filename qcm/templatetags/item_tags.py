@@ -15,6 +15,11 @@ def create_slug(arg, slug):
 
 
 @register.filter
+def mark_to_point(arg):
+    return str(arg).replace(",",".")
+ 
+
+@register.filter
 def add_parameters(arg, index):
     '''Modifie les paramètres aléatoires pour les questions flash'''
     tab = arg.split(";")

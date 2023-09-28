@@ -1354,8 +1354,6 @@ def show_quizz_parcours_student(request,id,idp):
 
 
  
-
-
  
 def create_quizz_code(request,id,idg):
     """ show quizz d'un groupe classe """
@@ -1368,7 +1366,20 @@ def create_quizz_code(request,id,idg):
     return redirect("show_quizz_group", id , idg ) 
 
 
+@csrf_exempt
+def ajax_quizz_sorter(request):
 
+    try :
+        valeur_ids = request.POST.get("valeurs")
+        valeur_tab = valeur_ids.split("-") 
+     
+        for i in range(len(valeur_tab)-1):
+            Quizz.objects.filter(pk = valeur_tab[i]).update(ranking = i)
+    except :
+        pass
+
+    data = {}
+    return JsonResponse(data) 
 ############################################################################################################
 ############################################################################################################
 ########## Play quizz

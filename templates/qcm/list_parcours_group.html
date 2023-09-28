@@ -77,7 +77,10 @@
                 {% for folder in folders  %}  
                     {% include 'qcm/folder_tag.html' %}
                 {% endfor %}
-            </form> <div style="clear:both"></div>
+            </form> 
+
+
+            <div style="clear:both"></div>
         </div>
 
         <div class="tab-pane {% if not nb_folders and not organiser %}active{% endif %}" id="2">
@@ -144,10 +147,13 @@
  
                 </div>
             </div>
-
+            <form action="" methode="POST" id="docperso_sortable">
             {% for docperso in docpersos %}   
                   {% include 'qcm/docperso_tag.html' %} 
-            {% endfor %}<div style="clear:both"></div>
+            {% endfor %}
+            </form>
+
+            <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="5">
             <div class="row" style="margin-bottom: 20px"> 
@@ -180,10 +186,12 @@
                         <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" title="Version Etablissement requise"><i class="bi bi-clipboard-plus"></i>  <span class="btn_label">Dupliquer un quiz mutualisé </span></a>    
                     {% endif %}
                 </div>
-            </div>
+            </div>            
+            <form action="" methode="POST" id="quizz_sortable"> 
             {% for quizz in quizzes %}   
                   {% include 'tool/quizz_tag.html' %} 
             {% endfor %}
+            </form>
             <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="7">
@@ -203,9 +211,13 @@
                 </div>
             </div>
 
+            <form action="" methode="POST" id="bibliotex_sortable"> 
             {% for bibliotex in bibliotexs %}   
-                  {% include 'bibliotex/bibliotex_tag.html' %} 
-            {% endfor %}<div style="clear:both"></div>
+                {% include 'bibliotex/bibliotex_tag.html' %} 
+            {% endfor %}
+            </form>
+
+            <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="8">
 
@@ -226,9 +238,12 @@
                     {% endif %}
                 </div>
             </div>
+            <form action="" methode="POST" id="flashpack_sortable"> 
             {% for flashpack in flashpacks %}   
                   {% include 'flashcard/flashpack_tag.html' %} 
-            {% endfor %}<div style="clear:both"></div>
+            {% endfor %}
+            </form>
+            <div style="clear:both"></div>
         </div>
     </div>
 </section>

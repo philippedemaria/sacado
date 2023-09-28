@@ -745,7 +745,31 @@ def flashpack_actioner(request):
             flashpack.is_favorite = 0
             flashpack.save()
      
-    return redirect('my_flashpacks')    
+    return redirect('my_flashpacks') 
+
+
+
+@csrf_exempt
+def ajax_flashpack_sorter(request):
+
+    try :
+        valeur_ids = request.POST.get("valeurs")
+        valeur_tab = valeur_ids.split("-") 
+     
+        for i in range(len(valeur_tab)-1):
+            Flashpack.objects.filter(pk = valeur_tab[i]).update(ranking = i)
+    except :
+        pass
+
+    data = {}
+    return JsonResponse(data) 
+
+
+
+
+
+
+
 ######################################################################################
 ######################################################################################
 #           Flashcard

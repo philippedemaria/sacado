@@ -2661,3 +2661,19 @@ def ajax_remove_toolless_mini(request):
 
     data = { }
     return JsonResponse(data)
+
+
+@csrf_exempt
+def ajax_group_sorter(request):
+
+    try :
+        valeur_ids = request.POST.get("valeurs")
+        valeur_tab = valeur_ids.split("-") 
+     
+        for i in range(len(valeur_tab)-1):
+            Group.objects.filter(pk = valeur_tab[i]).update(ranking = i)
+    except :
+        pass
+
+    data = {}
+    return JsonResponse(data) 

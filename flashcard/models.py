@@ -144,7 +144,8 @@ class Flashpack(models.Model):
     parcours     = models.ManyToManyField(Parcours, blank=True, related_name="flashpacks"  ) 
     folders      = models.ManyToManyField(Folder, blank=True, related_name="flashpacks"  ) 
     students     = models.ManyToManyField(Student, blank=True, related_name="flashpacks", editable=False)
-
+    ranking      = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
+    
     def __str__(self):
         return self.title 
 

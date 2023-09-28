@@ -307,7 +307,7 @@
               Coefficient actuel :  <span id="this_coeff{{ rc.id }}">{{ rc.coefficient  }}</span> 
               <hr style="padding:0px; margin:10px 0px"/><br>
               Notez ici le coefficient de l'exercice : Compris entre 0,25 et 10.
-              <input type="number"  min="0.25" max="10" step="0.05" data-relationship_id="{{rc.id}}" id="coefficient{{rc.id}}" data-custom=0  value="{{ rc.coefficient  }}" class="coefficient" />
+              <input type="number"  min="0.25" max="10" step="0.05" data-relationship_id="{{rc.id}}" id="coefficient{{rc.id}}" data-custom=0  value="{{ rc.coefficient|mark_to_point  }}" class="coefficient" />
 
                 <div class="row">
                     <div class="col-xs-12 col-md-12">

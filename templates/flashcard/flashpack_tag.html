@@ -3,10 +3,11 @@
 {% load item_tags %}
            
  
-<div  class="box box-widget widget-user-2"  
+<div  class="box box-widget widget-user-2 sorter_flashpack"  data-id="{{ flashpack.id }}"
       style="cursor: move;background-size: cover; {% if flashpack.vignette %}background-image: url('{{ flashpack.vignette.url }}'); {% else %}background-image: url('/static/img/flash_accueil.png');{% endif %}">
     <div class="handler widget-user-header">
-        <!-- Add signet to folder -->
+
+     <!-- Add signet to folder -->
         <span style="cursor:pointer" data-flashpack_id="{{flashpack.id }}" class="overlay_show white" >
             <div id="disc{{flashpack.id }}" class="{% if not flashpack.is_publish %}
                             disc_persistant

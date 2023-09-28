@@ -106,6 +106,9 @@ urlpatterns = [
     #path('send_slide', send_slide, name='send_slide'), 
     path('slide_sorter', slide_sorter, name='slide_sorter'),
 
+
+    path('ajax_quizz_sorter', ajax_quizz_sorter, name='ajax_quizz_sorter'),
+
     ################################################################################################################ 
     ############## Random_quizz
     ################################################################################################################ 

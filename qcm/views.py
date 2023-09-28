@@ -92,7 +92,27 @@ def parcours_are_in_trash() :
 
 
 
+def group_folder_parcours_exist(idg,idf,idp) :
 
+    group , folder , parcours = None, None, None
+
+    if idg : 
+        group = Group.objects.get(pk=idg) 
+    if idf : 
+        folder = Folder.objects.get(pk=idf)
+    if idp : 
+        parcours = Parcours.objects.get(pk=idp)
+    return group, folder, parcours
+
+
+def redirection_after_action(idg,idf,idp) :
+ 
+    if idp and idf : 
+        return redirect('show_parcours' , idf , idp)
+    elif idf : 
+        return redirect('list_sub_parcours_group', idg , idf )
+    else :
+        return redirect("list_parcours_group", idg)
 
 
 
@@ -2049,10 +2069,10 @@ def list_parcours_group(request,id):
     ###efface le realtime de plus de 30min
     #clear_realtime(parcourses , today.now() ,  1800 )
  
-    bibliotexs = group.bibliotexs.filter(folders=None)
-    quizzes    = group.quizz.filter(is_random=0,folders=None)
-    flashpacks = group.flashpacks.filter(folders=None)
-    docpersos  = group.docpersos.filter(folders=None)
+    bibliotexs = group.bibliotexs.filter(folders=None).order_by("ranking")
+    quizzes    = group.quizz.filter(is_random=0,folders=None).order_by("ranking")
+    flashpacks = group.flashpacks.filter(folders=None).order_by("ranking")
+    docpersos  = group.docpersos.filter(folders=None).order_by("ranking")
     qflashs    = group.quizz.filter(is_random=1,folders=None).order_by("-date_modified")
 
 
@@ -2108,11 +2128,11 @@ def list_sub_parcours_group(request,idg,idf):
     parcourses = folder.parcours.filter(is_archive=0 , is_evaluation=0 , is_sequence=0 , is_trash=0,is_testpos=0).order_by("ranking")
     evaluations = folder.parcours.filter(is_archive=0 , is_evaluation=1 , is_trash=0,is_testpos=0).order_by("ranking")
     sequences  = folder.parcours.filter(is_archive=0 , is_sequence=1 , is_trash=0).order_by("ranking")
-    quizzes    = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None)
-    bibliotexs = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None)
-    flashpacks = folder.flashpacks.filter(Q(teacher=teacher),is_archive=0,parcours=None)
+    quizzes    = folder.quizz.filter(teacher=teacher,is_archive=0,parcours=None).order_by("ranking")
+    bibliotexs = folder.bibliotexs.filter(Q(teacher=teacher)|Q(author=teacher)|Q(coteachers = teacher),is_archive=0,parcours=None).order_by("ranking")
+    flashpacks = folder.flashpacks.filter(Q(teacher=teacher),is_archive=0,parcours=None).order_by("ranking")
 
-    docpersos  = folder.docpersos.filter(parcours=None)
+    docpersos  = folder.docpersos.filter(parcours=None).order_by("ranking")
     qflashs     = folder.quizz.filter(is_random=1,parcours=None).order_by("-date_modified")
 
     accordion    = get_accordion(None, quizzes, bibliotexs, flashpacks)
@@ -4162,6 +4182,8 @@ def show_parcours(request, idf = 0, id=0):
  
     #relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
     relationships_customexercises = parcours.parcours_relationship.prefetch_related('exercise__supportfile').order_by("ranking")
+    relationships_customexercises_nb = relationships_customexercises.exclude(exercise__supportfile__is_title=1).count()
+
 
     nb_point , nb_time = 0 , 0
     nb_point_display = False
@@ -4183,14 +4205,14 @@ def show_parcours(request, idf = 0, id=0):
     request.session["parcours_id"] = parcours.id
 
     docpersos  = parcours.docpersos.filter(folders=folder).order_by("ranking")
-    bibliotexs = parcours.bibliotexs.filter(folders=folder)
-    quizzes    = parcours.quizz.filter(is_random=0,folders=folder)
-    flashpacks = parcours.flashpacks.filter(folders=folder)
+    bibliotexs = parcours.bibliotexs.filter(folders=folder).order_by("ranking")
+    quizzes    = parcours.quizz.filter(is_random=0,folders=folder).order_by("ranking")
+    flashpacks = parcours.flashpacks.filter(folders=folder).order_by("ranking")
     qflashs    = parcours.quizz.filter(is_random=1,folders=folder).order_by("-date_modified")
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher,  group = group ,  folder = folder ,   initial={ 'subject': parcours.subject , 'levels': parcours.level , 'groups': [group] , 'folders' :  [folder]  })
  
-    context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 
+    context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 'relationships_customexercises_nb' : relationships_customexercises_nb ,
                 'relationships_customexercises': relationships_customexercises, 'idf' : idf , 'bibliotexs' : bibliotexs , 'quizzes' : quizzes , 'flashpacks' : flashpacks , 'qflashs' : qflashs , 
                 'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder, 'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
 
@@ -14107,7 +14129,8 @@ def create_docperso_folder(request,idf=0):
             nf.students.set(group.students.all())
 
         messages.success(request, 'Le document a été créé avec succès !')
-        return redirect("list_parcours_group", idg)
+
+        return redirect("list_sub_parcours_group", idg,idf)
 
     else:
         print(form.errors)
@@ -14176,14 +14199,8 @@ def update_docperso(request, idp,idd):
     idg = request.session.get("group_id",None)
     idf = request.session.get("folder_id",None)
 
-    group , folder , parcours = None, None, None
-    if idf : 
-        folder = Folder.objects.get(pk=idf)
-    if idp : 
-        parcours = Parcours.objects.get(pk=idp)  
-    if idg : 
-        group = Group.objects.get(pk=idg)
-            
+    group, folder, parcours = group_folder_parcours_exist(idg,idf,idp)
+
     form = DocpersoForm(request.POST or None ,request.FILES or None ,teacher = request.user.teacher, parcours = parcours , folder = folder , group = group, instance=docperso  )
 
 
@@ -14207,10 +14224,9 @@ def update_docperso(request, idp,idd):
             nf.students.set(group.students.all())
 
         messages.success(request, 'Le document a été créé avec succès !')
-        if parcours and folder : 
-            return redirect('show_parcours' , folder.id , parcours.id)
-        else :
-            return redirect("list_parcours_group", idg)
+
+        return redirection_after_action(idg,idf,idp)
+
     else:
         print(form.errors)
 
@@ -14227,16 +14243,8 @@ def delete_docperso(request, idd, idp=0):
     idg = request.session.get("group_id",None)
     idf = request.session.get("folder_id",None)
     docperso.delete()
-    if idf : 
-        folder = Folder.objects.get(pk=idf) 
-    if idg : 
-        group = Group.objects.get(pk=idg)
-
-
-    if idp and idf : 
-        return redirect('show_parcours' , idf , idp)
-    else :
-        return redirect("list_parcours_group", idg)
+    group, folder, parcours = group_folder_parcours_exist(idg,idf,idp)
+    return redirection_after_action(idg,idf,idp)
 
 
 
@@ -14244,11 +14252,6 @@ def docperso_actioner(request) :
 
     teacher = request.user.teacher 
     idbs = request.POST.getlist("selected_docpersos")
-
-    print(  request.POST.get("action") == "deleter"  )
-
-
-    print(  "ids " ,  request.POST.getlist("selected_docpersos") )
 
     if  request.POST.get("action") == "deleter" :  
         for idb in idbs :
@@ -14476,3 +14479,17 @@ def get_inside_chapter_div(request) :
     return JsonResponse(data)
 
 
+@csrf_exempt
+def ajax_docperso_sorter(request):
+
+    try :
+        valeur_ids = request.POST.get("valeurs")
+        valeur_tab = valeur_ids.split("-") 
+     
+        for i in range(len(valeur_tab)-1):
+            Docperso.objects.filter(pk = valeur_tab[i]).update(ranking = i)
+    except :
+        pass
+
+    data = {}
+    return JsonResponse(data) 

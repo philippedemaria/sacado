@@ -70,7 +70,7 @@ body{
 
     <ul class="nav nav-tabs">
         <li class="active">
-            <a href="#3" data-toggle="tab" class="selector_tabs" data-id="3"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}"><i class="fa fa-explicit" ></i> <span class="legend_menu_tabs">  Exercices <span class="fontLabel"> {{ relationships_customexercises.count }} </span></span>
+            <a href="#3" data-toggle="tab" class="selector_tabs" data-id="3"  data-bg="{{ group.color }}" data-color="{{ group.color|contrast_color }}"><i class="fa fa-explicit" ></i> <span class="legend_menu_tabs">  Exercices <span class="fontLabel"> {{ relationships_customexercises_nb }} </span></span>
             </a>
         </li>
         <li>
@@ -254,10 +254,13 @@ body{
                     {% endif %}
                 </div>
             </div>
+            <form action="" methode="POST" id="docperso_sortable">
+            {% for docperso in docpersos %} 
+                {% include 'qcm/docperso_tag.html' %} 
+            {% endfor %}
+            </form>
 
-            {% for docperso in docpersos %}   
-                  {% include 'qcm/docperso_tag.html' %} 
-            {% endfor %}<div style="clear:both"></div>
+            <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="5">
             <div class="row" style="margin-bottom: 20px"> 
@@ -281,9 +284,11 @@ body{
                 {% endif %}
                 </div>
             </div>
+            <form action="" methode="POST" id="quizz_sortable">
             {% for quizz in quizzes %}   
                   {% include 'tool/quizz_tag.html' %} 
             {% endfor %}
+            </form>
             <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="7">
@@ -301,10 +306,11 @@ body{
                 {% endif %}
                 </div>
             </div>
-
+            <form action="" methode="POST" id="bibliotex_sortable">
             {% for bibliotex in bibliotexs %}   
                   {% include 'bibliotex/bibliotex_tag.html' %} 
             {% endfor %}
+            </form>
             <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="8">
@@ -320,10 +326,12 @@ body{
                     {% endif %}
                 {% endif %}
                 </div>
-            </div>
+            </div>            
+            <form action="" methode="POST" id="flashpack_sortable">
             {% for flashpack in flashpacks %}   
                   {% include 'flashcard/flashpack_tag.html' %} 
             {% endfor %}
+            </form>
             <div style="clear:both"></div>
         </div>
 </section>

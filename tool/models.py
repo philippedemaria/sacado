@@ -471,7 +471,7 @@ class Quizz(ModelWithCode):
     folders      = models.ManyToManyField(Folder, blank=True, related_name="quizz"  ) 
     
     students     = models.ManyToManyField(Student, blank=True,  related_name="quizz",   editable=False)
-
+    ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
 
     def __str__(self):

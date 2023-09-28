@@ -14,7 +14,7 @@ class GroupForm(forms.ModelForm):
 
     class Meta:
         model = Group 
-        fields = ('name','color','level','is_hidden','assign','suiviparent','lock','subject','studentprofile' ) 
+        fields = ('name','labelname','color','level','is_hidden','assign','suiviparent','lock','subject','studentprofile' ) 
 
 
 
@@ -22,7 +22,7 @@ class GroupForm(forms.ModelForm):
 class GroupTeacherForm(forms.ModelForm):
 	class Meta:
 		model = Group 
-		fields = ('name','color','level','assign','is_hidden','suiviparent','lock','subject','studentprofile','recuperation') 
+		fields = ('name','labelname','color','level','assign','is_hidden','suiviparent','lock','subject','studentprofile','recuperation') 
 
 
 	def __init__(self, *args, **kwargs):

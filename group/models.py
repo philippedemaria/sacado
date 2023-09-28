@@ -14,6 +14,7 @@ from django.db.models import Q
 class Group(ModelWithCode):
     """ Group est une classe d'élèves coté enseignant -- Ce qui permet de faire un groupe avec une ou plusieurs divisions """
     name           = models.CharField(max_length=255, verbose_name="Nom*")
+    labelname      = models.CharField(max_length=18, blank=True, default="", verbose_name="Nom de substitution")
     color          = models.CharField(max_length=255, default='#46119c', blank=True, null=True, verbose_name="Couleur*")
     students       = models.ManyToManyField(Student, related_name="students_to_group", blank=True, verbose_name="Élèves*")
     teacher        = models.ForeignKey(Teacher, blank=True, null=True, on_delete=models.CASCADE, related_name="groups", verbose_name="Enseignant*")
@@ -28,6 +29,7 @@ class Group(ModelWithCode):
     school         = models.ForeignKey(School, default = "" ,  editable=False, blank=True,  null=True, on_delete=models.CASCADE, related_name="school_group" ) 
     is_gar         = models.BooleanField(default=0)
     is_hidden      = models.BooleanField(default=0)
+    ranking        = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
     class Meta:
         ordering = ['name']

@@ -1115,7 +1115,7 @@ class Parcours(ModelWithCode):
             flashpacks = self.parcours_relationship.filter( type_id=4 )
             docpersos  = self.parcours_relationship.filter( type_id=10 )
         else :
-            exercises  = self.parcours_relationship.filter( exercise__supportfile__is_title=0 ) 
+            exercises  = self.parcours_relationship.filter( type_id=0,exercise__supportfile__is_title=0 ) 
             courses    = self.course.all()
             bibliotex  = self.bibliotexs.all() 
             quizz      = self.quizz.all()
