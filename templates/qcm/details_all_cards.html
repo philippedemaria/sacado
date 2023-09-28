@@ -368,11 +368,9 @@
               data-num_exo="{{ forloop.counter }}" 
               data-parcours_id="{{ parcours.id }}" data-custom=0 > 
               <div style="position:relative; height:195px;overflow-y:hidden;width:100%;padding-top:5px; ">
-                            {% comment %}
                 {% if rc.exercise.supportfile.imagefile %}
                 <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours"  style="position:absolute;{% if not rc.is_publish %}opacity:0.8{% endif %}" >
                 {% endif %} 
-                            {% endcomment %}
 
                 <div style="width:100%; border: thick double  {{parcours.subject.color}};padding:10px;font-size: 14px; height:180px">
                   {% if rc.exercise.supportfile.qtype_logo %} 
@@ -400,8 +398,6 @@
             <!-- Appel de la fenetre remédiation 
                   Appel ajax vers la modale qui est dans la page dashboard : id="remediation"
             -->
-            {% comment %}
-
             {% if parcours.zoom %}
             <a class="helper_tip" style="color:{{ parcours.color|contrast_color }}">
                 <i class="fa fa-search-plus"></i>
@@ -413,7 +409,6 @@
                 </span>
             </a>
             {% endif %}
-            {% endcomment %}
 
             <span style="font-size:9px;color:{{ parcours.color|contrast_color }}" id="response{{rc.id}}" >{{  rc.relationship_remediation.all|length }}</span>
 
