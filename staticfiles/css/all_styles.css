@@ -232,7 +232,7 @@ a.level_title:hover, a.level_title:active,a.level_title:focus{
 
 
 
-.ui-sortable .box{
+.ui-sortable .box,, .ui-sortable .sorter_group {
   cursor:move!important;
 }
 
