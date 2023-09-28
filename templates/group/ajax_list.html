@@ -69,11 +69,11 @@
                             <td><form action="" method="POST">
                                 {% csrf_token %}
                                 <i class='fa fa-square' style='color:{{ group.color }}'></i> <a
-                                    href="{% url 'update_group'  group.id %}">{{ group.name }} </a>
+                                    href="{% url 'update_group'  group.id %}">{% include 'group/group_labelname.html' %}</a>
  
                                 
                                 <a href="#" class="vue pull-right menuaction" data-toggle='modal'
-                                   data-group_name='{{ group.name }}' data-group_id='{{ group.id }}' data-target='#exampleModal'> {{ group.students.count }}
+                                   data-group_name="{{group.name}}" data-group_id='{{ group.id }}' data-target='#exampleModal'> {{ group.students.count }}
                                     <i class="fa fa-users"></i> </a>
                                 </form>
                             </td>

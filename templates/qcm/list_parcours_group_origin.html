@@ -56,11 +56,11 @@
     <div class="row"> 
 
         <div class="col-xs-6 col-md-3">
-            <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-speedometer2"></i> Bureau virtuel de {{ group.name|truncatechars:"20" }}</a>
+            <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-speedometer2"></i> Bureau virtuel de {% include 'group/group_labelname.html' %}</a>
         </div>
 
         <div class="col-xs-6 col-md-3">
-            <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-webcam"></i>  Questions flash de {{ group.name }} </a>
+            <a href="{% url 'list_questions_flash_by_group' group.id %}" class="btn btn-sacado"><i class="bi bi-webcam"></i>  Questions flash de {% include 'group/group_labelname.html' %}</a>
         </div>
     </div>
 

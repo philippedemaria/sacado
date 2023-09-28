@@ -192,7 +192,7 @@
                 <h2>Duplication dans vos groupes du parcours : <span id="this_document_title"></span></h2>
             </div>
             <div class="modal-body">
-                <p class="text-index_blue">Voici vos groupes du même niveau que  {{ group.name }} et leurs dossiers eventuels. Cocher ceux dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
+                <p class="text-index_blue">Voici vos groupes du même niveau que  {% include 'group/group_labelname.html' %} et leurs dossiers eventuels. Cocher ceux dans lesquels vous souhaitez placer ou rattacher votre parcours.</p>
 
                     {% csrf_token %}<input type="hidden" name="this_document_id" id="this_document_id" />
                     <div class="row">

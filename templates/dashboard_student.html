@@ -115,7 +115,7 @@
                                 {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name }}
                             </div>
                             <div class="col-xs-6 col-md-6 col-lg-6" align="right"> 
-                                {{ group.name }}  
+                                {% include 'group/group_labelname.html' %}
                             </div>
                         </div>
                     </div>

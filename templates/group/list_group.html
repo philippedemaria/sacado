@@ -46,7 +46,7 @@
                                     <span style="color:{{group.color}}">{{ group.code }}</span> 
                                 </td>
                                 <td style="width:150px">
-                                     <a href="{% url 'update_group'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a> <br>
+                                     <a href="{% url 'update_group'  group.id %}" style="color:{{group.color}}">{% include 'group/group_labelname.html' %}</a> <br>
 
                                      
 

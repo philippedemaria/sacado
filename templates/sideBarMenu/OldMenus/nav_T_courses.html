@@ -33,7 +33,7 @@
               {% if '/group.id' in request.path %}
                   active
               {% endif %}
-              "><a href="{% url 'sequences'  group.id  %}"> <i class='fa fa-square' style='color: {{ group.color }}'></i> {{ group.name }}</a></li> 
+              "><a href="{% url 'sequences'  group.id  %}"> <i class='fa fa-square' style='color: {{ group.color }}'></i> {% include 'group/group_labelname.html' %}</a></li> 
             {% endfor %}
           </ul>
         </div>

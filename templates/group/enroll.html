@@ -107,7 +107,7 @@ body{
             <div id="body_inscription">
                 {% if group.lock %}
                     <div class="alert alert-danger">
-                        <i class="fa fa-lock fa-2x"></i> Le groupe <b>{{ group.name }}</b> est verrouillé. <br/>Vous ne pouvez plus vous y inscrire. Contacter l'enseignant {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}.
+                        <i class="fa fa-lock fa-2x"></i> Le groupe <b>{% include 'group/group_labelname.html' %}</b> est verrouillé. <br/>Vous ne pouvez plus vous y inscrire. Contacter l'enseignant {{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}.
                     </div>
                 {% else %}
                 <form action="" method="POST" id="student_form">
@@ -119,7 +119,7 @@ body{
                     {% csrf_token %}
                     <div   class="  toppadding" >
 
-                        <h4  style="font-weight: 100">S'inscrire à {{ group.name }}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h4>
+                        <h4  style="font-weight: 100">S'inscrire à {% include 'group/group_labelname.html' %}<span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h4>
                         <input name="group_id" value="{{ group.id }}" type="hidden" /> 
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
@@ -216,7 +216,7 @@ body{
                     {% csrf_token %}
                     <input name="group_id" value="{{ group.id }}" type="hidden" /> 
                     <div  class="  toppadding" >
-                        <h4 style="font-weight: 100">Rejoindre le groupe {{ group.name }} <span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h4>
+                        <h4 style="font-weight: 100">Rejoindre le groupe {% include 'group/group_labelname.html' %} <span class="pull-right"><small>{{ group.teacher.user.civilite }} {{ group.teacher.user.last_name|capfirst }}</small></span></h4>
                         <div class="row">
                             <div class="col-xs-12 col-md-6">
                                 <div class="form-group">

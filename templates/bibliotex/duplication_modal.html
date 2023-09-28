@@ -23,7 +23,7 @@
                     {% for group in teacher.has_groups %}
                     <div class="col-xs-6 card_modal_search exercise_body_shared">
                         <div class="quizz_item" style="background-color:{{ group.color }}">
-                            <label  class="btn btn-sacado">Groupe : {{ group.name }} <input type="checkbox" name="groups" value="{{ group.id }}" class="group_name" /> </label> 
+                            <label  class="btn btn-sacado">Groupe : {% include 'group/group_labelname.html' %} <input type="checkbox" name="groups" value="{{ group.id }}" class="group_name" /> </label> 
                             <div class="form_card no_visu_on_load" style="padding : 15px 5px "><label>Dossiers associés</label>                         
                             {% for folder in  group.folders_not_in_trash %}
                                 <div class="quizz_item" style="background-color:{{ folder.color }};color:{{ folder.color|contrast_color}}"> 

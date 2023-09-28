@@ -81,7 +81,7 @@
                     <label>Groupe :</label>
                     <select name="group" class="form-control select2">
                         {% for group in groups %}
-                            <option value="{{ group.id }}">{{ group.name }}</option>
+                            <option value="{{ group.id }}">{% include 'group/group_labelname.html' %}</option>
                         {% endfor %}
                     </select>
                 </div>

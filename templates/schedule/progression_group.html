@@ -14,7 +14,7 @@
 
 
 {% block page_title %}
-    <i class="bi bi-calendar4"></i> Ma progression en {{ group.name }}
+    <i class="bi bi-calendar4"></i> Ma progression en {% include 'group/group_labelname.html' %}
        <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                     <div class="helper_tip_text" >Cliquer un créneau de l'emploi du temps coloré pour le remplir.</div>
                                 </span> 

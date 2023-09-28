@@ -66,7 +66,7 @@
                                 <td style="width:30px ; border-left:5px solid {{group.color}}">
                                     <input type="checkbox" name="group_ids" value="{{ group.id }}"  class ="items_to_be_selected" />
                                 </td><td>
-                                    <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{{ group.name }} </a>
+                                    <a href="{% url 'update_group_school'  group.id %}" style="color:{{group.color}}">{% include 'group/group_labelname.html' %}</a>
                                     <span style="color:#CCC; font-size: 10px" class="pull-right tool_tip" >
                                     {% if group.lock %}
                                         <i class="fa fa-lock"></i>

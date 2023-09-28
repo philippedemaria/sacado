@@ -44,7 +44,7 @@
                 <div class="small-box" style="background-color:{{ group.color }}; height:250px">
                 <!-- modal qui affiche la liste des élèves -->
                     <div class="inner" style="color:white;opacity:0.9"><br/>
-                        <span style="color:{{ group.color|contrast_color }};font-size: 35px">{{ group.name |truncatechars:"14" }} </span>  <br/><br><br>
+                        <span style="color:{{ group.color|contrast_color }};font-size: 35px">{% include 'group/group_labelname.html' %} </span>  <br/><br><br>
 
 
                      

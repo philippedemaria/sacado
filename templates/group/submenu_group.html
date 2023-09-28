@@ -219,7 +219,7 @@
             <a href="{% url 'update_group' group.id %}"  > <i class="fa fa-cogs fa-fw"  ></i><span class="small_displayer"> Configurer le groupe</span></a>    
         </li>
         {% if not is_gar_check %}
-        <li {% if 'group/update/' in request.path %} class="active" {% endif %}>
+        <li {% if 'students_to_' in request.path %} class="active" {% endif %}>
             <a href="{% url 'insert_students_to_this_group' group.id %}"  > <i class="fa fa-user-plus fa-fw"  ></i><span class="small_displayer"> Ajouter des élèves</span></a>    
         </li>
         {% endif %}

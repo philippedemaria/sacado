@@ -11,7 +11,7 @@
 
 
 {% block page_title %}
-    <a href="{% url 'list_questions_flash'  %}"><i class="bi bi-lightning"></i> Mes Questions flash </a><img src="{% static 'img/angle-right.png' %}" width="25px"/> <a href="{% url 'list_parcours_group' group.id %}" title="Vers mon groupe">{{ group.name }}</a>  
+    <a href="{% url 'list_questions_flash'  %}"><i class="bi bi-lightning"></i> Mes Questions flash </a><img src="{% static 'img/angle-right.png' %}" width="25px"/> <a href="{% url 'list_parcours_group' group.id %}" title="Vers mon groupe">{% include 'group/group_labelname.html' %}</a>  
 
     <ul>
 

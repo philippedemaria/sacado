@@ -5,7 +5,7 @@
                 <div class="panel panel-danger">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a href=' '><i class='fa fa-newspaper-o'></i> {{ mygroup.name }}  </a>
+                            <a href=' '><i class='fa fa-newspaper-o'></i>{% if mygroup.labelname %}{{ mygroup.labelname }}{% else %}{{ mygroup.name }}{% endif %}</a>
                         </h4>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                     {% endif %}
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a href=' '><i class='fa fa-newspaper-o'></i> {{ group.name }} </a>
+                            <a href=' '><i class='fa fa-newspaper-o'></i> {% include 'group/group_labelname.html' %} </a>
                         </h4>
                     </div>
                 </div>

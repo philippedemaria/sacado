@@ -361,7 +361,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <h4>{{ group.name }} <img src="{% static 'img/angle-right.png' %}"/> Dupliquer le sommaire</h4>              
+                <h4>{% include 'group/group_labelname.html' %} <img src="{% static 'img/angle-right.png' %}"/> Dupliquer le sommaire</h4>              
             </div>
             <div class="modal-body">
                 <form method="POST" action="{% url 'book_duplicate_summary' %}" enctype='multipart/form-data' id="new_chapter"> 

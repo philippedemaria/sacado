@@ -104,7 +104,7 @@
                     <div class="row">
                         <div class="col-xs-12">
                             {% for group in stamp.k_group_list %}
-                            <div class="card droppable"  data-group='{{ forloop.counter }}' style="padding:10px"><b>{{ group.name }}</b><br/>
+                            <div class="card droppable"  data-group='{{ forloop.counter }}' style="padding:10px"><b>{% include 'group/group_labelname.html' %}</b><br/>
                                 {% for s in group.students %}
                                     <li class="sanspuce">{{ s.name }} </span></li>
                                 {% endfor %}

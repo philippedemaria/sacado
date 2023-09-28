@@ -14,7 +14,7 @@
 
 
 {% block page_title %}
-    <i class='bi bi-slash-circle'></i> Oublis du groupe {{ group.name }}
+    <i class='bi bi-slash-circle'></i> Oublis du groupe {% include 'group/group_labelname.html' %}
 {% endblock %}
 
 {% block page_menu_right %}

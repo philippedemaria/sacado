@@ -8,7 +8,7 @@
 <a href="{% url 'index'  %}" style="color:{{ group.color|contrast_color_title }}"><i class="bi bi-people"></i></a> <img src="{% static 'img/angle-right.png' %}"/>
 
 
-<a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{{ group.name }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
+<a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color }}" >{% include 'group/group_labelname.html' %}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
 
 {% if folder and group %}  
 	<a href="{% url 'list_sub_parcours_group' group.id folder.id %}"   class="helper_tip" style="font-size:16px;color:{{ folder.color }}" > {{ folder.title|truncatechars:"25" }}</a>

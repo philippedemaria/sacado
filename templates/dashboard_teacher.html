@@ -18,7 +18,7 @@
                 <hr/>  
                 <ul>
                 {% for group in groups %}
-                    <li class="sanspuce"><i class="fa fa-square" style="color:  {{ group.color  }}"></i> <a href="{% url 'update_group' group.id %}">{{ group.name }}</a></li>
+                    <li class="sanspuce"><i class="fa fa-square" style="color:  {{ group.color  }}"></i> <a href="{% url 'update_group' group.id %}">{% include 'group/group_labelname.html' %}</a></li>
                 {% endfor %}
                 </ul>
             </div>
@@ -178,7 +178,7 @@
                             <!-- Legende de la small-box -->
                             <div class="inner" style="color:white;opacity:0.9"><br/>
                                 <span style="color:{{ group.color|contrast_color }};font-size: 35px">
-                                    {% if group.labelname %}{{ group.labelname |truncatechars:"14" }}{% else %}{{ group.name |truncatechars:"14" }}{% endif %}
+                                   {% include 'group/group_labelname.html' %}
                                 </span>{% if group.lock %} <i class="fa fa-lock" style="font-size: 14px" title="Ce groupe est verrouillé" ></i>{% endif %} <br/><br><br>
      
 

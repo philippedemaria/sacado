@@ -89,7 +89,7 @@
                                 <td>
                                    {% for group in student.students_to_group.all %} 
 
-                                        {{ group.name }} {% if not forloop.last %},{% endif %}
+                                        {% include 'group/group_labelname.html' %} {% if not forloop.last %},{% endif %}
 
                                    {% endfor  %} 
                                 </td>

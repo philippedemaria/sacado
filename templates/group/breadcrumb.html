@@ -3,5 +3,9 @@
 {% load item_tags %}
 {% load widget_tweaks %}
 
-{% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color|contrast_color_title }}" >{{ group.name }}</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
+{% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color|contrast_color_title }}" >
+
+{% include 'group/group_labelname.html' %}
+
+</a> <img src="{% static 'img/angle-right.png' %}"/>  {% endif %} 
  

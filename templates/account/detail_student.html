@@ -14,7 +14,7 @@
     <span   style="color:{{ group.color|contrast_color_title }}" ><i class="fa fa-mortar-board"></i> </span>
  
     {% if request.user.user_type == 2 %}
-        {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color|contrast_color_title }}" >{{ group.name }}</a> {% endif %}
+        {% if group %} <a href="{% url 'list_parcours_group' group.id %}" style="color:{{ group.color|contrast_color_title }}" >{% include 'group/group_labelname.html' %}</a> {% endif %}
         {% if not students %}
             {% if sprev_id %}
                 <a href="{% url 'detail_student' sprev_id  %}"  class="btn btn-default"> Elève précédent </a>{% endif  %}{{ student |truncatechars:"30" }} {% if snext_id %}<a href="{% url 'detail_student' snext_id  %}"  class="btn btn-default"> Elève suivant</a>
@@ -176,7 +176,7 @@
             <table class="table table-sacado  table-hover standard_tab_sort300">
                 <thead>
                     <tr style="color:#FFF;background-color: {{ group.color }}">
-                        <td>{{ group.name }}<img width="25px" src="{% static 'img/angle-right-white.png' %}"/>    Savoir faire</td>
+                        <td>{% include 'group/group_labelname.html' %}<img width="25px" src="{% static 'img/angle-right-white.png' %}"/>    Savoir faire</td>
                         <td style="width:400px">Score</td>
                     </tr>
                 </thead>

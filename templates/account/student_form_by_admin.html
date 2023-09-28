@@ -98,7 +98,7 @@
                     <label>Groupe affecté</label>
                     <select name="group_ids" id="group_ids" multiple class="select2">
                         {% for group in groups %}
-                            <option value="{{ group.id }}" {% if student in group.students.all %} selected {% endif %}>{{ group.name }}</option>
+                            <option value="{{ group.id }}" {% if student in group.students.all %} selected {% endif %}>{% include 'group/group_labelname.html' %}</option>
                          {% endfor %}
                     </select>
                 </div>

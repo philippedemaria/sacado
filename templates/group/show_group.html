@@ -23,7 +23,7 @@
 
 
 {% block page_title %}
-        <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {{ group.name }}   </span>
+        <span style="color:{{ group.color }}"><i class="fa fa-arrow-circle-right"></i> {% include 'group/group_labelname.html' %}   </span>
             <img src="{% static 'img/angle-right.png' %}"/> <small>Détails</small> <img src="{% static 'img/angle-right.png' %}"/>
 
             {% if group.just_students_count %}
@@ -329,14 +329,14 @@
         {% else %}
             {% if group.teacher and group.teacher == request.user.teacher %}
                     <hr/>Vous avez fait une fausse manip ? 
-                    <a href="{% url 'get_out_this_group' group.id %}" onclick="return get_out_this_group('{{group.name}}')">Quittez ce groupe</a>
+                    <a href="{% url 'get_out_this_group' group.id %}" onclick="return get_out_this_group('{% if group.labelname %}{{group.labelname}}{% else %}{{group.name}}{% endif %}')">Quittez ce groupe</a>
             {% else %}
                 <div class="row">
                     <div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 alert alert-danger"> 
                         <h1><b>IMPERATIF avec l'usage du GAR</h1>
                         Tant que vous n'avez pas récupéré tous vos élèves, ne changez pas le nom du groupe.
                         <hr/>
-                        <a href="{% url 'get_this_group' group.id %}" onclick="return get_this_group('{{group.name}}')">Récupérer ce groupe ?</a>
+                        <a href="{% url 'get_this_group' group.id %}" onclick="return get_this_group('{% if group.labelname %}{{group.labelname}}{% else %}{{group.name}}{% endif %}')">Récupérer ce groupe ?</a>
                     </div>
                 </div>
             {% endif %}
