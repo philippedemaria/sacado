@@ -187,8 +187,8 @@ def index(request):
                             }
  
             else :
-                grps = teacher.groups.filter(is_hidden=0)
-                shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True) 
+                grps = teacher.groups.filter(is_hidden=0).order_by("ranking")
+                shared_grps_id = Sharing_group.objects.filter(teacher=teacher).values_list("group_id", flat=True)
                 # sgps = []
                 # for sg_id in shared_grps_id :
                 #     grp = Group.objects.get(pk=sg_id)
@@ -199,7 +199,7 @@ def index(request):
 
                 sgps    = Group.objects.filter(pk__in=shared_grps_id,is_hidden=0)
                 groupes =  grps | sgps
-                groups  = groupes.order_by("level__ranking") 
+                groups  = groupes.order_by("ranking") 
                 nb_teacher_level = teacher.levels.count()
                 relationships = Relationship.objects.filter(Q(is_publish = 1)|Q(start__lte=today), parcours__teacher=teacher, date_limit__gte=today).order_by("date_limit").order_by("parcours")
                 folders_tab = teacher.teacher_folders.filter(students=None, is_favorite=1, is_archive=0 ,is_trash=0 )#.exclude(teacher__user__username__contains="_e-test") ## Dossiers  favoris non affectés
