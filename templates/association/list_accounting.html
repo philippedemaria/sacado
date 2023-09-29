@@ -126,35 +126,7 @@
 
                             </td> 
                             <td>
-                                {% if accounting.is_abonnement %}
-                                    {%  if accounting.mode == "par virement bancaire" %}
-                                        <span class="helper_tip"> <i class="fa fa-send"></i>
-                                            <div class="helper_tip_text" >par virement bancaire</div>
-                                        </span>
-                                    {% elif accounting.mode == "en espèces" %}
-                                        <span class="helper_tip"> <i class="fa fa-euro"></i>
-                                            <div class="helper_tip_text" >Espèces</div>
-                                        </span>
-                                    {% elif accounting.mode == "par mandatement administratif" %}
-                                        <span class="helper_tip"> <i class="fa fa-envelop"></i>
-                                            <div class="helper_tip_text" >Mandat administratif</div>
-                                        </span>
-                                    {% elif accounting.mode == "par carte de crédit" %}
-                                        <span class="helper_tip"> <i class="fa fa-credit-card"></i>
-                                            <div class="helper_tip_text" >par carte de crédit</div>
-                                        </span>
-                                    {% endif %}
-                                    {% if accounting.forme == "FACTURE" %}
-                                        {{ accounting.objet|safe  }}
-                                    {% else %}
-                                        {{ accounting.observation|safe }}
-                                    {% endif %}
-                                    {%  if accounting.mode == "Période de test" %}
-                                        <span class="text-danger">Période d'essai jusqu'au {{ accounting.abonnement.date_stop|date:"d N Y" }}</span>
-                                    {% endif %} 
-                                {% else %}
-                                     <span class="text-danger">Autre que abonnement.</span>
-                                {% endif %}
+                                {{ accounting.objet }}
 
                             </td>
 
