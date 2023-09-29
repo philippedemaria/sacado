@@ -1841,10 +1841,8 @@ def create_accounting(request,tp,ids):
 
     if ids > 0 :
         school = School.objects.get(pk=ids)
-        redirect_school = True
     else :
         school = None
-        redirect_school = True
 
     if tp == 0 :
         template = 'association/form_accounting.html'
@@ -1952,7 +1950,7 @@ def create_accounting(request,tp,ids):
         else :
             print(form.errors)
         
-        if redirect_school : return redirect('update_school_admin', ids )
+        if ids > 0 : return redirect('update_school_admin', ids )
         else : return redirect('list_accountings', 2 )
  
 
