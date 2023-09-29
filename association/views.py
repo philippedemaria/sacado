@@ -1839,7 +1839,10 @@ def create_accounting(request,tp,ids):
     form_ds  = formSet(request.POST or None)
     today    = datetime.now()
 
-    school = School.objects.get(pk=ids)
+    if ids > 0 :
+        school = School.objects.get(pk=ids)
+    else :
+        school = None
 
     if tp == 0 :
         template = 'association/form_accounting.html'
