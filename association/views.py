@@ -2331,7 +2331,7 @@ def create_avoir(request, id):
     c_year       = Activeyear.objects.filter(is_active = 1).order_by("year").last()
     current_year = c_year.year
     # Création des avoirs
-    Accountancy.objects.create(accounting_id = this_id , ranking = 3 , plan_id = 411 , is_credit = 1, amount = -amount , current_year = current_year)  
+    Accountancy.objects.create(accounting_id = this_id , ranking = 3 , plan_id = 411 , is_credit = 1, amount = amount , current_year = current_year)  
     Accountancy.objects.create(accounting_id = this_id , ranking = 4 , plan_id = 706 , is_credit = 0, amount = amount , current_year = current_year)  
  
     accounti = Accounting.objects.get(id=id) 
