@@ -2305,15 +2305,15 @@ def purge_gar(request,user_type):
 
 
 
-
-
-
 @user_passes_test(user_is_board)
 def create_avoir(request, id):
  
-    accounting_old = Accounting.objects.get(id=id)
-    amount         = accounting_old.amount
-    chronof        = accounting_old.chrono
+    accounting = Accounting.objects.get(id=id)
+    amount     = accounting.amount
+    chronof    = accounting.chrono
+
+    this_id    = accounting.id
+
 
     accounting.pk = None
     accounting.amount = -amount
@@ -2331,8 +2331,8 @@ def create_avoir(request, id):
     c_year       = Activeyear.objects.filter(is_active = 1).order_by("year").last()
     current_year = c_year.year
     # Création des avoirs
-    Accountancy.objects.create(accounting_id = accounting_old.id , ranking = 3 , plan_id = 411 , is_credit = 1, amount = -amount , current_year = current_year)  
-    Accountancy.objects.create(accounting_id = accounting_old.id , ranking = 4 , plan_id = 706 , is_credit = 0, amount = amount , current_year = current_year)  
+    Accountancy.objects.create(accounting_id = this_id , ranking = 3 , plan_id = 411 , is_credit = 1, amount = -amount , current_year = current_year)  
+    Accountancy.objects.create(accounting_id = this_id , ranking = 4 , plan_id = 706 , is_credit = 0, amount = amount , current_year = current_year)  
  
     accounti = Accounting.objects.get(id=id) 
     accounti.objet += " Avoir sur " + chronof
