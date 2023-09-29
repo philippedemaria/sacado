@@ -14,8 +14,11 @@
 
 {% block page_title %} 
 
-    <form action="" method="POST">
+
     <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a>  Journal  comptable 
+
+    {% comment %}
+    <form action="" method="POST">    
     {% csrf_token %}
 
     <select name="this_year_id"> 
@@ -25,7 +28,7 @@
     </select>
     <button type='submit' class="btn btn-sacado">GO</button>
     </form>
-
+    {% endcomment %}
 
 
 {% endblock %}
