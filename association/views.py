@@ -1448,7 +1448,7 @@ def list_accountancy(request):
     year    = Activeyear.objects.get(is_active=1)
     year_id = year.id
     #accontancies = Accountancy.objects.filter(current_year=year.year)
-    accontancies = Accountancy.objects.filter(id__gte=1217).order_by("id")
+    accontancies = Accountancy.objects.filter(id__gte=1217).order_by("-id")
     return render(request, 'association/list_accountancy.html', {'accontancies' : accontancies , 'years' : years ,'year_id' : year_id })
 
 
