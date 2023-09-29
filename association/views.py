@@ -1445,9 +1445,9 @@ def list_accountancy(request):
     #     year = ay.year
     #     messages.success(request,"L'année de visualisation est modifiée. L'année active est "+str(year)+"-"+str(year+1))
     # else :
-    year    = Activeyear.objects.get(is_active=1).year
+    year    = Activeyear.objects.get(is_active=1)
     year_id = year.id
-    accontancies = Accountancy.objects.filter(current_year=year)
+    accontancies = Accountancy.objects.filter(current_year=year.year)
     return render(request, 'association/list_accountancy.html', {'accontancies' : accontancies , 'years' : years ,'year_id' : year_id })
 
 
