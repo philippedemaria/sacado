@@ -48,7 +48,7 @@ import csv
 
 
  
-def csv_new_school(request):
+#def csv_new_school(request):
 
 	with open ("/var/www/sacado/ressources/etablissements.csv", newline ="") as file :
  		rows = csv.reader (file, delimiter=",")

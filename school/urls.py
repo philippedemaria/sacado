@@ -85,7 +85,7 @@ urlpatterns = [
     path('chargeschools', chargeschools, name='chargeschools'),
 
     path('ask_school_adhesion', ask_school_adhesion, name='ask_school_adhesion'),
-    path('csv_new_school', csv_new_school, name='csv_new_school'),
+    #path('csv_new_school', csv_new_school, name='csv_new_school'),
     # Enregistrement d'un enseignant avec son enseignant
     path('ajax_charge_town'  , ajax_charge_town, name='ajax_charge_town'),
     path('ajax_charge_school', ajax_charge_school, name='ajax_charge_school'),
