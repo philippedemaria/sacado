@@ -1905,9 +1905,9 @@ def create_accounting(request,tp,ids):
             if tp == 0 :
                 nb = 411
             elif nf.is_paypal :
-                nb = 5212
+                nb = 5122
             else :
-                nb = 5211
+                nb = 5121
 
             if tp == 0 :
                 if nf.is_credit :
