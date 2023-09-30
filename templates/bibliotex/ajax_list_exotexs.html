@@ -48,14 +48,14 @@
                             {% if k_e_c > 0 %}
 
                                 {% for exotex in knowledge.knowledge_exotexs.all|dictsort:"ranking"  %} 
-                                    <tr  class="opener_e openedk{{ knowledge.id }} no_visu_on_load" style="background:#fff;" >
+                                    <tr  class="opener_e openedk{{ knowledge.id }} no_visu_on_load" style="background:#f5f1ff;" >
                                         <td style="position: relative;" class="container_checkbox"> 
-                                            <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id" ><!--  sert à classer les thèmes  -->   
+                                            <input type="hidden" value="{{ exotex.id }}" name="this_exotex_id"><!--  sert à classer les thèmes  -->   
                                             <label>
                                             <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex.id}}" class="selector_exotex" name="exotexs"
-                                                   id="selected_exotex{{ exotex.id }}"  data-statut="{{ is_selected }}" {% if is_selected %}checked{% endif  %} />
+                                                   id="selected_exotex{{ exotex.id }}"  style="background:#fff;"  data-statut="{{ is_selected }}" {% if is_selected %}checked{% endif  %} />
 
-                                            <span class="checkmark"  style="top:13px;"></span>
+                                            <span class="checkmark"  style="top:13px;background:#fff;" ></span>
 
                                             <b><span class="number_exotex">{{ exotex.id}}</span> {% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Exercice sans titre {% endif %}</b> 
                                             </label>
