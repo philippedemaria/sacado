@@ -2043,17 +2043,8 @@ def ajax_get_price(request):
     data = {}
     price = ""
     if nbr_students :
-        if int(nbr_students) < 1500 : 
-            adhesion = Rate.objects.filter(quantity__gte=int(nbr_students)).first()
-            
-            today = datetime.now()
-
-            seuil = datetime(2021, 7, 1)
-
-            if today < seuil :
-                price = adhesion.discount
-            else :
-                price = adhesion.amount
+        rate  = Rate.objects.filter(quantity=int(nbr_students))
+        price = rate.amount  
 
     data["price"] = price
 

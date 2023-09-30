@@ -28,7 +28,22 @@ class Town(models.Model):
 
 
 class School(models.Model):
-    
+
+    NB_STUDENTS = (
+        (150, "moins de 150 - Version gratuite"),
+        (500, "Entre 150 et 500 : 100 €"),
+        (1000, "Entre 500 et 1000 : 200 € ()"),
+        (1500, "Entre 1000 et 1500 : 300 €"),
+        (2000, "Entre 1500 et 2000 : 400 €"),
+        (2500, "Entre 2000 et 2500 : 500 €"),
+        (3000, "Entre 2500 et 3000 : 600 €"),
+        (3500, "Entre 3000 et 3500 : 700 €"),
+        (4000, "Entre 3500 et 4000 : 800 €"),
+        (4500, "Entre 4000 et 4500 : 900 €"),
+        (10000, "+ de 4500 : 1000 €"),
+    )
+
+  
     name                = models.CharField(max_length=255, verbose_name="nom")
     country             = models.ForeignKey(Country, default='', blank=True, related_name='school', related_query_name="school", on_delete=models.PROTECT, verbose_name="Pays")
     town                = models.CharField(max_length=255, default='', verbose_name="ville")
@@ -37,7 +52,7 @@ class School(models.Model):
     complement          = models.CharField(max_length=255, blank=True, verbose_name="Complément d'adresse")
     zip_code            = models.CharField(max_length=255, default='99999', blank=True, verbose_name="Code postal")
     get_seconde_to_comp = models.BooleanField(default=0,   editable=False)# L'établissement a récupéré le groupe prépa math comp
-    nbstudents          = models.PositiveIntegerField(default=500, verbose_name="Nombre d'élèves")
+    nbstudents          = models.PositiveIntegerField(default=150, choices=NB_STUDENTS, verbose_name="Nombre d'élèves")
     rythme              = models.BooleanField(default=1, verbose_name="Rythme")# Nord ou Sud
     is_active           = models.BooleanField(default=0,   editable=False)
     gar                 = models.BooleanField(default=0, verbose_name="Connexion via le GAR souhaitée")
