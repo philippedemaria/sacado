@@ -53,8 +53,8 @@ def csv_new_school(request):
 	with open ("/var/www/sacado/ressources/etablissements.csv", newline ="") as file :
  		rows = csv.reader (file, delimiter=",")
 	 	for row in rows :
-	 		School.objects.create(name = row[0], country_id = row[2] , town = row[1] , code_acad = "999efe" , address = "" , zip_code = "999999" , nbstudents = 500 , tiers = 411 )
-	 		Town.objects.get_or_create(name =row[1] , zip_code = "999999", country_id = row[2]  )
+	 		School.objects.create(name = row[0], country_id = 31 , town = row[1] , code_acad = "999efe" , address = "" , zip_code = "999999" , nbstudents = 500 , tiers = 411 )
+	 		Town.objects.get_or_create(name =row[1] , zip_code = "999999", country_id = 31  )
 
 	# with open ("d://uwamp/www/sacadogit/ressources/etablissementfr.csv", newline ="") as file :
 	# 	rows = csv.reader (file, delimiter=";")
