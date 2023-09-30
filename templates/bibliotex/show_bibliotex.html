@@ -64,12 +64,14 @@
                     <div class="three_dots menu_exotex" style="display: inline-block;">
                         <i class="bi bi-three-dots-vertical"></i>
                         <div class="sub_menu_exotex">
-         
                             {% if request.user.is_superuser %}
                             <li class="sanspuce">  
-                                <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-gear"></i> Configurer </a>
+                                <a href="{% url 'update_exotex' r.exotex.id  %}" class="exotex_div_menu_label" ><i class="bi bi-pencil"></i> Configurer </a>
                             </li>
                             {% endif %}
+                            <li class="sanspuce">  
+                                <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-gear"></i> Personnaliser </a>
+                            </li>
                             {% if request.user.is_teacher %}
                                 <li class="sanspuce action_exotex"  data-action="print" data-relationtex_id="{{ r.id }}">  
                                     <a href="javascript:void(0);" data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="bi bi-printer"></i> Télécharger en pdf </a> 
