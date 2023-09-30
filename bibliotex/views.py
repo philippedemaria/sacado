@@ -1451,13 +1451,17 @@ def duplicate_bibliotex(request):
     if bibliotex_id :
         bibliotex = Bibliotex.objects.get(id=bibliotex_id)
         relationtexs = bibliotex.relationtexs.all()
-
+        levels   = bibliotex.levels.all()
+        subjects = bibliotex.subjects.all()
         bibliotex.pk=None
         bibliotex.save()
 
         bibliotex.folders.set(folders)    
         bibliotex.parcours.set(parcourses)
         bibliotex.groups.set(groups)
+        bibliotex.levels.set(levels)
+        bibliotex.subjects.set(subjects)
+
 
         group_str = ""
         students = set()
@@ -1616,7 +1620,7 @@ def exercise_bibliotex_peuplate(request, id):
         except : 
             level   = Level.objects.get(pk=6)
             subject = Subject.objects.get(pk=1)
-
+            
     waitings = level.waitings.filter(theme__subject = subject ).order_by("theme__subject" , "theme")
 
     group_id  = request.session.get("group_id",None)

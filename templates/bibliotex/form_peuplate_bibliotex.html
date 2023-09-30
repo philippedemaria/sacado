@@ -77,8 +77,8 @@
         </div> 
          <div class="row">
             <div class="col-xs-12 col-md-12 no_visu_on_load" id="div_to_save">
-                {% if group_id and folder_id and parcours_id %}
-                    <a href="{% url 'show_parcours' folder_id parcours_id %}" class="btn btn-primary">Enregistrer</a>  
+                {% if bibliotex %}
+                    <a href="{% url 'show_bibliotex' bibliotex.id %}" class="btn btn-primary">Enregistrer</a>  
                 {% elif group_id and folder_id %}
                     <a href="{% url 'list_sub_parcours_group' group_id folder_id %}" class="btn btn-primary">Enregistrer</a>                
                 {% elif group_id %}
