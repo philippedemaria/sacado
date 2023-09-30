@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
     <style>
         body{
-            background-color: #d9d2eb;
+            background-color: #ebe3ff;
         }
     </style>
 {% endblock %} 
@@ -20,7 +20,7 @@
 {% block require %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     <script>
-        require(['script/ajax-bibliotex']);
+        require(['script/ajax-bibliotex','script/ajax-duplication-document']);
     </script> 
 {% endblock %} 
 
@@ -348,7 +348,8 @@
     </div> 
 </div>
 
- 
+ {% include 'bibliotex/duplication_modal.html' %}
+
 
 <div class="modal fade" id="print_bibliotex" tabindex="-1" role="dialog" aria-labelledby="print_bibliotex">
     <div class="modal-dialog" role="document" style="width:70%">

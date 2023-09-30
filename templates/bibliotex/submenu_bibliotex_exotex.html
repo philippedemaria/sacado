@@ -8,23 +8,26 @@
     <ul class="dropdown-menu clearfix pull-right" role="menu">
 
         <li {% if 'update' in request.path %}class="active"{% endif %}>
-            <a href="{% url 'update_bibliotex' bibliotex.id  %}" ><i class="fa fa-fw fa-cogs"></i> Configurer</a>
+            <a href="javascript:void(0);" ><i class="bi bi-gear"></i> Configurer</a>
         </li> 
         <li>
             <a href="#" data-toggle='modal' data-target='#print_bibliotex'  data-action="print_bibliotex" data-relationtex_id="{{ bibliotex.id }}" class="action_exotex">
-                <i class="fa fa-fw fa-print"></i> Télécharger en pdf 
+                <i class="bi bi-printer"></i> Télécharger en pdf 
             </a>
         </li>
  
         <li {% if 'update' in request.path %}class="active"{% endif %}>
-            <a href="{% url 'update_bibliotex' bibliotex.id  %}"  ><i class="fa fa-fw fa-clone"></i> Dupliquer</a> 
+
+        <a  href="#" data-toggle='modal' data-target='#duplication_modal'  class="edit" title="Dupliquer"  
+                    id='duplication_document' 
+                    data-document_id='{{ bibliotex.id }}' data-document_title='{{ bibliotex.title }}'><i class="bi bi-clipboard-plus"></i> Dupliquer</a> 
         </li>
         <li {% if 'individualise' in request.path %}class="active"{% endif %}>
-            <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}"  ><i class="fa fa-fw fa-user"></i> Individualiser</a> 
+            <a href="{% url 'exercise_bibliotex_individualise' bibliotex.id  %}"  ><i class="bi bi-people"></i> Individualiser</a> 
         </li>
         {% comment %}
         <li {% if 'results' in request.path %}class="active"{% endif %}>
-            <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}"  ><i class="fa fa-fw fa-bar-chart"></i> Lire les résultats</a> 
+            <a  href="{% url 'exercise_bibliotex_results' bibliotex.id %}"  ><i class="bi bi-bar-chart"></i> Lire les résultats</a> 
         </li>
         {% endcomment %}
         <li class="divider"></li>       

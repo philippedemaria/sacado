@@ -1411,6 +1411,12 @@ def show_bibliotex(request, id):
 
     request.session["tdb"] = "Documents"  
     request.session["subtdb"] = "Bibliotex"
+    
+    try :
+        teacher = request.user.teacher
+    except :
+        messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
+        return redirect('index')
 
     group_id = request.session.get('group_id',None)
     group = None
@@ -1427,7 +1433,7 @@ def show_bibliotex(request, id):
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex_id=id).order_by("ranking")
 
-    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'group' : group, 'folder' : folder }
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'teacher' : teacher , 'group' : group, 'folder' : folder }
 
     return render(request, 'bibliotex/show_bibliotex.html', context )
 
