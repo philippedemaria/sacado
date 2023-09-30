@@ -127,7 +127,7 @@ class Bibliotex(models.Model):
     
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
 
-
+    two_cols = models.BooleanField( default=0, verbose_name="Colonnes ?" )
 
     def __str__(self):    
         return "{}".format(self.title)

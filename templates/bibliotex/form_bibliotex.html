@@ -140,6 +140,17 @@
                                                 <p class="alert alert-danger">{{error}}</p>
                                             {% endfor %}</td>
                                     </tr>
+                                    <tr>
+                                        <td>{{ form.two_cols.label_tag }}
+                                            <span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                                                <div class="helper_tip_text" >Format d'affichage des exercices.</div>
+                                            </span>
+                                        </td>
+                                        <td>{{ form.two_cols |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:2"|attr:"data-off:1"}}</td>
+                                        <td>{{ form.two_cols.errors }}</td>
+                                    </tr>
+
+
                             </table>
                         </div>
                     </div>

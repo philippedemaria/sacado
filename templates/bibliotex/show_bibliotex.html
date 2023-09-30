@@ -7,6 +7,11 @@
 
 {% block styleMk4ht %}
     <link rel="stylesheet" href="{% static 'css/styleMk4ht.css' %}"> 
+    <style>
+        body{
+            background-color: #9685c3;
+        }
+    </style>
 {% endblock %} 
 
 
@@ -22,15 +27,8 @@
   
 {% block page_title %}
 
-
-       {% include 'qcm/breadcrumb.html' %} 
-
-
-
-
-     {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/>  
-
-
+    {% include 'qcm/breadcrumb.html' %} 
+    {{ bibliotex.title }} <img src="{% static 'img/angle-right.png' %}"/>  
 
 {% endblock %}
 
@@ -45,10 +43,6 @@
         {% endif %}
     {% endif %}
 
-
-
-
-
 {% endblock %}
 
 
@@ -61,134 +55,128 @@
 {% csrf_token %}
 {% for r in relationtexs %} 
     {% if request.user.user_type == 2 or r.is_publish %}
-    <div class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_width relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
+    <fieldset class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_{% if not bibliotex.two_cols %}full_{% endif %}width relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
+        
+        <legend  class="container_checkbox_title">{{ r.exotex.title }} </legend>
         <div style="padding-left:10px;">
-        <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}</label>  
-            {% if request.user.user_type == 2 %}
-            <span class="pull-right action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
-                <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye text-success{% else %}eye-slash text-danger{% endif %}"></i></a>
-            </span>
-            {% endif %}
+            <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}</label>  
+                {% if request.user.user_type == 2 %}
+                    <div class="three_dots menu_exotex" style="display: inline-block;">
+                        <i class="bi bi-three-dots-vertical"></i>
+                        <div class="sub_menu_exotex">
+         
+                            {% if request.user.is_superuser %}
+                            <li class="sanspuce">  
+                                <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-gear"></i> Configurer </a>
+                            </li>
+                            {% endif %}
+                            {% if request.user.is_teacher %}
+                                <li class="sanspuce action_exotex"  data-action="print" data-relationtex_id="{{ r.id }}">  
+                                    <a href="javascript:void(0);" data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="bi bi-printer"></i> Télécharger en pdf </a> 
+                                </li>
+                                <li class="sanspuce action_print_tex"   data-relationtex_id="{{ r.id }}">  
+                                    <a href="javascript:void(0);" data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="20px" style="padding:3px"> Afficher le code source </a> 
 
-            {% if r.exotex.calculator  %}
-                 <img src="{% static 'img/calculator.png' %}" width="24px"   />
-            {% else %}
-                 <img src="{% static 'img/no_calculator.png' %}" width="24px"    />
-            {% endif %}
-            {% if r.exotex.is_python  %}
-                  <img src="{% static 'img/is_python.png' %}" width="20px" />
-            {% endif %}
-            {% if r.exotex.is_scratch  %}
-                  <img src="{% static 'img/is_scratch.png' %}" width="20px" />
-            {% endif %}
-            {% if r.exotex.is_tableur  %}
-                  <img src="{% static 'img/is_tableur.png' %}" width="20px" />
-            {% endif %}
-
-            <a href="#" class="expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i> </a>
-
-            {% if request.user.user_type == 2 %}
-                
- 
-                {% if r.relationships.count %}
-                    <span class="show_exotex_knowledges"> <i class="bi bi-link"  style="font-size:18px"></i>
-                        <div class="exotex_knowledges text-blue">
-                            {% for relationship in r.relationships.all %}
-                                {% if 'underlayer' in relationship.exercise.supportfile.imagefile.url %}
-                                    <img src="{{ relationship.exercise.supportfile.qtype_logo.url }}" class="image_thumb_parcours_link_exotex"   />
-                                {% else %}
-                                    <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="image_thumb_parcours_link_exotex"  />
+                                </li>
+                                {% if request.user.is_superuser %}
+                                    {% if sacado_asso %}
+                                    <li class="sanspuce {% if not r.is_publish %}no_visu_on_load{% endif %}">  
+                                        <a href="{% url 'link_to_relationship' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-link"></i>
+                                         Lier à des exercices</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="sanspuce {% if not r.is_publish %}no_visu_on_load_important{% endif %}">  
+                                        <a href="#" class="exotex_div_menu_label" title="Version Etablissement requise" ><i class="bi bi-link"></i>Lier à des exercices (V. etab.)</a>
+                                    </li>
+                                    {% endif %}
                                 {% endif %}
-                            {% endfor %}                            
+                                 
+                                {%  if group %}
+                                <li class="sanspuce action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}" > 
+                                    <a href="javascript:void(0);" data-target="#individualise_tex{{ r.id }}"  data-toggle='modal' class="exotex_div_menu_label" ><i class="bi bi-person"></i> Individualiser l'exercice</a>
+                                </li>
+                                {%  endif %}
+
+                                <li class="sanspuce action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="students" data-relationtex_id="{{ r.id }}" onclick="return TestDelete('cet exercice')" > 
+                                    <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="bi bi-x"></i> Supprimer de cette bibliotex</a>
+                                </li>
+                            {% else %}
+                                <li class="sanspuce action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
+                                    <a href="{% url 'print_exotex_by_student' r.id  %}" target="_blank" class="exotex_div_menu_label"><i class="bi bi-printer"></i>  Télécharger en pdf</a> 
+                                </li>
+                            {% endif %}
+                            <li class="sanspuce action_exotex"> 
+                                <span class="exotex_div_menu_label" ><i class="bi bi-cc-square"></i>
+                                    <a href="javascript:void(0);" class="show_this_exotex_knowledges exotex_div_menu_label"> Savoir faire et compétences
+                                        <div class="show_this_exotex_knowledges_display text-blue" style="font-size:12px; font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
+                                            {% for s in r.exotex.skills.all %}
+                                                {{ s.name }}.
+                                            {% endfor %}                            
+                                            <hr/>
+                                            {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
+                                            {% for k in r.exotex.knowledges.all %}
+                                                {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </a>
+                                </span>
+                            </li>
                         </div>
-                    </span>  
-                {% endif %}
-
-
-            {% elif request.user.user_type == 0 and r.is_publish_cor %}
-                {% if r.exotex.correction  %}
-                    <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction"><i class="fa fa-copyright" title="Correction"></i></a>
-                {% endif %}
-            {% endif %}
-
-
-        </div>
-
-        <div  class="container_checkbox_title" style="padding:5px 10px 10px 10px;font-size:20px!important">{{ r.exotex.title }} </div>
-
-
-
-
-        <div class="menu_exotex">
-
-
-            <div class="three_dots">
-                <i class="bi bi-three-dots-vertical"></i>
-            </div>
-
-            {% if request.user.is_superuser %}
-            <li class="relative_div_exotex">  
-                <a href="{% url 'update_relationtex' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-gear"></i><span class="legend_exotex_parameter"> Configurer </span></a>
-            </li>
-            {% endif %}
-            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"> 
-                <span class="exotex_div_menu_label" ><i class="bi bi-cc-square"></i>
-                    <span class="legend_exotex_parameter show_this_exotex_knowledges"> Savoir faire et compétences
-                        <div class="show_this_exotex_knowledges_display text-blue" style="font-size:12px; font-family: 'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw';">
-                            {% for s in r.exotex.skills.all %}
-                                {{ s.name }}.
-                            {% endfor %}                            
-                            <hr/>
-                            {{ r.exotex.knowledge.name }} {% if r.exotex.knowledges.all|length > 0 %}<br/>{% endif %}
-                            {% for k in r.exotex.knowledges.all %}
-                                {{ k.name }} {% if not forloop.last %}<br/> {% endif %}
-                            {% endfor %}
-                        </div>
+                    </div>
+                    <span class="pull-right action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
+                        <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye text-success{% else %}eye-slash text-danger{% endif %}"></i></a>
                     </span>
-                </span>
-            </li>
-
-
-
-            {% if request.user.is_teacher %}
-            <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
-                <span data-toggle='modal' data-target='#print_exotex' class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </span> 
-            </li>
-            {% else %}
-            <li class="relative_div_exotex action_exotex {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="print" data-relationtex_id="{{ r.id }}">  
-                <a href="{% url 'print_exotex_by_student' r.id  %}" target="_blank" class="exotex_div_menu_label"><i class="bi bi-printer"></i> <span class="legend_exotex_parameter"> Télécharger en pdf </span> </a> 
-            </li>
-            {% endif %}
-
-
-            {% if request.user.is_teacher %}
-            <li class="relative_div_exotex action_print_tex  {% if not r.is_publish %}no_visu_on_load{% endif %}"   data-relationtex_id="{{ r.id }}">  
-                <span data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="20px" style="padding:3px"> <span class="legend_exotex_parameter"> Afficher le code source </span> </span> 
-            </li>
-            {% if request.user.is_superuser %}
-                {% if sacado_asso %}
-                <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}">  
-                    <a href="{% url 'link_to_relationship' r.id  %}" class="exotex_div_menu_label" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices </span></a>
-                </li>
-                {% else %}
-                <li class="relative_div_exotex  {% if not r.is_publish %}no_visu_on_load_important{% endif %}">  
-                    <a href="#" class="exotex_div_menu_label" title="Version Etablissement requise" ><i class="bi bi-link"></i><span class="legend_exotex_parameter"> Lier à des exercices (V. etab.)</span></a>
-                </li>
                 {% endif %}
-            {% endif %}
-             
-            {%  if group %}
-            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}" > 
-                <a href="javascript:void(0);" data-target="#individualise_tex{{ r.id }}"  data-toggle='modal' class="exotex_div_menu_label" ><i class="bi bi-person"></i></i><span class="legend_exotex_parameter"> Individualiser l'exercice</span></a>
-            </li>
-            {%  endif %}
 
-            <li class="relative_div_exotex action_exotex  {% if not r.is_publish %}no_visu_on_load{% endif %}"  data-action="students" data-relationtex_id="{{ r.id }}" onclick="return TestDelete('cet exercice')" > 
-                <a href="{% url 'unset_exotex_in_bibliotex' r.id %}" class="exotex_div_menu_label" ><i class="bi bi-x"></i><span class="legend_exotex_parameter"> Supprimer de cette bibliotex</span></a>
-            </li>
-            {%  endif %}
- 
+                {% if r.exotex.calculator  %}
+                     <img src="{% static 'img/calculator.png' %}" width="24px"   />
+                {% else %}
+                     <img src="{% static 'img/no_calculator.png' %}" width="24px"    />
+                {% endif %}
+                {% if r.exotex.is_python  %}
+                      <img src="{% static 'img/is_python.png' %}" width="20px" />
+                {% endif %}
+                {% if r.exotex.is_scratch  %}
+                      <img src="{% static 'img/is_scratch.png' %}" width="20px" />
+                {% endif %}
+                {% if r.exotex.is_tableur  %}
+                      <img src="{% static 'img/is_tableur.png' %}" width="20px" />
+                {% endif %}
+
+                <a href="#" class="expand_video" data-exotex_id="{{ r.exotex.id }}"><i class="bi bi-webcam"></i> </a>
+
+                {% if request.user.user_type == 2 %}
+                    
+     
+                    {% if r.relationships.count %}
+                        <span class="show_exotex_knowledges"> <i class="bi bi-link"  style="font-size:18px"></i>
+                            <div class="exotex_knowledges text-blue">
+                                {% for relationship in r.relationships.all %}
+                                    {% if 'underlayer' in relationship.exercise.supportfile.imagefile.url %}
+                                        <img src="{{ relationship.exercise.supportfile.qtype_logo.url }}" class="image_thumb_parcours_link_exotex"   />
+                                    {% else %}
+                                        <img src="{{ relationship.exercise.supportfile.imagefile.url }}" class="image_thumb_parcours_link_exotex"  />
+                                    {% endif %}
+                                {% endfor %}                            
+                            </div>
+                        </span>  
+                    {% endif %}
+
+
+                {% elif request.user.user_type == 0 and r.is_publish_cor %}
+                    {% if r.exotex.correction  %}
+                        <a href="javascript:void();" data-r_id="{{ r.id }}" class="select_correction"><i class="fa fa-copyright" title="Correction"></i></a>
+                    {% endif %}
+                {% endif %}
+
         </div>
+
+
+
+
+
+
+
         <div class="body_exotex">
 
             <div id="content{{ r.exotex.id }}" class="relationtex{{ r.id }} {% if not r.is_publish %}no_visu_on_load_important{% endif %}">
@@ -231,8 +219,7 @@
             <div class="parcours_is_stop" id="tex_{{ r.id }}"><pre>{{ r.exotex.content }}</pre></div>
         </div>
 
-
-    </div>
+    </fieldset>
 
     {% if group %}
 
@@ -321,20 +308,16 @@
 
 {% endfor %}
 
-    {% if request.user.is_teacher %}
-    <div class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_empty" style="margin-bottom:20px;padding:60px;text-align: center"  >
-   
-         
-                <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id  %}" class="new_exotex_empty_button" title="Créer des exercices" ><i class="bi bi-plus-circle-dotted"></i></a>
 
-
-                <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="new_exotex_empty_button" title="Dupliquer des exercices" ><i class="bi bi-file-plus"></i></a> 
-
-
-    </div>
-    {%  endif %}
 <div style="clear:both"></div>
         <a href="javascript:history.back()"><input type="button" value="Retour" class="btn btn-default "/></a>  
+
+
+    {% if request.user.is_teacher %}
+        <a href="{% url 'set_exotex_in_bibliotex' bibliotex.id  %}" class="btn btn-warning" ><i class="bi bi-plus-circle-dotted"></i> Créer un exercice</a>
+        <a href="{% url 'exercise_bibliotex_peuplate' bibliotex.id  %}" class="btn btn-primary" ><i class="bi bi-clipboard-plus"></i> Dupliquer des exercices</a> 
+    {%  endif %}
+
 
 </section> 
 </form>
