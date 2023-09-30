@@ -883,12 +883,11 @@ def total_by_knowledge_by_student(knowledge,relationships, parcours,student) : #
         total_knowledge += int(sk.point)
 
     # Ajout éventuel de résultat sur la compétence sur un exo SACADO
-    if relationships :
-        for exercise_id in  relationships.values_list("exercise_id").filter(exercise__knowledge = knowledge) :
-            result_sacado_knowledge = student.answers.filter(parcours= parcours , exercise_id = exercise_id).order_by("-point").first()  
-            if result_sacado_knowledge :
-                total_knowledge += result_sacado_knowledge.point
-                nbk += 1
+    for exercise_id in  relationships.values_list("exercise_id").filter(exercise__knowledge = knowledge) :
+        result_sacado_knowledge = student.answers.filter(parcours= parcours , exercise_id = exercise_id).order_by("-point").first()  
+        if result_sacado_knowledge :
+            total_knowledge += result_sacado_knowledge.point
+            nbk += 1
 
     ################################################################
     if nbk !=0  :
@@ -5107,8 +5106,6 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
                 cen.append(cstm)
             except :
                 pass
-
-
   
     student["score_custom"] = score_custom
     student["tab_custom"]   = cen
@@ -11724,7 +11721,7 @@ def export_knowledges_after_evaluation(request):
 
     parcours_id   = request.POST.get("parcours_id")  
     parcours      = Parcours.objects.get(pk = parcours_id)  
-
+    relationships = parcours.parcours_relationship.filter(is_publish=1)
     this_clic = request.POST.get("this_clic_knowledges")
 
     group_id = request.session.get("group_id",None) 
@@ -11758,9 +11755,9 @@ def export_knowledges_after_evaluation(request):
             knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
             for knwldg in knowledges :
-                total = total_by_knowledge_by_student(knwldg,None,parcours,student)
+                total = total_by_knowledge_by_student(knwldg,relationships,parcours,student)
                 if total == -10 : res = "A"
-                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,None,parcours,student))
+                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,relationships,parcours,student))
                 knowledge_level_tab.append(res)
      
             writer.writerow( knowledge_level_tab )
@@ -11799,9 +11796,9 @@ def export_knowledges_after_evaluation(request):
             knowledge_level_tab = [str(student.user.last_name).capitalize().strip(),str(student.user.first_name).capitalize().strip()]
 
             for knwldg in knowledges :
-                total = total_by_knowledge_by_student(knwldg,None,parcours,student)
+                total = total_by_knowledge_by_student(knwldg,relationships,parcours,student)
                 if total == -10 : res = "A"
-                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,None,parcours,student))
+                else : res  = get_level_by_point(student,total_by_knowledge_by_student(knwldg,relationships,parcours,student))
                 knowledge_level_tab.append(res)
 
             students_detail.append(knowledge_level_tab)
