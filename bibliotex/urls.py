@@ -33,8 +33,8 @@ urlpatterns = [
     path('exercise_bibliotex_show/<int:id>', show_bibliotex, name='show_bibliotex'),
     path('exercise_bibliotex_duplicate', duplicate_bibliotex, name='duplicate_bibliotex'),
  
-
     path('exercise_exotex_show/<int:id>', show_exotex , name='show_exotex'),
+    path('ajax_class_exotex', ajax_class_exotex , name='ajax_class_exotex'),
 
 
     path('update_relationtex/<int:id>', update_relationtex , name='update_relationtex'),

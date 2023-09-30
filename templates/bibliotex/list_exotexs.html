@@ -14,7 +14,7 @@
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
 
     <script>
-        require(['script/ajax-supportfile']);
+        require(['script/ajax-sorter_exotex']);
     </script> 
 {% endblock %} 
 
@@ -41,10 +41,10 @@
                         <th></th>
                     </tr>
                 </thead> 
-                <tbody  id="supportfile_ranking">  
+                <tbody>  
                     {% regroup waitings by theme as theme_list %}
                     {% for theme in theme_list  %} 
-                        <tr style="background:#5d4391; color:white">
+                        <tr class="this_exotex"  style="background:#5d4391; color:white">
                             <td style="width:85%">{{theme.grouper.subject.name}} : {{theme.grouper.name}}</td> 
                         </tr> 
 
@@ -52,14 +52,14 @@
 
                         {% for waiting in theme.list  %}
                         
-                            <tr style="background:#aa98cd; cursor: pointer; color: white" class="opener out"  id="{{ waiting.id }}">
+                            <tr style="background:#aa98cd; cursor: pointer; color: white" class="opener out this_exotex"  id="{{ waiting.id }}">
                                 <td style="width:85%"><i class="fa fa-caret-right"></i> {{waiting.name}}   <small><b>{{  waiting.exotexs_counter }} exercice{{ waiting.exotexs_counter|pluralize  }}</b>  </small> </td> 
                             </tr>  
                  
  
                             {% for knowledge in waiting.knowledges.all  %}
                             {% with  k_e_c=knowledge.exotexs_counter  %}
-                                    <tr  style="background:#d4cbe6; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.id }} out"  id="{{ knowledge.id}}"> 
+                                    <tr  style="background:#d4cbe6; cursor: pointer; color: black" class="listingtd opener_k opened{{ waiting.id }} out this_exotex"  id="{{ knowledge.id}}"> 
                                         <td>
                                             <i class="fa fa-caret-right"></i>  
                                             {{ knowledge.name|capfirst }} <small><b>{{  k_e_c  }} exercice{{ k_e_c|pluralize  }}</b></small> 
@@ -71,10 +71,15 @@
                                 {% if k_e_c > 0 %}
 
                                     {% for exotex in knowledge.knowledge_exotexs.all|dictsort:"ranking"  %} 
-                                        <tr  class="opener_e openedk{{ knowledge.id }} this_supportfile" style="background:#fff; cursor: move;" >
+                                        <tr  class="opener_e openedk{{ knowledge.id }}" style="background:#fff" >
                                             <td>
+                                                <i class="bi bi-arrows-move"></i>
                                                 <a href="#" data-exotex_id="{{ exotex.id }}"  class="btn btn-sacado pull-right projection_exotex_admin"><i class='bi bi-webcam'></i></a>
                                                 <a href="{% url 'exotex_display_pdf' exotex.id %}" target="_blank" class="btn btn-sacado pull-right"><i class='bi bi-file-pdf'></i></a>
+
+                                                <input type="number" class="sort_exotex pull-right" id="sort_exotex"  name="sort_exotex" value="{{ exotex.ranking }}" min=1 data-exotex_id="{{ exotex.id }}"/>
+
+
 
                                                 {% if  exotex.is_read  %}
                                                     <i class="fa fa-check  text-success" title="Exercice vérifié"></i> 

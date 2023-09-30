@@ -2055,6 +2055,7 @@ def ajax_sort_exotexs_in_bibliotex(request):
         i+=1
     return JsonResponse(data)
 
+
 @csrf_exempt
 def ajax_bibliotex_sorter(request):
 
@@ -2066,6 +2067,26 @@ def ajax_bibliotex_sorter(request):
         except :pass
         i+=1
     return JsonResponse(data)
+
+
+
+
+@csrf_exempt
+def ajax_class_exotex(request):
+
+    data = {}
+    exotex_id = request.POST.get('exotex_id', None)
+    value = request.POST.get('value', None)
+
+    print(exotex_id , value)
+    Exotex.objects.filter(pk = exotex_id ).update(ranking=value)
+
+    return JsonResponse(data)
+
+
+
+
+
 
 
 
