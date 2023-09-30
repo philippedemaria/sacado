@@ -236,6 +236,9 @@ a.level_title:hover, a.level_title:active,a.level_title:focus{
   cursor:move!important;
 }
 
+.checkmark {
+    background-color: white;
+}
 
 /********************************************************************/
 /*********   cke  ***************************************************/

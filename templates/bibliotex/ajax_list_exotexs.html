@@ -55,7 +55,7 @@
                                             <input type="checkbox"  data-exotex_id="{{ exotex.id }}"  data-bibliotex_id="{{ bibliotex.id}}" class="selector_exotex" name="exotexs"
                                                    id="selected_exotex{{ exotex.id }}"  style="background:#fff;"  data-statut="{{ is_selected }}" {% if is_selected %}checked{% endif  %} />
 
-                                            <span class="checkmark"  style="top:13px;background:#fff;" ></span>
+                                            <span class="checkmark"  style="top:13px;" ></span>
 
                                             <b><span class="number_exotex">{{ exotex.id}}</span> {% if exotex.title %}{{ exotex.title|cleanhtml|capfirst }} {% else %} Exercice sans titre {% endif %}</b> 
                                             </label>
