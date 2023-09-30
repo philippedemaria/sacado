@@ -368,9 +368,11 @@
               data-num_exo="{{ forloop.counter }}" 
               data-parcours_id="{{ parcours.id }}" data-custom=0 > 
               <div style="position:relative; height:195px;overflow-y:hidden;width:100%;padding-top:5px; ">
+           
                 {% if rc.exercise.supportfile.imagefile %}
-                <img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours"  style="position:absolute;{% if not rc.is_publish %}opacity:0.8{% endif %}" >
+                <img src="{{ rc.exercise.supportfile.imagefile.url|image_md }}"  class="image_parcours"  style="position:absolute;{% if not rc.is_publish %}opacity:0.8{% endif %}" >
                 {% endif %} 
+               
 
                 <div style="width:100%; border: thick double  {{parcours.subject.color}};padding:10px;font-size: 14px; height:180px">
                   {% if rc.exercise.supportfile.qtype_logo %} 
@@ -404,7 +406,7 @@
                 <span class="helper_tip_card_flex" style="font-size:40px;color:{{ parcours.color }}">
                   {% if not rc.is_publish %}<span style="color:#F5F5F5;">{{ forloop.counter }}.</span>{% else %}{{ forloop.counter }}.{% endif %}<br>
                   {% if rc.exercise.supportfile.imagefile %}
-                  <img src="{{ rc.exercise.supportfile.imagefile.url }}" width="500px" loading="lazy" />
+                  <img src="{{ rc.exercise.supportfile.imagefile.url|image_md  }}" width="500px" loading="lazy" />
                   {% endif %}
                 </span>
             </a>

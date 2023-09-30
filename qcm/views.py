@@ -37,6 +37,7 @@ from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
 from tool.consumers import *
 from tool.models import Quizz , Answerplayer , Qtype
 from tool.forms import QuizzForm
+from subprocess import run
 
 import uuid
 import time
@@ -6786,6 +6787,17 @@ def get_this_codebook(nf) :
     return codebook
  
 
+def reduce_image(img_str):
+
+    formats = [("-xs",150,110) , ("-md",288,194), ("-lg",500,367)]
+    rep = "/var/www/sacado/ressources/ggnimages/"
+    for f in formats :
+        newName = img_str[:-4]+f[0]+img_str[-4:]
+        run(["gmic","-input", rep+"/"+img_str, "-resize", "{},{}".format(f[1],f[2]), "-output", rep+"/"+newName])
+
+
+
+
 def create_supportfile(request,qtype,ids):
     """ Création d'un supportfile"""
     code = str(uuid.uuid4())[:8]
@@ -6846,6 +6858,8 @@ def create_supportfile(request,qtype,ids):
                 pass   
                           
             nf.save()
+            if nf.imagefile : reduce_image(nf.imagefile)
+
             form.save_m2m()
             codebook = get_this_codebook(nf)
             Exercise.objects.create(supportfile = nf, knowledge = nf.knowledge, level = nf.level, theme = nf.theme,codebook=codebook )
@@ -6907,13 +6921,7 @@ def create_supportfile(request,qtype,ids):
         form_sub_ans = formSubSet()
         context.update(  { 'form_sub_ans' : form_sub_ans,  } )
 
-
     return render(request, template , context)
-
-
-
-
-
 
 
 @user_passes_test(user_is_creator)
@@ -6967,7 +6975,9 @@ def update_supportfile(request, id, redirection=0):
 
             nf.save()
             supportfile_form.save_m2m()  
-                       
+
+            if nf.imagefile : reduce_image(nf.imagefile)
+
             qtype  = nf.qtype
              
             is_sub = qto.is_sub
