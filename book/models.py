@@ -162,10 +162,8 @@ class Document(models.Model):
             doc_url = self.url
         elif self.doctype == 3 : 
             exercise = Exercise.objects.get(pk=self.doc_id)
-            url_str = exercise.supportfile.imagefile.url
-            url_s   = url_str[:-4]+"-xs"+ url_str[-4:]
             try :
-                icon = "<img src='"+url_s+"' class='mini_imagefile' />"
+                icon = "<img src='"+exercise.supportfile.imagefile.url+"' class='mini_imagefile' />"
             except :
                 icon = '<i class="bi bi-explicit  book_main_page_section_document_earmark"></i>'
             if exercise.supportfile.is_ggbfile :

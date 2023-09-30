@@ -13,25 +13,6 @@ def create_slug(arg, slug):
     return "{}-{}".format(arg, slug)
     
 
-@register.filter
-def image_lg(arg):
-    return arg[:-4]+"-lg"+  arg[-4:]
-
-@register.filter
-def image_md(arg):
-    return arg[:-4]+"-md"+  arg[-4:]
-
- 
-    
-@register.filter
-def image_xs(arg):
-    return arg[:-4]+"-xs"+  arg[-4:]
-
-
-
-
-
-
 
 @register.filter
 def mark_to_point(arg):
