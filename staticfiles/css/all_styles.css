@@ -2670,9 +2670,13 @@ a.select_correction:focus {
 
 .admin_exotex {
   font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
-  line-height: :22px!important;
+  line-height: 22px!important;
+  background-color: white;
+  border-radius: 5px;
+  border: 2px solid #c2b3e9 ; 
   max-width:760px;
   font-size: 20px;
+  padding: 10px;
 }
 
 .annale_box{
