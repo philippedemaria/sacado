@@ -2474,10 +2474,8 @@ input[type=range].form-range {
     background-color: #FFF;
     border: 3px solid #c2b3e9 ; 
     position: relative;
-    height: 350px;
     margin-top: 10px;
     margin-bottom: 10px;
-    overflow-y: auto;
     border-radius: 6px;  
     font-family:'MJXc-TeX-main-R', 'MJXc-TeX-main-Rw' ;
     line-height: :22px ;
@@ -2486,6 +2484,8 @@ input[type=range].form-range {
 .new_exotex_width{
   width       : 48%;
   margin-right: 2%;
+  overflow-y: auto;
+  height: 350px;
   overflow-x  : hidden;
   padding:10px;
 }
