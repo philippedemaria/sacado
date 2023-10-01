@@ -57,11 +57,11 @@
     {% if request.user.user_type == 2 or r.is_publish %}
     <fieldset class="col-xs-12 col-md-6 col-lg-6 new_exotex new_exotex_{% if not bibliotex.two_cols %}full_{% endif %}width relationtex_sorter" style="margin-bottom:20px;padding-top:10px;" data-relationtex_id ="{{r.id}}" style="cursor: move;">
         
-        <legend  class="container_checkbox_title">{{ r.exotex.title }} </legend>
-        <div style="padding-left:10px;">
-            <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}</label>  
+        <legend  class="container_checkbox_title">
+ 
+            <label class="number_exotex" style="margin:0px;font-size:18px">Exercice {{ forloop.counter }}. </label> {{ r.exotex.title }} 
                 {% if request.user.user_type == 2 %}
-                    <div class="three_dots menu_exotex" style="display: inline-block;">
+                    <div class="three_dots menu_exotex" style="display: inline-block;color: #5d4391;">
                         <i class="bi bi-three-dots-vertical"></i>
                         <div class="sub_menu_exotex">
                             {% if request.user.is_superuser %}
@@ -78,7 +78,6 @@
                                 </li>
                                 <li class="sanspuce action_print_tex"   data-relationtex_id="{{ r.id }}">  
                                     <a href="javascript:void(0);" data-toggle='modal' data-target='#print_tex' class="exotex_div_menu_label"><img src="{% static 'img/tex.png' %}" width="20px" style="padding:3px"> Afficher le code source </a> 
-
                                 </li>
                                 {% if request.user.is_superuser %}
                                     {% if sacado_asso %}
@@ -125,15 +124,12 @@
                             </li>
                         </div>
                     </div>
-                    <span class="pull-right action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
-                        <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye text-success{% else %}eye-slash text-danger{% endif %}"></i></a>
-                    </span>
                 {% endif %}
 
                 {% if r.exotex.calculator  %}
-                     <img src="{% static 'img/calculator.png' %}" width="24px"   />
+                     <i class="bi bi-calculator text-success" title="Calculatrice autorisée"></i>
                 {% else %}
-                     <img src="{% static 'img/no_calculator.png' %}" width="24px"    />
+                     <i class="bi bi-calculator-fill text-danger"  title="Calculatrice interdite"></i>
                 {% endif %}
                 {% if r.exotex.is_python  %}
                       <img src="{% static 'img/is_python.png' %}" width="20px" />
@@ -171,9 +167,13 @@
                     {% endif %}
                 {% endif %}
 
-        </div>
-
-
+ 
+                {% if request.user.user_type == 2 %}
+                    <span class="action_exotex"  data-action="display" data-relationtex_id="{{ r.id }}" id="display{{ r.id }}"> 
+                        <a href="javascript:void();" class="exotex_div_menu_label" ><i class="bi bi-{% if r.is_publish %}eye text-success{% else %}eye-slash text-danger{% endif %}"></i></a>
+                    </span>
+                {% endif %}
+        </legend>
 
 
 

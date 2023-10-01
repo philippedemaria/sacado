@@ -4729,7 +4729,7 @@ a.this_icon_menu_link_list_parcours_group{
   transition: transform 0.5s ease-in-out, margin 0.5s ease-in-out;
   z-index: 820;
   min-height:20px!important ;
-  background-color: white!important;
+
 }
 .layout-top-nav .content-wrapper,
 .layout-top-nav .right-side,

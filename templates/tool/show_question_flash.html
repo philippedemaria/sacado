@@ -28,6 +28,8 @@
 
 {% block page_title %}
 
+
+
    <a href="{% url 'list_questions_flash' %}" ><i class="bi bi-lightning"></i> </a> Outils pédagogiques 
    <img width="25px" src="{% static 'img/angle-right.png' %}"/> Questions flash 
  
@@ -146,3 +148,15 @@
     <script src="{% static 'js/script/geometry.js' %}"></script>
 
 {% endblock %}
+
+
+
+{% block styleMk4ht %}
+<style>
+.content-wrapper {
+  background-color: white!important;
+  margin-right: 0px;
+  overflow-x: hidden
+}
+</style>
+{% endblock %} 
