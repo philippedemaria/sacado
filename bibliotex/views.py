@@ -1172,17 +1172,17 @@ def ajax_search_bibliotex_by_level(request):
 
 
     f = open('/var/www/sacado/logs/debug.log','a')
-    print("===> teacher_id : " +  teacher_id , file=f)
+    print("===> teacher_id : " +  str(teacher_id) , file=f)
     print("<===================================================>"  , file=f)
-    print("===> subject_id : " +  subject_id , file=f)
+    print("===> subject_id : " +  str(subject_id) , file=f)
     print("<===================================================>"  , file=f)
-    print("===> level_id : " +  level_id , file=f)
+    print("===> level_id : " +  str(level_id) , file=f)
     print("<===================================================>"  , file=f)
-    print("===> base : " +  base , file=f)
+    print(base , file=f)
     print("<===================================================>"  , file=f)
-    print("===> bibliotexs : " +  bibliotexs , file=f)
+    print( bibliotexs , file=f)
     print("<===================================================>"  , file=f)
-    print("===> annales : " +  annales , file=f)
+    print(  annales , file=f)
 
     f.close()
 
