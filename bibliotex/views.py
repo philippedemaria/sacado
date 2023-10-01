@@ -1216,25 +1216,23 @@ def ajax_search_bibliotex(request):
                 annales.add(bibliotex)
 
 
-    try :
-        f = open('/var/www/sacado/logs/debug.log','a')
-        print("===> teacher_id : " +  teacher_id , file=f)
-        print("<===================================================>"  , file=f)
-        print("===> subject_id : " +  subject_id , file=f)
-        print("<===================================================>"  , file=f)
-        print("===> level_id : " +  level_id , file=f)
-        print("<===================================================>"  , file=f)
-        print("===> theme_ids : " +  theme_ids , file=f)
-        print("<===================================================>"  , file=f)
-        print("===> base : " +  base , file=f)
-        print("<===================================================>"  , file=f)
-        print("===> bibliotexs : " +  bibliotexs , file=f)
-        print("<===================================================>"  , file=f)
-        print("===> annales : " +  annales , file=f)
+    f = open('/var/www/sacado/logs/debug.log','a')
+    print("===> teacher_id : " +  teacher_id , file=f)
+    print("<===================================================>"  , file=f)
+    print("===> subject_id : " +  subject_id , file=f)
+    print("<===================================================>"  , file=f)
+    print("===> level_id : " +  level_id , file=f)
+    print("<===================================================>"  , file=f)
+    print("===> theme_ids : " +  theme_ids , file=f)
+    print("<===================================================>"  , file=f)
+    print("===> base : " +  base , file=f)
+    print("<===================================================>"  , file=f)
+    print("===> bibliotexs : " +  bibliotexs , file=f)
+    print("<===================================================>"  , file=f)
+    print("===> annales : " +  annales , file=f)
 
-        f.close()
-    except :
-        pass
+    f.close()
+ 
 
 
 
