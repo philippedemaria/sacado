@@ -1165,28 +1165,7 @@ def ajax_search_bibliotex_by_level(request):
             if bibliotex.is_annale() :
                 annales.add(bibliotex)
     else :
-        for bibliotex in bibliotexs :
-            if not bibliotex.is_annale() :
-                annales.add(bibliotex)
-
-
-
-    f = open('/var/www/sacado/logs/debug.log','a')
-    print("===> teacher_id : " +  str(teacher_id) , file=f)
-    print("<===================================================>"  , file=f)
-    print("===> subject_id : " +  str(subject_id) , file=f)
-    print("<===================================================>"  , file=f)
-    print("===> level_id : " +  str(level_id) , file=f)
-    print("<===================================================>"  , file=f)
-    print(base , file=f)
-    print("<===================================================>"  , file=f)
-    print( bibliotexs , file=f)
-    print("<===================================================>"  , file=f)
-    print(  annales , file=f)
-
-    f.close()
-
-
+        annales=bibliotex
 
 
 
