@@ -452,7 +452,7 @@ def printer(request, relationtex_id, collection,output , obj):
         return 
 
 
-def printer_bibliotex_by_student(bibliotex):
+def printer_bibliotex_by_student(request, bibliotex):
     """affiche un exo ou une collection d'exercices, en pdf (output="pdf") """
 
     # ouverture du texte dans le fichier tex
@@ -497,8 +497,6 @@ def printer_bibliotex_by_student(bibliotex):
 
         ctnt =  relationtex.exotex.content
         
-        if not multido : ctnt = escape_multido(ctnt) 
-
         elements += r"\vspace{0,2cm}\\"
         elements += ctnt
         elements += r"\vspace{0,2cm}\\"
@@ -2377,6 +2375,6 @@ def print_bibliotex_by_student(request,id):
 
     data = {}
     bibliotex = Bibliotex.objects.get(pk=id)
-    return printer_bibliotex_by_student(bibliotex) 
+    return printer_bibliotex_by_student(request,bibliotex) 
 
  

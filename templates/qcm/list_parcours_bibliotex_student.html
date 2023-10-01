@@ -53,33 +53,19 @@
                       style="{% if bibliotex.vignette %}background-image: url('{{ bibliotex.vignette.url }}');{% else %} background-image: url('{% static 'img/bibliotex.jpg' %}');{% endif %} background-size: cover;">
                     <div class="handler widget-user-header">
                         <!-- Add signet to folder -->
-                        <div class="group_show  no_visu_on_load scrolling_overflow" id="bibliotex_show{{bibliotex.id }}"> 
-                            <div class="row"> 
-                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                                    <b>Savoir faire ciblés</b>
-                                </div> 
-                            </div>
+     
 
-                            {% for k in bibliotex.knowledges %}
+                        <div class="group_show  no_visu_on_load scrolling_overflow" id="bibliotex_show{{bibliotex.id }}"> 
+
                             <div class="row"> 
                                 <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                                    {{ k.name }}
-                                </div> 
-                            </div>
-                            {% endfor %}
-                            <div class="row"> 
-                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_bibliotex_title">
-                                    <b>compétences ciblées</b>
-                                </div> 
-                            </div>
-                            
-                            <div class="row"> 
-                                <div class="col-xs-12 col-md-12 col-lg-12 skill_knowledge_body">
-                                    {% for s in bibliotex.skills %}
-                                        {{ s }}. 
+                                    {% for r in bibliotex.relationtexs.all %}
+                                    {{forloop.counter}}. {{ r.exotex.title }}<br/>
                                     {% endfor %}
                                 </div> 
                             </div>
+                            
+
                             <div style="clear:both"></div>
                         </div>
                         <div class="box_title_vignette box_title_vignette_color" style="background-color : {{ bibliotex.color}};"> 
@@ -100,20 +86,20 @@
                     <div class="box-footer" style="position: relative; padding-top:10px;">
                         <div class="row"> 
                            <div class="col-lg-7 col-xs-7">
-                                 {{ bibliotex.relationtex.nb_exotexs_published}} exercice{{ bibliotex.relationtex.nb_exotexs_published|pluralize}}
-                            </div>_
+                                <label>{{ bibliotex.relationtex.nb_exotexs_published}} exercice{{ bibliotex.relationtex.nb_exotexs_published|pluralize}}</label>
+                            </div> 
                             <div class="col-lg-5 col-xs-5">
  
                             </div> 
                         </div>
                         <div class="row"> 
-                            {% comment %}
+ 
                             <div class="col-lg-6 col-xs-6">
-                                <a href="{% url 'print_bibliotex_by_student' bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-download"></i>  <span class="label_icon">Télécharger</span>  </a>
+                                <a href="{% url 'print_bibliotex_by_student' bibliotex.id  %}" class="edit bibliotex_shower" ><i class="bi bi-printer"></i>  <span class="label_icon">Voir le pdf</span>  </a>
                             </div>
-                            {% endcomment %}
+ 
                             <div class="col-lg-6 col-xs-6">
-                                <a href="javascript:void();" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Compétences</span>
+                                <a href="javascript:void();" class="edit bibliotex_shower" data-bibliotex_id="{{bibliotex.id }}"><i class="fa fa-fw fa-mortar-board"></i>  <span class="label_icon">Exercices</span>
                                 </a>
                             </div> 
                         </div>

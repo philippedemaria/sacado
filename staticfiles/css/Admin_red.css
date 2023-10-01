@@ -7120,10 +7120,10 @@ nobox permet de garder l'accordion mais fait disparaitre le css
   border-radius: 10px;
 }
 
-
 .scrolling_overflow{
 height:170px;
 overflow-y: auto;
+overflow-x: hidden;
 }
 .scrolling_overflow::-webkit-scrollbar {
   width: 0px;
