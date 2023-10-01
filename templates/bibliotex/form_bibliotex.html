@@ -160,21 +160,27 @@
                 <div class="row setup_ggb {% if bibliotex or group %}no_visu{% endif %}">
                     <div class="col-xs-12 col-md-4" >   
                         <div class="form-group form_card"> 
-                            <label>Affecter à mon groupe  </label> {% if group %}
-                                    <span class="helper_tip"> <i class="fa fa-question-circle"></i> 
-                                        <div class="helper_tip_text" >Les groupes proposés sont du même niveau que le groupe {% include 'group/group_labelname.html' %} {% if folder %} et contiennent le dossier {{ folder.title }}.{% endif %} </div>
-                                    </span> {% endif %}
+                            {% if group %}
+                            <div class="alert alert-sacado form-group" style="display: none"  id="grplist">
+                            {{ form.groups|add_class:"select_all" }}
+                            {{ form.groups.errors }}
+                            </div>
+                            <label><i class="bi bi-check-square text-success"></i> {% include 'group/group_labelname.html' %} </label> 
+                            {% else %}
+                            <label>Affecter à mon groupe  </label>  
                             <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;"  id="grplist">
                             {{ form.groups|add_class:"select_all" }}
                             {{ form.groups.errors }}
                             </div>
+                            {% endif %}
+
                         </div>
                     </div>                            
 
 
                     <div class="col-xs-12 col-md-4" >
                         <div class="form-group form_card">
-                        {% if bibliotex or folder or group  %}                                
+                        {% if folder or group  %}                                
                             <label>Inclure dans le  dossier </label><span class="helper_tip"> <i class="fa fa-question-circle"></i> 
                                 <div class="helper_tip_text" >Facultatif, mais permet d'organiser ses documents.</div>
                             </span>

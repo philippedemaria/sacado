@@ -1341,16 +1341,8 @@ def create_bibliotex_from_parcours(request,idp=0):
 
     parcours = Parcours.objects.get(id=idp)
 
-
-
-
-
     form = BibliotexForm(request.POST or None,request.FILES or None, teacher = teacher, group = group,  folder = folder,  initial = { 'folders'  : [folder] ,  'groups'  : [group] ,  'parcours'  : [parcours] } )
     
-    sem = request.POST.getlist('folders')
-    form.fields['folders'].choices = [(sem, sem)]
-
-
     if form.is_valid():
         nf = form.save(commit = False) 
         nf.author = teacher
