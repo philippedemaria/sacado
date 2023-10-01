@@ -161,17 +161,17 @@
                     <div class="col-xs-12 col-md-4" >   
                         <div class="form-group form_card"> 
                             {% if group %}
-                            <div class="alert alert-sacado form-group" style="display: none"  id="grplist">
-                            {{ form.groups|add_class:"select_all" }}
-                            {{ form.groups.errors }}
-                            </div>
-                            <label><i class="bi bi-check-square text-success"></i> {% include 'group/group_labelname.html' %} </label> 
+                                <div class="alert alert-sacado form-group" style="display: none"  id="grplist">
+                                {{ form.groups|add_class:"select_all" }}
+                                {{ form.groups.errors }}
+                                </div>
+                                <label><i class="bi bi-check-square text-success"></i> {% include 'group/group_labelname.html' %} </label> 
                             {% else %}
-                            <label>Affecter à mon groupe  </label>  
-                            <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;"  id="grplist">
-                            {{ form.groups|add_class:"select_all" }}
-                            {{ form.groups.errors }}
-                            </div>
+                                <label>Affecter à mon groupe  </label>  
+                                <div class="alert alert-sacado form-group" style="overflow-y: auto;height: 200px;"  id="grplist">
+                                {{ form.groups|add_class:"select_all" }}
+                                {{ form.groups.errors }}
+                                </div>
                             {% endif %}
 
                         </div>

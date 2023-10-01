@@ -240,6 +240,13 @@ a.level_title:hover, a.level_title:active,a.level_title:focus{
     background-color: white;
 }
 
+
+.content-wrapper {
+  background-color: white!important;
+  margin-right: 0px;
+  overflow-x: hidden
+}
+
 /********************************************************************/
 /*********   cke  ***************************************************/
 /********************************************************************/
