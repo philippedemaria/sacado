@@ -1204,7 +1204,7 @@ def ajax_search_bibliotex(request):
     if len(theme_ids) > 0 and theme_ids[0] != '' :
         base = base.filter(exotexs__knowledge__theme_id__in = theme_ids )
 
-    bibliotexs = base.order_by('teacher').distinct()   
+    bibliotexs = base.order_by('teacher')
 
     annales = set()        
     if id_annale == "yes" :
