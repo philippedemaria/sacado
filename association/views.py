@@ -96,9 +96,6 @@ def conversion(tex) :
 
 def toHtml(tex) :
 
-    f = open('/var/www/sacado/logs/debug.log','a')
-    print("tex ======> "+tex,file=f)
-    f.close()
 
     if tex=="" : return ""
     f=open(tmpdir+"tmptex.tex","w",encoding="utf-8")
@@ -161,6 +158,12 @@ def create_bibliotex_from_tex(request) :
                 ex['corhtml']=""
 
             exos.append(ex)
+
+
+            f = open('/var/www/sacado/logs/debug.log','a')
+            print( exos,file=f)
+            f.close()
+
         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills   } )  
 
     elif request.method == "POST" and  validate_save :
