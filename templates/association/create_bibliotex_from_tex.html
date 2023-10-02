@@ -63,9 +63,6 @@
                         <input type="text" name="titleBiblio" class="form-control" required  />
                     </div>
                 </div>
-
-
-
             {% for exo in listeExos %}
             <div class="form_card" style='background-color: aliceblue; margin-bottom:20px'>
                 <div class="row">
@@ -115,6 +112,38 @@
                 </div>
             </div>
             {% endfor %}
+        {% else %}
+            <label>Format du fichier tex</label><br/>
+            <pre>
+
+            = Important =
+
+            \exo
+
+            \titreexo{ titre exo1}
+
+            \eno{  
+                enoncé1 en Latex
+            }
+
+            \cor{
+                corrigé1 en Latex
+              }
+             
+            \exo
+
+
+            \titreexo{ titre exo2}
+
+            \eno{  
+                enoncé2 en Latex
+            }
+
+            \cor{
+                corrigé2 en Latex
+              }
+            </pre>
+
         {% endif %}
 
 
