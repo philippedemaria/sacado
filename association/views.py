@@ -141,7 +141,7 @@ def create_bibliotex_from_tex(request) :
         Lexos  = reader.split(r"\exo")
 
         exos=[]
-        titreBiblio = bloc(reader,'fexos')
+
         for i,exo in enumerate(Lexos) :
             ex=dict()
             ex['titre'] = bloc(exo,'titreexo')
@@ -159,7 +159,7 @@ def create_bibliotex_from_tex(request) :
         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills  , 'titreBiblio' : titreBiblio } )  
 
     elif request.method == "POST" and  validate_save :
-
+        titreBiblio = request.POST.get('titreBiblio')
         if validate_save :
             bibliotex,created = Bibliotex.objects.update_or_create( title = titreBiblio,
                                                             author_id   = 2480,
