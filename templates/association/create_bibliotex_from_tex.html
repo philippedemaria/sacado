@@ -76,7 +76,8 @@
                 <div class="row">
                     <div class="col-xs-6 col-lg-6">
                             <label>Source html </label>
-                            <textarea name="enohtml{{ forloop.counter}}" class="form-control ckeditor_class" id="eno0"  >{{ exo.enohtml }}</textarea>  
+                            <textarea name="enohtml{{ forloop.counter}}" class="form-control ckeditor_class" id="eno0"  >{{ exo.enohtml }}</textarea>
+                            <textarea name="eno{{ forloop.counter}}" class="no_visu_on_load"   >{{ exo.eno  }}</textarea> 
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Vue Html</label>
@@ -86,7 +87,8 @@
                 <div class="row">
                     <div class="col-xs-6 col-lg-6">
                             <label>Source corrigé html </label>
-                            <textarea name="corhtml{{ forloop.counter}}" class="form-control"  id="cor0" >{{ exo.corhtml }}</textarea>  
+                            <textarea name="corhtml{{ forloop.counter}}" class="form-control"  id="cor0" >{{ exo.corhtml }}</textarea>
+                            <textarea name="cor{{ forloop.counter}}" class="no_visu_on_load"   >{{ exo.cor  }}</textarea> 
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Corrigé Html</label>

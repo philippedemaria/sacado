@@ -95,6 +95,11 @@ def conversion(tex) :
 
 
 def toHtml(tex) :
+
+    f = open('/var/www/sacado/logs/debug.log','a')
+    print("tex ======> "+tex,file=f)
+    f.close()
+
     if tex=="" : return ""
     f=open(tmpdir+"tmptex.tex","w",encoding="utf-8")
     f.write(r"\documentclass{article}")
@@ -159,6 +164,10 @@ def create_bibliotex_from_tex(request) :
         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills  , 'titreBiblio' : titreBiblio } )  
 
     elif request.method == "POST" and  validate_save :
+        post = True
+        level_id   = request.POST.get("level")
+        level      = Level.objects.get(pk=level_id)
+        skills     = Skill.objects.filter(subject_id=1) 
         titreBiblio = request.POST.get('titreBiblio')
         if validate_save :
             bibliotex,created = Bibliotex.objects.update_or_create( title = titreBiblio,
@@ -179,39 +188,34 @@ def create_bibliotex_from_tex(request) :
                 bibliotex.subjects.add(group.subject)
                 bibliotex.groups.add(group)
 
+        group = Group.objects.filter(teacher_id=2480,subject=subject,level=level).first()
+        level = group.level
+        subject = group.subject
 
         for i,exo in enumerate(Lexos) :
 
             ex=dict()
             ex['titre'] = bloc(exo,'titreexo')
             ex['eno']   = bloc(exo,'eno')
-            ex['cor']   = bloc(exo,'cor') 
-            toHtml(ex['eno'])
-            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
-            if ex['cor']!="" :
-                    toHtml(ex['cor'])
-                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
-            else :
-                ex['corhtml']=""
-
+            ex['cor']   = bloc(exo,'cor')        
             if validate_save and insert_exos :
 
                 knowledges = request.POST.getlist("knowledge"+str(i),None)
                 knowledge  = Knowlege.objects.get(pk=knowledges[0])
                 exotex, created = Exotex.objects.update_or_create(
                     title = ex['titre'],
-                    content = ex['eno'] ,
+                    content = request.POST.get("eno"+str(i),None) ,
                     content_html = request.POST.get("enohtml"+str(i),None) ,
                     author_id = 2480,
                     calculator = 0, 
                     duration = 15,
                     ###### Socle
-                    subject       = group.subject ,
+                    subject       = subject ,
                     knowledge_id  = knowledges[0] ,
-                    level         = group.level ,
+                    level         = level ,
                     theme         = knowledge.theme, 
                     point           = 0,
-                    correction      = ex['cor'],
+                    correction      = request.POST.get("cor"+str(i),None),
                     correction_html = request.POST.get("corhtml"+str(i),None),
                     ranking         = 0,
                     bloc_id = None,
@@ -233,8 +237,6 @@ def create_bibliotex_from_tex(request) :
                 except : pass 
 
             exos.append(ex)
-        
-
 
     return render(request, 'association/create_bibliotex_from_tex.html', context )
 
