@@ -58,6 +58,14 @@
             </div>
         </div>
         {% if post %}
+                <div class="row">
+                    <div class="col-xs-12 col-lg-12">
+                        <input type="text" name="titleBiblio" class="form-control" value="{{ create_bibliotex_from_tex }}" />
+                    </div>
+                </div>
+
+
+
             {% for exo in listeExos %}
             <div class="form_card" style='background-color: aliceblue'>
                 <div class="row">
@@ -68,7 +76,7 @@
                 <div class="row">
                     <div class="col-xs-6 col-lg-6">
                             <label>Source html </label>
-                            <textarea name="source" class="form-control ckeditor_class" id="eno0"  >{{ exo.enohtml }}</textarea>  
+                            <textarea name="enohtml{{ forloop.counter}}" class="form-control ckeditor_class" id="eno0"  >{{ exo.enohtml }}</textarea>  
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Vue Html</label>
@@ -78,7 +86,7 @@
                 <div class="row">
                     <div class="col-xs-6 col-lg-6">
                             <label>Source corrigé html </label>
-                            <textarea name="source_cor" class="form-control"  id="cor0" >{{ exo.corhtml }}</textarea>  
+                            <textarea name="corhtml{{ forloop.counter}}" class="form-control"  id="cor0" >{{ exo.corhtml }}</textarea>  
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Corrigé Html</label>
@@ -88,7 +96,7 @@
                 <div class="row">
                     <div class="col-xs-9 col-lg-9">
                         <label>Savoir faire</label><br/>
-                        <select name="knowledge" class="form-control select2" multiple>
+                        <select name="knowledge{{ forloop.counter}}" class="form-control select2" multiple>
                             {% for kowledge in knowledges %}
                             <option value="{{ kowledge.id}}">{{ kowledge.name}}</option>
                             {% endfor %}
@@ -96,7 +104,7 @@
                     </div>
                     <div class="col-xs-3 col-lg-3">
                         <label>Compétences</label><br/>
-                        <select name="skill" class="form-control select2" multiple>
+                        <select name="skill{{ forloop.counter}}" class="form-control select2" multiple>
                             {% for skill in skills %}
                             <option value="{{ skill.id}}">{{ skill.name}}</option>
                             {% endfor %}
@@ -106,6 +114,13 @@
             </div>
             {% endfor %}
         {% endif %}
+
+
+        <div class="col-xs-12 col-lg-12">
+            <button type="submit"  class="btn btn-primary" value="validate_save" >Enregistrer</button>
+        </div>
+
+
     </form>  
 </section>
 {% endblock %} 

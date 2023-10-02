@@ -123,11 +123,12 @@ def extraitBody(html) :
 def create_bibliotex_from_tex(request) :
 
     levels = Level.objects.order_by("ranking")
+    validate_save = request.POST.get("validate_save",None)
     post = False
     skills , knowledges = [], []
     context = { 'levels' : levels , 'post' : post } 
 
-    if request.method == "POST" :
+    if request.method == "POST" and not validate_save :
         post = True
         this_file  = request.FILES["this_file"]
         level_id   = request.POST.get("level")
@@ -140,7 +141,8 @@ def create_bibliotex_from_tex(request) :
         Lexos  = reader.split(r"\exo")
 
         exos=[]
-        for exo in Lexos[2:] :
+        titreBiblio = bloc(reader,'fexos')
+        for i,exo in enumerate(Lexos) :
             ex=dict()
             ex['titre'] = bloc(exo,'titreexo')
             ex['eno']   = bloc(exo,'eno')
@@ -152,9 +154,87 @@ def create_bibliotex_from_tex(request) :
                     ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
             else :
                 ex['corhtml']=""
-            exos.append(ex)
 
-        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills } )  
+            exos.append(ex)
+        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills  , 'titreBiblio' : titreBiblio } )  
+
+    elif request.method == "POST" and  validate_save :
+
+        if validate_save :
+            bibliotex,created = Bibliotex.objects.update_or_create( title = titreBiblio,
+                                                            author_id   = 2480,
+                                                            teacher_id  = 2480,
+                                                            defaults={ 'is_favorite' : 1,
+                                                                'is_share' : 1,
+                                                                'is_archive'  : 0,
+                                                                'is_publish' :1}
+                                                          )
+            if not created :
+                messages.error(request,"Ce titre de biblioTex est déjà utilisé.")
+                insert_exos = False
+            else :
+                subject = Subject.objects.get(pk=1) 
+                group = Group.objects.filter(teacher_id=2480,subject=subject,level=level).first()
+                bibliotex.levels.add(group.level)
+                bibliotex.subjects.add(group.subject)
+                bibliotex.groups.add(group)
+
+
+        for i,exo in enumerate(Lexos) :
+
+            ex=dict()
+            ex['titre'] = bloc(exo,'titreexo')
+            ex['eno']   = bloc(exo,'eno')
+            ex['cor']   = bloc(exo,'cor') 
+            toHtml(ex['eno'])
+            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
+            if ex['cor']!="" :
+                    toHtml(ex['cor'])
+                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
+            else :
+                ex['corhtml']=""
+
+            if validate_save and insert_exos :
+
+                knowledges = request.POST.getlist("knowledge"+str(i),None)
+                knowledge  = Knowlege.objects.get(pk=knowledges[0])
+                exotex, created = Exotex.objects.update_or_create(
+                    title = ex['titre'],
+                    content = ex['eno'] ,
+                    content_html = request.POST.get("enohtml"+str(i),None) ,
+                    author_id = 2480,
+                    calculator = 0, 
+                    duration = 15,
+                    ###### Socle
+                    subject       = group.subject ,
+                    knowledge_id  = knowledges[0] ,
+                    level         = group.level ,
+                    theme         = knowledge.theme, 
+                    point           = 0,
+                    correction      = ex['cor'],
+                    correction_html = request.POST.get("corhtml"+str(i),None),
+                    ranking         = 0,
+                    bloc_id = None,
+                    is_read = 0)
+                try : exotex.knowledges.set(knowledges[1:])
+                except : pass 
+                try : exotex.skills.set(request.POST.getlist("skill"+str(i)))
+                except : pass 
+                relationtex, created = Relationtex.objects.update_or_create(
+                        exotex = exotex,
+                        bibliotex = bibliotex,
+                        teacher_id = 2480, 
+                        calculator = 0,
+                        duration = 15, 
+                        )
+                try : relationtex.knowledges.set(knowledges[1:])
+                except : pass 
+                try : relationtex.skills.set(request.POST.getlist("skill"+str(i)))
+                except : pass 
+
+            exos.append(ex)
+        
+
 
     return render(request, 'association/create_bibliotex_from_tex.html', context )
 
