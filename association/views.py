@@ -147,7 +147,7 @@ def create_bibliotex_from_tex(request) :
 
         exos=[]
 
-        for i,exo in enumerate(Lexos) :
+        for i,exo in enumerate(Lexos[1:]) :
             ex=dict()
             ex['titre'] = bloc(exo,'titreexo')
             ex['eno']   = bloc(exo,'eno')
