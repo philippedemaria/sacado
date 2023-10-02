@@ -140,14 +140,13 @@ def create_bibliotex_from_tex(request) :
  
         reader = this_file.read().decode('utf8')
 
+        f = open('/var/www/sacado/logs/debug.log','a')
+        print( reader,file=f)
+        f.close()
+        
         Lexos  = reader.split(r"\exo")
 
-        f = open('/var/www/sacado/logs/debug.log','a')
-        print( Lexos,file=f)
-        f.close()
-
-
-
+ 
         exos=[]
 
         for exo in Lexos[1:] :
