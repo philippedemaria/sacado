@@ -161,7 +161,7 @@ def create_bibliotex_from_tex(request) :
                 ex['corhtml']=""
 
             exos.append(ex)
-        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills  , 'titreBiblio' : titreBiblio } )  
+        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills   } )  
 
     elif request.method == "POST" and  validate_save :
         post = True
