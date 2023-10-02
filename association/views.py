@@ -142,9 +142,15 @@ def create_bibliotex_from_tex(request) :
 
         Lexos  = reader.split(r"\exo")
 
+        f = open('/var/www/sacado/logs/debug.log','a')
+        print( Lexos,file=f)
+        f.close()
+
+
+
         exos=[]
 
-        for i,exo in enumerate(Lexos[1:]) :
+        for exo in Lexos[1:] :
             ex=dict()
             ex['titre'] = bloc(exo,'titreexo')
             ex['eno']   = bloc(exo,'eno')
@@ -158,11 +164,6 @@ def create_bibliotex_from_tex(request) :
                 ex['corhtml']=""
 
             exos.append(ex)
-
-
-            f = open('/var/www/sacado/logs/debug.log','a')
-            print( exos,file=f)
-            f.close()
 
         context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills   } )  
 

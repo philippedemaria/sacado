@@ -76,8 +76,8 @@
                 <div class="row">
                     <div class="col-xs-6 col-lg-6">
                             <label>Source html </label>
-                            <textarea name="enohtml{{ forloop.counter}}" class="form-control ckeditor_class" id="eno0"  >{{ exo.enohtml }}</textarea>
-                            <textarea name="eno{{ forloop.counter}}" class="no_visu_on_load"   >{{ exo.eno  }}</textarea> 
+                            <textarea name="enohtml{{ forloop.counter0}}" class="form-control ckeditor_class" id="eno0"  >{{ exo.enohtml }}</textarea>
+                            <textarea name="eno{{ forloop.counter0}}" class="no_visu_on_load"   >{{ exo.eno  }}</textarea> 
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Vue Html</label>
@@ -87,8 +87,8 @@
                 <div class="row">
                     <div class="col-xs-6 col-lg-6">
                             <label>Source corrigé html </label>
-                            <textarea name="corhtml{{ forloop.counter}}" class="form-control"  id="cor0" >{{ exo.corhtml }}</textarea>
-                            <textarea name="cor{{ forloop.counter}}" class="no_visu_on_load"   >{{ exo.cor  }}</textarea> 
+                            <textarea name="corhtml{{ forloop.counter0}}" class="form-control"  id="cor0" >{{ exo.corhtml }}</textarea>
+                            <textarea name="cor{{ forloop.counter0}}" class="no_visu_on_load"   >{{ exo.cor  }}</textarea> 
                     </div>
                     <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
                             <label>Corrigé Html</label>
@@ -98,7 +98,7 @@
                 <div class="row">
                     <div class="col-xs-9 col-lg-9">
                         <label>Savoir faire</label><br/>
-                        <select name="knowledge{{ forloop.counter}}" class="form-control select2" multiple>
+                        <select name="knowledge{{ forloop.counter0}}" class="form-control select2" multiple>
                             {% for kowledge in knowledges %}
                             <option value="{{ kowledge.id}}">{{ kowledge.name}}</option>
                             {% endfor %}
@@ -106,7 +106,7 @@
                     </div>
                     <div class="col-xs-3 col-lg-3">
                         <label>Compétences</label><br/>
-                        <select name="skill{{ forloop.counter}}" class="form-control select2" multiple>
+                        <select name="skill{{ forloop.counter0}}" class="form-control select2" multiple>
                             {% for skill in skills %}
                             <option value="{{ skill.id}}">{{ skill.name}}</option>
                             {% endfor %}
