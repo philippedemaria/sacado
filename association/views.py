@@ -65,7 +65,7 @@ from subprocess import run
 # Importation d'une fiche d'exos pour creer une bibliotex
 #################################################################
 
-tmpdir="ressources/fichesexos/tmp/"
+tmpdir="/var/www/sacado/ressources/fichesexos/tmp/"
 
 def bloc(texte,commande):
     if "\\"+commande+"{" not in texte :
