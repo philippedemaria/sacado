@@ -1,0 +1,157 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+    <script>
+        require(['script/bibliotex_from_tex']);
+    </script> 
+ 
+    
+{% endblock %}
+
+ 
+
+{% block page_title %}
+         Tex To Bibliotex  
+{% endblock %}
+
+
+{% block page_menu_right %}
+
+ 
+{% endblock %}
+
+
+
+
+{% block css_files %}
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    <form action="" method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <div class="row">
+            <div class="col-xs-3">
+                    <label>Niveau</label><br/>
+                    <select name="level" class="form-control select2">
+                        {% for level in levels %}
+                        <option value="{{ level.id}}" {% if level_id == level.id %} selected {% endif %} >{{ level.name}}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+            <div class="col-xs-6 col-lg-6">
+                    <label>Téléverser le source Tex</label>
+                    <input type="file" name="this_file" class="form-control btn btn-default" />
+            </div>
+            <div class="col-xs-6 col-lg-3">
+                <div class="form-group">
+                <input type="submit" value="Téléverser le source Tex" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+        {% if post %}
+                <div class="row">
+                    <div class="col-xs-12 col-lg-12"><label>Nombre d'exercices</label><br/>
+                        <input type="text" name="nb_exos" class="form-control" required value="{{ nb_exos }}" />
+                    </div>
+                </div>
+            {% for exo in listeExos %}
+            <div class="form_card" style='background-color: aliceblue; margin-bottom:20px'>
+                <div class="row">
+                    <div class="col-xs-12 col-lg-12">
+                        <input type="text" name="title{{ forloop.counter0}}" class="form-control" value="{{ exo.titre }}" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-lg-6">
+                            <label>Source html </label>
+                            <textarea name="enohtml{{ forloop.counter0}}" class="form-control ckeditor_class" id="eno{{ forloop.counter0}}"  >{{ exo.enohtml }}</textarea>
+                            <textarea name="eno{{ forloop.counter0}}" class="no_visu_on_load"   >{{ exo.eno  }}</textarea> 
+                    </div>
+                    <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
+                            <label>Vue Html</label>
+                            {{ exo.enohtml | safe }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-lg-6">
+                            <label>Source corrigé html </label>
+                            <textarea name="corhtml{{ forloop.counter0}}" class="form-control ckeditor_class"  id="cor{{ forloop.counter0}}" >{{ exo.corhtml }}</textarea>
+                            <textarea name="cor{{ forloop.counter0}}" class="no_visu_on_load"   >{{ exo.cor  }}</textarea> 
+                    </div>
+                    <div class="col-xs-6 col-lg-6" style="overflow-y: auto;height: 250px">
+                            <label>Corrigé Html</label>
+                            {{ exo.corhtml | safe }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-9 col-lg-9">
+                        <label>Savoir faire</label><br/>
+                        <select name="knowledge{{ forloop.counter0}}" class="form-control select2" multiple>
+                            {% for kowledge in knowledges %}
+                            <option value="{{ kowledge.id}}">{{ kowledge.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-xs-3 col-lg-3">
+                        <label>Compétences</label><br/>
+                        <select name="skill{{ forloop.counter0}}" class="form-control select2" multiple>
+                            {% for skill in skills %}
+                            <option value="{{ skill.id}}">{{ skill.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <label>Format du fichier tex</label><br/>
+            <pre>
+
+            = Important =
+
+            \exo
+
+            \titreexo{ titre exo1}
+
+            \eno{  
+                enoncé1 en Latex
+            }
+
+            \cor{
+                corrigé1 en Latex
+              }
+             
+            \exo
+
+
+            \titreexo{ titre exo2}
+
+            \eno{  
+                enoncé2 en Latex
+            }
+
+            \cor{
+                corrigé2 en Latex
+              }
+            </pre>
+
+        {% endif %}
+
+
+        <div class="col-xs-12 col-lg-12">
+            <button type="submit"  class="btn btn-primary" value="validate_save" >Enregistrer</button>
+        </div>
+
+
+    </form>  
+</section>
+{% endblock %} 

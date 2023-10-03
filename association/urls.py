@@ -124,7 +124,7 @@ urlpatterns = [
 
 
     path('create_bibliotex_from_tex', create_bibliotex_from_tex, name='create_bibliotex_from_tex'),
-
+    path('create_exotex_from_tex', create_exotex_from_tex, name='create_exotex_from_tex'),
 
 ]
  

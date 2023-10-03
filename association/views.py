@@ -139,14 +139,7 @@ def create_bibliotex_from_tex(request) :
         skills     = Skill.objects.filter(subject_id=1) 
  
         reader = this_file.read().decode('utf8')
-
-        f = open('/var/www/sacado/logs/debug.log','a')
-        print( reader,file=f)
-        f.close()
-        
         Lexos  = reader.split(r"\exo")
-
- 
         exos=[]
 
         for exo in Lexos[1:] :
@@ -163,8 +156,9 @@ def create_bibliotex_from_tex(request) :
                 ex['corhtml']=""
 
             exos.append(ex)
+        nb_exos = len(exos)
 
-        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills   } )  
+        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills , 'nb_exos' : nb_exos   } )  
 
     elif request.method == "POST" and  validate_save :
         post = True
@@ -195,38 +189,28 @@ def create_bibliotex_from_tex(request) :
         level = group.level
         subject = group.subject
 
-        for i,exo in enumerate(Lexos) :
+        for i in range(int(request.POST.get("nb_exos"))) :
 
-            ex=dict()
-            ex['titre'] = bloc(exo,'titreexo')
-            ex['eno']   = bloc(exo,'eno')
-            ex['cor']   = bloc(exo,'cor')        
-            if validate_save and insert_exos :
-
-                knowledges = request.POST.getlist("knowledge"+str(i),None)
-                knowledge  = Knowlege.objects.get(pk=knowledges[0])
-                exotex, created = Exotex.objects.update_or_create(
-                    title = ex['titre'],
-                    content = request.POST.get("eno"+str(i),None) ,
-                    content_html = request.POST.get("enohtml"+str(i),None) ,
-                    author_id = 2480,
-                    calculator = 0, 
-                    duration = 15,
-                    ###### Socle
-                    subject       = subject ,
-                    knowledge_id  = knowledges[0] ,
-                    level         = level ,
-                    theme         = knowledge.theme, 
-                    point           = 0,
-                    correction      = request.POST.get("cor"+str(i),None),
-                    correction_html = request.POST.get("corhtml"+str(i),None),
-                    ranking         = 0,
-                    bloc_id = None,
-                    is_read = 0)
-                try : exotex.knowledges.set(knowledges[1:])
-                except : pass 
-                try : exotex.skills.set(request.POST.getlist("skill"+str(i)))
-                except : pass 
+            knowledges = request.POST.getlist("knowledge"+str(i),None)
+            knowledge  = Knowlege.objects.get(pk=knowledges[0])
+            exotex, created = Exotex.objects.update_or_create(
+                title = request.POST.get("title"+str(i)),
+                content = request.POST.get("eno"+str(i),None) ,
+                content_html = request.POST.get("enohtml"+str(i),None) ,
+                author_id = 2480,
+                calculator = 0, 
+                duration = 15,
+                ###### Socle
+                subject       = subject ,
+                knowledge_id  = knowledge,
+                level         = level ,
+                theme         = knowledge.theme, 
+                point           = 0,
+                correction      = request.POST.get("cor"+str(i),None),
+                correction_html = request.POST.get("corhtml"+str(i),None),
+                ranking         = 0,
+                bloc_id = None,
+                is_read = 0)
                 relationtex, created = Relationtex.objects.update_or_create(
                         exotex = exotex,
                         bibliotex = bibliotex,
@@ -239,9 +223,86 @@ def create_bibliotex_from_tex(request) :
                 try : relationtex.skills.set(request.POST.getlist("skill"+str(i)))
                 except : pass 
 
+    return render(request, 'association/create_bibliotex_from_tex.html', context )
+
+
+
+
+def create_exotex_from_tex(request):
+
+    levels = Level.objects.order_by("ranking")
+    validate_save = request.POST.get("validate_save",None)
+    post = False
+    skills , knowledges = [], []
+    context = { 'levels' : levels , 'post' : post } 
+
+    if request.method == "POST" and not validate_save :
+        post = True
+        this_file  = request.FILES["this_file"]
+        level_id   = request.POST.get("level")
+        level      = Level.objects.get(pk=level_id)
+        knowledges = level.knowledges.all()
+        skills     = Skill.objects.filter(subject_id=1) 
+ 
+        reader = this_file.read().decode('utf8')
+        Lexos  = reader.split(r"\exo")
+        exos=[]
+        for exo in Lexos[1:] :
+            ex=dict()
+            ex['titre'] = bloc(exo,'titreexo')
+            ex['eno']   = bloc(exo,'eno')
+            ex['cor']   = bloc(exo,'cor') 
+            toHtml(ex['eno'])
+            ex['enohtml']=extraitBody(open(tmpdir+"tmptex.html").read() )             
+            if ex['cor']!="" :
+                    toHtml(ex['cor'])
+                    ex['corhtml']=extraitBody(open(tmpdir+"tmptex.html").read() )
+            else :
+                ex['corhtml']=""
+
             exos.append(ex)
 
-    return render(request, 'association/create_bibliotex_from_tex.html', context )
+        nb_exos = len(exos)
+
+        context.update( { 'level_id' : level.id ,   'post' : post , 'listeExos' : exos , 'knowledges' : knowledges , 'skills' : skills  , 'nb_exos' : nb_exos , } )  
+
+    elif request.method == "POST" and  validate_save :
+        post = True
+        level_id   = request.POST.get("level")
+        level      = Level.objects.get(pk=level_id)
+        skills     = Skill.objects.filter(subject_id=1) 
+
+
+        for i in range(int(request.POST.get("nb_exos"))) :
+
+        
+            knowledges = request.POST.getlist("knowledge"+str(i),None)
+            knowledge  = Knowlege.objects.get(pk=knowledges[0])
+            exotex, created = Exotex.objects.update_or_create(
+                title = request.POST.get("title"+str(i)),
+                content = request.POST.get("eno"+str(i),None) ,
+                content_html = request.POST.get("enohtml"+str(i),None) ,
+                author_id = 2480,
+                calculator = 0, 
+                duration = 15,
+                ###### Socle
+                subject       = subject ,
+                knowledge_id  = knowledge,
+                level         = level ,
+                theme         = knowledge.theme, 
+                point           = 0,
+                correction      = request.POST.get("cor"+str(i),None),
+                correction_html = request.POST.get("corhtml"+str(i),None),
+                ranking         = 0,
+                bloc_id = None,
+                is_read = 0)
+            if created :
+                try : exotex.knowledges.set(knowledges[1:])
+                except : pass 
+                try : exotex.skills.set(request.POST.getlist("skill"+str(i)))
+                except : pass 
+
+    return render(request, 'association/create_exotex_from_tex.html', context )
 
 
 
