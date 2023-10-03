@@ -211,17 +211,17 @@ def create_bibliotex_from_tex(request) :
                 ranking         = 0,
                 bloc_id = None,
                 is_read = 0)
-                relationtex, created = Relationtex.objects.update_or_create(
+            relationtex, created = Relationtex.objects.update_or_create(
                         exotex = exotex,
                         bibliotex = bibliotex,
                         teacher_id = 2480, 
                         calculator = 0,
                         duration = 15, 
                         )
-                try : relationtex.knowledges.set(knowledges[1:])
-                except : pass 
-                try : relationtex.skills.set(request.POST.getlist("skill"+str(i)))
-                except : pass 
+            try : relationtex.knowledges.set(knowledges[1:])
+            except : pass 
+            try : relationtex.skills.set(request.POST.getlist("skill"+str(i)))
+            except : pass 
 
     return render(request, 'association/create_bibliotex_from_tex.html', context )
 
@@ -275,7 +275,6 @@ def create_exotex_from_tex(request):
 
         for i in range(int(request.POST.get("nb_exos"))) :
 
-        
             knowledges = request.POST.getlist("knowledge"+str(i),None)
             knowledge  = Knowlege.objects.get(pk=knowledges[0])
             exotex, created = Exotex.objects.update_or_create(
