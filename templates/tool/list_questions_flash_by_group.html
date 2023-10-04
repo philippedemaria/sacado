@@ -71,7 +71,7 @@
                     <td>{{ q.nb_slide }} <small>[{{ q.duration|time_done }}]</small></td> 
                     <td style="position:relative">
                         <span id="new_group_affected{{ q.id}}">
-                        {% for g in  q.groups.all  %}
+                        {% for g in  q.group_shown.all  %}
                             <small>{{ g.name }} <small>({{ g.just_students.count }})</small>{% if not forloop.last %}, {% endif %}</small>
                         {% endfor %}
                         </span>
