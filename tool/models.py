@@ -517,6 +517,14 @@ class Quizz(ModelWithCode):
         return s
 
 
+
+    def group_shown(self):
+        return self.groups.filter(is_hidden=0) 
+
+
+
+
+
 def time_zone_user(user):
     try :
         if user.time_zone :
