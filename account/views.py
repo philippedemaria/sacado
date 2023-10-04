@@ -228,9 +228,9 @@ def get_dataset_to_gar(request): # 0 on supprime le compte hors gar - 1 On garde
         if request.method== "POST" :
             user_id = request.POST.get("user_id",None) # Enseignant qui donne ses documents
 
-            if school_target.is_migration == 0 :
+            if teacher_target.is_migration == 0 :
 
-                if user_id  and school_target.is_migration == 0 :
+                if user_id    :
                     teacher = Teacher.objects.get(user_id=user_id)
 
                     if request.POST.get("keep") == "yes" : 
