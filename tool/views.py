@@ -3884,7 +3884,7 @@ def list_questions_flash(request):
     request.session["group_id"] = False
     
     teacher = request.user.teacher     
-    groups  = teacher.groups.order_by("level__ranking")
+    groups  = teacher.groups.filter(is_hidden=0).order_by("level__ranking")
     delete_session_key(request, "quizz_id")
 
     qflashes = teacher.teacher_quizz.filter(is_random=1).order_by("-date_modified")

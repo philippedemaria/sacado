@@ -515,13 +515,7 @@ class Quizz(ModelWithCode):
         for question in self.questions.all():
             s.add(question.mental)
         return s
-
-
-
-    def group_shown(self):
-        return self.groups.filter(is_hidden=0) 
-
-
+ 
 
 
 
