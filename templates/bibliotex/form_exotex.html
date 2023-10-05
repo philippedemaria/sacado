@@ -56,23 +56,23 @@ ul#id_skills li{
             <div class="row" id="standard_layer">
                 {% if knowledge %}
 
-                <div class="row">
-                    <div class="col-xs-12 col-md-4">
-                        <div class="form-group">
-                            {{ form.title.label_tag }} <small>Optionnel</small> 
-                            {{ form.title |add_class:"form-control textarea_more_shown"  }}
-                            {{ form.title.errors }}
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4">
+                            <div class="form-group">
+                                {{ form.title.label_tag }} <small>Optionnel</small> 
+                                {{ form.title |add_class:"form-control textarea_more_shown"  }}
+                                {{ form.title.errors }}
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-12 col-md-2">
-                        <div class="form-group">
-                            {{ form.point.label_tag }} <small>Optionnel</small> 
-                            {{ form.point |add_class:"form-control"  }}
-                            {{ form.point.errors }}
+                        <div class="col-xs-12 col-md-2">
+                            <div class="form-group">
+                                {{ form.point.label_tag }} <small>Optionnel</small> 
+                                {{ form.point |add_class:"form-control"  }}
+                                {{ form.point.errors }}
+                            </div>
                         </div>
-                    </div>
-                </div> 
-                    {% if request.user.is_superuser or request.user.is_extra %}
+                    </div> 
+                    {% if request.user.is_superuser  %}
                         <div class="row">
                             <div class="col-xs-12 col-md-4">
                                     <label>Enseignement :</label>
@@ -98,63 +98,56 @@ ul#id_skills li{
                             </div>
                         </div>
                     {% else %}  
-
                         <input value="{{ knowledge.theme.subject.id }}" name="subject" id="id_subject" type="hidden" />
                         <input value="{{ knowledge.level.id }}" name="level" id="id_level" type="hidden" />
                         <input value="{{ knowledge.theme.id }}" name="theme" id="id_theme" type="hidden" />
                         <input value="{{ knowledge.id }}" name="knowledge" id="id_knowledge" type="hidden" />
                     {% endif %}
                 {% else %}  
-                <div class="row">
-                    <div class="col-xs-12 col-md-12">
-                         <div class="alert alert-sacado">Choisir l'enseignement, le niveau et le thème pour afficher les savoir faire ciblés.</div>
+                    <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                             <div class="alert alert-sacado">Choisir l'enseignement, le niveau et le thème pour afficher les savoir faire ciblés.</div>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12 col-md-4">
-                            <label>Enseignement :</label>
-                            {{ form.subject |add_class:"form-control select2" }}
-                            {{ form.subject.errors }}
-                        <div class="form-group">
-                            <label>Niveau :</label>
-                            {{ form.level |add_class:"form-control select2" }}
-                            {{ form.level.errors }}
-                        </div>
-                        <div class="form-group">
-                            {{ form.theme.label_tag }}
-                            {{ form.theme |add_class:"form-control select2" }}
-                            {{ form.theme.errors }}
-                        </div>
-                        <div class="form-group">
-                            {{ form.title.label_tag }} 
-                            {{ form.title |add_class:"form-control textarea_more_shown"  }}
-                            {{ form.title.errors }}
-                        </div>
-                        <div class="form-group"> 
-                            <label>Savoir faire  </label> :<small> Obligatoire</small>                   
-                            {{ form.knowledge|add_class:"form-control select2" }}
-                            {{ form.knowledge.errors }}
-                        </div>
-                        {% if  request.user.is_superuser or request.user.is_extra %}
+                    <div class="row">
+                        <div class="col-xs-12 col-md-4">
+                                <label>Enseignement :</label>
+                                {{ form.subject |add_class:"form-control select2" }}
+                                {{ form.subject.errors }}
                             <div class="form-group">
-                                {{ form.point.label_tag }} <small>Optionnel (utile si utilisation en DS)</small> 
-                                {{ form.point |add_class:"form-control"  }}
-                                {{ form.point.errors }}
+                                <label>Niveau :</label>
+                                {{ form.level |add_class:"form-control select2" }}
+                                {{ form.level.errors }}
                             </div>
-                        {% else %}
+                            <div class="form-group">
+                                {{ form.theme.label_tag }}
+                                {{ form.theme |add_class:"form-control select2" }}
+                                {{ form.theme.errors }}
+                            </div>
+                            <div class="form-group">
+                                {{ form.title.label_tag }} 
+                                {{ form.title |add_class:"form-control textarea_more_shown"  }}
+                                {{ form.title.errors }}
+                            </div>
                             <div class="form-group"> 
-                                <label>Compétences ciblées </label>                        
-                                {{ form.skills|add_class:"form-control select2" }}
-                                {{ form.skills.errors }}
+                                <label>Savoir faire  </label> :<small> Obligatoire</small>                   
+                                {{ form.knowledge|add_class:"form-control select2" }}
+                                {{ form.knowledge.errors }}
                             </div>
-                        {% endif %}
-                    </div>
-                    <div class="col-xs-12 col-md-8">
-                        <div class="form-group" id="knowledge_list" style="height:450px; overflow-y: auto">
-                           
+                            {% if  request.user.is_superuser   %}
+                                <div class="form-group">
+                                    {{ form.point.label_tag }} <small>Optionnel (utile si utilisation en DS)</small> 
+                                    {{ form.point |add_class:"form-control"  }}
+                                    {{ form.point.errors }}
+                                </div>
+                            {% endif %}
                         </div>
-                    </div>
-                </div> 
+                        <div class="col-xs-12 col-md-8">
+                            <div class="form-group" id="knowledge_list" style="height:450px; overflow-y: auto">
+                               
+                            </div>
+                        </div>
+                    </div> 
                 {% endif %}  
                 {% if request.user.is_superuser or request.user.is_extra %}
                 <div class="row"> 
@@ -286,19 +279,38 @@ ul#id_skills li{
                             {{ form.content.errors }}
                         </div>
                     </div>
-                   
- 
-           
+                    <div class="col-xs-12 col-md-6">                        
+                        <div class="form-group">                        
+                            {{ form.content_html.label_tag }}  <br/>      
+                            {{ form.content_html|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
+                            {{ form.content_html.errors }}
+                                                  
+                        </div>
+                    </div> 
+                </div>
+                <div class="row">
                     <div class="col-xs-12 col-md-6">                        
                         <div class="form-group">                        
                             {{ form.correction.label_tag }}  <br/>      
                             {{ form.correction|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
-                            {{ form.correction.errors }}
+                            {{ form.correction.errors }}                      
+                        </div>
+                    </div> 
+                    <div class="col-xs-12 col-md-6">                        
+                        <div class="form-group">                        
+                            {{ form.correction_html.label_tag }}  <br/>      
+                            {{ form.correction_html|add_class:"form-control textarea_more_shown"|attr:"rows:15" }}
+                            {{ form.correction_html.errors }}
                                                   
                         </div>
                     </div> 
-         
-                </div>  
+                </div> 
+                                <div class="form-group"> 
+                                    <label>Compétences ciblées </label>                        
+                                    {{ form.skills|add_class:"form-control select2" }}
+                                    {{ form.skills.errors }}
+                                </div>
+
                 {% endif %}   
 
                 <div class="row">
