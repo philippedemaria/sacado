@@ -56,9 +56,51 @@ from subprocess import run
 
 
 #################################################################
-# Tex to BiblioTex
+# TOPLOG
 #################################################################
+def courbeLog(request):
+    log=open("logs/toplog.log")
+    creation=time.ctime(os.path.getctime("logs/toplog.log"))
+    reDate = re.compile("top - (\d\d):(\d\d):(\d\d)")
+    reDaphne =re.compile(r".*\s(\S+)\s+\S+\s+\S+ daphne")
+    reMysqld =re.compile(r".*\s(\S+)\s+\S+\s+\S+ mysqld")
+    tablog=log.readlines()
+    i=0
+    ndays=0
+    maxdaphne=1
+    maxmysqld=1
+    tableau=[]
 
+    while (i<len(tablog)-2) :
+        date=reDate.match(tablog[i])
+         #print(tablog[i],date)
+        if (date) :
+            daphne=reDaphne.match(tablog[i+1]);
+            #print(tablog[i+1],daphne)
+            if not daphne :
+                mysqld=reMysqld.match(tablog[i+1])
+                daphne=reDaphne.match(tablog[i+2])
+                #print(tablog[i+2],daphne,"---------------",daphne[1])
+            else :  mysqld=reMysqld.match(tablog[i+2])
+
+            if (daphne and mysqld) :
+                date=ndays*24+int(date[1])+int(date[2])/60+int(date[3])/3600
+                daphne=float(daphne[1])
+                mysqld=float(mysqld[1])
+                tableau.append([date,daphne,mysqld])
+                if (daphne>maxdaphne) : maxdaphne=daphne
+                if (mysqld>maxmysqld) : maxmysqld=mysqld
+                i+=2;
+
+        i+=1;
+    end=tableau[-1][0]
+    j=len(tableau)-1
+    while j>0 and tableau[j][0]>end-1 :
+        j-=1
+    lastHour=tableau[j:]
+
+    context = {"tab":tableau, "maxdaphne":maxdaphne,"maxmysqld":maxmysqld,"end":tableau[-1][0],"date":creation, "lastHour":lastHour}
+    return render(request,"association/courbeLog.html", context)
 
 
 #################################################################

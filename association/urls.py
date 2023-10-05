@@ -119,12 +119,10 @@ urlpatterns = [
     ### -------------------------  to_clean_database
     path('to_clean_database/<int:idl>/<int:start>', to_clean_database, name='to_clean_database'),
 
-
-
-
-
     path('create_bibliotex_from_tex', create_bibliotex_from_tex, name='create_bibliotex_from_tex'),
     path('create_exotex_from_tex', create_exotex_from_tex, name='create_exotex_from_tex'),
+    
+    path('courbeLog', courbeLog, name='courbeLog'),
 
 ]
  
