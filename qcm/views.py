@@ -5519,7 +5519,7 @@ def  exercise_error(request):
         exercise = Exercise.objects.get(id = int(exercise_id))
     else :
         messages.error(request, "L'exercice n'est pas reconnu.")
-        redirect('index')        
+        return redirect('index')        
     parcours_id = request.POST.get("parcours_id",None)
 
     try :
