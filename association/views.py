@@ -47,11 +47,13 @@ cm = 2.54
 import re
 import pytz
 from datetime import datetime  , timedelta , date
+import time
 from general_fonctions import *
 import xlwt
 import uuid
 import json 
 from subprocess import run 
+
 
 
 
