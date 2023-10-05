@@ -5522,6 +5522,14 @@ def  exercise_error(request):
         redirect('index')        
     parcours_id = request.POST.get("parcours_id",None)
 
+    try :
+        HTTP_USER_AGENT = request.META['HTTP_USER_AGENT']
+        REMOTE_HOST     = request.META['REMOTE_HOST ']
+        HTTP_REFERER    = request.META['HTTP_REFERER ']
+        agent =  "\n\nNavigateur et OS" + HTTP_USER_AGENT + " \n\n Page d'accès : " +HTTP_REFERER + " \n\n Adresse IP du client : " +REMOTE_ADDR 
+    except :
+        agent =  "\n\nImpossible de déterminer l'agent"
+
     if request.user :
         usr = request.user
         email = " "
@@ -5535,7 +5543,7 @@ def  exercise_error(request):
         msg = "Message envoyé par l'utilisateur #Non connecté :\n\nL'exercice dont l'id est -- "+str(exercise_id)+" --  décrit ci-dessous : \n Savoir faire visé : "+exercise.knowledge.name+ " \n Niveau : "+exercise.level.name+  "  \n Thème : "+exercise.theme.name +" comporte un problème. \n  S'il est identifié par l'utilisateur, voici la description :  \n" + message   
         response = "\n\n Pour voir l'exercice en question, utiliser ce lien en remplaçant le - par un slash :   sacado.xyz-qcm-show_this_exercise-"+str(exercise_id)+"-"
 
-    sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
+    sending_mail("Avertissement SacAdo Exercice "+str(exercise_id),  msg + response + agent , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])
  
     if request.user.is_teacher :
         
