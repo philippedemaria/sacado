@@ -63,7 +63,7 @@
     </select>
 </div>
 <div class="course_page_main"  id="course_page_main">
-    {% for paragraph in page.paragraphs.all %}
+    {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
         <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"  data-paragraph_id ="{{ paragraph.id }}">
             <div class="row">
                 <div class="col-xs-12">
