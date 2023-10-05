@@ -5523,10 +5523,8 @@ def  exercise_error(request):
     parcours_id = request.POST.get("parcours_id",None)
 
     try :
-        HTTP_USER_AGENT = request.META.get('HTTP-USER-AGENT')
-        REMOTE_HOST     = request.META.get('REMOTE-HOST')  
-        HTTP_REFERER    = request.META.get('HTTP-REFERER') 
-        agent =  "\n\nNavigateur et OS" + HTTP_USER_AGENT + " \n\n Page d'accès : " +HTTP_REFERER + " \n\n Adresse IP du client : " +REMOTE_ADDR 
+        HTTP_USER_AGENT = request.headers.get("user-agent")
+        agent =  "\n\nNavigateur et OS : " + HTTP_USER_AGENT 
     except :
         agent =  "\n\nImpossible de déterminer l'agent"
 
