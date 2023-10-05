@@ -32,7 +32,7 @@ class School(models.Model):
     NB_STUDENTS = (
         (150, "moins de 150 - Version gratuite"),
         (500, "Entre 150 et 500 : 100 €"),
-        (1000, "Entre 500 et 1000 : 200 € ()"),
+        (1000, "Entre 500 et 1000 : 200 €"),
         (1500, "Entre 1000 et 1500 : 300 €"),
         (2000, "Entre 1500 et 2000 : 400 €"),
         (2500, "Entre 2000 et 2500 : 500 €"),
