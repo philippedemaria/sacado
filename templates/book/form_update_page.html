@@ -62,7 +62,7 @@
         <option value="algo_page_top">Algorithmique</option>
     </select>
 </div>
-<div class="course_page_main"  id="course_page_main">
+<div class="course_page_main this_page_only"  id="course_page_main">
     {% for paragraph in page.paragraphs.all|dictsort:"number" %}
         <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"  data-paragraph_id ="{{ paragraph.id }}">
             <div class="row">
