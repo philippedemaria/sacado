@@ -90,7 +90,7 @@
                 {{ page.title }} <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
                 <span class="pull-right">- {{ n }} </span>
             </div>            
-            {% for paragraph in page.paragraphs.all %}
+            {% for paragraph in page.paragraphs.all|dictsort:"number" %}
                 <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
                     <div class="row">
                         <div class="col-xs-12">
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        {% for bloc in paragraph.blocs.all %} 
+                        {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                             <div class="col-xs-{{ bloc.size }} to_projection" data-toggle='modal'   data-target='#book_shower_page' >
                                 <div class="{{ bloc.typebloc.css }}" > 
                                     <div class="bloc_title">
