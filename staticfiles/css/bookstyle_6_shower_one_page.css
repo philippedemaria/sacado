@@ -53,6 +53,17 @@ h1 {
     margin-left: 35px;
     margin-right: 35px;
 }
+
+.this_page_left{
+	height:800px;
+	background-color: white;
+    box-shadow: 0px 10px 30px rgba(160,153,172, 0.7);
+    -webkit-box-shadow: 0px 5px 5px rgba(160,153,172, 0.7);
+    -moz-  box-shadow:0px 5px 5px rgba(160,153,172,0.7);
+    border-radius: 0px 0px 5px 5px;
+}
+
+
 /******************************************* TOP **********************************************************/
 .course_page_top{
   background-color: #5d4391;
