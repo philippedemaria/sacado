@@ -10,7 +10,11 @@
     <div class="card-body" style="height:37px;">
           <input type="hidden" value="{{ rc.exercise.id }}" name="input_exercise_id" class="div_exercise_id" data-custom=0 /><!--  sert à classer les thèmes  -->
           <a href="" style="cursor:move;" class="move_inside" style="color:{{ parcours.color }}"> 
-          {% if not rc.is_publish %}<span style="color:#F5F5F5">{{ rc.ranking }}.</span>{% else %}{{ rc.ranking }}.{% endif %}
+              {% if not rc.is_publish %}
+                  <span style="color:#F5F5F5">{% if rc.ranking == 100 %}{{ forloop.counter }}{% else %}{{ rc.ranking }}{% endif %}.</span>
+              {% else %}
+                  {% if rc.ranking == 100 %}{{ forloop.counter }}{% else %}{{ rc.ranking }}{% endif %}.
+              {% endif %}
           </a>
                        
           <div class="card-score">
