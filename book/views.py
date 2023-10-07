@@ -1043,7 +1043,7 @@ def print_latex_to_pdf(request,idch,idp):
                 elements +=  r" \hrule \vspace {0.1cm}"
             for paragraph in page.paragraphs.order_by("ranking"):
                 if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
-                elif page.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
+                elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
                 for bloc in paragraph.blocs.order_by("ranking"):
                     elements +=  bloc.typebloc_latex()
 
@@ -1067,7 +1067,7 @@ def print_latex_to_pdf(request,idch,idp):
         elements +=  r" \hrule \vspace {0.1cm}"
         for paragraph in page.paragraphs.order_by("ranking"):
             if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
-            elif page.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
+            elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
             for bloc in paragraph.blocs.order_by("ranking"):
                 elements +=  bloc.typebloc_latex()
 
