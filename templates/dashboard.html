@@ -156,7 +156,7 @@
                                     {% endif %}
                                 {% elif user.is_student %}                                        
                                     <span style="color:#5d4391"><i class="bi bi-markdown icon_size" ></i> Matières  </span>  
-                                    <a href="#" data-toggle='modal' data-target='#video_sacado' class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> 
+                                    <a href="https://sacado-academie.fr/ressources/videos/tutoStudent.mp4" class="btn btn-violet" style="color:#FF0000; font-size:14px; margin-left: 100px"> 
                                         <i class="fa fa-play"></i> Sacado en vidéo
                                     </a>
                                 {% endif %}
@@ -320,25 +320,6 @@
 </div>
 
 
-{%  if index_tdb %}
-<div class="modal fade" id="video_sacado" tabindex="-1" role="dialog" aria-labelledby="video_sacado">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" >
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button> 
-                <h2  class='sacado'  >Sacado en vidéo</h2>
-            </div>
-            <div class="modal-body">
-                    <video src="https://sacado.xyz/ressources/videos/tutoStudent.mp4" width=560  height=315 controls  >
-                      Cette vidéo ne peut être affichée sur votre navigateur Internet.<br>
-                    </video>
-            </div>
-        </div>
-    </div>
-</div>
-{%  endif  %}
 
 
 
