@@ -235,7 +235,7 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_def .bloc_content, .paragraph_bloc_def .bloc_content *{
+.paragraph_bloc_def .bloc_content, .paragraph_bloc_def .bloc_content table tr td{
 	color :  #5d4391 ;
 	border-radius:0px 0px 3px 3px;
 	background-color: #f7e7ff;
@@ -264,7 +264,7 @@ h1 {
 	font-weight: normal;
 }
 
-.paragraph_bloc_mt .bloc_content, .paragraph_bloc_mt .bloc_content *{
+.paragraph_bloc_mt .bloc_content, .paragraph_bloc_mt .bloc_content table tr td{
 	border-radius:0px 0px 3px 3px;
 	background-color: #FFF;
 	padding:10px;
@@ -290,7 +290,7 @@ h1 {
 }
 
 .paragraph_bloc_pp .bloc_content,.paragraph_bloc_th .bloc_content,.paragraph_bloc_pp .bloc_content,
-.paragraph_bloc_pp .bloc_content *,.paragraph_bloc_th .bloc_content *,.paragraph_bloc_pp .bloc_content *{
+.paragraph_bloc_pp .bloc_content table tr td,.paragraph_bloc_th .bloc_content table tr td,.paragraph_bloc_pp .bloc_content table tr td{
 	color :  #5d4391 ;
 	border-radius: 3px;
 	background-color:white;
@@ -319,7 +319,7 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_ex .bloc_content,.paragraph_bloc_ex .bloc_content *{
+.paragraph_bloc_ex .bloc_content,.paragraph_bloc_ex .bloc_content table tr td{
 	border-radius: 3px;
 	background-color:white;
 	padding:10px;
@@ -348,7 +348,7 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_exo .bloc_content, .paragraph_bloc_exo .bloc_content *{
+.paragraph_bloc_exo .bloc_content, .paragraph_bloc_exo .bloc_content table tr td{
 	border-radius: 3px;
 	background-color:white;
 	padding:10px;
@@ -377,7 +377,7 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_at .bloc_content, .paragraph_bloc_at .bloc_content *{
+.paragraph_bloc_at .bloc_content, .paragraph_bloc_at .bloc_content table tr td{
 	border-radius: 3px;
 	background-color:white;
 	padding:10px;
@@ -405,7 +405,7 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_vo .bloc_content, .paragraph_bloc_vo .bloc_content *{
+.paragraph_bloc_vo .bloc_content, .paragraph_bloc_vo .bloc_content table tr td{
 	border-radius: 3px;
 	background-color:white;
 	padding:10px;
@@ -431,7 +431,7 @@ h1 {
 	font-weight:600; 
 }
 
-.paragraph_bloc_sf .bloc_content, .paragraph_bloc_sf .bloc_content *{
+.paragraph_bloc_sf .bloc_content, .paragraph_bloc_sf .bloc_content table tr td{
 	border-radius:0px 0px 3px 3px;
 	background-color: #f7e7ff;
 	padding:10px;
@@ -457,7 +457,7 @@ h1 {
 	font-weight:600; 
 }
 
-.paragraph_bloc_rm .bloc_content, .paragraph_bloc_rm .bloc_content *{
+.paragraph_bloc_rm .bloc_content, .paragraph_bloc_rm .bloc_content table tr td{
 	border-radius:0px 0px 3px 3px;
 	background-color: white;
 	padding:10px;
@@ -512,7 +512,7 @@ h1 {
 	font-weight: normal;
 }
 
-.paragraph_bloc_pr .bloc_content, .paragraph_bloc_pr .bloc_content *{
+.paragraph_bloc_pr .bloc_content, .paragraph_bloc_pr .bloc_content table tr td{
 	border-radius:0px 0px 3px 3px;
 	background-color: #FFF;
 	padding:10px;
@@ -541,7 +541,7 @@ h1 {
 	font-weight: normal;
 }
 
-.paragraph_bloc_rg .bloc_content, .paragraph_bloc_rg .bloc_content *{
+.paragraph_bloc_rg .bloc_content, .paragraph_bloc_rg .bloc_content table tr td{
 	border-radius:0px 0px 3px 3px;
 	background-color: #FFF;
 	padding:10px;
@@ -563,7 +563,7 @@ h1 {
 	font-weight: normal;
 }
 
-.paragraph_bloc_so .bloc_content, .paragraph_bloc_so .bloc_content *{
+.paragraph_bloc_so .bloc_content, .paragraph_bloc_so .bloc_content table tr td{
 	background-color: #FFF;
 	padding:10px;
 	width:100%;
@@ -592,7 +592,7 @@ h1 {
 	font-weight: normal;
 }
 
-.paragraph_bloc_mm .bloc_content, .paragraph_bloc_mm .bloc_content * {
+.paragraph_bloc_mm .bloc_content, .paragraph_bloc_mm .bloc_content table tr td {
 	border-radius:0px 0px 3px 3px;
 	background-color: #e6F8F5;
 	padding:10px;
