@@ -92,6 +92,7 @@
             </div>            
             {% for paragraph in page.paragraphs.all|dictsort:"number" %}
                 <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
+                    {% if paragraph.number > 0 %}
                     <div class="row">
                         <div class="col-xs-12">
                             <span class="paragraph_number">{{ paragraph.number }}</span>
@@ -102,6 +103,8 @@
                             </span>
                         </div>
                     </div>
+                    {% endif %}
+
                     <div class="row">
                         {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                             <div class="col-xs-{{ bloc.size }} to_projection" data-toggle='modal'   data-target='#book_shower_page' >
