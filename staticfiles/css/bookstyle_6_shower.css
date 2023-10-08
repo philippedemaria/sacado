@@ -350,7 +350,7 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_ex .bloc_content, .paragraph_bloc_ex .bloc_content table tr td{
+.paragraph_bloc_ex .bloc_content, .paragraph_bloc_ex .bloc_content table tr td , .paragraph_bloc_ex .bloc_content table tr td p{
 	color :  #008B73 ;
 	border-radius: 3px;
 	background-color:white;
