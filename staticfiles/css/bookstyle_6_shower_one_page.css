@@ -393,25 +393,25 @@ h1 {
 }
 
 .exo_u{
-	background-color:#00B999; ;
+	background-color:#00B999!important ;
 }
 .exo_d{
-	background-color:#0093CA;
+	background-color:#0093CA!important ;
 }
 
 .exo_t{
-	background-color:#cb2131;
+	background-color:#cb2131!important ;
 }
 
 .exo_auto{
-	background-color:#ffb400;
+	background-color:#ffb400!important ;
 }
 
 
 .exo_bloc_u{
 	border: 2px solid  #00B999;
 	border-radius: 5px;
-	color:#00B999;
+	color:#222;
 	position:relative;
 	margin:30px 20px 0px 50px;
 	padding:0px;
@@ -419,7 +419,7 @@ h1 {
 .exo_bloc_d{
 	border: 2px solid  #0093CA;
 	border-radius: 5px;
-	color:#0093CA;
+	color:#222;
 	position:relative;
 	margin:30px 20px 0px 50px;
 	padding:0px;
@@ -428,7 +428,7 @@ h1 {
 .exo_bloc_t{
 	border: 2px solid  #cb2131;
 	border-radius: 5px;
-	color:#cb2131;
+	color:#222;
 	position:relative;
 	margin:30px 20px 0px 50px;
 	padding:0px;
@@ -437,11 +437,12 @@ h1 {
 .exo_auto{
 	border: 2px solid  #ffb400;
 	border-radius: 5px;
-	color:#ffb400;
+	color:#222;
 	position:relative;
 	margin:30px 20px 0px 50px;
 	padding:0px;
 }
+
 
 
 /*  paragraph_bloc_rm  */
