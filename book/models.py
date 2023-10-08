@@ -284,6 +284,13 @@ class Page(models.Model):
         return test
 
 
+    def body_css(self) :
+        if self.css == 'parcoursu_page_top' : return 'course_page_u_main'
+        elif self.css == 'parcoursd_page_top' : return 'course_page_d_main'
+        if self.css == 'parcourst_page_top' : return 'course_page_t_main'
+        else :  return ''
+
+
 class Paragraph(models.Model):
 
     page    = models.ForeignKey(Page, on_delete=models.CASCADE,  blank=True, null=True,  related_name='paragraphs')
@@ -423,3 +430,9 @@ class Bloc(models.Model):
 
         #return r"\begin{"+suffixe+r"}{"+self.title+r"}"+self.content+r"\end{"+suffixe+r"}"
         return stringer
+
+    def css(self) :
+        if self.paragraph.page.css == 'parcoursu_page_top' : return 'course_page_u_main'
+        elif self.paragraph.page.css == 'parcoursd_page_top' : return 'course_page_d_main'
+        if self.paragraph.page.css == 'parcourst_page_top' : return 'course_page_t_main'
+        else :  return ''

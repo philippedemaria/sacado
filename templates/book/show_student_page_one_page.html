@@ -108,7 +108,7 @@
                     <div class="row">
                         {% for bloc in paragraph.blocs.all %} 
                             <div class="col-xs-{{ bloc.size }} to_projection" data-toggle='modal'   data-target='#book_shower_page' >
-                                <div class="{{ bloc.typebloc.css }}" > 
+                                <div class="{{ bloc.typebloc.css }} {{ bloc.css }}" > 
                                     <div class="bloc_title">
                                         {{ bloc.title }}
                                         <span class="helper_tip display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-type_id = "3" > 
