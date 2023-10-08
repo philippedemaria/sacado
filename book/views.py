@@ -1517,7 +1517,7 @@ def update_bloc(request, idb, idp, idbl):
         else:
             print(form.errors)
 
-    context = {'form_b': form,  'bloc': bloc,   }
+    context = {'form_b': form,  'bloc': bloc, 'idb' : idb , 'idp' : idp   }
 
     return render(request, 'book/form_bloc.html', context )
 

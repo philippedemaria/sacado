@@ -190,6 +190,11 @@
                         <div class="col-xs-12 col-md-12">
                             <button type="submit" class="btn btn-primary" name="form_action" value="new_bloc">Enregistrer</button>   
                         </div>
+                        {% if bloc %}
+
+                            <a href="{% url 'delete_bloc' idb  idp  bloc.id  %}" class="btn btn-danger" onclick="return TestDelete('Ce bloc')">Supprimer</a>
+
+                        {% endif %}
                     </div>
   
 
