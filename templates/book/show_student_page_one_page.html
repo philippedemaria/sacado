@@ -108,8 +108,8 @@
                     <div class="row">
                         {% for bloc in paragraph.blocs.all %} 
                             <div class="col-xs-{{ bloc.size }} to_projection" data-toggle='modal'   data-target='#book_shower_page' >
-                                <div class="{{ bloc.typebloc.css }} {{ bloc.css }}" > 
-                                    <div class="bloc_title">
+                                <div class="{{ bloc.typebloc.css }} {{ bloc.bloc_css }}" > 
+                                    <div class="bloc_title {{ bloc.css }}">
                                         {{ bloc.title }}
                                         <span class="helper_tip display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-type_id = "3" > 
                                             <i class="bi bi-cc-circle-fill text-{% if bloc.is_correction %}success{% else %}danger{% endif %} these_blocs" id="cc_bloc{{ bloc.id }}"></i> 

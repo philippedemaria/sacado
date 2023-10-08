@@ -437,3 +437,11 @@ class Bloc(models.Model):
         elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_t'
         elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_auto'
         else :  return ''
+
+
+    def css(self) :
+        if self.paragraph.page.css == 'parcoursu_page_top' : return 'exo_bloc_u'
+        elif self.paragraph.page.css == 'parcoursd_page_top' : return 'exo_bloc_d'
+        elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_bloc_t'
+        elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_bloc_auto'
+        else :  return ''

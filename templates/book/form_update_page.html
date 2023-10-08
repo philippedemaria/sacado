@@ -82,8 +82,9 @@
 
                         <div class="col-xs-{{ bloc.size }} this_bloc_sort" id="this_bloc_content{{ bloc.id }}" data-bloc_id = "{{bloc.id}}" data-paragraph_id = "{{ paragraph.id }}"  >
                             
-                            <div class="{{ bloc.typebloc.css }} {{ bloc.css }}"> 
-                                <div class="bloc_title"><i class="fa fa-sort bloc_sorter" data-bloc_id = "{{bloc.id}}"></i>
+                                <div class="{{ bloc.typebloc.css }} {{ bloc.bloc_css }}" > 
+                                    <div class="bloc_title {{ bloc.css }}">
+                                        <i class="fa fa-sort bloc_sorter" data-bloc_id = "{{bloc.id}}"></i>
                                     #{{ bloc.id }}. {{ bloc.title }} 
                                 </div>
                                 <div class="bloc_content">
