@@ -439,7 +439,7 @@ class Bloc(models.Model):
         else :  return ''
 
 
-    def css(self) :
+    def bloc_css(self) :
         if self.paragraph.page.css == 'parcoursu_page_top' : return 'exo_bloc_u'
         elif self.paragraph.page.css == 'parcoursd_page_top' : return 'exo_bloc_d'
         elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_bloc_t'
