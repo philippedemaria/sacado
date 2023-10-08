@@ -1235,7 +1235,6 @@ def update_page(request,idb, idp):
 
                                                 bloc_id=nf.id,
                                                 author = request.user.teacher , 
-                                                content = nf.content, 
                                                 subject = page.chapter.book.subject,  
                                                 knowledge = nf.knowledge,   
                                                 level = page.chapter.book.level, 
