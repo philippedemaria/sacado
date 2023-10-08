@@ -287,7 +287,7 @@ class Page(models.Model):
     def body_css(self) :
         if self.css == 'parcoursu_page_top' : return 'course_page_u_main'
         elif self.css == 'parcoursd_page_top' : return 'course_page_d_main'
-        if self.css == 'parcourst_page_top' : return 'course_page_t_main'
+        elif self.css == 'parcourst_page_top' : return 'course_page_t_main'
         else :  return ''
 
 
@@ -434,5 +434,6 @@ class Bloc(models.Model):
     def css(self) :
         if self.paragraph.page.css == 'parcoursu_page_top' : return 'exo_u'
         elif self.paragraph.page.css == 'parcoursd_page_top' : return 'exo_d'
-        if self.paragraph.page.css == 'parcourst_page_top' : return 'exo_t'
+        elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_t'
+        elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_auto'
         else :  return ''

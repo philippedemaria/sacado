@@ -390,21 +390,20 @@ h1 {
 	font-weight: normal;
 }
 
-.paragraph_bloc_exo .exo_u{
+.exo_u{
 	background-color:#00B999; ;
 }
-.paragraph_bloc_exo .exo_d{
+.exo_d{
 	background-color:#0093CA;
 }
 
-.paragraph_bloc_exo .exo_t{
+.exo_t{
 	background-color:#cb2131;
 }
 
-.paragraph_bloc_exo .exo_auto{
+.exo_auto{
 	background-color:#ffb400;
 }
-
 
 
 
