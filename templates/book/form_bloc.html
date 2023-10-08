@@ -187,13 +187,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xs-12 col-md-12">
+                        <div class="col-xs-6 col-md-6">
                             <button type="submit" class="btn btn-primary" name="form_action" value="new_bloc">Enregistrer</button>   
                         </div>
                         {% if bloc %}
-
-                            <a href="{% url 'delete_bloc' idb  idp  bloc.id  %}" class="btn btn-danger" onclick="return TestDelete('Ce bloc')">Supprimer</a>
-
+                        <div class="col-xs-6 col-md-6">
+                            <a href="{% url 'delete_bloc' idb  idp  bloc.id  %}" class="btn btn-danger" onclick="return TestDelete(' ce bloc')">Supprimer</a>
+                        </div>
                         {% endif %}
                     </div>
   
