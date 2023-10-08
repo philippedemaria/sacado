@@ -1252,7 +1252,7 @@ def update_page(request,idb, idp):
                                                 'is_tableur':  nf.is_tableur,
                                                 'is_corrected' :1,
                                                 'is_annals': nf.is_annals,
-                                                'point' = 0 
+                                                'point' : 0 
                                                 }
                                                 )
                     if created :
