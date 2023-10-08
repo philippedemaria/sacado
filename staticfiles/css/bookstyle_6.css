@@ -196,7 +196,6 @@ h1 {
 
 
 .course_page_u_main{
-    color:#5d4391;
     position:relative;
     padding-left:30px;
     padding: 30px;
@@ -211,7 +210,6 @@ h1 {
 
 
 .course_page_d_main{
-    color:#5d4391;
     position:relative;
     padding-left:30px;
     padding: 30px;
@@ -226,12 +224,11 @@ h1 {
 
 
 .course_page_t_main{
-    color:#5d4391;
     position:relative;
     padding-left:30px;
     padding: 30px;
 	height:1320px;
-	background-color: #ffe3e4;
+	background-color: #fff5f5;
     box-shadow: 0px 10px 30px rgba(160,153,172, 0.7);
     -webkit-box-shadow: 0px 5px 5px rgba(160,153,172, 0.7);
     -moz-  box-shadow:0px 5px 5px rgba(160,153,172,0.7);
@@ -400,6 +397,10 @@ h1 {
 	width:100%;
 	font-weight: normal;
 }
+
+
+
+
 
 .exo_u{
 	background-color:#00B999!important ;

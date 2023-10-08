@@ -356,10 +356,14 @@ h1 {
 	background-color:white;
 	padding:5px;
 	width:100%;
-	font-weight: normal;
+	font-weight: normal;	
+	font-size:12px;
 }
 
- 
+.paragraph_bloc_exo .bloc_content img, .paragraph_bloc_exo .bloc_content p img {
+	width:50%;
+}
+
 
 /*  paragraph_bloc_exo  */
 .paragraph_bloc_exo{
