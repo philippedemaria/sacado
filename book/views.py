@@ -1224,33 +1224,41 @@ def update_page(request,idb, idp):
 
                     nf.skills.set( exo.skills.all())
                     nf.knowledges.set(exo.knowledges.all())
+                    nf.exercises.set( exo.exercises.all())
+
                 elif nf.typebloc.id == 6 :
                     try : 
                         title = nf.title.split(".")[1]
                     except :
                         title = nf.title
-                    exo=Exotex.objects.create(title = title, 
-                                                content = nf.content, 
-                                                content_html =nf.content_html,
+                    exo,created=Exotex.objects.update_or_create(title = title, 
+
+                                                bloc_id=nf.id,
                                                 author = request.user.teacher , 
-                                                calculator = nf.is_calculator,
+                                                content = nf.content, 
                                                 subject = page.chapter.book.subject,  
                                                 knowledge = nf.knowledge,   
                                                 level = page.chapter.book.level, 
                                                 theme = nf.theme,
-                                                is_share     = 1,
-                                                is_python    = nf.is_python,
-                                                is_scratch   =  nf.is_scratch,
-                                                is_tableur   =  nf.is_tableur,
-                                                is_corrected = 1,
-                                                is_annals   = nf.is_annals,
-                                                point = 0,
-                                                correction = nf.correction,
-                                                correction_html =nf.correction_html,
-                                                bloc_id=nf.id)
-                    exo.skills.set( nf.skills.all())
-                    exo.knowledges.set(nf.knowledges.all())
-
+                                                defaults =  {
+                                                'content' : nf.content, 
+                                                'content_html' :nf.content_html,
+                                                'correction' : nf.correction,
+                                                'correction_html' :nf.correction_html,
+                                                'calculator' :nf.is_calculator,
+                                                'is_share'     :1,
+                                                'is_python'    :nf.is_python,
+                                                'is_scratch':  nf.is_scratch,
+                                                'is_tableur':  nf.is_tableur,
+                                                'is_corrected' :1,
+                                                'is_annals': nf.is_annals,
+                                                'point' = 0 
+                                                }
+                                                )
+                    if created :
+                        exo.skills.set( nf.skills.all())
+                        exo.knowledges.set(nf.knowledges.all())
+                        exo.exercises.set( nf.exercises.all())
 
             else:
                 print(form_b.errors)
