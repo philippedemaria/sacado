@@ -350,19 +350,16 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_ex .bloc_content, .paragraph_bloc_ex .bloc_content table tr td , .paragraph_bloc_ex .bloc_content table tr td p{
+.paragraph_bloc_ex .bloc_content, .paragraph_bloc_ex .bloc_content table tr td{
 	color :  #008B73 ;
 	border-radius: 3px;
 	background-color:white;
 	padding:5px;
 	width:100%;
 	font-weight: normal;	
-	font-size:12px!important;
 }
 
-.paragraph_bloc_exo .bloc_content img, .paragraph_bloc_exo .bloc_content p img {
-	width:50%;
-}
+
 
 
 /*  paragraph_bloc_exo  */
@@ -373,7 +370,7 @@ h1 {
 	position:relative;
 	margin: 10px 0px 0px 0px;
 	padding:0px;
-	font-size: 12px;
+	font-size:12px!important;
 }
 
 .paragraph_bloc_exo .bloc_title{
@@ -384,13 +381,14 @@ h1 {
 	width:100%;
 }
 
-.paragraph_bloc_exo .bloc_content, .paragraph_bloc_exo .bloc_content table tr td{
+.paragraph_bloc_exo .bloc_content, .paragraph_bloc_exo .bloc_content table tr td , .paragraph_bloc_ex .bloc_content table tr td p{
 	color :  #0093CA ;
 	border-radius: 3px;
 	background-color:white;
 	padding:5px;
 	width:100%;
-	font-weight: normal;
+	font-weight: normal;	
+	font-size:12px!important;
 }
 
 .exo_u{
@@ -445,7 +443,9 @@ h1 {
 }
 
 
-
+.paragraph_bloc_exo .bloc_content img, .paragraph_bloc_exo .bloc_content p img {
+	width:50%;
+}
 
 
 
