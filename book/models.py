@@ -432,7 +432,7 @@ class Bloc(models.Model):
         return stringer
 
     def css(self) :
-        if self.paragraph.page.css == 'parcoursu_page_top' : return 'course_page_u_main'
-        elif self.paragraph.page.css == 'parcoursd_page_top' : return 'course_page_d_main'
-        if self.paragraph.page.css == 'parcourst_page_top' : return 'course_page_t_main'
+        if self.paragraph.page.css == 'parcoursu_page_top' : return 'exo_u'
+        elif self.paragraph.page.css == 'parcoursd_page_top' : return 'exo_d'
+        if self.paragraph.page.css == 'parcourst_page_top' : return 'exo_t'
         else :  return ''
