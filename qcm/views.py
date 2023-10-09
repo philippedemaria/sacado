@@ -8888,7 +8888,9 @@ def store_the_score_relation_ajax(request):
         relation_id = int(request.POST.get("relation_id"))
         relation = Relationship.objects.get(pk = relation_id)
         data = {}
-     
+
+        mathis_time = time()
+
         student = Student.objects.get(user=request.user)
 
         if request.method == 'POST':
@@ -8910,21 +8912,6 @@ def store_the_score_relation_ajax(request):
                     score = 100
             else :
                 score = get_the_score(request,relation.exercise.supportfile,answer)            
-
-            # multi_studentanswer = Studentanswer.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student)
-            # if multi_studentanswer.count() > 0 :
-            #     this_studentanswer = multi_studentanswer.last()
-            #     multi_studentanswer.filter(pk=this_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
-            # else :
-            #     try :
-            #         this_studentanswer = Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student, numexo= numexo,  point= score, secondes= timer    )
-            #     except :
-            #         pass
-
-            #multi_studentanswer, create = Studentanswer.objects.update_or_create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , defaults={'numexo' : numexo,  'point': score, 'secondes': timer} )
-            #if not create :
-            #    Studentanswer.objects.filter(pk=multi_studentanswer.id).update( numexo   = numexo, point    = score , secondes = timer )
-
 
             Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
             ##########################################################
@@ -9000,6 +8987,13 @@ def store_the_score_relation_ajax(request):
                     
             except:
                 pass
+            
+            timer_mathis = time() - mathis_time 
+
+            f=open("/var/www/sacado/logs/mysql.log",'a')
+            print("timer_mathis : " , file=f)
+            print(timer_mathis , file=f)
+            f.close()
 
             try :
                 nb_done = 0
