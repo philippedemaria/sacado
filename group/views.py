@@ -168,7 +168,7 @@ def student_dashboard(request,group_id):
         return template , context 
 
 
-    groups = student.students_to_group.filter( is_hidden=0)
+    groups = student.students_to_group.filter(is_hidden=0)
 
     parcourses_on_fire = []
 
@@ -194,20 +194,21 @@ def student_dashboard(request,group_id):
         group = Group.objects.get(pk = group_id)
         request.session["group_id"] = group_id 
 
-        folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
-        bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
+        folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).exclude(parcours=none).order_by("ranking")
+        bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).annotate(relationship_count=Count('parcours_relationship')).filter(relationship_count__gt=0).distinct()
         last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
+
 
     else :
  
         try :
             group = student.students_to_group.filter(is_hidden=0).first()
-            folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
+            folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).exclude(parcours=none).order_by("ranking")
         except :
             group = None
-            folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
+            folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).exclude(parcours=none).order_by("ranking")
 
-        bases = student.students_to_parcours.filter(is_trash=0).order_by("ranking") 
+        bases = student.students_to_parcours.filter(is_trash=0).annotate(relationship_count=Count('parcours_relationship')).filter(relationship_count__gt=0).order_by("ranking") 
         last_exercises_done = student.answers.order_by("-date")[:5]
 
 
