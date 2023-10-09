@@ -9011,10 +9011,10 @@ def store_the_score_relation_ajax(request):
                 pass
             
             timer_mathis = time.time() - mathis_time 
-            if timer_mathis > 1 :
-                f=open("/var/www/sacado/logs/mysql.log",'a')
-                print(""+str( datetime.now() )+" -  time to save an exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-                f.close()
+
+            f=open("/var/www/sacado/logs/mysql.log",'a')
+            print(""+str( datetime.now() )+" -  time to save an exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+            f.close()
 
             try :
                 nb_done = 0
