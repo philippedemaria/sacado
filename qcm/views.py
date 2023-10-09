@@ -4495,8 +4495,6 @@ def show_parcours_student(request, id):
     print("--------------"+str( datetime.now() )+" -  time to show_parcours_student ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
     f.close()
 
-
-
     context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
                 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
                 'today': today ,    }

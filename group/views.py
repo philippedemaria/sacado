@@ -60,6 +60,7 @@ cm = 2.54
 #################################################################################
 import re
 import pytz
+import time,
 from datetime import datetime, date , timedelta
 from general_fonctions import *
 import qrcode
@@ -153,7 +154,8 @@ def student_dashboard(request,group_id):
     #######Groupes de l'élève. 
     # si plusieurs matières alors on envoie sur dashboard_group 
     # si une seule matière alors  sur dashboard
- 
+    mathis_time = time.time() 
+
     if not request.user.is_student :
 
         messages.error(request,"Elève non identifié")
@@ -269,6 +271,14 @@ def student_dashboard(request,group_id):
                'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups , 'bibliotexs' : bibliotexs, 
                'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
                'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index  , 'docpersos' : docpersos }
+
+
+    timer_mathis = time.time() - mathis_time 
+
+    f=open("/var/www/sacado/logs/mysql.log",'a')
+    print("/////////////// "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+    f.close()
+
 
     return template, context
 
