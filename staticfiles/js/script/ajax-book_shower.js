@@ -95,7 +95,11 @@ define(['jquery', 'bootstrap'], function ($) {
 
             $("#book_shower_correction_content").css("font-size",value*12);
 
+            $("#book_shower_correction_content img").css("width",value*60+'%');           
+
         });  
+ 
+
 
 
 });
