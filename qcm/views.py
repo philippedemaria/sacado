@@ -8889,7 +8889,7 @@ def store_the_score_relation_ajax(request):
         relation = Relationship.objects.get(pk = relation_id)
         data = {}
 
-        mathis_time = time()
+        mathis_time = time.time()
 
         student = Student.objects.get(user=request.user)
 
@@ -8988,7 +8988,7 @@ def store_the_score_relation_ajax(request):
             except:
                 pass
             
-            timer_mathis = time() - mathis_time 
+            timer_mathis = time.time() - mathis_time 
 
             f=open("/var/www/sacado/logs/mysql.log",'a')
             print("timer_mathis : " , file=f)
