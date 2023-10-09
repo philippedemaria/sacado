@@ -4219,7 +4219,7 @@ def show_parcours(request, idf = 0, id=0):
 
     if timer_mathis > 1 :
         f=open("/var/www/sacado/logs/mysql.log",'a')
-        print("=========================> time to show a parcours exercice " +teacher.user.last_name+" - " +teacher.user.first_name+" - " +teacher.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
+        print("========== "+str( datetime.now() )+" ===============> time to show a parcours exercice " +teacher.user.last_name+" - " +teacher.user.first_name+" - " +teacher.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
         f.close()
 
 
@@ -5145,7 +5145,7 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 def stat_evaluation(request, id):
 
     mathis_time = time.time() 
-    
+
     try :
         teacher = request.user.teacher
     except :
@@ -5191,7 +5191,7 @@ def stat_evaluation(request, id):
     timer_mathis = time.time() - mathis_time 
     if timer_mathis > 1 :
         f=open("/var/www/sacado/logs/mysql.log",'a')
-        print("++++++++++++++++> time stat d'un parcours " +parcours.title +"  : "+str(timer_mathis) , file=f)
+        print("++++++++++++++++>"+str( datetime.now() )+" - time stat d'un parcours " +parcours.title +"  : "+str(timer_mathis) , file=f)
         f.close()
 
 
@@ -9013,7 +9013,7 @@ def store_the_score_relation_ajax(request):
             timer_mathis = time.time() - mathis_time 
             if timer_mathis > 1 :
                 f=open("/var/www/sacado/logs/mysql.log",'a')
-                print("time to save an exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+                print(""+str( datetime.now() )+" -  time to save an exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
                 f.close()
 
             try :
