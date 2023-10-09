@@ -60,7 +60,7 @@ cm = 2.54
 #################################################################################
 import re
 import pytz
-import time,
+import time
 from datetime import datetime, date , timedelta
 from general_fonctions import *
 import qrcode
