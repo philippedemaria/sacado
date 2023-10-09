@@ -4218,7 +4218,7 @@ def show_parcours(request, idf = 0, id=0):
     timer_mathis = time.time() - mathis_time 
 
     f=open("/var/www/sacado/logs/mysql.log",'a')
-    print("=========================> time to show a parcours exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
+    print("=========================> time to show a parcours exercice " +teacher.user.last_name+" - " +teacher.user.first_name+" - " +teacher.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
     f.close()
 
 
