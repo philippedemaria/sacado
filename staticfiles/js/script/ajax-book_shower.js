@@ -93,10 +93,10 @@ define(['jquery', 'bootstrap'], function ($) {
 
             var value = $(this).val() ; 
 
-            $("#book_shower_correction_content").css("font-size",value*12);
+            $("#book_shower_page_content").css("font-size",value*12);
 
-            $("#book_shower_correction_content img").css("width",value*60+'%');           
-
+            $("#book_shower_page_content img").css("width",'200%'); 
+            $("#book_shower_page_content img").css("height",'200%'); 
         });  
  
 
