@@ -4159,6 +4159,8 @@ def show_parcours(request, idf = 0, id=0):
     """ show parcours coté prof """
     #peuplate_parcours_ia(id)
     
+    mathis_time = time.time()
+
     if idf > 0 :
         folder = Folder.objects.get(id=idf)
     else :
@@ -4212,6 +4214,14 @@ def show_parcours(request, idf = 0, id=0):
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher,  group = group ,  folder = folder ,   initial={ 'subject': parcours.subject , 'levels': parcours.level , 'groups': [group] , 'folders' :  [folder]  })
  
+            
+    timer_mathis = time.time() - mathis_time 
+
+    f=open("/var/www/sacado/logs/mysql.log",'a')
+    print("=========================> time to show a parcours exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
+    f.close()
+
+
     context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 'relationships_customexercises_nb' : relationships_customexercises_nb ,
                 'relationships_customexercises': relationships_customexercises, 'idf' : idf , 'bibliotexs' : bibliotexs , 'quizzes' : quizzes , 'flashpacks' : flashpacks , 'qflashs' : qflashs , 
                 'group_id': group_id, 'group': group, 'role' : role,  'folder' : folder, 'nb_time' : nb_time,  'nb_point' : nb_point,  'nb_point_display' : nb_point_display      }
@@ -8991,7 +9001,7 @@ def store_the_score_relation_ajax(request):
             timer_mathis = time.time() - mathis_time 
 
             f=open("/var/www/sacado/logs/mysql.log",'a')
-            print("timer " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+            print("time to save an exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
             f.close()
 
             try :
