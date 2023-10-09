@@ -4453,6 +4453,8 @@ def ordering_number_for_student(parcours,student):
 @login_required(login_url= 'index')
 def show_parcours_student(request, id):
 
+    mathis_time = time.time()
+
     folder = None
     try :
         folder_id = request.session.get('folder_id', None)
@@ -4485,6 +4487,13 @@ def show_parcours_student(request, id):
 
     nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
     nb_quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).count()
+
+
+    timer_mathis = time.time() - mathis_time 
+
+    f=open("/var/www/sacado/logs/mysql.log",'a')
+    print("--------------"+str( datetime.now() )+" -  time to show_parcours_student ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+    f.close()
 
 
 
