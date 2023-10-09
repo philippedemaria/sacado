@@ -614,24 +614,16 @@ class Student(ModelWithCode):
         nb         = bases.filter( is_evaluation = 0).count() 
         nbe        = bases.filter( is_evaluation = 1).count()
 
-
         nb_folders  = group.group_folders.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = self,  is_archive=0,  is_trash=0).count()
-
         nbc        = bases.exclude(course = None ).count() 
-
-
         nbb        = group.bibliotexs.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  students = self ,  subjects = group.subject, levels = group.level ,   is_archive=0 ).count() 
 
         nbf        = group.flashpacks.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = self ,  subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
         nbq        = group.quizz.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students = self ,  subject = group.subject, levels = group.level ,   is_archive=0 ).count() 
 
-        a_new_c    = self.student_custom_answer.values("parcours").filter(parcours__subject = group.subject ,is_reading=0).first()
-        if a_new_c :
-            a_new_cop = a_new_c 
-        else :
-            a_new_cop = False
-
-
+        a_new_cop = False
+        is_display = False
+        if nb + nbe + nb_folders + nbc + nbb + nbf + nbq > 0 : is_display = True
         data = {}
         data["nb_parcours"]     = nb
         data["nb_evaluations"]  = nbe 
@@ -641,6 +633,7 @@ class Student(ModelWithCode):
         data["nb_flashpacks"]   = nbf
         data["nb_quizz"]        = nbq 
         data["a_new_cop"]       = a_new_cop 
+        data["is_display"]      = is_display 
         return data
 
 

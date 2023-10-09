@@ -142,7 +142,7 @@ class Group(ModelWithCode):
         data["profiltest"] = profilTest  
         data["nb_folders"] = nb_folders 
         data["nb_folders_published"] = nb_folders_published
-        data["nb_documents"] = nb_folders + nbe + nb_folders + nb
+        data["nb_documents"] = nb_folders + nbe + nb
 
         return data
 
