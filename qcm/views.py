@@ -8991,8 +8991,7 @@ def store_the_score_relation_ajax(request):
             timer_mathis = time.time() - mathis_time 
 
             f=open("/var/www/sacado/logs/mysql.log",'a')
-            print("timer_mathis : " , file=f)
-            print(timer_mathis , file=f)
+            print("timer " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
             f.close()
 
             try :
