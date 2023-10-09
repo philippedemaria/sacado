@@ -163,12 +163,14 @@
             </div>    
             {% for paragraph in next_page.paragraphs.all %}
                 <div class="this_paragraph">
+                    {% if paragraph.number > 0 %}
                     <div class="row">
                         <div class="col-xs-12">
                             <span class="paragraph_number">{{ paragraph.number }}</span>
                             <span class="paragraph_title">{{ paragraph.title }}</span>
                         </div>
                     </div>
+                    {% endif %}
                     <div class="row">
                         {% for bloc in paragraph.blocs.all %} 
                             <div class="col-xs-{{ bloc.size }} to_projection"  data-toggle='modal'   data-target='#book_shower_page' >
