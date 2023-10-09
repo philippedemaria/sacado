@@ -9013,7 +9013,7 @@ def store_the_score_relation_ajax(request):
             timer_mathis = time.time() - mathis_time 
 
             f=open("/var/www/sacado/logs/mysql.log",'a')
-            print(""+str( datetime.now() )+" -  time to save an exercice " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+            print(""+str( datetime.now() )+" -  time to save an exercice,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
             f.close()
 
             try :
