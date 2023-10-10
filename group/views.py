@@ -155,7 +155,9 @@ def student_dashboard(request,group_id):
     # si plusieurs matières alors on envoie sur dashboard_group 
     # si une seule matière alors  sur dashboard
     mathis_time = time.time() 
-
+    today = time_zone_user(request.user)        
+    timer = today.time()
+    
     if not request.user.is_student :
 
         messages.error(request,"Elève non identifié")
@@ -169,23 +171,6 @@ def student_dashboard(request,group_id):
         template , context =  "dashboard.html" , False
         return template , context 
 
-
-    groups = student.students_to_group.filter( is_hidden=0)
-    student_index = False
-
-
-
-    if groups.count() > 1  :
-        template = "dashboard.html" 
-        student_index = True
-    else :
-        template = "group/dashboard_group.html"  
-
-    today = time_zone_user(request.user)        
-    timer = today.time()
-
-
-
     if int(group_id) > 0 :
 
         template =  "group/dashboard_group.html"  
@@ -198,13 +183,28 @@ def student_dashboard(request,group_id):
 
 
         responses = []
-
+        groups = []
         relationships_in = []
         relationships_in_tasks = []
         relationships_in_late  = []
+        student_index = False
 
     else :
  
+
+        groups = student.students_to_group.filter( is_hidden=0)
+        student_index = True
+
+        if groups.count() > 1  :
+            template = "dashboard.html" 
+            student_index = True
+        else :
+            template = "group/dashboard_group.html"  
+
+        today = time_zone_user(request.user)        
+        timer = today.time()
+
+
         try :
             group = student.students_to_group.filter(is_hidden=0).first()
             folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
