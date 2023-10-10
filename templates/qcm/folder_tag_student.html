@@ -67,7 +67,7 @@
         <div class="row extend_student" style="margin-left: 5px"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
                 <div style="text-align: center;margin-bottom: 15px"><br/>
-                    <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}"  class="btn btn-transparent" style="width:200px; background-color: {{ folder.color }}; color:{{ folder.color|contrast_color }}" >  
+                    <a href="{% url 'list_sub_parcours_group_student' group.id folder.id  %}"  class="btn btn-transparent" class="this_is_an_access_link" style="width:200px; background-color: {{ folder.color }}; color:{{ folder.color|contrast_color }}" >  
                         {%  if is_task_exists %}
                             <i class="fa fa-calendar-check" style="color:red"></i>
                         {% endif %} Accéder</a>
