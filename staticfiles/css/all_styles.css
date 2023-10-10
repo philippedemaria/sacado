@@ -1135,6 +1135,20 @@ a.no_decoration:hover{
 }
 
 
+
+.btn-transparent, .btn-transparent:active, .btn-transparent:active > a  {
+  border-radius: 20px; /*radius des boutons*/
+  margin-right: 5px;
+}
+
+.btn-transparent:hover, .btn-transparent:hover > a , 
+.btn-transparent.hover,  .btn-transparent.hover > a   {
+  background-color: #f1eef7!important;/*   #dd4b39!important;*/
+  color: #5d4391!important;
+  text-decoration: none;
+}
+
+
  
 
 
