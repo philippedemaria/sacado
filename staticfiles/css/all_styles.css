@@ -1143,7 +1143,7 @@ a.no_decoration:hover{
 
 .btn-transparent:hover, .btn-transparent:hover > a , 
 .btn-transparent.hover,  .btn-transparent.hover > a   {
-  opacity: 0.8;
+  opacity: 0.65;
 }
 
 
