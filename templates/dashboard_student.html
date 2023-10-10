@@ -100,7 +100,7 @@
                         <div class="row extend_student"> 
                             <div class="col-xs-12 col-md-12 col-lg-12"  style="margin-top:15px; margin-bottom:15px"><br/> 
                                 <div style="text-align: center">
-                                    <a href="{% url 'dashboard_group' group.id %}" class="btn btn-new-violet" class="this_is_an_access_link" style="width:200px;background-color:{{ group.subject.color }};color:{{ group.subject.color|contrast_color }}">  
+                                    <a href="{% url 'dashboard_group' group.id %}" class="btn btn-new-violet this_is_an_access_link" style="width:200px;background-color:{{ group.subject.color }};color:{{ group.subject.color|contrast_color }}">  
                                             {%  if is_task_exists %}
                                                 <i class="fa fa-calendar-check" style="color:red"></i>
                                             {% endif %} Accéder
