@@ -24,5 +24,25 @@ define(['jquery', 'bootstrap', 'multislider' ], function ($) {
 
             }
 
-    });        
+        });   
+
+
+
+        $(document).on('click',".this_is_an_access_link",function(){
+ 
+            $(this).addClass("no_visu_on_load");
+            $(this).parent().append("<i class='fa fa-spinner fa-pulse fa-2x'></i> Chargement en cours.");
+        });
+
+
+
+
+
+
+
+
+
+
+
+
 });
