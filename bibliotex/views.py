@@ -1433,7 +1433,9 @@ def show_bibliotex_student(request, id):
 
     request.session["tdb"] = "Documents"  
     request.session["subtdb"] = "Bibliotex"
-    
+
+    try : student = request.user.student
+    except : return redirect('index')
 
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex=bibliotex).order_by("ranking")
