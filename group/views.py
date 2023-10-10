@@ -194,7 +194,15 @@ def student_dashboard(request,group_id):
 
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         #bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
-        bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
+        bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct().order_by("ranking")
+
+
+        responses = []
+
+        relationships_in = []
+        relationships_in_tasks = []
+        relationships_in_late  = []
+
     else :
  
         try :
@@ -206,6 +214,12 @@ def student_dashboard(request,group_id):
 
         bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_trash=0).order_by("ranking") 
 
+        responses = request.user.user_response.exclude(is_read=1)
+
+        relationships_in = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today) , is_evaluation=0).exclude(students_done=student)
+        relationships_in_tasks = relationships_in.filter(date_limit__lt=today).order_by("date_limit")
+        relationships_in_late  = relationships_in.filter(date_limit__gte=today).order_by("date_limit")
+
 
     parcourses  = bases.filter(is_evaluation=0,is_sequence=0).order_by("ranking")       
     evaluations = bases.filter(is_evaluation=1).order_by("ranking")
@@ -213,12 +227,6 @@ def student_dashboard(request,group_id):
     parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
     flashpacks = student.flashpacks.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today) ,is_global=1).exclude(madeflashpack__date=today).distinct()
     docpersos = student.docpersos.filter( folders = None,is_publish=1).distinct()
-
-    responses = request.user.user_response.exclude(is_read=1)
-
-    relationships_in = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today) , is_evaluation=0).exclude(students_done=student)
-    relationships_in_tasks = relationships_in.filter(date_limit__lt=today).order_by("date_limit")
-    relationships_in_late  = relationships_in.filter(date_limit__gte=today).order_by("date_limit")
 
 
     context = {'student_id': student.user.id, 'student': student, 'timer' : timer ,   'responses' : responses , 'flashpacks' : flashpacks, 'relationships_in_tasks' : relationships_in_tasks ,
