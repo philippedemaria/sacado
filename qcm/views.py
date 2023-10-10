@@ -4216,11 +4216,12 @@ def show_parcours(request, idf = 0, id=0):
  
             
     timer_mathis = time.time() - mathis_time 
-
-    if timer_mathis > 1 :
-        f=open("/var/www/sacado/logs/mysql.log",'a')
-        print("========== "+str( datetime.now() )+" ===============> time to show a parcours exercice " +teacher.user.last_name+" - " +teacher.user.first_name+" - " +teacher.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
-        f.close()
+    try :
+        if timer_mathis > 1 :
+            f=open("/var/www/sacado/logs/mysql.log",'a')
+            print("========== "+str( datetime.now() )+" ===============> time to show a parcours exercice " +teacher.user.last_name+" - " +teacher.user.first_name+" - " +teacher.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
+            f.close()
+    except : pass
 
 
     context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 'relationships_customexercises_nb' : relationships_customexercises_nb ,
@@ -4490,11 +4491,11 @@ def show_parcours_student(request, id):
 
 
     timer_mathis = time.time() - mathis_time 
-
-    f=open("/var/www/sacado/logs/mysql.log",'a')
-    print("--------------"+str( datetime.now() )+" -  time to show_parcours_student ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-    f.close()
-
+    try :
+        f=open("/var/www/sacado/logs/mysql.log",'a')
+        print("--------------"+str( datetime.now() )+" -  time to show_parcours_student ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+        f.close()
+    except : pass
     context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
                 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
                 'today': today ,    }
@@ -5196,10 +5197,12 @@ def stat_evaluation(request, id):
 
 
     timer_mathis = time.time() - mathis_time 
-    if timer_mathis > 1 :
-        f=open("/var/www/sacado/logs/mysql.log",'a')
-        print("++++++++++++++++>"+str( datetime.now() )+" - time stat d'un parcours " +parcours.title +"  : "+str(timer_mathis) , file=f)
-        f.close()
+    try :
+        if timer_mathis > 1 :
+            f=open("/var/www/sacado/logs/mysql.log",'a')
+            print("++++++++++++++++>"+str( datetime.now() )+" - time stat d'un parcours " +parcours.title +"  : "+str(timer_mathis) , file=f)
+            f.close()
+    except : pass
 
 
 
@@ -8943,6 +8946,8 @@ def store_the_score_relation_ajax(request):
                 score = get_the_score(request,relation.exercise.supportfile,answer)            
 
             Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
+
+            Relationship.Objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student).update(students_done=student)
             ##########################################################
 
             result, createded = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
@@ -9018,10 +9023,11 @@ def store_the_score_relation_ajax(request):
                 pass
             
             timer_mathis = time.time() - mathis_time 
-
-            f=open("/var/www/sacado/logs/mysql.log",'a')
-            print(""+str( datetime.now() )+" -  time to save an exercice,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-            f.close()
+            try :
+                f=open("/var/www/sacado/logs/mysql.log",'a')
+                print(""+str( datetime.now() )+" -  time to save an exercice,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+                f.close()
+            except : pass
 
             try :
                 nb_done = 0

@@ -1687,6 +1687,7 @@ class Relationship(models.Model):
     beginner      = models.TimeField(null=True, blank=True, verbose_name="Heure du début")
     skills        = models.ManyToManyField(Skill, blank=True, related_name='skills_relationship', editable=False)
     students      = models.ManyToManyField(Student, blank=True, related_name='students_relationship', editable=False)
+    students_done = models.ManyToManyField(Student, blank=True, related_name='students_done_relationship', editable=False)
     instruction   = models.TextField(blank=True,  null=True,  editable=False)
     score_display = models.BooleanField(default=1, blank=True)
 
@@ -1698,11 +1699,12 @@ class Relationship(models.Model):
     is_correction_visible = models.BooleanField(default=0, editable=False  )
 
     coefficient   = models.DecimalField(default=1,  max_digits=4, decimal_places=2, verbose_name="Coefficient")
-    is_calculator = models.BooleanField(default=0, editable=False  )
+    is_calculator = models.BooleanField(default=0, editable=False)
     is_paper      = models.BooleanField(default=0, editable=False)
     # document : type du doc et id du doc ( exercice = 0 , custom = 1 , cours = 2 , quizz= 3 , biblio = 4 , flash = 5)
     document_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)    
     type_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)
+
 
     def __str__(self):
 

@@ -171,9 +171,6 @@ def student_dashboard(request,group_id):
 
 
     groups = student.students_to_group.filter( is_hidden=0)
-
-    parcourses_on_fire = []
-
     student_index = False
 
     if groups.count() > 1  :
@@ -198,7 +195,7 @@ def student_dashboard(request,group_id):
 
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
-        last_exercises_done = student.answers.filter(exercise__knowledge__theme__subject=group.subject).order_by("-date")[:5]
+ 
 
     else :
  
@@ -209,78 +206,39 @@ def student_dashboard(request,group_id):
             group = None
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
 
-        bases = student.students_to_parcours.filter(is_trash=0).order_by("ranking") 
-        last_exercises_done = student.answers.order_by("-date")[:5]
+        bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_trash=0).order_by("ranking") 
 
-
-
-    parcours_sequences = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_evaluation=0).order_by("ranking") 
-    evaluations_brut = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),  is_evaluation=1).order_by("ranking") 
-       
-    parcourses_brut  = parcours_sequences.filter(is_sequence=0).order_by("ranking")
-    sequences_brut   = parcours_sequences.filter(is_sequence=1).order_by("ranking")
-
-
-    parcourses  = parcourses_brut.filter( folders = None).order_by("ranking")
-    #sequences   = sequences_brut.filter(folders = None).order_by("ranking")
-    evaluations = evaluations_brut.filter( folders = None).order_by("ranking")
-   
+    parcourses  = bases.filter(is_evaluation=0,is_sequence=0, folders = None).order_by("ranking")       
+    evaluations = bases.filter(is_evaluation=1 , folders = None).order_by("ranking")
     bibliotexs =  student.bibliotexs.filter(folders = None,  is_publish = 1).distinct()
-
     parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
-
-    flashpacks = Flashpack.objects.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today), students=student,is_global=1).exclude(madeflashpack__date=today).distinct()
-
+    flashpacks = student.flashpacks.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today) ,is_global=1).exclude(madeflashpack__date=today).distinct()
     docpersos = student.docpersos.filter( folders = None,is_publish=1).distinct()
-
-    customexercises_set = set()
-    nb_custom = 0
-    for p in parcourses_brut :
-        custom_exercises = Customexercise.objects.filter(Q(is_publish=1) | Q(start__lte=today), parcourses = p , date_limit__gte=today).order_by("date_limit")
-        nb_custom += custom_exercises.count()
-        customexercises_set.update(set(custom_exercises))
-    customexercises = list(customexercises_set)
-
-    relationships = Relationship.objects.filter(Q(is_publish=1) | Q(start__lte=today)).filter(Q(parcours__in=parcourses_brut)| Q(parcours__in=sequences_brut)).filter( date_limit__gte=today).order_by("date_limit")
-    
-    exercise_tab = Relationship.objects.values_list("exercise_id",flat=True).filter(Q(is_publish=1) | Q(start__lte=today)).filter(Q(parcours__in=parcourses_brut)| Q(parcours__in=sequences_brut)).filter(type_id = 0 , date_limit__gte=today)
-    
-    som = student.answers.values_list("exercise_id",flat=True).filter( exercise__in =exercise_tab).distinct().count()  
-    som += student.student_custom_answer.filter(customexercise__in=customexercises).count()  
-
-    try:
-        nb_relationships =  relationships.count()
-        ratio = int(som / (nb_relationships+nb_custom) * 100)
-    except:
-        ratio = 0
-
-    ratiowidth = int(0.9*ratio)
-
 
     responses = request.user.user_response.exclude(is_read=1)
 
-    studentanswers =  student.answers.all()
-    exercises = Exercise.objects.filter(pk__in=studentanswers.values_list('exercise', flat=True))
+    relationships_in = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today) , is_evaluation=0).exclude(students_done=student)
+    relationships_in_tasks = relationships_in.filter(date_limit__lt=today).order_by("date_limit")
+    relationships_in_late  = relationships_in.filter(date_limit__gte=today).order_by("date_limit")
 
 
-    relationships_in_base  = student.students_relationship.filter(Q(is_publish = 1)|Q(start__lte=today) ).filter( Q(parcours__in=parcourses_brut)|Q(parcours__in=sequences_brut) ).filter( is_evaluation=0).exclude(exercise__in=exercises)
-    relationships_in_late  = relationships_in_base.filter(date_limit__lt=today).order_by("date_limit")
-    relationships_in_tasks = relationships_in_base.filter(date_limit__gte=today).order_by("date_limit")
-
-    context = {'student_id': student.user.id, 'student': student, 'relationships': relationships, 'timer' : timer ,  'last_exercises_done' : last_exercises_done, 'responses' : responses , 'flashpacks' : flashpacks, 
-               'evaluations': evaluations, 'ratio': ratio, 'today' : today ,  'parcourses': parcourses,   'customexercises': customexercises, 'group' : group , 'groups' : groups , 'bibliotexs' : bibliotexs, 
-               'ratiowidth': ratiowidth, 'relationships_in_late': relationships_in_late, 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
-               'relationships_in_tasks': relationships_in_tasks , 'student_index' : student_index  , 'docpersos' : docpersos }
-
+    context = {'student_id': student.user.id, 'student': student, 'timer' : timer ,   'responses' : responses , 'flashpacks' : flashpacks, 'relationships_in_tasks' : relationships_in_tasks ,
+               'evaluations': evaluations,  'today' : today ,  'parcourses': parcourses,  'group' : group , 'groups' : groups , 'bibliotexs' : bibliotexs, 
+                'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
+                  'relationships_in_late' : relationships_in_late ,'student_index' : student_index  , 'docpersos' : docpersos }
 
     timer_mathis = time.time() - mathis_time 
-
-    f=open("/var/www/sacado/logs/mysql.log",'a')
-    print("/////////////// "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-    f.close()
-
-
+    try :
+        f=open("/var/www/sacado/logs/mysql.log",'a')
+        print("/////////////// "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+        f.close()
+    except : 
+        print("Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) )
+    
     return template, context
+
+
+
 
 
  
