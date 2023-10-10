@@ -173,6 +173,8 @@ def student_dashboard(request,group_id):
     groups = student.students_to_group.filter( is_hidden=0)
     student_index = False
 
+
+
     if groups.count() > 1  :
         template = "dashboard.html" 
         student_index = True
@@ -183,9 +185,6 @@ def student_dashboard(request,group_id):
     timer = today.time()
 
 
-    trackers= Tracker.objects.filter( user = request.user)
-    for tracker in trackers:
-        tracker.delete()
 
     if int(group_id) > 0 :
 
@@ -196,7 +195,6 @@ def student_dashboard(request,group_id):
         folders = student.folders.filter( is_publish=1 , subject = group.subject,level = group.level,is_archive=0, groups = group , is_trash=0).order_by("ranking")
         bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
  
-        print('ici')
     else :
  
         try :
@@ -233,9 +231,9 @@ def student_dashboard(request,group_id):
         print("/////////////// "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
         f.close()
     except : 
+        #print("/////////////// "+str(timer_mathis)+" <--------> "+str(student.user.id)) 
         pass
 
-    
     return template, context
 
 

@@ -33,6 +33,7 @@
     </div>
     <!-- box-footer DES FONCTIONNALITES  -->
     <div class="box-footer" style="position: relative; padding-top: 0px;">
+        {% comment %}
         <div class="row dossier" style="padding-top: 3px;padding-bottom: 3px;"> 
 
 
@@ -60,7 +61,8 @@
                 {{  data_min.nb_flashpack }} flashpack
                 {% endif %}
             </div>
-        </div>        
+        </div> 
+        {% endcomment %}       
         {% if  group %}  
         <div class="row extend_student" style="margin-left: 5px"> 
             <div class="col-xs-12 col-md-12 col-lg-12"> 
