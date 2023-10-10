@@ -206,6 +206,7 @@ def student_dashboard(request,group_id):
 
         bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_trash=0).order_by("ranking") 
 
+
     parcourses  = bases.filter(is_evaluation=0,is_sequence=0, folders = None).order_by("ranking")       
     evaluations = bases.filter(is_evaluation=1 , folders = None).order_by("ranking")
     bibliotexs =  student.bibliotexs.filter(folders = None,  is_publish = 1).distinct()

@@ -36,6 +36,10 @@ urlpatterns = [
     path('exercise_exotex_show/<int:id>', show_exotex , name='show_exotex'),
     path('ajax_class_exotex', ajax_class_exotex , name='ajax_class_exotex'),
 
+    path('show_bibliotex_student/<int:id>', show_bibliotex_student, name='show_bibliotex_student'),
+
+
+
 
     path('update_relationtex/<int:id>', update_relationtex , name='update_relationtex'),
     path('delete_relationtex/<int:id>', delete_relationtex , name='delete_relationtex'),

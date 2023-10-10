@@ -1427,6 +1427,30 @@ def show_bibliotex(request, id):
 
 
 
+
+
+def show_bibliotex_student(request, id):
+
+    request.session["tdb"] = "Documents"  
+    request.session["subtdb"] = "Bibliotex"
+    
+
+    bibliotex = Bibliotex.objects.get(id=id)
+    relationtexs = Relationtex.objects.filter(bibliotex=bibliotex).order_by("ranking")
+
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'student' : student }
+
+    return render(request, 'bibliotex/show_bibliotex.html', context )
+
+
+
+
+
+
+
+
+
+
 def duplicate_bibliotex(request):
 
     bibliotex_id = request.POST.get("this_document_id",None)
