@@ -6880,8 +6880,7 @@ def create_supportfile(request,qtype,ids):
             try :
                 sending_to_teachers(teacher , nf.level,nf.theme.subject,"Un nouvel exercice")   
             except :
-                pass   
-                          
+                pass               
             nf.save()
             form.save_m2m()
             codebook = get_this_codebook(nf)
@@ -6901,21 +6900,6 @@ def create_supportfile(request,qtype,ids):
                     for form_answer in form_ans :
                         if form_answer.is_valid():
                             fa = form_answer.save()
-                            # if nf.qtype==10:
-                            #     ##### A tester lors de la création
-                            #     name, ext = os.path.splitext(fa.imageanswer)
-                            #     img = Image.open(os.path.join(dir_in, filename))
-                            #     w, h = img.size
-                                
-                            #     grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
-                            #     for i, j in grid:
-                            #         box = (j, i, j+d, i+d)
-                            #         out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
-                            #         img.crop(box).save(out)
-
-                            #         my_c = Supportsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'supportchoice' : fa , 'label' : 0 } )
-                            #         my_c.save()
-                                ####################################
                 else :
                     formset = formSetNested(request.POST or None,  request.FILES or None, instance=nf)
                     if formset.is_valid():
@@ -13699,13 +13683,13 @@ def folder_unarchive(request,id,idg):
     if folder.teacher == teacher :
         folder = Folder.objects.get(id=id)
         folder.is_archive = 0
-        folder.is_favorite = 0
+        folder.is_favorite = 1
         folder.save()
         subparcours = folder.parcours.all()
      
         for p in subparcours :
             p.is_archive = 0
-            p.is_favorite = 0
+            p.is_favorite = 1
             p.save()
         messages.error(request,"Dossier" + folder.title +" désarchivé")
     else :
