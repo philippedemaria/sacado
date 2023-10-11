@@ -212,7 +212,7 @@ def student_dashboard(request,group_id):
             group = None
             folders = student.folders.filter( is_publish=1 , is_archive=0, is_trash=0).order_by("ranking")
 
-        bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today),is_trash=0).order_by("ranking") 
+        bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_trash=0).order_by("ranking") 
 
         responses = request.user.user_response.exclude(is_read=1)
 
@@ -221,8 +221,8 @@ def student_dashboard(request,group_id):
         relationships_in_late  = relationships_in.filter(date_limit__gte=today).order_by("date_limit")
 
 
-    parcourses  = bases.filter(is_evaluation=0,is_sequence=0).order_by("ranking")       
-    evaluations = bases.filter(is_evaluation=1).order_by("ranking")
+    parcourses  = bases.filter(folders = None,is_evaluation=0,is_sequence=0).order_by("ranking")       
+    evaluations = bases.filter(folders = None,is_evaluation=1).order_by("ranking")
     bibliotexs =  student.bibliotexs.filter(folders = None,  is_publish = 1).distinct()
     parcourses_on_fire = bases.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), is_active=1,  is_archive =0 , is_trash=0).distinct()
     flashpacks = student.flashpacks.filter(Q(answercards=None) | Q(answercards__rappel=today), Q(stop=None) | Q(stop__gte=today) ,is_global=1).exclude(madeflashpack__date=today).distinct()
