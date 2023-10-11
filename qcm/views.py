@@ -2192,9 +2192,12 @@ def change_situations_in_all_relationships(request,idf,idp):
 
     if request.method == "POST" :
         global_situation = request.POST.get('global', None)
+        if global_situation :
+            for r in relationships :
+                Relationship.objects.filter(pk=r.id).update(situation = global_situation)
+        else :
+            messages.error(request,"Erreur..... Nombre de situations manquant.")
 
-        for r in relationships :
-            Relationship.objects.filter(pk=r.id).update(situation = global_situation)
 
         return redirect('show_parcours' , idf , idp )
 
@@ -2221,9 +2224,12 @@ def change_durations_in_all_relationships(request,idf,idp):
 
     if request.method == "POST" :
         global_duration = request.POST.get('global', None)
+        if global_duration :
+            for r in relationships :
+                Relationship.objects.filter(pk=r.id).update(duration = global_duration)
+        else :
+            messages.error(request,"Erreur..... Durée globale manquante.")
 
-        for r in relationships :
-            Relationship.objects.filter(pk=r.id).update(duration = global_duration)
 
         return redirect('show_parcours' , idf , idp )
 
