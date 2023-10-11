@@ -1042,20 +1042,20 @@ def ajax_populate(request):
     teacher = Teacher.objects.get(user= request.user)    
 
     if statut=="true" or statut == "True":
+        try :
+            r = Relationship.objects.get(parcours=parcours, exercise = exercise)  
+            students = parcours.students.all()
+            for student in students :
+                r.students.remove(student)
 
-        r = Relationship.objects.get(parcours=parcours, exercise = exercise)  
-        students = parcours.students.all()
-        for student in students :
-            r.students.remove(student)
-
-        r.delete()         
-        statut = 0
-        data["statut"] = "False"
-        data["class"] = "btn btn-danger"
-        data["noclass"] = "btn btn-success"
-        data["html"] = "<i class='fa fa-times'></i>"
-        data["no_store"] = False
-
+            r.delete()         
+            statut = 0
+            data["statut"] = "False"
+            data["class"] = "btn btn-danger"
+            data["noclass"] = "btn btn-success"
+            data["html"] = "<i class='fa fa-times'></i>"
+            data["no_store"] = False
+        except : pass
     else:
         statut = 1
         if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
@@ -4164,8 +4164,6 @@ def rcs_for_realtime(parcours):
 def show_parcours(request, idf = 0, id=0):
     """ show parcours coté prof """
     #peuplate_parcours_ia(id)
-    
-    mathis_time = time.time()
 
     if idf > 0 :
         folder = Folder.objects.get(id=idf)
@@ -4219,16 +4217,6 @@ def show_parcours(request, idf = 0, id=0):
     qflashs    = parcours.quizz.filter(is_random=1,folders=folder).order_by("-date_modified")
 
     form = QuizzForm(request.POST or None, request.FILES or None ,teacher = teacher,  group = group ,  folder = folder ,   initial={ 'subject': parcours.subject , 'levels': parcours.level , 'groups': [group] , 'folders' :  [folder]  })
- 
-            
-    timer_mathis = time.time() - mathis_time 
-    try :
-        if timer_mathis > 1 :
-            f=open("/var/www/sacado/logs/mysql.log",'a')
-            print("========== "+str( datetime.now() )+" ===============> time to show a parcours exercice " +teacher.user.last_name+" - " +teacher.user.first_name+" - " +teacher.user.school.country.name+"  : "+str(timer_mathis) +" " +parcours.title, file=f)
-            f.close()
-    except : pass
-
 
     context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'skills': skills,  'user' : rq_user , 'form' : form , 'docpersos' : docpersos , 'relationships_customexercises_nb' : relationships_customexercises_nb ,
                 'relationships_customexercises': relationships_customexercises, 'idf' : idf , 'bibliotexs' : bibliotexs , 'quizzes' : quizzes , 'flashpacks' : flashpacks , 'qflashs' : qflashs , 
@@ -4461,8 +4449,6 @@ def ordering_number_for_student(parcours,student):
 @login_required(login_url= 'index')
 def show_parcours_student(request, id):
 
-    mathis_time = time.time()
-
     folder = None
     try :
         folder_id = request.session.get('folder_id', None)
@@ -4495,13 +4481,6 @@ def show_parcours_student(request, id):
     nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
     nb_quizzes = parcours.quizz.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).count()
 
-
-    timer_mathis = time.time() - mathis_time 
-    try :
-        f=open("/var/www/sacado/logs/mysql.log",'a')
-        print("--------------"+str( datetime.now() )+" -  time to show_parcours_student ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-        f.close()
-    except : pass
     context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
                 'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,  'nb_quizzes' : nb_quizzes ,
                 'today': today ,    }
@@ -5158,8 +5137,6 @@ def get_student_result_from_eval(s, parcours, exercises,relationships,skills, kn
 @parcours_exists
 def stat_evaluation(request, id):
 
-    mathis_time = time.time() 
-
     try :
         teacher = request.user.teacher
     except :
@@ -5200,16 +5177,6 @@ def stat_evaluation(request, id):
     for s in students :
         student = get_student_result_from_eval(s, parcours, exercises,relationships,skills, knowledges,parcours_duration) 
         stats.append(student)
-
-
-    timer_mathis = time.time() - mathis_time 
-    try :
-        if timer_mathis > 1 :
-            f=open("/var/www/sacado/logs/mysql.log",'a')
-            print("++++++++++++++++>"+str( datetime.now() )+" - time stat d'un parcours " +parcours.title +"  : "+str(timer_mathis) , file=f)
-            f.close()
-    except : pass
-
 
 
     context = { 'folder': folder, 'parcours': parcours, 'form': form, 'stats':stats , 'group_id': group_id , 'group': group , 'relationships' : relationships , 'stage' : stage , 'role' : role  }
@@ -8912,8 +8879,6 @@ def store_the_score_relation_ajax(request):
         relation = Relationship.objects.get(pk = relation_id)
         data = {}
 
-        mathis_time = time.time()
-
         student = Student.objects.get(user=request.user)
 
         if request.method == 'POST':
@@ -9012,13 +8977,6 @@ def store_the_score_relation_ajax(request):
                     
             except:
                 pass
-            
-            timer_mathis = time.time() - mathis_time 
-            try :
-                f=open("/var/www/sacado/logs/mysql.log",'a')
-                print(str( datetime.now() )+" -  time to save an exercice,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-                f.close()
-            except : pass
 
             try :
                 nb_done = 0

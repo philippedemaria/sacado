@@ -20,7 +20,7 @@
             </a>   
         </div>
 
-        <div class="exo_tex_scrollbar" style="height:170px;">     
+        <div class="exo_tex_scrollbar" style="height:140px;">     
             {% for e in  bibliotex.exotexs.all %}
                 <li class="list_exotex_in_tag sanspuce">{{ forloop.counter}}. {{ e.title|truncatechars:40}}</li>
             {% empty %}

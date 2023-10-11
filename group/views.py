@@ -154,12 +154,10 @@ def student_dashboard(request,group_id):
     #######Groupes de l'élève. 
     # si plusieurs matières alors on envoie sur dashboard_group 
     # si une seule matière alors  sur dashboard
-    mathis_time = time.time() 
     today = time_zone_user(request.user)        
     timer = today.time()
     
     if not request.user.is_student :
-
         messages.error(request,"Elève non identifié")
         template , context =  "dashboard.html" , False
         return template , context 
@@ -181,7 +179,6 @@ def student_dashboard(request,group_id):
         #bases = group.group_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), students =student , subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct()
         bases = student.students_to_parcours.filter(Q(is_publish=1) | Q(start__lte=today, stop__gte=today), subject = group.subject, level = group.level , folders = None,  is_archive =0 , is_trash=0).distinct().order_by("ranking")
 
-
         responses = []
         groups = []
         relationships_in = []
@@ -190,7 +187,6 @@ def student_dashboard(request,group_id):
         student_index = False
 
     else :
- 
 
         groups = student.students_to_group.filter( is_hidden=0)
         student_index = True
@@ -234,18 +230,7 @@ def student_dashboard(request,group_id):
                 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
                   'relationships_in_late' : relationships_in_late ,'student_index' : student_index  , 'docpersos' : docpersos }
 
-    timer_mathis = time.time() - mathis_time 
-    try :
-        f=open("/var/www/sacado/logs/mysql.log",'a')
-        if student.user.school :
-            print("/////////////// "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-        else :
-            print("=============== "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - sans établissement  : "+str(timer_mathis) , file=f)  
-        f.close()
-    except : 
-        #print("/////////////// "+str(timer_mathis)+" <--------> "+str(student.user.id)) 
-        pass
-
+ 
     return template, context
 
 
@@ -633,10 +618,15 @@ def get_out_this_group(request, id):
 
 
 def dashboard_group(request, id):
+
     template, context = student_dashboard(request,id)
+
     if context :
         return render(request, template , context )
     else : return redirect('index')
+
+
+
 
 @login_required(login_url= 'index')
 def list_groups(request):

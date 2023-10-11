@@ -166,7 +166,7 @@ def index(request):
 
 
         if request.user.is_teacher :
-            mathis_time = time.time() 
+ 
             over_students, nbss , nbsa = False , 0 , 0
             if request.user.school :
                 over_students , nbss , nbsa  = oversize_students(request.user.school)
@@ -224,12 +224,8 @@ def index(request):
                            'relationships': relationships,  'index_tdb' : index_tdb, 'folders_tab' : folders_tab , 'group_prims' : group_prims ,  'is_gar_check' : is_gar_check , 'is_not_set_up' : is_not_set_up , 
                            'parcours_tab': parcours_tab, 'webinaire': webinaire,'communications': communications,  'over_students' : over_students ,  'hidden_groups' : hidden_groups, #'parcourses': parcourses
                             }
-            timer_mathis = time.time() - mathis_time 
-            try :
-                f=open("/var/www/sacado/logs/mysql.log",'a')
-                print("/////////////// "+str( datetime.now() )+" -  Page d'accueil des enseignants,  teacher_id : " +str(teacher.user.id)+" - " +teacher.user.last_name+" - " +teacher.user.first_name+" - " +teacher.user.school.country.name+"  : "+str(timer_mathis) , file=f)
-                f.close()
-            except : pass
+ 
+
         elif request.user.is_student:  ## student
 
             request.session["tdb"] = "Groups"
