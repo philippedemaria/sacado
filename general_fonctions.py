@@ -1121,13 +1121,9 @@ def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) 
             except :
                 raison += " Document non récupéré."
 
-
-
     if len(raison) : is_test = True
     else           : is_test = False
-
-    print( "is_test , raison" , is_test , raison)
-
+ 
     return is_test , raison
 
 
