@@ -13886,7 +13886,7 @@ def actioner_parcours(request):
 
     if  request.POST.get("action") == "deleter" :  
         for idp in idps :
-            parcours = Parcours.objects.get(id=idp) 
+            parcours = Parcours.objects.get(id=idp,teacher=teacher) 
             parcours.students.clear()
 
             if not authorizing_access(teacher, parcours, False ):
@@ -13894,9 +13894,9 @@ def actioner_parcours(request):
                 return redirect('index')
 
 
-            studentanswers = Studentanswer.objects.filter(parcours = parcours)
-            for s in studentanswers :
-                s.delete()
+            # studentanswers = Studentanswer.objects.filter(parcours = parcours)
+            # for s in studentanswers :
+            #     s.delete()
             parcours.is_trash=1
             parcours.save()
  
