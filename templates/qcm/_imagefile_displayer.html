@@ -13,10 +13,12 @@
 					{% else %}padding:5px;font-size:  0.4em{% endif %}">
 			{{ rc.qtype_logo|safe }} 
 		</label>  
-		{% if rc.instruction %}    
-			{{rc.instruction|safe|truncatechars_html:45}}    
-		{% else %}    
-			{{ rc.exercise.supportfile.annoncement|safe }}  
+		{% if rc.exercise.supportfile.qtype < 100 %}
+			{% if rc.instruction %}    
+				{{rc.instruction|safe|truncatechars_html:45}}    
+			{% else %}    
+				{{ rc.exercise.supportfile.annoncement|safe }}  
+			{% endif %}
 		{% endif %}
 	</div>
 </div>

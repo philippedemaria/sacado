@@ -155,9 +155,9 @@
                 {% get_parcours_available parcours student rc.exercise as parcours_available %}
 
                 {% if rc.relationship_mastering.all|length > 0  and data.score  %}
-                <a href="{% url 'mastering_student_show' rc.id %}" target="_blank" class="btn btn-danger" style="position: absolute; z-index:9; right:0px;top:150px;background-color:{{ parcours.color }}">
-                    Parcours de maîtrise proposé<br/><i class="fa fa-sitemap"></i>
-                </a>
+                    <a href="{% url 'mastering_student_show' rc.id %}" target="_blank" class="btn btn-danger" style="position: absolute; z-index:9; right:0px;top:150px;background-color:{{ parcours.color }}">
+                        Parcours de maîtrise proposé<br/><i class="fa fa-sitemap"></i>
+                    </a>
                 {% endif  %}
                 {% if is_blck %}
                     <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
