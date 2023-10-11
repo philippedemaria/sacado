@@ -237,7 +237,10 @@ def student_dashboard(request,group_id):
     timer_mathis = time.time() - mathis_time 
     try :
         f=open("/var/www/sacado/logs/mysql.log",'a')
-        print("/////////////// "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+        if student.user.school :
+            print("/////////////// "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - " +student.user.school.country.name+"  : "+str(timer_mathis) , file=f)
+        else :
+            print("=============== "+str( datetime.now() )+" -  Page d'accueil ,  student_id : " +str(student.user.id)+" - " +student.user.last_name+" - " +student.user.first_name+" - sans établissement  : "+str(timer_mathis) , file=f)  
         f.close()
     except : 
         #print("/////////////// "+str(timer_mathis)+" <--------> "+str(student.user.id)) 

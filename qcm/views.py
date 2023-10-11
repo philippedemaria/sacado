@@ -14285,10 +14285,6 @@ def docperso_actioner(request) :
     return redirect('my_docpersos')
 
 
-
-
-
-
 def duplicate_parcours_organiser(request,idch):
 
     idg = request.session.get("group_id",None)
