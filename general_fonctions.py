@@ -1146,9 +1146,6 @@ def migrate_all_documents_to_gar(init , target , is_delete) :
     parcourses_no_folder = init.teacher_parcours.filter(folders=None)# on ne récupère que les parcours sans dossier puisque ceux dans les dossiers sont déjà récupérés 
  
     is_test,raison = migrate_all_documents_from_parcourses(target,None, parcourses_no_folder,is_delete)
- 
-
-    test = is_ok and is_test
 
     this_raison = ""
     if not is_ok   : this_raison += raisonf
