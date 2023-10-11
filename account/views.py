@@ -1953,9 +1953,9 @@ def ajax_detail_student_parcours(request):
     student = Student.objects.get(user_id=student_id)
     parcours = Parcours.objects.get(pk=parcours_id)
 
-    if student.user.school :
+    try :
         stage = Stage.objects.get(school = student.user.school)
-    else :
+    except :
         stage = { 'low' : 30, 'medium' : 60 , 'up' :80 }        
 
 

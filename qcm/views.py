@@ -6217,7 +6217,6 @@ def ajax_detail_parcours(request):
     custom =  int(request.POST.get("custom"))    
     parcours_id =  int(request.POST.get("parcours_id"))
     exercise_id =  int(request.POST.get("exercise_id"))
-    num_exo =  int(request.POST.get("num_exo"))    
     parcours = Parcours.objects.get(id = parcours_id)
 
     today = time_zone_user(request.user)
@@ -6226,8 +6225,10 @@ def ajax_detail_parcours(request):
 
     try :
         relationship = Relationship.objects.get(exercise_id = exercise_id, parcours = parcours)
+        num_exo = relationship.ranking
     except :
         relationship = None
+        num_exo = 100
     
     data = {}
     if custom == 0 :
@@ -6237,7 +6238,7 @@ def ajax_detail_parcours(request):
             student = {}
             student["name"] = s 
 
-            studentanswers = Studentanswer.objects.filter(student=s, exercise = exercise ,  parcours = parcours)
+            studentanswers = s.answers.filter(exercise = exercise ,  parcours = parcours)
             duration, score = 0, 0
             tab, tab_date = [], []
             for studentanswer in  studentanswers : 
