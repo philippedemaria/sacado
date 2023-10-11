@@ -1997,14 +1997,15 @@ def passwordResetView(request):
             link = "https://sacado.xyz/account/newpassword/"+this_form.code
             msg = "Bonjour, \nvous venez de demander la réinitialisation de votre mot de passe. Cliquez sur le lien suivant : \n"+ link +"\n\nMerci. \n\n Ceci est un mail automatique, ne pas répondre."
           
-            send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[this_form.email, ])
+            try : send_mail('SacAdo : Ré-initialisation de mot de passe', msg ,settings.DEFAULT_FROM_EMAIL,[this_form.email, ])
+            except :  messages.error(request,"Echec de la ré-initialisation. Le lien n'est pas envoyé. Contacter votre enseignant ou l'équipe SACADO.")
             return redirect("password_reset_done")
         else :
-            messages.error(request, "une erreur est survenue. Contacter l'équipe SACADO.")
+            messages.error(request, "une erreur est survenue.  Contacter votre enseignant oul'équipe SACADO.")
             return redirect('index')
 
     else :
-        messages.error(request, "une erreur est survenue. Contacter l'équipe SACADO.")
+        messages.error(request, "une erreur est survenue. Contacter votre enseignant ou l'équipe SACADO.")
         return redirect('index')
 
 

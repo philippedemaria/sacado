@@ -1440,7 +1440,7 @@ def show_bibliotex_student(request, id):
     bibliotex = Bibliotex.objects.get(id=id)
     relationtexs = Relationtex.objects.filter(bibliotex=bibliotex).order_by("ranking")
 
-    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs, 'student' : student }
+    context = { 'bibliotex': bibliotex, 'relationtexs': relationtexs,    }
 
     return render(request, 'bibliotex/show_bibliotex.html', context )
 
