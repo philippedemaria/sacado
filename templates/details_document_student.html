@@ -110,7 +110,8 @@
 
         <div class="card-body student" >
             <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not data.score %} color: {{ rc.parcours.color}} ;  {% endif %} ">
-                {{ nb_exo_only|index:forloop.counter0 }}.</span> 
+                {% if rc.ranking == 100 %}{{ forloop.counter }}{% else %}{{ rc.ranking }}{% endif %}.
+            </span> 
             <div class="card-score-student">
 
                 {% get_is_submitted rc student as submitter %}
@@ -333,7 +334,7 @@
 
         <div class="card-body student">
             <span style="font-size: 40px; padding-left:3px;float:left; padding-top: 10px; {% if not score %} color: {{ parcours.color}} ;  {% endif %} ">
-                {{ nb_exo_only|index:forloop.counter0 }}.</span> 
+                {% if rc.ranking == 100 %}{{ forloop.counter }}{% else %}{{ rc.ranking }}{% endif %}.</span> 
             <div class="card-score-student"  >
 
             {% if submitter %}

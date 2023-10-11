@@ -4451,6 +4451,7 @@ def ordering_number_for_student(parcours,student):
 
     return listing_order , nb_exo_only, nb_exo_visible
 
+
 @login_required(login_url= 'index')
 def show_parcours_student(request, id):
 
@@ -4474,7 +4475,6 @@ def show_parcours_student(request, id):
         messages.error(request,"Vous n'êtes pas élève ou pas connecté.")
         return redirect('index')
 
-
     if parcours.stop :
         lock_all_exercises_for_this_student(parcours,student)
 
@@ -4483,7 +4483,7 @@ def show_parcours_student(request, id):
  
     tracker_execute_exercise(True ,  user , id , None , 0)
 
-    relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number_for_student(parcours,student)
+    relationships_customexercises   = Relationship.objects.filter(parcours=parcours, students=student, is_publish=1).prefetch_related('exercise__supportfile').order_by("ranking")
     nb_exercises = len(relationships_customexercises)
 
     nb_courses = parcours.course.filter(Q(is_publish=1)|Q(publish_start__lte=today,publish_end__gte=today)).count()
@@ -4497,7 +4497,7 @@ def show_parcours_student(request, id):
         f.close()
     except : pass
     context = { 'stage' : stage , 'relationships_customexercises': relationships_customexercises, 'folder': folder, 'nb_courses' : nb_courses , 
-                'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,'nb_exo_only': nb_exo_only,  'nb_quizzes' : nb_quizzes ,
+                'parcours': parcours, 'student': student, 'nb_exercises': nb_exercises,  'nb_quizzes' : nb_quizzes ,
                 'today': today ,    }
 
     return render(request, 'qcm/show_parcours_student.html', context)
