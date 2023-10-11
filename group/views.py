@@ -161,7 +161,7 @@ def student_dashboard(request,group_id):
         messages.error(request,"Elève non identifié")
         template , context =  "dashboard.html" , False
         return template , context 
-        
+ 
     try :
         student = request.user.student
     except :
@@ -230,7 +230,7 @@ def student_dashboard(request,group_id):
                 'index_tdb' : True, 'folders' : folders, 'parcourses_on_fire' : parcourses_on_fire ,  
                   'relationships_in_late' : relationships_in_late ,'student_index' : student_index  , 'docpersos' : docpersos }
 
- 
+
     return template, context
 
 
@@ -619,11 +619,15 @@ def get_out_this_group(request, id):
 
 def dashboard_group(request, id):
 
-    template, context = student_dashboard(request,id)
+    try :
+        template, context = student_dashboard(request,id)
+        if context :
+            return render(request, template , context )
+        else : return redirect('index')
+    except :
+        messages.error(request,"Erreur de redirection")
+        return redirect('index')
 
-    if context :
-        return render(request, template , context )
-    else : return redirect('index')
 
 
 
