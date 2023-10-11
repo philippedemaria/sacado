@@ -13904,7 +13904,7 @@ def actioner_parcours(request):
  
 
         for idp in idps :
-            parcours = Parcours.objects.get(id=idp) 
+            parcours = Parcours.objects.get(id=idp,teacher=teacher) 
             parcours.is_archive = 1
             parcours.is_favorite = 0
             parcours.save()
@@ -13912,7 +13912,7 @@ def actioner_parcours(request):
     else :
 
         for idp in idps :
-            parcours = Parcours.objects.get(id=idp) 
+            parcours = Parcours.objects.get(id=idp,teacher=teacher) 
             parcours.is_archive = 0
             parcours.is_favorite = 0
             parcours.save()
@@ -13944,13 +13944,6 @@ def actioner_course(request):
         course.delete()
  
     return redirect('courses')
-
-
-
-
-
-
-
 
 
 
