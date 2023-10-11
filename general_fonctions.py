@@ -1134,7 +1134,7 @@ def migrate_all_documents_from_parcourses(teacher,folder, parcourses,is_delete) 
 def migrate_all_documents_to_gar(init , target , is_delete) :
 
     folders              = init.teacher_folders.all()
- 
+    is_ok = True
     for folder in folders :
         parcourses = folder.parcours.all()
         folder.pk      = None
