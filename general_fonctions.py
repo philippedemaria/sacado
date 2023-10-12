@@ -1147,7 +1147,7 @@ def migrate_all_documents_to_gar(init , target , is_delete) :
     if not is_ok   : this_raison += raisonf
     if not is_test : this_raison += raison
 
-    return test, this_raison
+    return is_test, this_raison
 
 
 def cleanhtml(raw_html): #nettoie le code des balises HTML
