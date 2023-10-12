@@ -579,10 +579,6 @@ def compile_html(request,nf):
     return save_html 
 
 
-
-
-
-
 @user_passes_test(user_is_creator)
 def create_exotex_knowledge(request,idk):
 

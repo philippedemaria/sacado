@@ -61,48 +61,98 @@ from subprocess import run
 # TOPLOG
 #################################################################
 def courbeLog(request):
-    log=open("logs/toplog.log")
-    creation=time.ctime(os.path.getctime("logs/toplog.log"))
+    log=open("/var/www/sacado/logs/toplog.log")
     reDate = re.compile("top - (\d\d):(\d\d):(\d\d)")
+    reMem   =re.compile(r"MiB Mem : \s+\S+ total,\s*\S+ free,\s*(\S*) used")
     reDaphne =re.compile(r".*\s(\S+)\s+\S+\s+\S+ daphne")
     reMysqld =re.compile(r".*\s(\S+)\s+\S+\s+\S+ mysqld")
+    reJava =re.compile(r".*\s(\S+)\s+\S+\s+\S+ java")
     tablog=log.readlines()
     i=0
     ndays=0
+    newday=0
     maxdaphne=1
     maxmysqld=1
     tableau=[]
-
-    while (i<len(tablog)-2) :
+    ndays=0
+    while (i<len(tablog)-3) :
         date=reDate.match(tablog[i])
-         #print(tablog[i],date)
         if (date) :
-            daphne=reDaphne.match(tablog[i+1]);
-            #print(tablog[i+1],daphne)
-            if not daphne :
-                mysqld=reMysqld.match(tablog[i+1])
-                daphne=reDaphne.match(tablog[i+2])
-                #print(tablog[i+2],daphne,"---------------",daphne[1])
-            else :  mysqld=reMysqld.match(tablog[i+2])
-
-            if (daphne and mysqld) :
-                date=ndays*24+int(date[1])+int(date[2])/60+int(date[3])/3600
-                daphne=float(daphne[1])
-                mysqld=float(mysqld[1])
-                tableau.append([date,daphne,mysqld])
-                if (daphne>maxdaphne) : maxdaphne=daphne
-                if (mysqld>maxmysqld) : maxmysqld=mysqld
-                i+=2;
+            mem = reMem.match(tablog[i+1])
+            #print(tablog[i+1],mem)
+            mem=float(mem[1])
+            i+=2
+            daphne,mysqld,java = False, False, False
+            while i+1 < len(tablog) and not(reDate.match(tablog[i])) :
+                i+=1
+                if not(daphne) : daphne=reDaphne.match(tablog[i]);
+                if not(mysqld) : mysqld=reMysqld.match(tablog[i])
+                if not(java) : java  =reJava.match(tablog[i])
+            if date[1]=="00" and not(newday) :
+                ndays+=1
+                newday=True
+            if date[1]=="23" : newday=False
+            date=ndays*24+int(date[1])+int(date[2])/60+int(date[3])/3600
+            if daphne : daphne=float(daphne[1])
+            else : daphne=0
+            if mysqld : mysqld=float(mysqld[1])
+            else : mysqld = 0
+            if java : java=float(java[1])
+            else : java = 0
+            tableau.append([date,mem,daphne,mysqld,java])
+            if (daphne>maxdaphne) : maxdaphne=daphne
+            if (mysqld>maxmysqld) : maxmysqld=mysqld
+            i+=2;
 
         i+=1;
-    end=tableau[-1][0]
-    j=len(tableau)-1
-    while j>0 and tableau[j][0]>end-1 :
-        j-=1
-    lastHour=tableau[j:]
+    T=[l[0] for l in tableau]
+    M=[l[1] for l in tableau]
+    D=[l[2] for l in tableau]
+    S=[l[3] for l in tableau]
+    J=[l[4] for l in tableau]
+    major_ticks = np.arange(24, T[-1], 24)
+    minor_ticks = np.arange(24, T[-1], 1)
+    f=plt.figure(figsize=(15,6))
+    axM=f.add_subplot(221)
+    axM.plot(T,M)
+    axM.set_xticks(major_ticks)
+    axM.grid(which='both', linestyle='-.')
+    axM.set_title("Mémoire")
+    
+    axD=f.add_subplot(222)
+    axD.plot(T,D)
+    axD.set_xticks(major_ticks)
+    axD.grid(which='both', linestyle='-.')
+    axD.set_title("Daphne")
 
-    context = {"tab":tableau, "maxdaphne":maxdaphne,"maxmysqld":maxmysqld,"end":tableau[-1][0],"date":creation, "lastHour":lastHour}
+    axS=f.add_subplot(223)
+    axS.plot(T,S)
+    axS.set_xticks(major_ticks)
+    axS.grid(which='both', linestyle='-.')
+    axS.set_title("MySql")
+
+    axJ=f.add_subplot(224)
+    axJ.plot(T,J)
+    axJ.set_xticks(major_ticks)
+    axJ.grid(which='both', linestyle='-.')
+    axJ.set_title("Java")
+    plt.subplots_adjust(left=0.05,
+                    bottom=0.05, 
+                    right=0.955, 
+                    top=0.955, 
+                    wspace=0.15, 
+                    hspace=0.2)
+    
+    plt.savefig("/var/www/sacado/logs/courbes.png")
+
+    context = {}
     return render(request,"association/courbeLog.html", context)
+ 
+
+
+
+
+
 
 
 #################################################################
@@ -238,29 +288,34 @@ def create_bibliotex_from_tex(request) :
             knowledges = request.POST.getlist("knowledge"+str(i),None)
             knowledge  = Knowlege.objects.get(pk=knowledges[0])
             exotex, created = Exotex.objects.update_or_create(
+
                 title = request.POST.get("title"+str(i)),
                 content = request.POST.get("eno"+str(i),None) ,
                 content_html = request.POST.get("enohtml"+str(i),None) ,
+                correction      = request.POST.get("cor"+str(i),None),
+                correction_html = request.POST.get("corhtml"+str(i),None),
                 author_id = 2480,
-                calculator = 0, 
-                duration = 15,
-                ###### Socle
                 subject       = subject ,
                 knowledge_id  = knowledge,
                 level         = level ,
                 theme         = knowledge.theme, 
-                point           = 0,
-                correction      = request.POST.get("cor"+str(i),None),
-                correction_html = request.POST.get("corhtml"+str(i),None),
-                ranking         = 0,
-                bloc_id = None,
-                is_read = 0)
+                defaults = {
+                    'calculator' : 0, 
+                    'duration' : 15,
+                    'point'   : 0,
+                    'ranking' : 0,
+                    'bloc_id' : None,
+                    'is_read' : 0
+                    }
+                )
             relationtex, created = Relationtex.objects.update_or_create(
                         exotex = exotex,
                         bibliotex = bibliotex,
                         teacher_id = 2480, 
-                        calculator = 0,
-                        duration = 15, 
+                        defaults = {
+                            'calculator' : 0,
+                            'duration' : 15,
+                            }
                         )
             try : relationtex.knowledges.set(knowledges[1:])
             except : pass 
