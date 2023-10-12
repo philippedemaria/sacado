@@ -151,12 +151,6 @@ def courbeLog(request):
     return render(request,"association/courbeLog.html", context)
  
 
-
-
-
-
-
-
 #################################################################
 # Importation d'une fiche d'exos pour creer une bibliotex
 #################################################################
