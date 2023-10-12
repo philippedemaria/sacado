@@ -145,7 +145,7 @@ def courbeLog(request):
                     wspace=0.15, 
                     hspace=0.2)
     
-    plt.savefig("/var/www/sacado/logs/courbes.png")
+    plt.savefig("/var/www/sacado/ressources/logs/courbes.png")
 
     context = {}
     return render(request,"association/courbeLog.html", context)
