@@ -1705,7 +1705,6 @@ class Relationship(models.Model):
     document_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)    
     type_id = models.IntegerField(  default=0,  blank=True, null=True, editable=False)
 
-
     def __str__(self):
 
         try :
