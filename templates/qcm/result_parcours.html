@@ -84,28 +84,25 @@
                         {% for student in  students %}
                             <tr class="no_padding">
                                 <td style="min-width:250px">
- 
-                                        <form  action="" method="POST">{% csrf_token %} 
-                                            <a href="{% url 'detail_student_all_views' student.user.id %}" target="_blank"> {{ student |truncatechars:"30" }} </a>
-                                        <div class="pull-right"> 
-                                            <a href="#" data-toggle='modal'
-                                                    data-target='#writer' 
-                                                    class="send_message"   data-student_name="{{ student.user }}"
-                                                    data-student_email="{{ student.user.email }}">  
+                                    <form  action="" method="POST">{% csrf_token %} 
+                                        <a href="#" data-toggle='modal'
+                                                data-target='#writer' 
+                                                class="send_message pull-right"   data-student_name="{{ student.user }}"
+                                                data-student_email="{{ student.user.email }}">  
 
-                                                    {% if student.user.email  %}                                      
-                                                    <i class="fa fa-inbox" style="font-size:14px"></i> 
-                                                    {% else %}
+                                                {% if student.user.email  %}                                      
+                                                <i class="fa fa-inbox" style="font-size:14px"></i> 
+                                                {% else %}
 
-                                                    <span class="icon-stack">
-                                                      <i class="icon-inbox"></i>
-                                                      <i class="icon-ban-circle icon-stack-base text-error"></i>
-                                                    </span>
+                                                <span class="icon-stack">
+                                                  <i class="icon-inbox"></i>
+                                                  <i class="icon-ban-circle icon-stack-base text-error"></i>
+                                                </span>
 
-                                                    {% endif %}
-                                            </a>        
-                                        </div>  
-                                        </form>    
+                                                {% endif %}
+                                        </a>  
+                                        <a href="{% url 'detail_student_all_views' student.user.id %}" target="_blank"> {{ student |truncatechars:"30" }} </a>
+                                    </form>    
                                 </td>
                                 {% block result %}                                       
                                 <td> 

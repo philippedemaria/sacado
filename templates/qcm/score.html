@@ -33,7 +33,6 @@
         </a>
     {% endif %}
 
-
 {% else %} 
 
       {% get_score  relationship.exercise  student as score %}
@@ -54,7 +53,7 @@
                     {{ score }}<div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}</div>
           </a>
       {% else %}
-          <a class="markdown_no_mark helper_tip" href="{% url 'show_this_exercise'  relationship.exercise.id   %}" target="_blank"  >
+          <a class="markdown helper_tip" href="{% url 'show_this_exercise'  relationship.exercise.id   %}" target="_blank"  >
               <div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}</div>
           </a>
       {% endif %}
