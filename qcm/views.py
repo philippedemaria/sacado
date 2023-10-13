@@ -8896,32 +8896,30 @@ def store_the_score_relation_ajax(request):
             relationship_students_done.students_done.add(student)
             ##########################################################
 
-            Resultexercise.objects.update_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
+            try : r_exo_student = Resultexercise.objects.get(exercise  = relation.exercise , student  = student)
+            except : r_exo_student = Resultexercise.objects.filter(exercise  = relation.exercise , student  = student).last()
+            if r_exo_student.point < score : 
+                r_exo_student.point = score
+                r_exo_student.save()
 
             # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
             knowledge = relation.exercise.knowledge
-            scored = 0
-            studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
-            for studentanswer in studentanswers:
-                scored += studentanswer.point 
-            try :
-                scored = scored/len(studentanswers)
-            except :
+            try : 
+                score_label = student.answers.filter(exercise = e,exercise__knowledge = knowledge ).aggregate(avg = Avg('point'))
+                scored = score_label['avg']
+            except : 
                 scored = 0
-            Resultknowledge.objects.update_or_create(knowledge  = relation.exercise.knowledge , student  = student , defaults = { "point" : scored , })   
+ 
+            Resultknowledge.objects.update_or_create(knowledge  = knowledge , student  = student , defaults = { "point" : scored , })   
 
             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
             skills = relation.skills.all()
             for skill in skills :
                 Resultskill.objects.create(student = student, skill = skill, point = score) 
-                resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
-                sco = 0
-                for resultskill in resultskills :
-                    sco += resultskill.point
-                    try :
-                        sco_avg = sco/len(resultskills)
-                    except :
-                        sco_avg = 0
+                
+                resultskills = student.results_s.filter(skill = skill).aggregate(avg = Avg('point'))
+                sco_avg = resultskills['avg']
+
                 Resultlastskill.objects.update_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
                 
                 if Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).count() < 2 :
@@ -8935,7 +8933,7 @@ def store_the_score_relation_ajax(request):
                 if relation.exercise.supportfile.annoncement != "" :
                     name_title = relation.exercise.supportfile.annoncement
                 else :
-                    name_title = relation.exercise.knowledge.name
+                    name_title = knowledge.name
                 msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Parcours : "+str(relation.parcours.title)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
                 rec = []
                 for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
@@ -9794,10 +9792,6 @@ def ajax_choose_student(request): # Ouvre la page de la réponse des élèves à
 
 
 
-
-
-
-
 def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
 
     student_id =  int(request.POST.get("student_id"))
@@ -9831,14 +9825,17 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
                     Studentanswer.objects.filter(parcours  = relationship.parcours, exercise = relationship.exercise , student  = student).update(point= tab_value[value])
                 # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
                 knowledge = relationship.exercise.knowledge
-                scored = 0
-                studentanswers = Studentanswer.objects.filter(student = student,exercise__knowledge = knowledge) 
-                for studentanswer in studentanswers:
-                    scored +=  studentanswer.point 
-                try :
-                    scored = scored/len(studentanswers)
-                except :
+                # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
+                try : 
+                    score_label = student.answers.filter( exercise = relationship.exercise, exercise__knowledge = knowledge ).aggregate(avg = Avg('point'))
+                    scored = score_label['avg']
+                except : 
                     scored = 0
+     
+                Resultknowledge.objects.update_or_create(knowledge  = knowledge , student  = student , defaults = { "point" : scored , })   
+
+
+
                 result, created = Resultknowledge.objects.get_or_create(knowledge  = relationship.exercise.knowledge , student  = student , defaults = { "point" : scored , })
                 if not created :
                     Resultknowledge.objects.filter(knowledge  = relationship.exercise.knowledge , student  = student).update(point= scored)
@@ -9852,14 +9849,13 @@ def ajax_exercise_evaluate(request): # Evaluer un exercice non auto-corrigé
             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
                 skill = Skill.objects.get(pk = skill_id )
                 Resultskill.objects.create(student = student, skill = skill, point = tab_value[value]) 
-                resultskills = Resultskill.objects.filter(student = student, skill = skill).order_by("-id")[0:10]
-                sco = 0
-                for resultskill in resultskills :
-                    sco += resultskill.point
-                    try :
-                        sco_avg = sco/len(resultskills)
-                    except :
-                        sco_avg = 0
+ 
+                try : 
+                    score_label = student.results_s.filter(skill = skill ).aggregate(avg = Avg('point'))
+                    sco_avg = score_label['avg']
+                except : 
+                    sco_avg = 0
+
                 result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
                 if not creat :
                     Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
