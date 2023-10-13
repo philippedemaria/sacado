@@ -3745,7 +3745,8 @@ def peuplate_parcours_ia(idp) :
             secondes = random.randint(45,180)
             point += 5            
             Studentanswer.objects.create(exercise = relationship.exercise, parcours=parcours, student=student, point=point, secondes = secondes )
-            Resultexercise.objects.get_or_create(exercise = relationship.exercise,  student=student, defaults = { 'point' : point} )
+            
+            .objects.get_or_create(exercise = relationship.exercise,  student=student, defaults = { 'point' : point} )
 
 
 
@@ -8892,7 +8893,7 @@ def store_the_score_relation_ajax(request):
 
             Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
 
-            Relationship.Objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student).update(students_done=student)
+            Relationship.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student).update(students_done=student)
             ##########################################################
 
             Resultexercise.objects.update_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
