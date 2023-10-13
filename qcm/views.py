@@ -3745,8 +3745,7 @@ def peuplate_parcours_ia(idp) :
             secondes = random.randint(45,180)
             point += 5            
             Studentanswer.objects.create(exercise = relationship.exercise, parcours=parcours, student=student, point=point, secondes = secondes )
-            
-            .objects.get_or_create(exercise = relationship.exercise,  student=student, defaults = { 'point' : point} )
+            Resultexercise.objects.get_or_create(exercise = relationship.exercise,  student=student, defaults = { 'point' : point} )
 
 
 
