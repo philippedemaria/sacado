@@ -8892,7 +8892,8 @@ def store_the_score_relation_ajax(request):
 
             Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
 
-            Relationship.objects.filter(exercise  = relation.exercise , parcours  = relation.parcours).update(students_done=student)
+            relationship_students_done = Relationship.objects.get(exercise  = relation.exercise , parcours  = relation.parcours)
+            relationship_students_done.students_done.add(student)
             ##########################################################
 
             Resultexercise.objects.update_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
