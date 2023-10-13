@@ -804,7 +804,7 @@ def logged_user_has_permission_to_this_student(user_reader, student) :
         else : 
             if user_reader == student.user :
                 test = True  
-                
+
     testeur = test or  is_test or is_test_p
     return testeur
 
@@ -1825,7 +1825,7 @@ def my_profile(request):
                     print(form.errors)
             return render(request, 'account/parent_form.html', {'parent_form': form, 'communications' : [],  'user_form': user_form, 'parent': parent, 'today' : today })
     else :
-        redirect("index")
+        return redirect("index")
 
 
 @csrf_exempt
