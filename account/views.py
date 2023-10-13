@@ -780,7 +780,7 @@ def sender_mail(request,form):
 
 def logged_user_has_permission_to_this_student(user_reader, student) :
 
-    test = False
+    testeur , test , is_test , is_test_p  = False ,  False , False, False
     if user_reader.is_authenticated : 
         if user_reader.is_teacher :
             groups = Group.objects.filter(teacher__user = user_reader) # tous le groupes du prof
@@ -793,18 +793,20 @@ def logged_user_has_permission_to_this_student(user_reader, student) :
      
             for sgroup in sgroups :
                 if student in sgroup.group.students.all() :
-                    test = True
+                    is_test = True
                     break
 
         elif user_reader.is_parent : 
             parent = Parent.objects.get(user = user_reader)
             if student in parent.students.all():
-                test = True
+                is_test_p = True
 
         else : 
             if user_reader == student.user :
-                test = True    
-    return test
+                test = True  
+                
+    testeur = test or  is_test or is_test_p
+    return testeur
 
  
 
