@@ -8895,9 +8895,7 @@ def store_the_score_relation_ajax(request):
             Relationship.Objects.filter(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student).update(students_done=student)
             ##########################################################
 
-            result, createded = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
-            if not createded :
-                Resultexercise.objects.filter(exercise  = relation.exercise , student  = student).update(point= score)
+            Resultexercise.objects.update_or_create(exercise  = relation.exercise , student  = student , defaults = { "point" : score , })
 
             # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
             knowledge = relation.exercise.knowledge
@@ -8909,10 +8907,7 @@ def store_the_score_relation_ajax(request):
                 scored = scored/len(studentanswers)
             except :
                 scored = 0
-            result, created = Resultknowledge.objects.get_or_create(knowledge  = relation.exercise.knowledge , student  = student , defaults = { "point" : scored , })
-            if not created :
-                Resultknowledge.objects.filter(knowledge  = relation.exercise.knowledge , student  = student).update(point= scored)
-            
+            Resultknowledge.objects.update_or_create(knowledge  = relation.exercise.knowledge , student  = student , defaults = { "point" : scored , })   
 
             # Moyenne des scores obtenus par compétences enregistrées dans Resultskill
             skills = relation.skills.all()
@@ -8926,19 +8921,14 @@ def store_the_score_relation_ajax(request):
                         sco_avg = sco/len(resultskills)
                     except :
                         sco_avg = 0
-                result, creat = Resultlastskill.objects.get_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
-                if not creat :
-                    Resultlastskill.objects.filter(student = student, skill = skill).update(point = sco_avg) 
+                Resultlastskill.objects.update_or_create(student = student, skill = skill, defaults = { "point" : sco_avg , })
                 
                 if Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).count() < 2 :
-                    result, creater = Resultggbskill.objects.get_or_create(student = student, skill = skill, relationship = relation, defaults = { "point" : score , })
-                    if not creater :
-                        Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).update(point = sco_avg)
+                    result, creater = Resultggbskill.objects.update_or_create(student = student, skill = skill, relationship = relation, defaults = { "point" : score , })
                 else :
                     result = Resultggbskill.objects.filter(student = student, skill = skill, relationship = relation).last()
-                    result.point = sco_avg 
+                    result.point = score 
                     result.save()
-
 
             try :
                 if relation.exercise.supportfile.annoncement != "" :
@@ -8952,7 +8942,7 @@ def store_the_score_relation_ajax(request):
                         rec.append(g.teacher.user.email)
 
                 if g.teacher.notification :
-                    sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec )
+                    sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec )
                     pass
 
                 try :
@@ -8960,7 +8950,7 @@ def store_the_score_relation_ajax(request):
                     for parent in student.students_parent.filter(user__school_id = 50): 
                         rec_p.append(parent.user.email)
                         msg += "" # désincription
-                        sending_mail("SacAdo Académie Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec_p )
+                        sending_mail("SACADO : Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , rec_p )
                 except :
                     pass
                     
