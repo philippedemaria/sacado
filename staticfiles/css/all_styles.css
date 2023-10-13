@@ -246,6 +246,23 @@ a.level_title:hover, a.level_title:active,a.level_title:focus{
   overflow-x: hidden
 }
 
+.markdown_no_mark {
+    list-style: none;
+    background-color: #d1c5de;
+    font-size: 12px;
+    padding: 4px 3px;
+    border-radius: 15px;
+    width: 30px;
+    margin: 1px;
+    text-align: center;
+    float: left;
+    height: 30px;
+    position: relative;
+    cursor: help;
+    color: #d1c5de;
+}
+
+
 /********************************************************************/
 /*********   cke  ***************************************************/
 /********************************************************************/

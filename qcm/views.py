@@ -4380,7 +4380,7 @@ def result_parcours_exercises(request, idf = 0, id=0):
         listing_r = []
         nb_time = 0
         global_time = 0
-        base_studentanswer = Studentanswer.objects.filter(parcours=parcours,student=student)
+        base_studentanswer = student.answers.filter(parcours=parcours)
         for relationship in relationships :
             nb_time += relationship.duration
             data_r = dict()
@@ -4690,22 +4690,12 @@ def result_parcours(request, id, is_folder):
         role, group , group_id , access = get_complement(request, teacher, folder)
         students = folder.only_students_folder() # liste des élèves d'un parcours donné 
         relationships = Relationship.objects.filter(parcours__in=folder.parcours.all(),exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
-
-        #custom_set = set()
-        #for p in folder.parcours.all():
-        #    cstm = p.parcours_customexercises.all() 
-        #    custom_set.update(set(cstm))
-        #customexercises = list(custom_set)
-
         target = folder
-
     else :
         parcours = Parcours.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, parcours)
         students =  parcours.only_students(group)
         relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
-        #customexercises = parcours.parcours_customexercises.all() 
-
         target = parcours
 
     themes_tab, historic = [],  []
@@ -4722,10 +4712,7 @@ def result_parcours(request, id, is_folder):
                 theme["name"]= thm.name
                 themes_tab.append(theme)
 
-
-
     form = EmailForm(request.POST or None )
-
     stage = get_stage(teacher.user)
 
     context = {   'relationships': relationships, 'parcours': target, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }

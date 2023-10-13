@@ -15,7 +15,7 @@
             darkgreen
             {% endif %}" style="cursor:help">
         
-         <span class="helper_tip_text_center"><b>Score = {{ score }}%</b><img src="{{ exercise.supportfile.imagefile.url }}" width="400px" /></span>
+         <span class="helper_tip_text_center"><b>Score = {{ score }}%</b>{% if exercise.supportfile.imagefile %}<img src="{{ exercise.supportfile.imagefile.url }}" width="400px" />{% endif %}</span>
     </a>
 {% else %}
     <a class="markdown square"  > 
