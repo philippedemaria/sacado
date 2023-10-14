@@ -1288,7 +1288,6 @@ def ask_school_adhesion(request):
 	except :
 		customer = False
  
-	print(customer)
  
 	context = {  'school' : school , 'form' : form , 'customer' : customer }
 	return render(request, 'school/ask_school_adhesion.html', context )

@@ -187,7 +187,10 @@ class Supportfile(models.Model):
 
     def qtype_logo(self):        
         Qtype = apps.get_model('tool', 'Qtype')
-        logo = Qtype.objects.get(pk=self.qtype).imagefile
+        if self.qtype < 100 : 
+            logo = Qtype.objects.get(pk=self.qtype).imagefile
+        else :
+            logo = False
         return logo
 
 
