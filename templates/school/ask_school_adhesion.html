@@ -125,7 +125,7 @@
         <div class="col-xs-6 col-md-6">
 
             <form action="{% url 'send_message' %}" method="post" class="alert alert-sacado" >
-              <p>Après l'envoi de cette demande, vous recevrez rapidement, à votre adresse mail, l'IBAN de l'association à transmettre à votre DAF. Nous contacter en cas de besoin avec le formulaire ci-dessous.</p>
+              <label>Nous contacter en cas de besoin avec le formulaire ci-dessous.</label>
               {% csrf_token %}
             <div class="form-group">
               <input type="hidden" name="name" class="form-control" id="name" value="{{ request.user }}" required />

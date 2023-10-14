@@ -7356,29 +7356,32 @@ def ajax_sort_exercise_from_admin(request):
 
 
 def show_exercise(request, id):
-    exercise = Exercise.objects.get(id=id)
+    try :
+        exercise = Exercise.objects.get(id=id)
 
-    request.session['level_id'] = exercise.level.id
-    form = AuthenticationForm() 
-    u_form = UserForm()
-    t_form = TeacherForm()
-    s_form = StudentForm()
+        request.session['level_id'] = exercise.level.id
+        form = AuthenticationForm() 
+        u_form = UserForm()
+        t_form = TeacherForm()
+        s_form = StudentForm()
 
-    context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 't_form' : t_form , 'levels' : [],   'communications' : [] , 'relationships' : []  }
- 
-    if exercise.supportfile.is_ggbfile :
-        wForm = None
-        url = "show_exercise.html" 
-    elif exercise.supportfile.is_python :
-        url = "basthon/index_shower.html"
-        wForm = None
-    else :
-        wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
-        context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 's_form' : s_form , 't_form' : t_form ,  'wForm' : wForm , 'levels' : [],   'communications' : [] , 'relationships' : []  }
-        url = "qcm/show_teacher_writing.html"  
+        context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 't_form' : t_form , 'levels' : [],   'communications' : [] , 'relationships' : []  }
+     
+        if exercise.supportfile.is_ggbfile :
+            wForm = None
+            url = "show_exercise.html" 
+        elif exercise.supportfile.is_python :
+            url = "basthon/index_shower.html"
+            wForm = None
+        else :
+            wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
+            context = {'exercise': exercise,   'form': form , 'u_form' : u_form , 's_form' : s_form , 's_form' : s_form , 't_form' : t_form ,  'wForm' : wForm , 'levels' : [],   'communications' : [] , 'relationships' : []  }
+            url = "qcm/show_teacher_writing.html"  
 
-    return render(request, url , context)
+        return render(request, url , context)
 
+    except : 
+        return redirect('index')
 
 
 def show_this_exercise(request, id):
