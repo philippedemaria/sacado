@@ -9,6 +9,16 @@
 {% block body %}
 
 
+<div style="border-left:15px black solid; float:left;width:130px; padding : 40px 0px 0px 2px; font-size:12px;">
+
+
+ Les enseignants sont des phares contre l'obscurantisme. SACADO s'accossie à la douleur de la famille, des amis et des collègues de Dominique Bernard.
+
+</div>
+
+
+
+
 {% if messages %}
 <ul class="messages" id="container_messages">
     {% for message in messages %}
@@ -41,17 +51,7 @@ Intro Section -
 <section id="intro" class="clearfix">
     <div class="container h-100">
         <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
-            {% comment %}  
-            <div class="col-xs-12 alert alert-sacado on_index"  style="font-size:18px" >
-                <span style="font-size: 30px"> <span class="sacado">SACADO</span> évolue en 2023.</span> 
-                Vous avez maintenant la possibilité de créer vos propres exercices, à <b>variables statiques</b> (mode basique) ou à <b>variables numériques aléatoires</b> ou <b>pseudo-aléatoires</b> (mode expert) parmi 17 types d'exercices (En version test).
-                <hr/>
-
-                Pensez à la <b>version Etablissement</b>. En quelques clics, récupérer tous les dossiers (parcours d'exercices et cours) créés par notre équipe, modifiables bien sûr. Pour obtenir la version établissement, créer un compte gratuitement et cliquer sur "Opter pour la version Etablissement".
-            </div>
-            {% endcomment %} 
-
-
+ 
             <div class="col-xs-12 col-md-12 col-lg-5">
  
                 <div class="title marginbottom50" style="clear: both; margin-bottom: 40px;">
@@ -66,16 +66,7 @@ Intro Section -
                     <div class="index_step" style="background-color: #0960B5">Nommer vos groupes</div> 
                     <div class="index_step"  style="background-color: #00B999">Choisir <br/>vos parcours</div>  
                     <div class="index_step"  style="background-color: #0093CA;padding-top:15px;">SACADO est prêt</div>
-
-
                 </div>
-                
-                {% comment %}
-                <div class="row alert alert-info" style="margin-top:0px">
-                    <a href="{% url 'academy'  %}" style="font-size:18px"><i class="bi bi-chevron-double-right"></i> L'équipe SacAdo lance <span class="sacado">SA</span>, la version pour accompagner les enfants pendant les vacances sur le chemin de la réussite en Mathématiques. Pour en savoir plus, cliquez ici. </a> 
-                </div>
-                {% endcomment %}
-
                 <div style="margin: 0px 0px 30px 0px; clear:both">
                     <i class="fa fa-apple"></i>
                     <a href="https://java.com/fr/download/help/mac_install.xml"
@@ -83,43 +74,6 @@ Intro Section -
                         <small>Pour safari, installer Java si nécessaire.</small>
                     </a>
                 </div>
-
-                {% comment %}
-                <div style="margin: 0px 0px 30px 0px;">
-                    Aujourd'hui, c’est le <b><a href="https://fr.wikimini.org/wiki/Suite_de_Fibonacci" target="_blank">Fibonacci Day</a></b> le 23 novembre, soit en écriture anglaise :  1 1 2 3 qui sont les premiers termes de la suite de Fibonacci.
-                </div>
-                <div class="row" style="margin-top:0px">
-                    <img src="{% static 'img/real_time.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/>  Suivis en<br/>   temps réel 
-                    <a href="#" data-toggle='modal' data-target='#rt_modal'>                          
-                          <i class="fa fa-question-circle"></i>
-                    </a> 
-
-                          <img src="{% static 'img/python_logo.png' %}" height="50px" width="50px" style="margin-left: 15px; margin-right: 10px; vertical-align: baseline"/>  Interface <br/> Python
-                    <a href="#" data-toggle='modal' data-target='#python_modal'>                          
-                            <i class="fa fa-question-circle"></i>
-                    </a> 
-                    <img src="{% static 'img/pronote.png' %}" height="50px" width="50px" style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/> Export CSV <br/>des résultats  
-
-                </div>
-                <div class="row" style="margin-top:30px">
- 
-                    <img src="{% static 'img/gar.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> 
-                    Correction <br/> en ligne
-                    
-                    <a href="#" data-toggle='modal' data-target='#correction_modal'><i class="fa fa-question-circle"></i></a> 
-
-                    <img src="{% static 'img/bibliotex.png' %}" height="50px" style="margin-left: 5px; margin-right: 10px; vertical-align: baseline"/> <span style="color:#333"><b>{{ nb_exotex }}</b> exercices en <br/>
-            
-                    <img src="{% static 'img/latex_project.png' %}" height="15px" style="vertical-align: bottom"/> imprimables  </span>
-                  <a href="#" data-toggle='modal'   data-target='#bibliotex_modal' >
-                    <i class="fa fa-question-circle"></i>
-                  </a> 
-                  <img src="{% static 'img/flash_accueil.png' %}" height="50px"   style="margin-left: 20px; margin-right: 10px; vertical-align: baseline"/>  
-                    Flashpacks <br/>et flashcards  <a href="#" data-toggle='modal'   data-target='#flashpack_modal'  ><i class="fa fa-question-circle"></i>
-                  </a> 
-                </div>
-
-                {% endcomment %}
             </div>
 
 
@@ -159,11 +113,8 @@ Intro Section -
                 </div>
             </div>
             <div class="col-xs-12 col-md-12 col-lg-8">
-
-                  <small style="margin-left:150px">Les établissements font confiance à <span class="">SACADO</span></small>
-
-                          {% include 'schools_slider.html'  %}
-
+                <small style="margin-left:150px">Les établissements font confiance à <span class="">SACADO</span></small>
+                {% include 'schools_slider.html'  %}
             </div>
         </div>
     </div>
