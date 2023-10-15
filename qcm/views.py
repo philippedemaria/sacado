@@ -1046,8 +1046,12 @@ def ajax_populate(request):
             r = Relationship.objects.get(parcours=parcours, exercise = exercise)  
             students = parcours.students.all()
             for student in students :
+                percent = student.percents.get(parcours=parcours)
+                percent.nb_total -= 1
+                if student.answers.filter(parcours=parcours, exercise = exercise) :
+                    percent.nb_done -= 1
+                percent.save()
                 r.students.remove(student)
-
             r.delete()         
             statut = 0
             data["statut"] = "False"
@@ -1056,6 +1060,8 @@ def ajax_populate(request):
             data["html"] = "<i class='fa fa-times'></i>"
             data["no_store"] = False
         except : pass
+
+
     else:
         statut = 1
         if Relationship.objects.filter(parcours_id=parcours_id , exercise__supportfile = exercise.supportfile ).count() == 0 :
@@ -1065,6 +1071,12 @@ def ajax_populate(request):
                 relation.skills.set(exercise.supportfile.skills.all())
                 students = parcours.students.all()
                 relation.students.set(students)
+
+                for student in students :
+                    percent = student.percents.get(parcours=parcours)
+                    percent.nb_total += 1
+                    percent.save()
+
             except :
                 pass
             data["statut"] = "True"
@@ -3001,7 +3013,7 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
-    levels          = teacher.levels.order_by("ranking")
+    levels = teacher.levels.order_by("ranking")
     ############################################################################################## 
     ################# ############## On regarde s'il existe un groupe  ###########################
     images = [] 
@@ -3062,7 +3074,10 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
             groups_students = set()
             for gid in group_ids :
                 group = Group.objects.get(pk = gid)
-                groups_students.update( group.students.all() )
+                grp_stds = group.students.all()
+                groups_students.update( grp_stds )
+                for std in grp_stds : 
+                    Percent.objects.get_or_create(parcours = nf , student = std , defaults = { 'nb_total' : 0 , 'nb_done' : 0 } )
 
      
             nf.students.set(groups_students)
@@ -3072,6 +3087,7 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
             coanim = set_coanimation_teachers(nf,  group_ids,teacher) 
             ################################################
             lock_all_exercises_for_student(nf.stop,nf)
+
 
 
             if nf.is_ia :

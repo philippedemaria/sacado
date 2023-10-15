@@ -4,9 +4,7 @@
      
 
 
-
 <div  class="box box-widget widget-user-2 folder_sorter height_max_box"  style="{% if parcours.vignette %}background-image: url('{{parcours.vignette.url }}');{% endif  %} background-size: 100% 100%;background-color:{{parcours.color }}"> 
-
     <div class="handler widget-user-header">
          {% include 'qcm/evaluation_tag_student_badge_and_trophy.html'  %}
     </div>
@@ -16,8 +14,8 @@
         <div class="parcours_tag_student_fermeture no_visu_on_load" ><i class="fa fa-times"></i> Fermer </div>
         <a href="{% url 'show_parcours_student' parcours.id   %}" style="color:{{ parcours.color|contrast_color }}">{{ parcours.title  }} <i class="bi bi-box-arrow-right"></i></a><br/> 
         <div style="font-size:16px">
-            {{  data_min.nb_exercise }} exercices 
-            <span class="pull-right" style="font-size:30px;color:#39fa5a;" >{{ data_min.pc }}%</span>
+            {{  data.nb_exercise }} exercices 
+            <span class="pull-right" style="font-size:30px;color:#39fa5a;" >{{ data.pc }}%</span>
         </div>
 
     </div> 

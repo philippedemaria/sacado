@@ -76,8 +76,6 @@ class School(models.Model):
         nb = {"nbt": nbt, "nbs": nbs}
         return nb
 
-
-
     def admin(self):
         users = self.users.filter(is_manager = 1).order_by("last_name")
         return users

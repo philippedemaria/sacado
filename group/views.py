@@ -17,7 +17,7 @@ from account.models import Student, Teacher, Parent, Adhesion, User, Resultknowl
 from account.forms import UserForm
 from group.models import * 
 from socle.models import Knowledge, Theme, Level, Skill
-from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker , Folder , Docperso
+from qcm.models import Exercise, Parcours, Relationship, Studentanswer, Resultexercise , Resultggbskill, Customexercise , Tracker , Folder , Docperso , Percent
 from group.forms import GroupForm , GroupTeacherForm
 from flashcard.models import Flashpack
 from sendmail.models import Email
@@ -168,6 +168,18 @@ def student_dashboard(request,group_id):
         messages.error(request,"Elève non identifié")
         template , context =  "dashboard.html" , False
         return template , context 
+
+    ### Peuplement de la table des % d'exercices faits
+    my_list, is_created = student.list_percent_exercise_to_parcours()
+    if is_created :
+        for [parcours , nb_total, nb_done ] in my_list :
+            Percent.objects.create(parcours = parcours , student = student , nb_total = nb_total,  nb_done = nb_done  ) 
+
+
+
+
+
+
 
     if int(group_id) > 0 :
 

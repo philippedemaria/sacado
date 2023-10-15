@@ -15,17 +15,18 @@
     <div class="row" id="mixedSlider">
         <div class="col-md-12 col-lg-12 col-xs-12 in_this_time_container MS-content"> 
             <div class="in_this_time">En ce moment </div>
-
             {% for parcours in parcourses_on_fire %}
+                {% get_percent parcours student as data %}
                 <div class="item">
-                {% if parcours.is_evaluation %}
+                {% if parcours.is_evaluation %} 
                     {% with evaluation=parcours %}
                         {% include 'qcm/evaluation_tag_student.html' %}
                     {% endwith %}
-                {% else %}                
+                {% else %}             
                     {% include 'qcm/parcours_tag_student_index.html' %}                
                 {% endif %}
                 </div>
+
             {% endfor  %}
             <!-- ******************************************************************************************** -->
         </div>

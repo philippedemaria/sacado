@@ -45,15 +45,15 @@
     <div class="row" id="mixedSlider">
         <div class="col-md-12 col-lg-12 col-xs-12 in_this_time_container MS-content"> 
             <div class="in_this_time">En ce moment : Lien direct vers les exercices </div>
-
+ 
             {% for parcours in parcourses_on_fire %}
-                <div class="item">
-                {% if parcours.is_evaluation %}
+                <div class="item">dddddd
+                {% if parcours.is_evaluation %} 
                     {% with evaluation=parcours %}
                         {% get_min_score parcours student as data_min %}
                         {% include 'qcm/evaluation_tag_student.html' %}
                     {% endwith %}
-                {% else %}  
+                {% else %}   
                     {% get_min_score parcours student as data_min %}        
                     {% include 'qcm/parcours_tag_student_index.html' %}                
                 {% endif %}
@@ -103,6 +103,7 @@
             {% endif %}  
 
             <!-- *************************************** Parcours ******************************************* -->
+            {%  comment %}
             {%  if sequences %}
             <div class="row"></div> 
                 <h2 class='thin'>Sequences</h2>
@@ -114,8 +115,8 @@
 
                 {% endfor  %}   
             {% endif %}  
-
-
+            {%  endcomment %}
+            <!-- *************************************** Parcours ******************************************* -->
             {%  if parcourses %}
             <div class="row"></div> 
                 <h2 class='thin'>Parcours</h2>

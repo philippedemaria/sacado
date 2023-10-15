@@ -929,36 +929,25 @@ class Parcours(ModelWithCode):
 
     def is_percent(self,student):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
- 
-        nb_relationships =  self.parcours_relationship.filter(students = student, is_publish=1,  exercise__supportfile__is_title=0 ).count()
-        nb_customs =  self.parcours_customexercises.filter(students = student, is_publish=1).count()
-
-        ## Nombre de réponse avec exercice unique du parcours
-        base = Studentanswer.objects.filter(student=student, parcours=self).values_list("exercise",flat=True).order_by("exercise").distinct()
-        nb_studentanswers = base.count()
-        nb_customanswerbystudent = Customanswerbystudent.objects.filter(student=student, customexercise__parcourses=self).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
-
         data = {}
         data["score_ggb"] = 0
 
+        percent = student.percents.get(parcours=self)
+        nb_done = percent.nb_done
+        nb_total = percent.nb_total
 
-        nb_exercise_done = nb_studentanswers + nb_customanswerbystudent
-        data["nb"] = nb_exercise_done
-        data["nb_total"] = nb_relationships + nb_customs
+        data["nb"] = nb_done
+        data["nb_total"] = nb_total
+
         try :
-            maxi = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
-            if int(nb_exercise_done * 100/(nb_relationships+nb_customs)) > 100:
-                maxi = 100
+            maxi = min( 100, int(nb_done * 100/nb_total) )
             data["pc"] = maxi
             data["opac"] = 0.3 + 0.7*maxi/100
         except :
             data["pc"] = 0
             data["opac"] = 1
-
+ 
         return data
-
-
-
 
 
     def get_details_for_min_score(self,student):
@@ -980,9 +969,7 @@ class Parcours(ModelWithCode):
         data["nb"] = nb_exercise_done
         data["nb_total"] = nb_relationships + nb_customs
         try :
-            maxi = int(nb_exercise_done * 100/(nb_relationships+nb_customs))
-            if int(nb_exercise_done * 100/(nb_relationships+nb_customs)) > 100:
-                maxi = 100
+            maxi = min( 100, int(nb_done * 100/nb_total) )
             data["pc"] = maxi
             data["opac"] = 0.3 + 0.7*maxi/100
         except :
@@ -990,6 +977,7 @@ class Parcours(ModelWithCode):
             data["opac"] = 1
 
         return data  ,  relationships , customs, answers ,  answers_c
+
 
 
     def min_score(self,student):
@@ -1013,7 +1001,6 @@ class Parcours(ModelWithCode):
         nb_exo_in_parcours = relationships.count()
         today = timezone.now()
 
-
         data["nb_cours"]     = self.course.filter( is_publish =1 ).count()
         data["nb_quizz"]     = self.quizz.filter( is_random = 0, is_publish = 1 ).count()
         data["nb_qflash"]    = self.quizz.filter( is_random = 1, is_publish = 1 ).count()
@@ -1021,7 +1008,6 @@ class Parcours(ModelWithCode):
         data["nb_bibliotex"] = self.bibliotexs.filter( is_publish =1, students = student ).count()
         data["nb_flashpack"] = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) ,  is_publish =1, students = student ).count()
         data["nb_docperso"]  = self.docpersos.filter(is_publish=1, students=student).count()
-
 
         try :
             stage =  student.user.school.aptitude.first()
@@ -1075,7 +1061,7 @@ class Parcours(ModelWithCode):
             data["label"] = "Explorateur"
             if student.user.civilite =="Mme": 
                 data["label"] = "Exploratrice"
- 
+
         return data
 
  
@@ -1678,7 +1664,7 @@ class Folder(models.Model):
 
 class Relationship(models.Model):
 
-    exercise      = models.ForeignKey(Exercise,  null=True, blank=True,   related_name='exercise_relationship', on_delete=models.CASCADE,  editable= False)
+    exercise      = models.ForeignKey(Exercise, on_delete=models.CASCADE,  null=True, blank=True,   related_name='exercise_relationship',  editable= False)
     parcours      = models.ForeignKey(Parcours, on_delete=models.CASCADE,  related_name='parcours_relationship',  editable= False)
     ranking       = models.PositiveIntegerField(default=0, editable=False)
     is_publish    = models.BooleanField(default=1)
@@ -2395,7 +2381,7 @@ class Customexercise(ModelWithCode):
     def nb_task_parcours_done(self, parcours):
         studentanswer_tab = []
         for s in parcours.students.all():
-            studentanswer = Studentanswer.objects.filter(exercise=self, student=s).first()
+            studentanswer = s.answers.filter(exercise=self).first()
             if studentanswer:
                 studentanswer_tab.append(studentanswer)
         nb_task_done = len(studentanswer_tab)
@@ -2408,7 +2394,7 @@ class Customexercise(ModelWithCode):
         try:
             custom_tab = []
             for s in group.students.all():
-                custom_answer = Customanswerbystudent.objects.filter(customexercise=self, student=s).first()
+                custom_answer = s.student_custom_answer.objects.filter(customexercise=self).first()
                 if custom_answer:
                     custom_tab.append(custom_answer)
             nb_task_done = len(custom_tab)
@@ -2680,6 +2666,29 @@ class Constraint(models.Model):
 
     def __str__(self):        
         return "{} à {}%".format(self.code , self.scoremin)
+
+
+########################################################################################################################################### 
+########################################################################################################################################### 
+########################################################   Optimisation     ############################################################### 
+########################################################################################################################################### 
+########################################################################################################################################### 
+
+class Percent(models.Model): # pourcentage d'exercices faits
+
+    parcours = models.ForeignKey(Parcours, related_name="percents", on_delete=models.CASCADE, editable= False) 
+    student  = models.ForeignKey(Student, related_name="percents", on_delete=models.CASCADE, editable= False) 
+    nb_total = models.PositiveIntegerField(default=30,  blank=True, editable= False) # Nombre total d'exercices  
+    nb_done  = models.PositiveIntegerField(default=1,  blank=True, editable= False) # Nombre d'exercices faits     
+ 
+
+    def __str__(self):        
+        return "{}, {}, {}".format(self.parcours , self.student , self.nb_total)
+
+
+    class Meta:
+        unique_together = ['parcours', 'student']
+
 
 ########################################################################################################################################### 
 ########################################################################################################################################### 

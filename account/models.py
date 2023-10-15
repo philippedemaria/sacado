@@ -449,6 +449,33 @@ class Student(ModelWithCode):
 
 
 
+    def list_percent_exercise_to_parcours(self):
+
+        my_list = list()
+        percents = self.percents.all() 
+        is_created = False
+
+
+        if percents :
+            for p in percents :
+                my_list.append([ p.parcours , p.nb_total , p.nb_done  ])
+
+        else :
+            all_parcours = self.students_to_parcours.all()
+            for parcours in all_parcours :
+                nb_relationships =  parcours.parcours_relationship.filter(students = self, is_publish=1,  exercise__supportfile__is_title=0 ).count()
+                nb_customs =  parcours.parcours_customexercises.filter(students = self, is_publish=1).count()
+                nb_total = nb_relationships + nb_customs
+
+                ## Nombre de réponse avec exercice unique du parcours
+                nb_studentanswers = self.answers.filter(parcours=parcours).values_list("exercise",flat=True).order_by("exercise").distinct().count()
+                nb_customanswerbystudent = self.student_custom_answer.filter(customexercise__parcourses=parcours).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
+                nb_done =  nb_studentanswers + nb_customanswerbystudent
+                my_list.append( [parcours , nb_total , nb_done] )
+            is_created = True
+
+        return my_list , is_created 
+
 
 
     def has_exercise(self, relationship):
