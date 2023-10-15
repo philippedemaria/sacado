@@ -182,6 +182,7 @@ def create_flashpack(request, idf=0):
             group_students.update(group.students.all())
         nf.students.set(group_students)
 
+
         if nf.is_global :
             messages.success(request, 'Le flashpack annuel est créé avec succès !')
             return redirect('my_flashpacks')
@@ -268,7 +269,8 @@ def create_flashpack_from_parcours(request, idp=0):
             group_students.update(group.students.all())
 
         nf.students.set(group_students)
-        
+ 
+
         messages.success(request, 'Le flashpack a été créé avec succès !')
         return redirect('set_flashcards_to_flashpack' , nf.id)
     else:

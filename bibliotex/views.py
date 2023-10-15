@@ -1048,8 +1048,7 @@ def create_bibliotex_sequence(request,id):
         relation = Relationship.objects.create(parcours = parcours , exercise_id = None , document_id = nf.id  , type_id = 5 , ranking =  200 , is_publish= 1 , start= None , date_limit= None, duration= 10, situation= 0 ) 
         students = parcours.students.all()
         relation.students.set(students)
-
-
+ 
         return redirect('exercise_bibliotex_peuplate', nf.id)
 
     else:
@@ -1346,6 +1345,7 @@ def create_bibliotex_from_parcours(request,idp=0):
         nf.groups.set(group_ids)
         nf.folders.set(folder_ids)
         all_students = affectation_students_folders_groups(nf,group_ids,folder_ids)
+ 
 
         return redirect('exercise_bibliotex_peuplate', nf.id)
 
@@ -1479,6 +1479,7 @@ def duplicate_bibliotex(request):
             students.update( folder.students.all() )
         for prc_id in parcourses :
             parcours = Parcours.objects.get(pk=prc_id)
+ 
             students.update( parcours.students.all() )
         for grp_id in groups :
             group = Group.objects.get(pk=grp_id)
@@ -1521,7 +1522,7 @@ def bibliotex_actioner(request):
     idbs = request.POST.getlist("selected_bibliotexs")
     if  request.POST.get("action") == "deleter" :  
         for idb in idbs :
-            bibliotex = Bibliotex.objects.get(id=idb) 
+            bibliotex = Bibliotex.objects.get(id=idb)
             bibliotex.coteachers.clear()
             bibliotex.folders.clear()
             bibliotex.groups.clear()
@@ -1699,10 +1700,6 @@ def link_to_relationship(request,idr):
     return render(request, 'bibliotex/form_link_to_relationship.html', context )
 
 
-
-
-
-
 def ajax_chargethemes(request):
     level_id =  request.POST.get("id_level")
     id_subject =  request.POST.get("id_subject")
@@ -1782,10 +1779,7 @@ def ajax_level_exotex(request):
             base = base.filter(Q(title__icontains=keyword)| Q(content_html__icontains=keyword)).order_by("theme","knowledge__waiting","knowledge","ranking")
 
         exotexs = base
-
         data['html'] = render_to_string('bibliotex/ajax_list_exercises.html', { 'bibliotex_id': bibliotex_id , 'exotexs': exotexs , "teacher" : teacher  })
-        
-        print("ici")
 
     else :
         knowledges = Knowledge.objects.values_list("id","name").filter(theme_id__in=theme_ids, level_id = level_id  ) 

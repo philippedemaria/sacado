@@ -1421,7 +1421,7 @@ def ajax_individualise(request):
                             data["alert"] = True
                         else :
                             data["alert"] = False
-
+ 
                     else : 
                         relationship.students.set(parcours.students.all())
                         for s in parcours.students.all():
@@ -1431,7 +1431,7 @@ def ajax_individualise(request):
                         data["class"] = "btn btn-success"
                         data["noclass"] = "btn btn-default"
                         data["alert"] = False
-
+ 
                 else :
                     student = Student.objects.get(pk = student_id)  
   
@@ -1450,19 +1450,21 @@ def ajax_individualise(request):
                             data["class"] = "btn btn-success"
                             data["noclass"] = "btn btn-default"
                             data["alert"] = True
-
+                        
                         update_parcourscreator_ia(relationship.exercise.knowledge , parcours, student, relationship.exercise.id , 0)
 
                     else:
                         relationship.students.add(student)
+
                         if Blacklist.objects.filter(relationship=relationship, student = student , customexercise = None   ).count()  > 0 :
                             Blacklist.objects.get(relationship=relationship, student = student , customexercise = None   ).delete()
                         data["statut"] = "True"
                         data["class"] = "btn btn-success"
                         data["noclass"] = "btn btn-default"
                         data["alert"] = False
-
+ 
                         update_parcourscreator_ia(relationship.exercise.knowledge , parcours, relationship.exercise.id , student, 1)
+
 
             if relationship.students.count() != relationship.parcours.students.count() :
                 data["indiv_nb"]   = relationship.students.count()
@@ -1629,7 +1631,6 @@ def ajax_individualise_this_exercise(request):
     else :
         students = rc.students.exclude(user__username__contains="_e-test").order_by("user__last_name") 
 
-
     data = {}
     data['html'] = render_to_string('qcm/ajax_individualise_this_exercise.html', {'rc' : rc, 'parcours' : parcours, 'students' : students, })
 
@@ -1651,7 +1652,6 @@ def ajax_individualise_this_document(request):
         students = group.students.exclude(user__username__contains="_e-test").order_by("user__last_name")
     else :
         students = rc.students.exclude(user__username__contains="_e-test").order_by("user__last_name") 
-
 
     data = {}
     data['html'] = render_to_string('qcm/ajax_individualise_this_document.html', {'rc' : rc, 'parcours' : parcours, 'students' : students, })
@@ -14139,6 +14139,7 @@ def create_docperso_parcours(request,idp=0):
             parcours = Parcours.objects.get(pk=idp)   
             nf.parcours.add(parcours)
             nf.students.set(parcours.students.all())
+
         if idg : 
             group = Group.objects.get(pk=idg)
             nf.groups.add(group)
@@ -14212,7 +14213,10 @@ def delete_docperso(request, idd, idp=0):
     idg = request.session.get("group_id",None)
     idf = request.session.get("folder_id",None)
     docperso.delete()
+
     group, folder, parcours = group_folder_parcours_exist(idg,idf,idp)
+
+
     return redirection_after_action(idg,idf,idp)
 
 

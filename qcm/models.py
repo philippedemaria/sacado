@@ -2677,6 +2677,7 @@ class Percent(models.Model): # pourcentage d'exercices faits
     bibliotex = models.PositiveIntegerField(default=1,  blank=True, editable= False)
     flashpack = models.PositiveIntegerField(default=1,  blank=True, editable= False)
     docperso  = models.PositiveIntegerField(default=1,  blank=True, editable= False)
+    today     = models.DateField(auto_now = True)
 
     def __str__(self):        
         return "Parcours : {}, Elève id : {}, exercice : {}, cours : {}, quizz : {}, qflash : {}, bibliotex : {}, flashpack : {}, docperso : {}".format(self.parcours , self.student , self.exercise , self.cours, self.quizz , self.qflash, self.bibliotex , self.flashpack, self.docperso)

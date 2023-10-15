@@ -451,40 +451,44 @@ class Student(ModelWithCode):
 
     def list_percent_exercise_to_parcours(self):
 
+
+        today = datetime.today().strftime('%Y-%m-%d')
         my_list = list()
-        percents = self.percents.all() 
+        percents = self.percents.filter(today=today) 
         is_created = False
 
+        try :
+            if percents :
+                for p in percents :
+                    my_list.append([ p.parcours , p.nb_total , p.nb_done  , p.cours  , p.quizz  , p.qflash , p.bibliotex , p.flashpack  , p.docperso  ])
 
-        if percents :
-            for p in percents :
-                my_list.append([ p.parcours , p.nb_total , p.nb_done  , p.cours  , p.quizz  , p.qflash , p.bibliotex , p.flashpack  , p.docperso  ])
+            else :            
+                all_parcours = self.students_to_parcours.filter(is_trash = 0, is_publish=1)
+                nb_parcours , nb_evaluations = 0 , 0
+                for parcours in all_parcours :
+                    nb_relationships =  parcours.parcours_relationship.filter(students = self, is_publish=1,  exercise__supportfile__is_title=0 ).count()
+                    nb_customs =  parcours.parcours_customexercises.filter(students = self, is_publish=1).count()
+                    nb_total = nb_relationships + nb_customs
 
-        else :
-            all_parcours = self.students_to_parcours.filter(is_trash = 0, is_publish=1)
-            nb_parcours , nb_evaluations = 0 , 0
-            for parcours in all_parcours :
-                nb_relationships =  parcours.parcours_relationship.filter(students = self, is_publish=1,  exercise__supportfile__is_title=0 ).count()
-                nb_customs =  parcours.parcours_customexercises.filter(students = self, is_publish=1).count()
-                nb_total = nb_relationships + nb_customs
+                    ## Nombre de réponse avec exercice unique du parcours
+                    nb_studentanswers = self.answers.filter(parcours=parcours).values_list("exercise",flat=True).order_by("exercise").distinct().count()
+                    nb_customanswerbystudent = self.student_custom_answer.filter(customexercise__parcourses=parcours).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
+                    nb_done =  nb_studentanswers + nb_customanswerbystudent
 
-                ## Nombre de réponse avec exercice unique du parcours
-                nb_studentanswers = self.answers.filter(parcours=parcours).values_list("exercise",flat=True).order_by("exercise").distinct().count()
-                nb_customanswerbystudent = self.student_custom_answer.filter(customexercise__parcourses=parcours).values_list("customexercise",flat=True).order_by("customexercise").distinct().count()
-                nb_done =  nb_studentanswers + nb_customanswerbystudent
+                    if parcours.is_evaluation : nb_evaluations += 1  
+                    else : nb_parcours += 1  
 
-                if parcours.is_evaluation : nb_evaluations += 1  
-                else : nb_parcours += 1  
+                    nb_cours = parcours.course.values_list("id").filter( is_publish=1 ).distinct().count()
+                    nb_quizz = parcours.quizz.values_list("id").filter( is_publish=1,is_random=0 ).distinct().count()
+                    nb_qflash  = parcours.quizz.values_list("id").filter( is_publish=1,is_random=1  ).distinct().count()
+                    nb_flashpack = parcours.flashpacks.filter(is_publish=1, students=self).count()
+                    nb_bibliotex = parcours.bibliotexs.filter(is_publish=1, students=self).count()
+                    nb_docperso  = parcours.docpersos.filter(is_publish=1, students=self).count()
 
-                nb_cours = parcours.course.values_list("id").filter( is_publish=1 ).distinct().count()
-                nb_quizz = parcours.quizz.values_list("id").filter( is_publish=1,is_random=0 ).distinct().count()
-                nb_qflash  = parcours.quizz.values_list("id").filter( is_publish=1,is_random=1  ).distinct().count()
-                nb_flashpack = parcours.flashpacks.filter(is_publish=1, students=self).count()
-                nb_bibliotex = parcours.bibliotexs.filter(is_publish=1, students=self).count()
-                nb_docperso  = parcours.docpersos.filter(is_publish=1, students=self).count()
-
-                my_list.append( [parcours , nb_total , nb_done,nb_cours  , nb_quizz  , nb_qflash , nb_bibliotex , nb_flashpack  , nb_docperso ] )
-            is_created = True
+                    my_list.append( [parcours , nb_total , nb_done,nb_cours  , nb_quizz  , nb_qflash , nb_bibliotex , nb_flashpack  , nb_docperso ] )
+                is_created = True
+        except :
+            pass
 
         return my_list , is_created 
 
