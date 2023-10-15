@@ -483,8 +483,6 @@ class Student(ModelWithCode):
                 nb_bibliotex = parcours.bibliotexs.filter(is_publish=1, students=self).count()
                 nb_docperso  = parcours.docpersos.filter(is_publish=1, students=self).count()
 
-
-
                 my_list.append( [parcours , nb_total , nb_done,nb_cours  , nb_quizz  , nb_qflash , nb_bibliotex , nb_flashpack  , nb_docperso ] )
             is_created = True
 
