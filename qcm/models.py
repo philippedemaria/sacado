@@ -1382,8 +1382,8 @@ class Folder(models.Model):
         data["nb_evaluations"] = nb_evaluations
         data["nb_cours"] = percent.cours
         data["nb_quizz"] = percent.quizz
-        data["nb_flashpack"] = percent.flashpacks
-        data["nb_bibliotex"] = percent.bibliotexs
+        data["nb_flashpack"] = percent.flashpack
+        data["nb_bibliotex"] = percent.bibliotex
         data["nb_docperso"]  = percent.docpersos
 
         try :
