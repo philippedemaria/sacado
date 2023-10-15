@@ -131,7 +131,7 @@
                                         </ul>
                                     {% elif teacher.groups.count > 0 and teacher.user.username|length < 50 and teacher.user.school.is_managing == 1 %} 
                                         <ul>
-                                            <li> <a href="#" class="btn btn-default" title="vous n'avez pas les droits pour créer un groupe"  > Nouveau groupe</a> </li>  
+                                            <li> <a href="#" class="btn btn-default" title="Seul votre administrateur peut créer des groupes via son espace Admin"  > Nouveau groupe</a> </li>  
                                         </ul>
                                     {% endif %}
                                     {% if hidden_groups %}

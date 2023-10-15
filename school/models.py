@@ -61,7 +61,7 @@ class School(models.Model):
     resiliation         = models.TextField( verbose_name="Motif de Résiliation", blank=True, default="")
     tiers               = models.PositiveIntegerField(default=411 ,  editable=False)
     is_primaire         = models.BooleanField(default=1 ,   editable=False)
-    is_managing         = models.PositiveIntegerField(default=1 ,   editable=False)
+    is_managing         = models.PositiveIntegerField(default=0 ,   editable=False)
 
     def __str__(self):
         return "{} - {} - {}".format(self.name, self.town, self.country.name)
