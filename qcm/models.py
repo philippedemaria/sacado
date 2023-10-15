@@ -946,7 +946,7 @@ class Parcours(ModelWithCode):
         except :
             data["pc"] = 0
             data["opac"] = 1
- 
+
         return data
 
 
@@ -1178,6 +1178,10 @@ class Parcours(ModelWithCode):
         return groups
 
 
+
+
+  
+
 #############################################################################################################################################
 #############################################################################################################################################
 ##############################               IA                             #################################################################
@@ -1348,35 +1352,39 @@ class Folder(models.Model):
         exercises = set()
 
         exs = set()
-        nb_exo_in_parcours , nb_cours , nb_quizz = 0 , 0 , 0
+        score , nb_exo_in_parcours , nb_done , nb_cours , nb_quizz , nb_parcours, nb_evaluations , nb_flashpack, nb_bibliotex , nb_docperso = 0, 0 , 0 , 0, 0 , 0 , 0, 0 , 0 , 0
         parcours_set = set()
         for p in self.parcours.filter(is_publish=1, students=student):
-            exos = p.exercises.filter(supportfile__is_title=0, supportfile__is_ggbfile=1 )
+            percent = p.percents.get(student=student)
+
             nb_cours += p.course.values_list("id").filter( is_publish=1 ).distinct().count()
             nb_quizz += p.quizz.values_list("id").filter( is_publish=1 ).distinct().count()
 
-            if exos.count() > 0 : 
-                exercises.update(exos)
+            nb_exo_in_parcours +=   percent.nb_total
+            nb_done +=   percent.nb_done 
 
-            nb_exo_in_parcours +=  p.parcours_relationship.filter(is_publish=1,students=student ).count()
-    
-            for exercise in exercises :
-                maxi = p.answers.filter(student=student, exercise = exercise )
-                if maxi.count()>0 :
-                    maximum = maxi.aggregate(Max('point'))
-                    max_tab.append(maximum["point__max"])
-                    nb_done +=1
 
-        data["nb_parcours"]    = self.parcours.filter(is_evaluation = 0, is_publish=1, students=student).count()
-        data["nb_evaluations"] = self.parcours.filter(is_evaluation = 1, is_publish=1, students=student).count()
+            if p.is_evaluation : nb_evaluations+=1
+            else : nb_parcours+=1
 
-        data["nb_cours"] = nb_cours
-        data["nb_quizz"] = nb_quizz
 
-        data["nb_flashpack"] = self.flashpacks.filter(is_publish=1, students=student).count()
-        data["nb_bibliotex"] = self.bibliotexs.filter(is_publish=1, students=student).count()
-        data["nb_docperso"]  = self.docpersos.filter(is_publish=1, students=student).count()
+            nb_cours += percent.cours
+            nb_quizz += percent.quizz
+            nb_flashpack += percent.flashpacks
+            nb_bibliotex += percent.bibliotexs
+            nb_docperso  += percent.docpersos 
 
+            for relationship in p.parcours_relationship.all() :
+                point = Resultexercise.objects.get(student=student, exercise=relationship.exercise).point
+                if point > score : score = point
+
+        data["nb_parcours"]    = nb_parcours
+        data["nb_evaluations"] = nb_evaluations
+        data["nb_cours"] = percent.cours
+        data["nb_quizz"] = percent.quizz
+        data["nb_flashpack"] = percent.flashpacks
+        data["nb_bibliotex"] = percent.bibliotexs
+        data["nb_docperso"]  = percent.docpersos
 
         try :
             stage =  student.user.school.aptitude.first()
@@ -1398,13 +1406,6 @@ class Folder(models.Model):
 
         if nb_done == nb_exo_in_parcours :
             data["size"] = "40px"
-          
-            max_tab.sort()
-            try :
-                score = max_tab[0]
-            except :
-                score = None
-
             data["boolean"] = True
 
             if score :
@@ -1419,19 +1420,9 @@ class Folder(models.Model):
             else :
                 data["colored"] = "red"
 
-
-
         ### Si l'elève a fait plus de la moitié des exercices du parcours
         elif nb_done > nb_exo_in_parcours // 2 :
             data["size"] = "20px"
-
-            max_tab.sort()
-
-            if len(max_tab)>0 :
-                score = max_tab[0]
-            else :
-                score = None
-
             data["boolean"] = True
             if score :
                 if score > up :
@@ -2676,20 +2667,24 @@ class Constraint(models.Model):
 
 class Percent(models.Model): # pourcentage d'exercices faits
 
-    parcours = models.ForeignKey(Parcours, related_name="percents", on_delete=models.CASCADE, editable= False) 
-    student  = models.ForeignKey(Student, related_name="percents", on_delete=models.CASCADE, editable= False) 
-    nb_total = models.PositiveIntegerField(default=30,  blank=True, editable= False) # Nombre total d'exercices  
-    nb_done  = models.PositiveIntegerField(default=1,  blank=True, editable= False) # Nombre d'exercices faits     
- 
+    parcours  = models.ForeignKey(Parcours, related_name="percents", on_delete=models.CASCADE, editable= False) 
+    student   = models.ForeignKey(Student, related_name="percents", on_delete=models.CASCADE, editable= False) 
+    nb_total  = models.PositiveIntegerField(default=30,  blank=True, editable= False) # Nombre total d'exercices  
+    nb_done   = models.PositiveIntegerField(default=1,  blank=True, editable= False) # Nombre d'exercices faits     
+    cours     = models.PositiveIntegerField(default=1,  blank=True, editable= False)
+    quizz     = models.PositiveIntegerField(default=1,  blank=True, editable= False)
+    qflash    = models.PositiveIntegerField(default=1,  blank=True, editable= False)
+    bibliotex = models.PositiveIntegerField(default=1,  blank=True, editable= False)
+    flashpack = models.PositiveIntegerField(default=1,  blank=True, editable= False)
+    docperso  = models.PositiveIntegerField(default=1,  blank=True, editable= False)
 
     def __str__(self):        
-        return "{}, {}, {}".format(self.parcours , self.student , self.nb_total)
-
+        return "Parcours : {}, Elève id : {}, exercice : {}, cours : {}, quizz : {}, qflash : {}, bibliotex : {}, flashpack : {}, docperso : {}".format(self.parcours , self.student , self.exercise , self.cours, self.quizz , self.qflash, self.bibliotex , self.flashpack, self.docperso)
 
     class Meta:
         unique_together = ['parcours', 'student']
-
-
+ 
+ 
 ########################################################################################################################################### 
 ########################################################################################################################################### 
 ########################################################   Demande d'exo    ############################################################### 

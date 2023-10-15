@@ -172,13 +172,8 @@ def student_dashboard(request,group_id):
     ### Peuplement de la table des % d'exercices faits
     my_list, is_created = student.list_percent_exercise_to_parcours()
     if is_created :
-        for [parcours , nb_total, nb_done ] in my_list :
-            Percent.objects.create(parcours = parcours , student = student , nb_total = nb_total,  nb_done = nb_done  ) 
-
-
-
-
-
+        for [parcours , nb_total , nb_done, nb_cours  , nb_quizz  , nb_qflash , nb_bibliotex , nb_flashpack  , nb_docperso] in my_list :
+            Percent.objects.create(parcours = parcours , student = student , nb_total = nb_total,  nb_done = nb_done , cours = nb_cours  , quizz = nb_quizz  , qflash = nb_qflash , bibliotex = nb_bibliotex , flashpack = nb_flashpack  , docperso = nb_docperso ) 
 
 
     if int(group_id) > 0 :
