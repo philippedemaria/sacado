@@ -1378,8 +1378,12 @@ class Folder(models.Model):
             nb_docperso  += percent.docperso
 
             for relationship in p.parcours_relationship.all() :
-                point = Resultexercise.objects.get(student=student, exercise=relationship.exercise).point
-                if point > score : score = point
+                try : 
+                    re = Resultexercise.objects.get_or_create(student=student, exercise=relationship.exercise, defaults = { 'point' : 0 } )
+                    point = re.point
+                    if point > score : score = point
+                except :
+                    point = score
 
         data["nb_parcours"]    = nb_parcours
         data["nb_evaluations"] = nb_evaluations
