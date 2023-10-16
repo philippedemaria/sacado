@@ -1358,7 +1358,9 @@ class Folder(models.Model):
         score , nb_exo_in_parcours , nb_done , nb_cours , nb_quizz , nb_parcours, nb_evaluations , nb_flashpack, nb_bibliotex , nb_docperso = 0, 0 , 0 , 0, 0 , 0 , 0, 0 , 0 , 0
         parcours_set = set()
         for p in self.parcours.filter(is_publish=1, students=student):
-            percent = p.percents.get(student=student)
+
+
+            percent,created = Percent.objects.get_or_create(student=student,parcours=p, defaults={ 'nb_total' : p.parcours_relationship.count(), 'nb_done' : 0 , 'cours': 1 , 'quizz' : 1 , 'qflash': 1 , 'bibliotex' : 1 ,  'flashpack': 1 , 'docperso' : 1   })
 
             nb_cours += p.course.values_list("id").filter( is_publish=1 ).distinct().count()
             nb_quizz += p.quizz.values_list("id").filter( is_publish=1 ).distinct().count()
@@ -1379,7 +1381,7 @@ class Folder(models.Model):
 
             for relationship in p.parcours_relationship.all() :
                 try : 
-                    re = Resultexercise.objects.get_or_create(student=student, exercise=relationship.exercise, defaults = { 'point' : 0 } )
+                    re,creat = Resultexercise.objects.get_or_create(student=student, exercise=relationship.exercise, defaults = { 'point' : 0 } )
                     point = re.point
                     if point > score : score = point
                 except :
