@@ -931,10 +931,13 @@ class Parcours(ModelWithCode):
         ## Nombre de relationships dans le parcours => nbre  d'exercices
         data = {}
         data["score_ggb"] = 0
-
-        percent = student.percents.get(parcours=self)
-        nb_done = percent.nb_done
-        nb_total = percent.nb_total
+        try :
+            percent = student.percents.get(parcours=self)
+            nb_done = percent.nb_done
+            nb_total = percent.nb_total
+        except :
+            nb_done = 0
+            nb_total = 1
 
         data["nb"] = nb_done
         data["nb_total"] = nb_total
