@@ -1373,9 +1373,9 @@ class Folder(models.Model):
 
             nb_cours += percent.cours
             nb_quizz += percent.quizz
-            nb_flashpack += percent.flashpacks
-            nb_bibliotex += percent.bibliotexs
-            nb_docperso  += percent.docpersos 
+            nb_flashpack += percent.flashpack
+            nb_bibliotex += percent.bibliotex
+            nb_docperso  += percent.docperso
 
             for relationship in p.parcours_relationship.all() :
                 point = Resultexercise.objects.get(student=student, exercise=relationship.exercise).point
@@ -1387,7 +1387,7 @@ class Folder(models.Model):
         data["nb_quizz"] = percent.quizz
         data["nb_flashpack"] = percent.flashpack
         data["nb_bibliotex"] = percent.bibliotex
-        data["nb_docperso"]  = percent.docpersos
+        data["nb_docperso"]  = percent.docperso
 
         try :
             stage =  student.user.school.aptitude.first()
