@@ -121,6 +121,8 @@ urlpatterns = [
     path('create_appliquette/<int:idl>', create_appliquette, name='create_appliquette'),
     path('update_appliquette/<int:ida>', update_appliquette, name='update_appliquette'),
     path('delete_appliquette/<int:ida>', delete_appliquette, name='delete_appliquette'),
+    path('show_appliquette/<int:ida>', show_appliquette, name='show_appliquette'),
+
 
     path('display_details_bloc_by_qr/<int:idbl>', display_details_bloc_by_qr, name='display_details_bloc_by_qr'),
     path('display_details_bloc_correction/<int:idbl>', display_details_bloc_correction, name='display_details_bloc_correction'),

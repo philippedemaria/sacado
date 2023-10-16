@@ -32,7 +32,7 @@
                   <thead>
                       <tr>
                         <th style="width:10px">Forme</th>                       
-                        <th  style="width:200px">Titre</th>                  
+                        <th  style="width:250px">Titre</th>                  
                         <th>url</th> 
                         <th>iframe</th>
                       </tr>
@@ -42,8 +42,9 @@
                         <tr> 
                           <td>{{ appliquette.forme }}</td>
                           <td>
-                              <a href="{% url 'update_appliquette' appliquette.level.id %}">{{ appliquette.title }} </a> 
-                              <a href="{% url 'delete_appliquette' appliquette.level.id %}"  onclick="return TestDelete('ce niveau')"><i class='fa fa-trash pull-right'></i></a>
+                              <a href="{% url 'update_appliquette' appliquette.id %}">{{ appliquette.title }} </a> 
+                              <a href="{% url 'delete_appliquette' appliquette.id %}"  onclick="return TestDelete('ce niveau')"><i class='fa fa-trash pull-right'></i></a>
+                              <a href="{% url 'show_appliquette' appliquette.id %}" target="_blank"><i class='fa fa-eye pull-right'></i></a>
                           </td>
                           <td>
                              {{ appliquette.url }}

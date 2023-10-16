@@ -1687,6 +1687,22 @@ def delete_appliquette(request,ida):
     return redirect('list_appliquettes', level_id)
 
 
+
+def show_appliquette(request,ida):
+
+    app = Appliquette.objects.get(id=ida)
+
+    context = { 'app' : app }
+
+    return render(request, 'book/show_appliquette.html', context )
+
+
+
+
+
+
+
+
 @csrf_exempt
 def ajax_display_correcion_bloc(request):
 
