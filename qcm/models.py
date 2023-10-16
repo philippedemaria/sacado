@@ -1387,11 +1387,12 @@ class Folder(models.Model):
 
         data["nb_parcours"]    = nb_parcours
         data["nb_evaluations"] = nb_evaluations
-        data["nb_cours"] = percent.cours
-        data["nb_quizz"] = percent.quizz
-        data["nb_flashpack"] = percent.flashpack
-        data["nb_bibliotex"] = percent.bibliotex
-        data["nb_docperso"]  = percent.docperso
+
+        data["nb_cours"] = nb_cours
+        data["nb_quizz"] = nb_quizz
+        data["nb_flashpack"] = nb_flashpack
+        data["nb_bibliotex"] = nb_bibliotex
+        data["nb_docperso"]  = nb_docperso
 
         try :
             stage =  student.user.school.aptitude.first()
