@@ -4515,6 +4515,7 @@ def list_sf_bo(request,slug):
         teacher = Teacher.objects.get(user=user)
         subjects = teacher.subjects.all()
     except :
+        messages.error(request,"Erreur... Vous ne semblez pas être un enseignant....")
         return redirect('index')
 
     levels =  Level.objects.exclude(pk=13)
