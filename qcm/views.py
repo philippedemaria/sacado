@@ -8915,9 +8915,8 @@ def store_the_score_relation_ajax(request):
             relationship_students_done.students_done.add(student)
             ##########################################################
 
-            try : r_exo_student = Resultexercise.objects.get(exercise  = relation.exercise , student  = student)
-            except : r_exo_student = Resultexercise.objects.filter(exercise  = relation.exercise , student  = student).last()
-            if r_exo_student.point < score : 
+            r_exo_student, created = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student,  defaults = {'point' : score} )
+            if not created and r_exo_student.point < score : 
                 r_exo_student.point = score
                 r_exo_student.save()
 
