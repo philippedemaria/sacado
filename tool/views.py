@@ -4510,11 +4510,14 @@ def list_sf_bo(request,slug):
     try : ids, idl = slug.split("-")
     except : idl = False
 
-    user = request.user    
-    teacher = Teacher.objects.get(user=user)
-    subjects = teacher.subjects.all()
-    levels =  Level.objects.exclude(pk=13)
+    try :
+        user = request.user    
+        teacher = Teacher.objects.get(user=user)
+        subjects = teacher.subjects.all()
+    except :
+        return redirect('index')
 
+    levels =  Level.objects.exclude(pk=13)
 
     if idl : 
         level = Level.objects.get(pk=idl)
