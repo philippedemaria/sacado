@@ -608,7 +608,7 @@ class Parcours(ModelWithCode):
     is_trash = models.BooleanField(default=0, verbose_name="Poubelle ?", editable=False)
     is_sequence = models.BooleanField(default=0, verbose_name="Séquence d'apprentissage ?", editable=False)
 
-
+    is_full_display = models.BooleanField(default=1, blank=True,  editable=False)
     is_testpos = models.BooleanField(default=0, verbose_name="Test de positionnement ?", editable=False)
     target_id  = models.PositiveIntegerField( blank=True, null=True, editable=False , verbose_name="Parcours cible") 
 

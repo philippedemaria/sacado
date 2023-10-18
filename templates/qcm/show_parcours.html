@@ -142,10 +142,13 @@ body{
                         {% else %}
                             <a href="{% url 'change_publications_in_all_relationships' 0 parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-toggle-on" style="margin-right: 0px"></i> <span class="btn_label">Gérer les publications</span></a> 
                             <a href="{% url 'change_situations_in_all_relationships' 0 parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-123"></i> <span class="btn_label">Gérer le nombre de situations</span></a> 
-                            <a href="{% url 'change_durations_in_all_relationships' 0 parcours.id  %}"class="btn btn-xs btn-sacado" ><i class="bi bi-clock"></i> <span class="btn_label">Gérer les durées</span></a> 
+                            <a href="{% url 'change_durations_in_all_relationships' 0 parcours.id  %}"class="btn btn-xs btn-sacado" ><i class="bi bi-clock"></i> <span class="btn_label">Gérer les durées</span></a>
+
+
                         {% endif %}
 
 
+                            <a href="javascript:void(0);" id="display_exercises_parcours" data-parcours_id="{{parcours.id}}"  class="btn btn-xs btn-{% if parcours.is_full_display %}sacado{% else %}danger{% endif %}" ><i class="bi bi-eye"></i><span id="display_exercises_spinner"></span> <span class="btn_label">Montrer seulement les exercices publiés</span></a>  
 
 
                         {% if parcours.is_ia and parcours.is_testpos %}
@@ -168,7 +171,7 @@ body{
                         {% elif parcours.is_ia and not parcours.is_testpos %}
 
                                 {% if folder %}
-                                <a href="{% url 'show_parcours' folder.id  parcours.testpositionnement.id class="btn btn-xs btn-sacado" %}" ><b>IA</b> <span class="btn_label"> Voir le test de positionnement</span></a>  
+                                <a href="{% url 'show_parcours' folder.id  parcours.testpositionnement.id %}"  class="btn btn-xs btn-sacado"><b>IA</b> <span class="btn_label"> Voir le test de positionnement</span></a>  
                                 {% else %}
                                 <a href="{% url 'show_parcours' 0  parcours.testpositionnement.id  %}" class="btn btn-xs btn-sacado"><b>IA</b><span class="btn_label">  Voir le test de positionnement</span></a>    
                                 {% endif %}
@@ -181,6 +184,8 @@ body{
                         <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" ><i class="bi bi-123"></i> <span class="btn_label">Gérer le nombre de situations</span></a> 
 
                         <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" ><i class="bi bi-clock"></i> <span class="btn_label">Gérer les durées</span></a> 
+
+                        <a href="#" class="btn btn-xs btn-sacado  no_sacado_asso" ><i class="bi bi-eye"></i> <span class="btn_label">Montrer seulement les exercices publiés</span></a>  
      
                         {% if parcours.is_ia and parcours.is_testpos %}
                             <a  href="#" class="btn btn-xs btn-sacado no_sacado_asso"><b>IA</b> <span class="btn_label">Voir le parcours lié à ce test</span></a>  

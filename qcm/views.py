@@ -4205,7 +4205,12 @@ def show_parcours(request, idf = 0, id=0):
         return redirect('index')
  
     #relationships_customexercises , nb_exo_only, nb_exo_visible  = ordering_number(parcours)
-    relationships_customexercises = parcours.parcours_relationship.prefetch_related('exercise__supportfile').order_by("ranking")
+
+    if parcours.is_full_display :
+        relationships_customexercises = parcours.parcours_relationship.prefetch_related('exercise__supportfile').order_by("ranking")
+    else :
+        relationships_customexercises = parcours.parcours_relationship.filter(is_publish=1).prefetch_related('exercise__supportfile').order_by("ranking")
+
     relationships_customexercises_nb = relationships_customexercises.exclude(exercise__supportfile__is_title=1).count()
 
 
@@ -4385,6 +4390,12 @@ def result_parcours_exercises(request, idf = 0, id=0):
         students =  parcours.only_students(group)
 
     relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+
+    if parcours.is_full_display :
+        relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+    else :
+        relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0,is_publish=1).prefetch_related('exercise').order_by("ranking")
+
     customexercises = parcours.parcours_customexercises.all() 
 
     listing = []
@@ -4512,7 +4523,6 @@ def show_parcours_student(request, id):
 def show_folder_student(request, id):
 
     folder = Folder.objects.get(id=id)
- 
 
     user = request.user
     student = user.student
@@ -4705,13 +4715,18 @@ def result_parcours(request, id, is_folder):
         folder = Folder.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, folder)
         students = folder.only_students_folder() # liste des élèves d'un parcours donné 
-        relationships = Relationship.objects.filter(parcours__in=folder.parcours.all(),exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours__in=folder.parcours.all()).prefetch_related('exercise').order_by("ranking")
         target = folder
     else :
         parcours = Parcours.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, parcours)
         students =  parcours.only_students(group)
-        relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+ 
+        if parcours.is_full_display :
+            relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+        else :
+            relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0,is_publish=1).prefetch_related('exercise').order_by("ranking")
+
         target = parcours
 
     themes_tab, historic = [],  []
@@ -5703,6 +5718,42 @@ def ajax_is_calculator(request):
     return JsonResponse(data) 
 
 
+
+
+@csrf_exempt # Autorise ou pas la calculatrice dans une relationship
+def ajax_full_display(request):  
+
+    parcours_id = int(request.POST.get("parcours_id",None))
+    teacher = request.user.teacher
+    today = time_zone_user(request.user)
+    data = {}
+    parcours = Parcours.objects.get(pk = parcours_id)
+    this_test = not parcours.is_full_display
+    parcours.is_full_display = this_test
+    parcours.save()
+
+    if this_test :
+        relationships = parcours.parcours_relationship.order_by("ranking")
+    else :
+        relationships = parcours.parcours_relationship.filter(is_publish=1).order_by("ranking")
+
+    role, group , group_id , access = get_complement(request, teacher, parcours)
+
+    folder_id = request.session.get("folder_id",None) 
+    if folder_id : folder = Folder.objects.get(pk=folder_id)
+    else : folder = None
+ 
+
+
+    context = { 'parcours': parcours, 'teacher': teacher,  'today' : today , 'relationships' : relationships , 
+                'group_id': group_id, 'group': group,   'folder' : folder     }
+
+
+    data['html'] = render_to_string('qcm/ajax_display_relationship.html', context)
+
+    return JsonResponse(data) 
+
+
 @csrf_exempt # PublieDépublie un exercice depuis organize_parcours
 def ajax_course_sorter(request):  
 
@@ -5892,9 +5943,6 @@ def ajax_publish_parcours(request):
     return JsonResponse(data) 
 
  
- 
-
-
 
 @csrf_exempt   # PublieDépublie un parcours depuis form_group et show_group
 def ajax_sharer_parcours(request):  
@@ -5902,8 +5950,6 @@ def ajax_sharer_parcours(request):
     parcours_id = request.POST.get("parcours_id")
     statut = request.POST.get("statut")
     is_folder = request.POST.get("is_folder")
-
-    print(is_folder,statut,parcours_id)
 
     data = {}
     if statut=="true" or statut == "True":
@@ -6158,6 +6204,8 @@ def ajax_skills(request):
 
     return JsonResponse(data) 
 
+
+
 def aggregate_parcours(request):
 
     code = request.POST.get("parcours")
@@ -6168,6 +6216,8 @@ def aggregate_parcours(request):
         parcours.students.add(student)
 
     return redirect("index") 
+
+
 
 def ajax_parcoursinfo(request):
 
@@ -6186,9 +6236,9 @@ def ajax_parcoursinfo(request):
     except :
             data['htmlg'] = "<br><i class='fa fa-times text-danger'></i> Parcours inconnu."
  
-
- 
     return JsonResponse(data)
+
+
 
 def ajax_detail_parcours(request):
 
@@ -6256,7 +6306,6 @@ def ajax_detail_parcours(request):
                 student["nb"] = 0  
             stats.append(student)
 
- 
         context = { 'parcours': parcours, 'exercise':exercise ,  'stats': stats ,  'today' : today ,  'num_exo':num_exo , 'relationship':relationship, 'communications' : [] , }
 
         data['html'] = render_to_string('qcm/ajax_detail_parcours.html', context)
@@ -11859,6 +11908,7 @@ def export_result_parcours_exercises(request):
 
 
     parcours      = Parcours.objects.get(pk = parcours_id)  
+
 
     relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
     customexercises = parcours.parcours_customexercises.all() 

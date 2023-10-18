@@ -41,13 +41,39 @@ define(['jquery', 'bootstrap'], function ($) {
                     )
                 });
 
+ 
 
 
+        $(document).on('click', '#display_exercises_parcours', function (event) {
 
+            let parcours_id = $(this).data("parcours_id");
+            let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
+            $('#display_exercises_spinner').append("<i class='fa fa-spinner fa-pulse'></i>") ;
+            $.ajax(
+                {
+                    type: "POST",
+                    dataType: "json",
+                    traditional: true,
+                    data: {
+                        'parcours_id'  : parcours_id,                
+                        csrfmiddlewaretoken: csrf_token
+                    },
+                    url : "../../ajax_full_display" ,
+                    success: function (data) {
 
-
-
+                        $("#exercise_sorter").html(data.html) ;
+                        if ($("#display_exercises_parcours").hasClass("btn-sacado")) {
+                            $("#display_exercises_parcours").removeClass("btn-sacado").addClass("btn-danger");
+                        }
+                        else {
+                            $("#display_exercises_parcours").removeClass("btn-danger").addClass("btn-sacado");
+                        }
+                        $('#display_exercises_spinner').html("") ;
+                    }
+                }
+            )
+        });
 
 });
 

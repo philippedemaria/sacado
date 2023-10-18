@@ -154,6 +154,8 @@ urlpatterns = [
 
     path('ajax_is_calculator', ajax_is_calculator, name='ajax_is_calculator'), 
 
+    path('ajax_full_display', ajax_full_display, name='ajax_full_display'), 
+
     path('ajax_reset_this_exercise', ajax_reset_this_exercise, name='ajax_reset_this_exercise'),
 
     path('real_time/<int:id>', real_time, name='real_time'),
