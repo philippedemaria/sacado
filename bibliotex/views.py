@@ -723,8 +723,11 @@ def update_exotex(request, id):
 def delete_exotex(request, id):
     exotex = Exotex.objects.get(id=id)
     level_id = exotex.knowledge.level.id
-    if request.user == exotex.author.user :
+    if request.user == exotex.author.user or request.user.is_superuser :
+        messages.success(request,"Exercice en Tex supprimé")
         exotex.delete()
+    else :
+        messages.error(request,"Errue de suppression")
 
     return redirect('admin_exotexs', level_id)
 
