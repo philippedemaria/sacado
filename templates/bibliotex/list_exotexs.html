@@ -76,7 +76,7 @@
                                                 <i class="bi bi-arrows-move"></i>
                                                 <a href="#" data-exotex_id="{{ exotex.id }}"  class="btn btn-sacado pull-right projection_exotex_admin"><i class='bi bi-webcam'></i></a>
                                                 <a href="{% url 'exotex_display_pdf' exotex.id %}" target="_blank" class="btn btn-sacado pull-right"><i class='bi bi-file-pdf'></i></a>
-                                                {% if request.user.is_superuser %}
+                                                {% if request.user.is_superuser or request.user.is_extra  %}
                                                 <input type="number" class="sort_exotex pull-right" id="sort_exotex"  name="sort_exotex" value="{{ exotex.ranking }}" min=1 data-exotex_id="{{ exotex.id }}"/>
                                                 <a href="{% url 'delete_exotex' exotex.id %}" class="btn btn-danger pull-right"><i class='bi bi-trash'></i></a>                                                
                                                 {% endif %}
