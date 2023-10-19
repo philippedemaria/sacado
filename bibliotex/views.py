@@ -672,6 +672,8 @@ def create_exotex(request):
         save_html = compile_html(request,nf)
 
         if save_html :
+            msg = "Bonjour l'équipe,\n\n Un exercice Tex vient d'être posté par "+ request.user.get_full_name() +".\n\nPour le visualiser : https://sacado.xyz/bibliotex/exercise_exotex_update/"+str(nf.id)+" .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
+            sending_mail("SACADO : Exercice TEX ",  msg  , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"])    
             messages.success(request, "L'exercice a été créé avec succès !")
         else :
             messages.error(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")
@@ -701,6 +703,9 @@ def update_exotex(request, id):
             save_html = compile_html(request,nf)
 
             if save_html :
+                msg = "Bonjour l'équipe,\n\n Un exercice Tex vient d'être modifié avec succès par "+ request.user.get_full_name() +".\n\nPour le visualiser : https://sacado.xyz/bibliotex/exercise_exotex_update/"+str(nf.id)+" .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
+                sending_mail("SACADO : Exercice TEX modifié",  msg  , settings.DEFAULT_FROM_EMAIL , ["sacado.asso@gmail.com"]) 
+
                 messages.success(request, "L'exercice a été créé avec succès !")
             else :
                 messages.error(request,"Le contenu html ne s'est pas enregistré. Modifier l'exercice et changer l'encodage.")

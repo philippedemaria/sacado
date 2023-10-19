@@ -6936,9 +6936,8 @@ def create_supportfile(request,qtype,ids):
 
 
             try :
-                msg = "Bonjour l'équipe,\n\n Un exercice vient d'être posté.\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+nf.id+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
-                if user.email :
-                    send_mail('SACADO : Exercice Perso', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
+                msg = "Bonjour l'équipe,\n\n Un exercice Perso vient d'être posté par "+teacher.user.get_full_name()+".\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+str(nf.id)+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
+                send_mail('SACADO : Exercice Perso', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
             except :
                 pass
             return redirect('my_own_exercises' )
@@ -7056,9 +7055,8 @@ def update_supportfile(request, id, redirection=0):
                     if formset.is_valid():
                         formset.save()
             try :
-                msg = "Bonjour l'équipe,\n\n Un exercice vient d'être modifié.\n\nPour le visualiser : https://sacado.xyz/qcm/show_this_supportfile/"+nf.id+"/ .\n\nCeci est un mail automatique. Merci de ne pas répondre."
-                if user.email :
-                    send_mail('SACADO : Exercice Perso', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
+                msg = "Bonjour l'équipe,\n\n Un exercice vient d'être modifié.\n\nPour le visualiser : https://sacado.xyz/qcm/show_this_supportfile/"+str(nf.id)+"/ .\n\nCeci est un mail automatique. Merci de ne pas répondre."
+                send_mail('SACADO : Exercice Perso', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
             except :
                 pass
 
@@ -8108,7 +8106,7 @@ def write_exercise(request,id): # Coté élève
             w_f.save()
 
             ### Envoi de mail à l'enseignant
-            msg = "Exercice : "+str(unescape_html(cleanhtml(relationship.exercise.supportfile.annoncement)))+"\n Parcours : "+str(relationship.parcours.title)+", posté par : "+str(student.user) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
+            msg = "Exercice : "+str(unescape_html(cleanhtml(relationship.exercise.supportfile.annoncement)))+"\n Parcours : "+str(relationship.parcours.title)+", posté par : "+str(student.user.get_full_name()) +"\n\n sa réponse est \n\n"+str(wForm.cleaned_data['answer'])
             if relationship.parcours.teacher.notification :
                 sending_mail("SACADO Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [relationship.parcours.teacher.user.email] )
                 pass
@@ -9001,7 +8999,7 @@ def store_the_score_relation_ajax(request):
                     name_title = relation.exercise.supportfile.annoncement
                 else :
                     name_title = knowledge.name
-                msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Parcours : "+str(relation.parcours.title)+"\n Fait par : "+str(student.user)+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
+                msg = "Exercice : "+str(unescape_html(cleanhtml(name_title)))+"\n Parcours : "+str(relation.parcours.title)+"\n Fait par : "+str(student.user.get_full_name())+"\n Nombre de situations : "+str(numexo)+"\n Score : "+str(score)+"%"+"\n Temps : "+str(convert_seconds_in_time(timer))
                 rec = []
                 for g in student.students_to_group.filter(teacher = relation.parcours.teacher):
                     if not g.teacher.user.email in rec : 
@@ -10459,7 +10457,7 @@ def asking_parcours_sacado(request,pk):
     else :
         test_string = "Je ne parviens pas à récupérer les exercices."    
 
-    msg = "Je souhaite utiliser les parcours Sacado de mon niveau de "+str(level)+", mon enseignant ne les utilise pas. "+test_string+" Merci.\n\n"+str(student)
+    msg = "Je souhaite utiliser les parcours Sacado de mon niveau de "+str(level)+", mon enseignant ne les utilise pas. "+test_string+" Merci.\n\n"+str(student.user.get_full_name())
 
     sending_mail("Demande de parcours SACADO",  msg , settings.DEFAULT_FROM_EMAIL , ["brunoserres33@gmail.com", "sacado.asso@gmail.com"] )
 
