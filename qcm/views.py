@@ -8961,8 +8961,6 @@ def store_the_score_relation_ajax(request):
             relationship_students_done = Relationship.objects.get(exercise  = relation.exercise , parcours  = relation.parcours)
             relationship_students_done.students_done.add(student)
 
-            try : Percent.objects.filter(parcours = relation.parcours , student = student).update( nb_done=F("nb_done") + 1 ) 
-            except : pass
             ##########################################################
 
             r_exo_student, created = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student,  defaults = {'point' : score} )
