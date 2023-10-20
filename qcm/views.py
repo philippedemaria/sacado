@@ -9,7 +9,7 @@ from django.contrib.auth.forms import  AuthenticationForm
 from django.forms.models import modelformset_factory
 from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import  permission_required,user_passes_test, login_required
-from django.db.models import Q , Sum , Avg
+from django.db.models import Q , Sum , Avg , F
 from django.core.mail import send_mail
 from django.http import JsonResponse 
 from django.core import serializers
@@ -4743,7 +4743,7 @@ def result_parcours(request, id, is_folder):
                 theme["name"]= thm.name
                 themes_tab.append(theme)
 
-    form = EmailForm(request.POST or None )
+    form  = EmailForm(request.POST or None )
     stage = get_stage(teacher.user)
 
     context = {   'relationships': relationships, 'parcours': target, 'students': students, 'themes': themes_tab, 'form': form,  'group_id' : group_id  , 'stage' : stage, 'communications' : [] , 'role' : role }
@@ -8960,6 +8960,9 @@ def store_the_score_relation_ajax(request):
 
             relationship_students_done = Relationship.objects.get(exercise  = relation.exercise , parcours  = relation.parcours)
             relationship_students_done.students_done.add(student)
+
+            try : Percent.objects.filter(parcours = relation.parcours , student = student).update( nb_done=F("nb_done") + 1 ) 
+            except : pass
             ##########################################################
 
             r_exo_student, created = Resultexercise.objects.get_or_create(exercise  = relation.exercise , student  = student,  defaults = {'point' : score} )

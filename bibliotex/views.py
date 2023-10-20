@@ -2289,14 +2289,11 @@ def ajax_individualise(request):
                 data["class"] = "btn btn-success"
                 data["noclass"] = "btn btn-default"
                 data["alert"] = False
- 
 
     return JsonResponse(data)
 
 
         
-
-
 
 def ajax_individualise_exotex(request):
     """ A partir d'un exotex """

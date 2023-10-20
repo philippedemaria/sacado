@@ -3,7 +3,6 @@
 
  
 
-{% if relationship.parcours.is_evaluation  %}
 
     {% get_score_student_for_this  relationship  student as score %}
 
@@ -22,7 +21,7 @@
               target="_blank" >
      
 
-                  {{ score.point }}<div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}</div>
+                  {{ score.point }}<div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}<br/>{{ score.date }}</div>
 
      
 
@@ -33,31 +32,6 @@
         </a>
     {% endif %}
 
-{% else %} 
 
-      {% get_score  relationship.exercise  student as score %}
-
-      {% if score > 0 %}
-          <a class="helper_tip markdown
-                  {% if score < stage.low %}
-                   red 
-                  {% elif score < stage.medium  %}
-                  orange
-                  {% elif score < stage.up  %}
-                  green
-                  {% else %}
-                  darkgreen
-                  {% endif %}"
-                href="{% url 'show_this_exercise'  relationship.exercise.id   %}" 
-                target="_blank" >
-                    {{ score }}<div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}</div>
-          </a>
-      {% else %}
-          <a class="markdown helper_tip" href="{% url 'show_this_exercise'  relationship.exercise.id   %}" target="_blank"  >
-              <div class="helper_tip_text">{{ relationship.exercise.knowledge.name }}</div>
-          </a>
-      {% endif %}
-
-{% endif %}
 
 
