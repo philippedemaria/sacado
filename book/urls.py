@@ -39,7 +39,7 @@ urlpatterns = [
     path('chapter_chrono_concept_document/<int:idb>/<int:idch>', chapter_chrono_concept_document, name='chapter_chrono_concept_document'),
 
     path('print_latex_to_pdf/<int:idch>/<int:idp>', print_latex_to_pdf , name='print_latex_to_pdf'), 
-
+    path('print_latex_to_tex/<int:idch>/<int:idp>', print_latex_to_tex , name='print_latex_to_tex'), 
 
     #################################################################
     # document

@@ -288,6 +288,9 @@ class Page(models.Model):
         if self.css == 'parcoursu_page_top' : return 'course_page_u_main'
         elif self.css == 'parcoursd_page_top' : return 'course_page_d_main'
         elif self.css == 'parcourst_page_top' : return 'course_page_t_main'
+        elif self.css == 'ad_page_top' : return 'course_page_ad_main'
+        elif self.css == 'auto_page_top' : return 'course_page_a_main'
+        elif self.css == 'algo_page_top' : return 'course_page_al_main'
         else :  return ''
 
 
