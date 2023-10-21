@@ -35,21 +35,18 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 }
 
 .to_sorter_div_left{
-	left:30px;
 	top:30px;
 	position: absolute;
 	z-index: 10;
 }
 
 .to_sorter_div{
-	left:30px;
 	top:60px;
 	position: absolute;
 	z-index: 10;
 }
 
 .to_sorter_div_sub_left{
-	left:30px;
 	top:90px;
 	position: absolute;
 	z-index: 10;
