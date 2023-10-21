@@ -1203,7 +1203,7 @@ def print_latex_to_tex(request,idch,idp):
         file.write(elements)
         file.close()
 
-    return FileResponse( open(file_path+".tex",'rb') , as_attachment=True, filename="Source_Tex")
+    return FileResponse( open(file_path+".tex",'rb') , as_attachment=True, filename="Source_Tex.tex")
 
 
 #################################################################
