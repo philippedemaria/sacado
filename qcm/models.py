@@ -1011,7 +1011,8 @@ class Parcours(ModelWithCode):
         data["nb_bibliotex"] = self.bibliotexs.filter( is_publish =1, students = student ).count()
         data["nb_flashpack"] = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) ,  is_publish =1, students = student ).count()
         data["nb_docperso"]  = self.docpersos.filter(is_publish=1, students=student).count()
-
+        try : data["pc"] = int(ceil(nb_done/nb_exo_in_parcours))
+        except : data["pc"] = 0
         try :
             stage =  student.user.school.aptitude.first()
             up    = stage.up

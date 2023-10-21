@@ -43,7 +43,6 @@
              <!-- ******************************************************************************************** -->
             <!-- *************************************** Parcours ******************************************* -->
             {% for group in groups %}
- 
                 {% get_documents_counter_by_student  student group as dataset  %}
                 {% if dataset.is_display %}
                 <div  class="box box-widget widget-user-2 folder_sorter"   
