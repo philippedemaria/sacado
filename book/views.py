@@ -1071,7 +1071,7 @@ def print_latex_to_pdf(request,idch,idp):
             if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
             elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
             for bloc in paragraph.blocs.order_by("ranking"):
-                
+
                 elements += r"\begin{minipage}{"+str(round(bloc.size/12,1)).replace(",",".") +r"\linewidth}"
                 elements +=  bloc.typebloc_latex()
                 elements += r"\end{minipage}"
@@ -1188,9 +1188,6 @@ def print_latex_to_tex(request,idch,idp):
                 for a in appliquettes :
                     elements +=  r" sacado.xyz/a/"+str(a.code)+" | "
 
-
-
-
     elements +=  r"\end{document}"
     ################################################################# 
     ###########################################
@@ -1206,7 +1203,7 @@ def print_latex_to_tex(request,idch,idp):
         file.write(elements)
         file.close()
 
-    return FileResponse(open(file_path+".tex", 'rb'))
+    return FileResponse(open(file_path+".tex", mode='t', encoding='UTF-8'))
 
 
 #################################################################
