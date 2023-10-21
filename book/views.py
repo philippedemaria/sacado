@@ -1140,22 +1140,50 @@ def print_latex_to_tex(request,idch,idp):
             for paragraph in page.paragraphs.order_by("ranking"):
                 if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
                 elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
+ 
                 for bloc in paragraph.blocs.order_by("ranking"):
-                    elements += r"\begin{minipage}{"+str(round(bloc.size/12,1)).replace(",",".") +r"\linewidth}"
-                    elements +=  bloc.typebloc_latex()
-                    elements += r"\end{minipage}"
+
                     exercises = bloc.exercises.all() 
                     exotexs = bloc.exotexs.all()
                     appliquettes = bloc.appliquettes.all()
 
-                    if exercises.count() + exotexs.count() + appliquettes.count() > 0 : elements += r'\textbf{Supports} : '
+                    if bloc.size != 12 :
+                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,1)).replace(",",".") +r"\linewidth}"
 
-                    for e in bloc.exercises.all() :
-                        elements +=  "Exe : "+e.supportfile.code +" | "
-                    for e in bloc.exotexs.all() :
-                        elements +=  "ExoTex : "+e.id +" | "
-                    for a in bloc.appliquettes.all() :
-                        elements +=  r" https://sacado.xyz/a/"+str(a.code)+" | "
+                        elements +=  bloc.typebloc_latex()
+
+                        if bloc.correction :
+                            elements += r"\textbf{Corrigé} : sacado.xyz/c/"+str(bloc.id)+" || "
+
+                        if exercises.count() + exotexs.count() + appliquettes.count() > 0 : elements += r'\textbf{Supports} : '
+
+                        for e in exercises :
+                            elements +=  "exe : "+e.supportfile.code +" | "
+                        for e in exotexs :
+                            elements +=  "tex : "+e.id +" | "
+                        for a in appliquettes :
+                            elements +=  r" /a/"+str(a.code)+" | "
+
+                        elements += r"\end{minipage}\hfill"
+
+
+                    else : 
+
+                        elements += "  "
+                        elements +=  bloc.typebloc_latex()
+
+                        if bloc.correction :
+                            elements += r"\textbf{Corrigé} : sacado.xyz/c/"+str(bloc.id)+" || "
+
+                        if exercises.count() + exotexs.count() + appliquettes.count() > 0 : elements += r'\textbf{Supports} : '
+
+                        for e in exercises :
+                            elements +=  "exe : "+e.supportfile.code +" | "
+                        for e in exotexs :
+                            elements +=  "tex : "+e.id +" | "
+                        for a in appliquettes :
+                            elements +=  r" sacado.xyz/a/"+str(a.code)+" | "
+
             elements += r"\newpage"
 
     elif idp :
