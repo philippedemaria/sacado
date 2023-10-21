@@ -1199,11 +1199,11 @@ def print_latex_to_tex(request,idch,idp):
     file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+str(idp)
     ################################################################# 
     ################################################################# 
-    with open(file_path+".tex" , 'w') as file:
+    with open(file_path+".tex" , 'w', encoding='UTF-8') as file:
         file.write(elements)
         file.close()
 
-    return FileResponse(open(file_path+".tex", mode='t', encoding='UTF-8'))
+    return FileResponse(open(file_path+".tex",'rb'))
 
 
 #################################################################
