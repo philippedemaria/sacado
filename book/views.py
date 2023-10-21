@@ -1122,13 +1122,7 @@ def print_latex_to_pdf(request,idch,idp):
 def print_latex_to_tex(request,idch,idp):
 
 
-    preamb = settings.TEX_PREAMBULE_PDF_FILE
-
-    entetes=open(preamb,"r")
-    elements=entetes.read()
-    entetes.close()
-    elements +=r"\begin{document}"+"\n"  
-
+    elements =" "  
 
     if idch :
  
@@ -1237,7 +1231,6 @@ def print_latex_to_tex(request,idch,idp):
                     for a in appliquettes :
                         elements +=  r" sacado.xyz/a/"+str(a.code)+" | "
 
-    elements +=  r"\end{document}"
     ################################################################# 
     ###########################################
     ###################### Attention ERREUR si non modif
