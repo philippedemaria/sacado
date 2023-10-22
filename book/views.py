@@ -1122,7 +1122,7 @@ def print_latex_to_pdf(request,idch,idp):
 def print_latex_to_tex(request,idch,idp):
 
 
-    elements =" "  
+    elements =""  
 
     if idch :
  
@@ -1159,7 +1159,6 @@ def print_latex_to_tex(request,idch,idp):
                             elements +=  r" /a/"+str(a.code)+" | "
 
                         elements += r"\end{minipage}\hfill"
-
 
                     else : 
 
@@ -1216,7 +1215,6 @@ def print_latex_to_tex(request,idch,idp):
 
                 else : 
 
-                    elements += "  "
                     elements +=  bloc.typebloc_latex()
 
                     if bloc.correction :
