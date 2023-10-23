@@ -1711,9 +1711,7 @@ def paypal_module(request):
 	school     = user.school
 	accounting = Accounting.objects.filter(school=school).last()
 	amount     = accounting.amount
-
-	amount +="0"
-
+ 
 	context    = {'user':user,  'school' : school , 'accounting' : accounting , 'amount' : amount }
 
 	return render(request,'school/paypal_module.html', context)
