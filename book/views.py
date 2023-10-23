@@ -1341,7 +1341,7 @@ def update_page(request,idb, idp):
     chapter = page.chapter 
 
     form_page = PageForm(request.POST or None,book=book, instance=page)
-    form_p  = ParagraphForm(request.POST or None)
+    form_p  = ParagraphForm(request.POST or None,book=book)
     form_b  = BlocForm(request.POST or None,book=book,page=page)
     form_tb = TypeblocForm(request.POST or None)
 
@@ -1514,7 +1514,7 @@ def ajax_create_exercise_from_scratch(request):
 def create_paragraph(request, idb):
 
     book = Book.objects.get(pk=idb)
-    form = ParagraphForm(request.POST or None )
+    form = ParagraphForm(request.POST or None,book=book )
 
     if form.is_valid():
         form.save()
@@ -1535,7 +1535,7 @@ def update_paragraph(request,idb, idp, idpa):
     book = Book.objects.get(pk=idb)
     page = Page.objects.get(pk=idp)
     paragraph = Paragraph.objects.get(id=idpa)
-    form = ParagraphForm(request.POST or None,  instance=paragraph )
+    form = ParagraphForm(request.POST or None,  instance=paragraph,book=book )
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save(commit=False)

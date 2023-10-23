@@ -91,6 +91,15 @@ class ParagraphForm(forms.ModelForm):
 		model = Paragraph
 		fields = '__all__'
 
+	def __init__(self, *args, **kwargs):
+
+		book = kwargs.pop('book')
+
+		super(ParagraphForm, self).__init__(*args, **kwargs)
+		pages = Page.objects.filter(chapter__in=book.chapters.all()).order_by("number")
+		self.fields['page'] = forms.ModelChoiceField(queryset=pages)  
+
+
 
 
 class BlocForm(forms.ModelForm):

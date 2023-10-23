@@ -90,7 +90,7 @@
     {% if n == 0 %}
     <div class="col-xs-12 col-md-12">
         <table class="table borderless">
-        {% for chapter in book.chapters.all %}
+        {% for chapter in book.chapters.all|dictsort:"ranking" %}
             <tr>
                 <td width='450px'>{{ forloop.counter0 }}. {{ chapter }} 
                     <a href="{% url 'delete_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-trash"></i>
