@@ -886,27 +886,30 @@ def send_message(request):
     token = request.POST.get("token", None)
 
     if token :
-        if int(token) == 7 :
-            if message:
-                #### Si c'est un établissement qui fait une demande 
-                school_datas = ""
-                if not subject :
-                    subject = "Adhésion SACADO - demande d'IBAN"
-                    school_id = request.session.get("inscription_school_id",None)
-                    if not school_id:
-                        school_id = request.POST.get("inscription_school_id",None)
-                    if school_id :
-                        school = School.objects.get(pk = school_id)
-                        school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
-                ############################################################  
+        try :
+            if int(token) == 7 :
+                if message:
+                    #### Si c'est un établissement qui fait une demande 
+                    school_datas = ""
+                    if not subject :
+                        subject = "Adhésion SACADO - demande d'IBAN"
+                        school_id = request.session.get("inscription_school_id",None)
+                        if not school_id:
+                            school_id = request.POST.get("inscription_school_id",None)
+                        if school_id :
+                            school = School.objects.get(pk = school_id)
+                            school_datas = "\n"+school.name +"\n"+school.code_acad +  " - " + str(school.nbstudents) +  " élèves \n" + school.address +  "\n"+school.town+", "+school.country.name
+                    ############################################################  
 
-                send_mail(subject,
-                            message+" \n\n Ce mail est envoyé à partir de l'adresse : " + email + "\n\n" + school_datas,
-                          settings.DEFAULT_FROM_EMAIL,
-                          ["sacado.asso@gmail.com" ])
-                messages.success(request,"Message envoyé..... Merci. L'équipe Sacado.")
+                    send_mail(subject,
+                                message+" \n\n Ce mail est envoyé à partir de l'adresse : " + email + "\n\n" + school_datas,
+                              settings.DEFAULT_FROM_EMAIL,
+                              ["sacado.asso@gmail.com" ])
+                    messages.success(request,"Message envoyé..... Merci. L'équipe Sacado.")
 
-        else :
+            else :
+                messages.error(request,"Erreur d'opération....")
+        except :
             messages.error(request,"Erreur d'opération....")
     else :
         messages.error(request,"Oubli de token.")
