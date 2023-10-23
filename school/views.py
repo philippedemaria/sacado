@@ -1710,8 +1710,8 @@ def paypal_module(request):
 	user       = request.user
 	school     = user.school
 	accounting = Accounting.objects.filter(school=school).last()
-	amount     = accounting.amount
- 
+	amount     = str(round(float(str(accounting.amount)) * 1.03,1))
+
 	context    = {'user':user,  'school' : school , 'accounting' : accounting , 'amount' : amount }
 
 	return render(request,'school/paypal_module.html', context)
