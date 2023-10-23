@@ -92,14 +92,11 @@
         <table class="table borderless">
         {% for chapter in book.chapters.all|dictsort:"ranking" %}
             <tr>
-                <td width='450px'>{{ forloop.counter0 }}. {{ chapter }} 
-                    <a href="{% url 'delete_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-trash"></i>
-                    <a href="{% url 'update_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-pencil"></i>
+                <td width='400px'>{{ forloop.counter0 }}. {{ chapter }} 
                 </td>
-                <td width='40px'><a href="{% url 'create_page' book.id chapter.id %}" class="btn btn-sacado">+</a></td>
                 <td id="this_page_is_sorter{{ chapter.id }}" data-chapter_id="{{ chapter.id }}" class="book_sorter_page">
                     {% for page in chapter.pages.all|dictsort:"number" %}
-                        <a href="{% url 'update_page' book.id page.id %}" data-page_id="{{ page.id }}"  target="_blank"
+                        <a href="{% url 'show_student_book' book.id page.number %}" data-page_id="{{ page.id }}"  target="_blank"
                            class="btn btn-{{ page.css }} sorter_items_pages">{{ page.number }}</a>
                     {% endfor %}
                 </td>

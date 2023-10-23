@@ -1710,7 +1710,7 @@ def paypal_module(request):
 	user       = request.user
 	school     = user.school
 	accounting = Accounting.objects.filter(school=school).last()
-	amount     = str(round(float(str(school.fee())) * 1.03,1))
+	amount     = accounting.amount
 
 	amount +="0"
 

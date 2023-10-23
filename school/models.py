@@ -128,14 +128,14 @@ class School(models.Model):
     def fee(self):
         """ cotisation pour un établissement suivant le nombre de ses élèves"""
         if self.nbstudents < 150 : f = 0
-        elif self.nbstudents < 500 : f = 100
-        elif self.nbstudents < 1000 : f = 200
-        elif self.nbstudents < 1500 : f = 300
-        elif self.nbstudents < 2000 : f = 400
-        elif self.nbstudents < 2500 : f = 500
-        elif self.nbstudents < 3000 : f = 600
-        elif self.nbstudents < 4000 : f = 700
-        elif self.nbstudents < 4500 : f = 800
+        elif self.nbstudents < 501 : f = 100
+        elif self.nbstudents < 1001 : f = 200
+        elif self.nbstudents < 1501 : f = 300
+        elif self.nbstudents < 2001 : f = 400
+        elif self.nbstudents < 2501 : f = 500
+        elif self.nbstudents < 3001 : f = 600
+        elif self.nbstudents < 4001 : f = 700
+        elif self.nbstudents < 4501 : f = 800
         else : f = 900
         return f
 
