@@ -72,6 +72,8 @@
 
 {% block body  %}  
 <section class="content_main"> 
+
+
     <div class="row">
         <div class="col-xs-12 col-md-12">
             {% for fpage in first_pages %}
@@ -84,6 +86,30 @@
         </div>
     </div>
     <hr/>
+
+    {% if n == 0 %}
+    <div class="col-xs-12 col-md-12">
+        <table class="table borderless">
+        {% for chapter in book.chapters.all %}
+            <tr>
+                <td width='450px'>{{ forloop.counter0 }}. {{ chapter }} 
+                    <a href="{% url 'delete_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-trash"></i>
+                    <a href="{% url 'update_student_book_chapter' book.id chapter.id %}" class="pull-right"><i class="bi bi-pencil"></i>
+                </td>
+                <td width='40px'><a href="{% url 'create_page' book.id chapter.id %}" class="btn btn-sacado">+</a></td>
+                <td id="this_page_is_sorter{{ chapter.id }}" data-chapter_id="{{ chapter.id }}" class="book_sorter_page">
+                    {% for page in chapter.pages.all|dictsort:"number" %}
+                        <a href="{% url 'update_page' book.id page.id %}" data-page_id="{{ page.id }}"  target="_blank"
+                           class="btn btn-{{ page.css }} sorter_items_pages">{{ page.number }}</a>
+                    {% endfor %}
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+
+
+
+    {% else %}
     <div class="row">
         <div class="col-xs-12 {% if page in first_pages %}col-md-12{% else %}col-md-6{% endif %} this_page_left {{ page.body_css }}">
             <div class="{{ page.css}}">
@@ -217,8 +243,8 @@
             {% endfor %}
         </div>
         {% endif %} 
-
     </div>
+    {% endif %}
 </section>
 
 
