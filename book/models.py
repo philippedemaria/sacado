@@ -427,9 +427,18 @@ class Bloc(models.Model):
 
         splitter = self.title.split(".")
 
-        if len(splitter)>1 : stringer = r" \begin{GeneriqueT}{"+splitter[0]+r"}{"+splitter[1]+r"}"+self.content+r"\end{GeneriqueT} "
-        else : stringer = r" \begin{GeneriqueT}{"+self.title+r"}{\;}"+self.content+r"\end{GeneriqueT} "
+        details = ""
+        if self.correction :
+            details += r"\href{https://sacado.xyz/c/"+str(self.id)+r"}{COR} "
+        for e in self.exercises.all() :
+            details +=  r"\href{https://sacado.xyz/show_exercise_to_tex/"+str(e.supportfile.code)+r"}{E} "
+        for e in self.exotexs.all() :
+            details +=  r"\href{https://sacado.xyz/exercise_exotex_show/"+str(e.id)+r"}{E-Tex} "
+        for a in self.appliquettes.all() :
+            details +=  r"\href{https://sacado.xyz/a/"+str(a.code)+r"}{App} "
 
+        if len(splitter)>1 : stringer = r" \begin{GeneriqueT}{"+splitter[0]+r"}{"+splitter[1]+" "+details+" "+ r"}"+self.content+r"\end{GeneriqueT} "
+        else : stringer = r" \begin{GeneriqueT}{"+self.title+r"}{\;}"+self.content+r"\end{GeneriqueT} "
 
         #return r"\begin{"+suffixe+r"}{"+self.title+r"}"+self.content+r"\end{"+suffixe+r"}"
         return stringer

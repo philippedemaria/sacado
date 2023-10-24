@@ -9482,6 +9482,31 @@ def ajax_search_exercise(request):
 
 
  
+def show_exercise_to_tex(request,code):
+
+    if code : code = code.lower() 
+    knowledges = Knowledge.objects.values_list('id',flat=True).filter(name__contains= code).distinct()
+
+    if (knowledges.count())>2:
+        return redirect ('index' )  
+    else :
+        try :
+            if request.user.user_type == 0 :
+                student = True
+                parcourses = request.user.student.students_to_parcours.values_list('id',flat=True).filter(is_publish=1).distinct()
+
+            elif request.user.user_type == 2 :
+                student = False
+                parcourses = request.user.teacher.teacher_parcours.values_list('id',flat=True).distinct()
+
+            relationships = Relationship.objects.filter(Q(exercise__knowledge_id__in = knowledges)|Q(exercise__supportfile__annoncement__contains= code)|Q(exercise__supportfile__code__contains= code) , parcours_id__in=parcourses)
+
+
+            context = { 'relationships' : relationships , 'parcourses' : parcourses , 'student' : student }
+            return render ('qcm/show_exercise_from_tex.html', context )  
+        except :
+            return redirect ('index' )  
+
 
 
  

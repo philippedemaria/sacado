@@ -105,7 +105,7 @@ urlpatterns = [
 
 
     #path('show_inside_parcours/<int:idf>/<int:idp>/<slug:code>', show_inside_parcours, name='show_inside_parcours'),
-
+    path('show_exercise_to_tex/<slug:code>', show_exercise_to_tex, name='show_exercise_to_tex'),
 
     
     path('parcours_clone/<int:id>/<int:course_on>', clone_parcours, name='clone_parcours'),
