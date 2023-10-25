@@ -1428,9 +1428,7 @@ def update_paragraph(request,idb, idp, idpa):
     form = ParagraphForm(request.POST or None,  instance=paragraph,book=book )
     if request.method == "POST" :
         if form.is_valid():
-            nf = form.save(commit=False)
-            nf.page=page
-            nf.save()
+            form.save()
             messages.success(request, 'Le paragraphe a été modifié avec succès !')
             return redirect('update_page',idb,idp)
         else:
