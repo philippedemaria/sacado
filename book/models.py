@@ -429,13 +429,13 @@ class Bloc(models.Model):
 
         details = ""
         if self.correction :
-            details += r"\href{https://sacado.xyz/c/"+str(self.id)+r"}{C.} "
+            details += r" \href{https://sacado.xyz/c/"+str(self.id)+r"}{C.} "
         for e in self.exercises.all() :
-            details +=  r"\href{https://sacado.xyz/show_exercise_to_tex/"+str(e.supportfile.code)+r"}{E.} "
+            details +=  r" \href{https://sacado.xyz/show_exercise_to_tex/"+str(e.supportfile.code)+r"}{E.} "
         for e in self.exotexs.all() :
-            details +=  r"\href{https://sacado.xyz/exercise_exotex_show/"+str(e.id)+r"}{E-Tex.} "
+            details +=  r" \href{https://sacado.xyz/exercise_exotex_show/"+str(e.id)+r"}{E-Tex.} "
         for a in self.appliquettes.all() :
-            details +=  r"\href{https://sacado.xyz/a/"+str(a.code)+r"}{App.} "
+            details +=  r" \href{https://sacado.xyz/a/"+str(a.code)+r"}{App.} "
 
         if len(splitter)>1 : stringer = r" \begin{GeneriqueT}{"+splitter[0]+r"}{"+splitter[1]+" "+details+" "+ r"}"+self.content+r"\end{GeneriqueT} "
         else : stringer = r" \begin{GeneriqueT}{"+self.title+r"}{"+details+r"}"+self.content+r"\end{GeneriqueT} "
