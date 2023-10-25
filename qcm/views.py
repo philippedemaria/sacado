@@ -6936,7 +6936,9 @@ def create_supportfile(request,qtype,ids):
 
 
             try :
-                msg = "Bonjour l'équipe,\n\n Un exercice Perso vient d'être posté par "+teacher.user.get_full_name()+".\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+str(nf.id)+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
+                if teacher.user.email : email = teacher.user.email
+                else : email = ""
+                msg = "Bonjour l'équipe,\n\n Un exercice Perso vient d'être posté par "+teacher.user.get_full_name()+" : "+email+" .\n\nPour le visualiser : https://sacado.xyz/qcm/show_all_type_exercise/"+str(nf.id)+"/ .\n\nCet exercice n'est pas encore mutualisé.\n\nCeci est un mail automatique. Merci de ne pas répondre."
                 send_mail('SACADO : Exercice Perso', msg ,settings.DEFAULT_FROM_EMAIL,['sacado.asso@gmail.com', ])
             except :
                 pass
