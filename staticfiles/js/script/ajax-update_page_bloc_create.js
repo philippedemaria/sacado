@@ -4,9 +4,9 @@ define(['jquery', 'bootstrap'], function ($) {
 
         $('#id_is_calculator').prop('checked', false); 
  
-        $('#id_is_python').prop('checked', true); 
+        $('#id_is_python').prop('checked', false); 
  
-        $('#id_is_scratch').prop('checked', true); 
+        $('#id_is_scratch').prop('checked', false); 
 
         $('#id_is_tableur').prop('checked', false); 
 
