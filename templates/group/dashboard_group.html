@@ -47,7 +47,7 @@
             <div class="in_this_time">En ce moment : Lien direct vers les exercices </div>
  
             {% for parcours in parcourses_on_fire %}
-                <div class="item">dddddd
+                <div class="item">
                 {% if parcours.is_evaluation %} 
                     {% with evaluation=parcours %}
                         {% get_min_score parcours student as data_min %}
