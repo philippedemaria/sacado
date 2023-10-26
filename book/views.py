@@ -1042,7 +1042,7 @@ def print_latex_to_pdf(request,idch,idp):
                 elements +=  r'{\huge '+ page.title+r'} \hfill '+str(chapter.book.level.shortname)+". "+  chapter.title
                 elements +=  r" \hrule "
             for paragraph in page.paragraphs.order_by("ranking"):
-                if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
+                if 'Cours' in page.title and paragraph.number > 0 : elements += r'\section{'+paragraph.title+r'}'
                 elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
                 for bloc in paragraph.blocs.order_by("ranking"):
                     if bloc.size != 12 :
@@ -1060,7 +1060,7 @@ def print_latex_to_pdf(request,idch,idp):
         elements +=  r'{\huge '+ page.title+r'}'
         elements +=  r" \hrule "
         for paragraph in page.paragraphs.order_by("ranking"):
-            if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
+            if 'Cours' in page.title and paragraph.number > 0 : elements += r'\section{'+paragraph.title+r'}'
             elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
             for bloc in paragraph.blocs.order_by("ranking"):
                 if bloc.size != 12 :
