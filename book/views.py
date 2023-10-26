@@ -1046,7 +1046,7 @@ def print_latex_to_pdf(request,idch,idp):
                 elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
                 for bloc in paragraph.blocs.order_by("ranking"):
                     if bloc.size != 12 :
-                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,1)).replace(",",".") +r"\linewidth}"
+                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,2)).replace(",",".") +r"\linewidth}"
                         elements +=  bloc.typebloc_latex()
                         elements += r"\end{minipage}\hfill"
 
@@ -1064,7 +1064,7 @@ def print_latex_to_pdf(request,idch,idp):
             elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
             for bloc in paragraph.blocs.order_by("ranking"):
                 if bloc.size != 12 :
-                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,1)).replace(",",".") +r"\linewidth}"
+                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,2)).replace(",",".") +r"\linewidth}"
                     elements +=  bloc.typebloc_latex()
                     elements += r"\end{minipage}\hfill"
                 else :
@@ -1117,7 +1117,7 @@ def print_latex_to_tex(request,idch,idp):
                 for bloc in paragraph.blocs.order_by("ranking"):
 
                     if bloc.size != 12 :
-                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,1)).replace(",",".") +r"\linewidth}"
+                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,2)).replace(",",".") +r"\linewidth}"
                         elements +=  bloc.typebloc_latex()
                         elements += r"\end{minipage}\hfill"
 
@@ -1138,7 +1138,7 @@ def print_latex_to_tex(request,idch,idp):
 
             for bloc in paragraph.blocs.order_by("ranking"):
                 if bloc.size != 12 :
-                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,1)).replace(",",".") +r"\linewidth}"
+                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.02,2)).replace(",",".") +r"\linewidth}"
                     elements +=  bloc.typebloc_latex()
                     elements += r"\end{minipage}\hfill"
 
