@@ -1011,7 +1011,7 @@ class Parcours(ModelWithCode):
         data["nb_bibliotex"] = self.bibliotexs.filter( is_publish =1, students = student ).count()
         data["nb_flashpack"] = self.flashpacks.filter(Q(stop__gte=today)|Q(stop=None) ,  is_publish =1, students = student ).count()
         data["nb_docperso"]  = self.docpersos.filter(is_publish=1, students=student).count()
-        try : data["pc"] = int(ceil(nb_done/nb_exo_in_parcours))
+        try : data["pc"] = int(100*ceil(nb_done/nb_exo_in_parcours))
         except : data["pc"] = 0
         try :
             stage =  student.user.school.aptitude.first()
@@ -1024,7 +1024,7 @@ class Parcours(ModelWithCode):
             low = 35
 
         try :
-            score_ggb = ceil( (score_ggb / coeffs) * data["pc"]/100  )
+            score_ggb = ceil( (score_ggb / coeffs) * data["pc"]/100)
             data["score_ggb"] = score_ggb
         except :
             score_ggb = None
