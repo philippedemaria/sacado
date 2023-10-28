@@ -5296,6 +5296,7 @@ def clone_parcours(request, id, course_on ):
         return redirect('index')
     parcours = Parcours.objects.get(pk=id) # parcours à cloner
     relationships = parcours.parcours_relationship.all() 
+    bibliotexs    = parcours.bibliotexs.all() 
     courses = parcours.course.filter(is_share = 1)
     # clone le parcours
     parcours.pk = None
@@ -5308,21 +5309,28 @@ def clone_parcours(request, id, course_on ):
     parcours.target_id = None
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
+    
+    if request.session.get("folder_id",None) :  
+        folder = Folder.objects.get(pk=folder_id)
+        folder.parcours.add(parcours) 
 
+
+    group_id = request.session.get("group_id",None)
     # ajoute le group au parcours si group    
     try :
-        group_id = request.session.get("group_id",None)
         if group_id :
             group = Group.objects.get(pk = group_id)
             parcours.groups.add(group)
             Parcours.objects.filter(pk = parcours.id).update(subject = group.subject)
             Parcours.objects.filter(pk = parcours.id).update(level = group.level)
+            students = group.students.all()
+            parcours.students.set(students)
         else :
-            group = None   
+            group = None
+            students = set()  
     except :
         group = None
-
-
+        students = set()
 
     former_relationship_ids = []
 
@@ -5335,7 +5343,6 @@ def clone_parcours(request, id, course_on ):
             course.parcours = parcours
             course.teacher = teacher
             course.save()
-
 
             for relationship in old_relationships :
                 # clone l'exercice rattaché au cours du parcours 
@@ -5354,11 +5361,41 @@ def clone_parcours(request, id, course_on ):
             relationship.pk = None
             relationship.parcours = parcours
             relationship.save() 
-            relationship.skills.set(skills) 
+            relationship.skills.set(skills)
+            relationship.students.set(students)
         except :
             pass
 
-    messages.success(request, "Duplication réalisée avec succès. Bonne utilisation. Vous pouvez placer le parcours dans le dossier en cliquant sur la config. du parcours")
+    # clone tous les biliotex rattachés au parcours 
+    for bibliotex in bibliotexs :  
+        relationtexs = bibliotex.relationtexs.all()    
+        themes       = bibliotex.subjects.all()  
+        levels       = bibliotex.levels.all()    
+
+        bibliotex.pk      = None
+        bibliotex.teacher = teacher
+        bibliotex.save()
+        for relationtex in relationtexs :
+            knowledges = relationtex.knowledges.all() 
+            skills     = relationtex.skills.all() 
+            relationtex.pk        = None
+            relationtex.bibliotex = bibliotex
+            relationtex.teacher   = teacher
+            relationtex.save()
+            relationtex.skills.set(skills)
+            relationtex.knowledges.set(knowledges)
+            relationtex.students.set(students)
+
+        bibliotex.themes.set(themes)
+        bibliotex.levels.set(levels)
+        bibliotex.parcours.add(parcours) 
+        bibliotex.students.set(students)
+        if group :  bibliotex.groups.add(group) 
+        if request.session.get("folder_id",None) :  
+            folder = Folder.objects.get(pk=folder_id)
+            bibliotex.folders.add(folder) 
+
+    messages.success(request, "Duplication réalisée avec succès. Bonne utilisation.")
 
 
     if group_id :
