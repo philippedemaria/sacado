@@ -2501,7 +2501,7 @@ def ajax_all_folders(request):
 
     if keywords:
         parcours_key = Parcours.objects.filter(Q(exercises__supportfile__title__icontains = keywords)|Q(exercises__supportfile__annoncement__icontains = keywords)|Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords)   )
-        base = base.objects.filter( Q( title__icontains = keywords )|Q(parcours__in=parcours_key) )
+        base = base.filter( Q( title__icontains = keywords )|Q(parcours__in=parcours_key) )
 
     folders = base.order_by("author") 
 
