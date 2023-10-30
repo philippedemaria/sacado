@@ -246,15 +246,10 @@ body{
                 {% endif %}
                 </div>
             </div>
-            <div class="row"> 
-            <div class="col-xs-12"> 
             {% for course in parcours.course.all|dictsort:"ranking" %}
                 {% include 'qcm/course/course_tag.html' %}
             {% endfor %}
-            </div>
-            </div>
-            </form>
-            <div style="clear:both"></div>
+            </form><div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="4">
             <div class="row" style="margin-bottom: 20px"> 
@@ -264,15 +259,12 @@ body{
                     {% endif %}
                 </div>
             </div>
-            <div class="row"> 
-            <div class="col-xs-12"> 
             <form action="" methode="POST" id="docperso_sortable">
             {% for docperso in docpersos %} 
                 {% include 'qcm/docperso_tag.html' %} 
             {% endfor %}
             </form>
-            </div>
-            </div>
+
             <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="5">
@@ -281,11 +273,7 @@ body{
                     <a href="{% url 'create_questions_flash_inside_parcours' parcours.id %}" class="btn btn-xs btn-sacado"><i class="bi bi-plus-circle-dotted"></i> Créer des questions flash</a>
                 </div>
             </div>
-            <div class="row"> 
-                <div class="col-xs-12 "> 
             {% include 'qcm/list_questions_flash_by_group.html' %}
-            </div>
-            </div>
         </div>
         <div class="tab-pane" id="6">
             <div class="row" style="margin-bottom: 20px"> 
@@ -351,7 +339,7 @@ body{
             </form>
             <div style="clear:both"></div>
         </div>
-    </div>
+    </div>    
 </section>
  
  <div class="modal fade" id="print_bibliotex" tabindex="-1" role="dialog" aria-labelledby="print_bibliotex">
