@@ -249,7 +249,8 @@ body{
             {% for course in parcours.course.all|dictsort:"ranking" %}
                 {% include 'qcm/course/course_tag.html' %}
             {% endfor %}
-            </form><div style="clear:both"></div>
+            </form>
+            <div style="clear:both"></div>
         </div>
         <div class="tab-pane" id="4">
             <div class="row" style="margin-bottom: 20px"> 
@@ -339,6 +340,7 @@ body{
             </form>
             <div style="clear:both"></div>
         </div>
+    </div>
 </section>
  
  <div class="modal fade" id="print_bibliotex" tabindex="-1" role="dialog" aria-labelledby="print_bibliotex">
