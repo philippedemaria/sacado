@@ -246,9 +246,13 @@ body{
                 {% endif %}
                 </div>
             </div>
+            <div class="row"> 
+            <div class="col-xs-12"> 
             {% for course in parcours.course.all|dictsort:"ranking" %}
                 {% include 'qcm/course/course_tag.html' %}
             {% endfor %}
+            </div>
+            </div>
             </form>
             <div style="clear:both"></div>
         </div>
