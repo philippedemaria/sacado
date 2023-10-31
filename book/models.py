@@ -367,7 +367,12 @@ class Bloc(models.Model):
 
     SIZES = (
         (12,"Page entière"),
+        (10, "5/6 page"),
+        (9, "3/4 page"),
+        (8, "2/3 page"),
+        (7, "7/12 page"),    
         (6, "1/2 page"),
+        (5, "5/12 page"),   
         (4, "1/3 page"),
         (3, "1/4 page"),
         (2, "1/6 page"),
