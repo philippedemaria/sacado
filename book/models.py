@@ -414,7 +414,7 @@ class Bloc(models.Model):
 
 
     def display_qr(self):
-        return self.exercises.count() or self.exotexs.count() or self.appliquettes.count()
+        return self.exercises.count() or self.exotexs.count() or self.appliquettes.count() or self.correction_html
 
 
     def typebloc_latex(self):
