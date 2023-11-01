@@ -86,6 +86,7 @@ class Chapter(models.Model):
     date_modified = models.DateTimeField(auto_now=True, verbose_name="Date de modification")
     book          = models.ForeignKey(Book, on_delete=models.CASCADE,  blank=True,   related_name='chapters', editable=False)
     parcours      = models.ForeignKey(Parcours, on_delete=models.CASCADE , blank=True, null= True, related_name="chapters")
+    flashpack     = models.ForeignKey(Flashpack, on_delete=models.CASCADE , blank=True, null= True, related_name="chapters", editable=False)  
 
     def __str__(self):
         return "{}".format(self.title)
@@ -96,7 +97,7 @@ class Chapter(models.Model):
         for page in self.pages.all():
             for paragraph in page.paragraphs.all():
                 for bloc in paragraph.blocs.all():
-                    if bloc.is_correction == False : test = False
+                    if bloc.is_correction   : test = True
                     break
         return test
 
@@ -279,7 +280,7 @@ class Page(models.Model):
         test = False
         for paragraph in self.paragraphs.all():
             for bloc in paragraph.blocs.all():
-                if bloc.is_correction == False : test = False
+                if bloc.is_correction : test = True
                 break
         return test
 
