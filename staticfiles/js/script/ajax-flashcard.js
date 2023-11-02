@@ -1,4 +1,4 @@
-define(['jquery', 'bootstrap'], function ($) {
+define(['jquery', 'bootstrap','ckeditor'], function ($) {
     $(document).ready(function () {
         console.log("chargement JS ajax-flashcard.js OK + cke");
 
