@@ -1296,7 +1296,7 @@ def this_year_from_today(today) :
 
 def can_inscribe_students(school, compare):
 
-    nb_students = school.nbstudents - school.users.filter(user_type=0).count()
+    nb_students = school.nbstudents - school.users.filter(user_type=0).exclude(username__contains="_e-test").count()
     test = False
     if nb_students > compare :
         test = True
