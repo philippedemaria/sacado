@@ -78,29 +78,31 @@
             <div class="row" id="this_bloc{{ paragraph.id }}" >
                 {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                     <div class="this_div_bloc_sort">
-                        <a href="{% url 'update_bloc' book.id page.id bloc.id %}" class="to_sorter_div_left"><i class="bi bi-pen"></i></a>
-                        <a href="{% url 'delete_bloc' book.id page.id bloc.id %}" class="to_sorter_div" onclick="TestDelete('{{ bloc.title}}')"><i class="bi bi-trash"></i></a> 
-                        <a href="{% url 'goto_details_bloc_after_qrcode' bloc.id %}" class="to_sorter_div_sub_left" target="_blank"><i class="bi bi-link"></i></a>
+                    <a href="{% url 'update_bloc' book.id page.id bloc.id %}" class="to_sorter_div_left"><i class="bi bi-pen"></i></a>
+                    <a href="{% url 'delete_bloc' book.id page.id bloc.id %}" class="to_sorter_div" onclick="TestDelete('{{ bloc.title}}')"><i class="bi bi-trash"></i></a> 
+                    <a href="{% url 'goto_details_bloc_after_qrcode' bloc.id %}" class="to_sorter_div_sub_left" target="_blank"><i class="bi bi-link"></i></a>
 
-                        <div class="col-xs-{{ bloc.size }} this_bloc_sort" id="this_bloc_content{{ bloc.id }}" data-bloc_id = "{{bloc.id}}" data-paragraph_id = "{{ paragraph.id }}"  > 
-                            <div class="{{ bloc.typebloc.css }} {{ bloc.bloc_css }}" > 
-                                <div class="bloc_title {{ bloc.css }}">
-                                    <i class="fa fa-sort bloc_sorter" data-bloc_id = "{{bloc.id}}"></i>
-                                #{{ bloc.id }}. {{ bloc.title }} 
+                        <div class="col-xs-{{ bloc.size }} this_bloc_sort" id="this_bloc_content{{ bloc.id }}" data-bloc_id = "{{bloc.id}}" data-paragraph_id = "{{ paragraph.id }}"  >
+                            
+                                <div class="{{ bloc.typebloc.css }} {{ bloc.bloc_css }}" > 
+                                    <div class="bloc_title {{ bloc.css }}">
+                                        <i class="fa fa-sort bloc_sorter" data-bloc_id = "{{bloc.id}}"></i>
+                                    #{{ bloc.id }}. {{ bloc.title }} 
+                                </div>
+                                <div class="bloc_content">
+                                    {{ bloc.content_html|safe }}
                                 </div>
                             </div>
-                            <div class="bloc_content">
-                                {{ bloc.content_html|safe }}
-                            </div>
+
                             {% if bloc.display_qr %} 
                             <div class="this_div_bloc_complements">  
                                 <label> 
-                                            {% if bloc.correction_html %}
-                                                <a href="javascript:void(0);"    data-target="#book_shower_correction{{ bloc.id }}" data-toggle="modal" >
-                                                    <i class="bi bi-c-square text-success"></i>
-                                                </a>
-                                            {% endif %}    
-                                        Compléments :
+                                        {% if bloc.correction_html %}
+                                            <a href="javascript:void(0);"    data-target="#book_shower_correction{{ bloc.id }}" data-toggle="modal" >
+                                                <i class="bi bi-c-square text-success"></i>
+                                            </a>
+                                        {% endif %}    
+                                    Compléments :
                                 </label> 
                                 {% for a in bloc.appliquettes.all %}
                                     <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
@@ -117,15 +119,10 @@
                              {% endif %}                        
                         </div>
 
-
+                    </div>
 
                     {% get_bloc_col_width paragraph  forloop.counter as col_width %}
-                    {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}
-                    </div>
-                    <div class="row">
-                    {% endif %}                    
-
-                    </div>   
+                    {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}</div><div class="row">{% endif %}   
                 {% endfor %}
             </div>
 
