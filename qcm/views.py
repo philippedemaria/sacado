@@ -5422,6 +5422,7 @@ def exercise_parcours_duplicate(request):
 
         parcours = Parcours.objects.get(pk=parcours_id) # parcours à cloner
         relationships = parcours.parcours_relationship.all() 
+        bibliotexs = parcours.bibliotexs.all() 
         courses = parcours.course.filter(is_share = 1)
         # clone le parcours
         parcours.pk = None
@@ -5484,6 +5485,37 @@ def exercise_parcours_duplicate(request):
                 relationship.students.set(students)
             except :
                 pass
+
+
+        # clone tous les biliotex rattachés au parcours 
+        for bibliotex in bibliotexs :  
+            relationtexs = bibliotex.relationtexs.all()    
+            themes       = bibliotex.subjects.all()  
+            levels       = bibliotex.levels.all()    
+
+            bibliotex.pk      = None
+            bibliotex.teacher = teacher
+            bibliotex.save()
+            for relationtex in relationtexs :
+                knowledges = relationtex.knowledges.all() 
+                skills     = relationtex.skills.all() 
+                relationtex.pk        = None
+                relationtex.bibliotex = bibliotex
+                relationtex.teacher   = teacher
+                relationtex.save()
+                relationtex.skills.set(skills)
+                relationtex.knowledges.set(knowledges)
+                relationtex.students.set(students)
+
+            bibliotex.themes.set(themes)
+            bibliotex.levels.set(levels)
+            bibliotex.parcours.add(parcours) 
+            bibliotex.students.set(students)
+            if group :  bibliotex.groups.add(group) 
+            if request.session.get("folder_id",None) :  
+                folder = Folder.objects.get(pk=folder_id)
+                bibliotex.folders.add(folder) 
+
 
         data["validation"] = "Duplication réussie."
     else :
