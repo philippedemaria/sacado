@@ -318,6 +318,36 @@ h1 {
 	font-weight: normal;
 }
 
+/*  paragraph_bloc_il  */
+.paragraph_bloc_il{
+	border: 2px solid  #5d4391;
+	border-radius: 5px;
+	color:#5d4391;
+	position:relative;
+	margin: 40px 0px 0px 0px;
+	padding:0px;
+	font-size: 20px;
+}
+
+
+
+.paragraph_bloc_il .bloc_title{
+	color :  #fff ;
+	border-radius:0px 0px 3px 3px;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
+.paragraph_bloc_il .bloc_content, .paragraph_bloc_mt .bloc_content table tr td{
+	color :  #5d4391 ;
+	border-radius:0px 0px 3px 3px;
+	background-color: #FFF;
+	padding:10px;
+	width:100%;
+	font-weight: normal;
+}
+
  
 /*  paragraph_bloc_pp  */
 .paragraph_bloc_pp,.paragraph_bloc_th,.paragraph_bloc_pp{
