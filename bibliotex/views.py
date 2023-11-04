@@ -314,7 +314,7 @@ def printer(request, relationtex_id, collection,output , obj):
 
 
 
-                elements += r"\\ \vspace{0.2cm} "
+                elements += r"\\ \vspace{0.1cm} "
 
                 if output == "html_cor" :
                     ctnt =  relationtex.exotex.correction
@@ -400,7 +400,7 @@ def printer(request, relationtex_id, collection,output , obj):
         author         = "Équipe SACADO"
 
         elements += ctnt
-        elements += r" \vspace{0,4cm}"
+        elements += r" \vspace{0,1cm}"
     # Fermeture du texte dans le fichier tex
     if columns : elements +=r"\end{multicols}"
     elements +=  r"\end{document}"
