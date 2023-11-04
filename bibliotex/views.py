@@ -243,10 +243,7 @@ def printer(request, relationtex_id, collection,output , obj):
                 skill_dpl = r"\competence{" +skills_display+r"}"
             else : skill_dpl = ""
 
-            elements += r"\\ \vspace{0.1cm}"
-
             pref_image = '/var/www/sacado/static/img/'
-
 
             if relationtex.exotex.calculator : calculator = pref_image + 'calculator.png'
             else : calculator = pref_image + 'no_calculator.png'   

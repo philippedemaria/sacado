@@ -3,8 +3,8 @@
 {% load static %}
 {% load item_tags %}
 
+
 {% block require %}
- 
     {% if parcours %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common4_withoutMathJax.js' %}"></script>
     {% else %}
@@ -14,7 +14,6 @@
     <script>
         require(['script/ajax-parcours-create']);
     </script> 
-
     {% block require_complement %}
         {% if not parcours %}    
             <script>
@@ -22,19 +21,15 @@
             </script> 
         {% endif %}
     {% endblock %} 
-
 {% endblock %} 
 
 
+
+
 {% block page_title %}
-
     {% include 'qcm/breadcrumb.html' %}
-
-     
     {% if parcours %}  <small> Configuration </small> {% else %} Nouveau parcours {% endif %}
-
     {% include 'modes.html' %}    
-
 {% endblock %}
 
 
@@ -50,7 +45,6 @@
             {% endif %} 
         {% endif %} 
     </li>
-
 {% endblock %} 
 
 
@@ -324,11 +318,6 @@
 
     </form>      
 </section>   
-
-
-
-
-
 {% endblock %}
 
 
