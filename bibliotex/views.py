@@ -329,12 +329,10 @@ def printer(request, relationtex_id, collection,output , obj):
             if linked_exercises :
 
                 exs = relationtex.exercises.order_by("ranking")
-                if exs.count() > 0 :
-                    elements +=  r"\\ \vspace{0,1cm}"                
-                    text_linked = ""
-
+                if exs.count() > 0 :             
+                    text_linked = "Compléments : "
                     for exercise in exs :
-                        text_linked += r"\sacado{"+str(exercise.supportfile.code ) + r"} \; "
+                        text_linked += str(exercise.supportfile.code ) + " | "
                     elements +=  text_linked 
 
                 # exercises =  relationtex.exotex.exercises.order_by("ranking")
