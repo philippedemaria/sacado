@@ -310,9 +310,6 @@ def printer(request, relationtex_id, collection,output , obj):
                     elements += r"}"
 
 
-
-                elements += r"\\ \vspace{0.1cm} "
-
                 if output == "html_cor" :
                     ctnt =  relationtex.exotex.correction
                 elif output == "html" :
@@ -350,10 +347,10 @@ def printer(request, relationtex_id, collection,output , obj):
                 if  relationtex.exotex.correction :
                     elements += r"\exercice{Exercice "+ str(k) + r"} "
                     elements += relationtex.exotex.correction
-                    elements += r" \vspace{0.2cm}"
+                    elements += r" \vspace{0.1cm}"
                 else :
                     elements += r"\exercice{Exercice "+ str(k) + r"} - Non corrigé"
-                    elements += r" \vspace{0.2cm}"
+                    elements += r" \vspace{0.1cm}"
                 k+=1
        
     else : #pour la création d'un exercise ou son update*
