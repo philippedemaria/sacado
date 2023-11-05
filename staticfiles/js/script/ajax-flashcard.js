@@ -16,7 +16,7 @@ define(['jquery', 'bootstrap','ckeditor'], function ($) {
     { name: 'others', groups: [ 'mode' ], items: [ 'Source', 'searchCode', 'autoFormat', 'CommentSelectedRange', 'UncommentSelectedRange', 'AutoComplete', '-', 'ShowBlocks' ] },
     { name: 'tools', items: [ 'Maximize' ] },
 ]
-*/
+
 
         CKEDITOR.replace( 'id_question', {     
             height: 300,              
@@ -66,7 +66,7 @@ define(['jquery', 'bootstrap','ckeditor'], function ($) {
             ]
 
             } );
-
+*/
 
         $("#this_question_textarea_display").click(function(){ 
             var value = CKEDITOR.instances['id_question'].getData(); 

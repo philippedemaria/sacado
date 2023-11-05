@@ -274,19 +274,19 @@ class Group(ModelWithCode):
  
 
 
-def vignette(self):
+    def vignette(self):
 
-    try :
-        url = Vignette.objects.values("imagefile").get(level=self.level, subject=self.subject)
-        is_exists = True
-    except :
-        url = False 
-        is_exists = False
+        try :
+            url = Vignette.objects.values("imagefile").get(level=self.level, subject=self.subject)
+            is_exists = True
+        except :
+            url = False 
+            is_exists = False
 
-    data = {}
-    data["is_exists"] = is_exists
-    data["url"] = url
-    return data
+        data = {}
+        data["is_exists"] = is_exists
+        data["url"] = url
+        return data
 
 
 
