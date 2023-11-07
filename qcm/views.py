@@ -6509,8 +6509,8 @@ def real_time(request,id):
 
     if not teacher_has_permisson_to_parcourses(request,teacher,parcours) :
         return redirect('index')
-
-    students = parcours.students.order_by("user__last_name").exclude(user__username__contains="_e-test")
+ 
+    students = students_from_p_or_g(request,parcours)
     rcs      = rcs_for_realtime(parcours)
 
     context = { 'teacher': teacher , 'parcours': parcours, 'rcs': rcs, 'students': students , 'group': group , 'role': role , 'access': access  , 'relationships_customexercises': relationships_customexercises  }

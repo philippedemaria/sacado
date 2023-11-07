@@ -217,9 +217,6 @@ class Level(models.Model):
 
 
 
-
-
-
 class Vignette(models.Model):
     subject = models.ForeignKey(Subject,  null=True, blank=True,   related_name='vignettes', on_delete=models.CASCADE, verbose_name="Enseignement")
     imagefile = models.ImageField(upload_to=directory_path,  verbose_name="Image" )
@@ -227,8 +224,6 @@ class Vignette(models.Model):
 
     def __str__(self):
         return "Vignette {}".format(self.level.name)
-
-
 
 
 class Waiting(models.Model):
