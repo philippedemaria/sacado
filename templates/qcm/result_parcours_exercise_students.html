@@ -91,7 +91,7 @@
                     </div> 
                     <div  class="col-xs-12 col-md-7">
                         {% get_parcours_group_students_count parcours group as parcours_group_students %}
-                        {%  for s in  parcours_group_students.students.all|dictsort:"user.last_name" %}
+                        {%  for s in  parcours_group_students.students|dictsort:"user.last_name" %}
                             {% get_score  relationship.exercise   s   as   score %}
                             <a href="{%  url 'detail_student_parcours' s.user.id  relationship.parcours.id %}" class="btn btn-{% if score > 90  %}darkgreen{% elif score > 70  %}success{% elif score > 40  %}warning{% elif score > 0  %}danger{% else  %}default{% endif  %}" style="min-width:175px; margin:1px" target="_blank" />{{ s.user.last_name }} {{ s.user.first_name|truncatechars:5 }} <font style="font-size:10px">{% if score > -1 %}{{ score }}%{% endif  %}</font></a>
                         {%  endfor %}
