@@ -1026,7 +1026,7 @@ def sorter_book_pages(request):
 def print_latex_to_pdf(request,idch,idp):
 
 
-    preamb = settings.TEX_PREAMBULE_PDF_FILE
+    preamb = settings.TEX_PREAMBULE_PDF_FILE_BOOK
 
     entetes=open(preamb,"r")
     elements=entetes.read()

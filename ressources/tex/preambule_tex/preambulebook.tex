@@ -249,7 +249,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 }
 
 \setlength{\parindent}{0cm}
-\usepackage[left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}
+\usepackage[left=1cm,right=1cm,top=0.1cm,bottom=1cm]{geometry}
 
 \usepackage{multicol}
 
@@ -273,95 +273,69 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 \end{tcolorbox}\par}
 
 
-
-\newenvironment{defT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Définition \thecpt \;: #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{thT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Théorème \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{ppT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Proposition \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{exT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Exemple \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{mtT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Méthode \thecpt \;: #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{exoT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Exercice \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{sfT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Savoir faire \thecpt \;: #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{atT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Attention \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-
-
-\newenvironment{voT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Vocabulaire \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{rmT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Remarque \thecpt \;: #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{mmT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Mathématiciennes et mathématiciens \thecpt : #1.]}
-{%
-\end{tcolorbox}\par}
-
-
-\newenvironment{soT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Sommaire \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{prT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Preuve \thecpt \;: #1.]}
-{%
-\end{tcolorbox}\par}
-
-\newenvironment{rgT}[1]{%
-\medskip \begin{tcolorbox}[widget,colback=white ,colframe=black,
-title= \stepcounter{cpt} Règle \thecpt\; : #1.]}
-{%
-\end{tcolorbox}\par}
-
-
 \usepackage{multido}
 \newcommand{\point}[1]{\vspace{0.1cm}\multido{}{#1}{ \dotfill \medskip \endgraf}}
 \newcommand{\ligne}[1]{\vspace{0.1cm}\multido{}{#1}{ {\color{cqcqcq}\hrulefill} \medskip \endgraf}}
+
+
+%%%%%%%%%%%%% Définitions
+%%%%%%%%%%%%%  
+\newenvironment{DefT}[1]{%
+\begin{tcolorbox}[colback=sacado_blue_light,colframe=sacado_blue_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_blue,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}}%
+{%
+\end{tcolorbox}\par}
+
+
+\newenvironment{DefTB}[1]{%
+\begin{tcolorbox}[colback=sacado_blue_light,colframe=sacado_blue_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_blue,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}\begin{leftbar}
+}%
+{\end{leftbar}%
+\end{tcolorbox}\par}
+
+ 
+
+%%%%%%%%%%%%% EXEMPLES
+\newenvironment{Ex}{%
+\vspace{3mm}
+\colorbox{white}{
+\begin{minipage}{0.98\linewidth}
+ }%
+{
+\end{minipage} }
+}
+
+
+
+
+\newenvironment{Th}[1]{%
+\begin{tcolorbox}[colback=sacado_yellow_light,colframe=sacado_yellow_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_pink,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Théorème. #1 ]\vspace{3mm}\begin{leftbarPink}}%
+{\end{leftbarPink}%
+\end{tcolorbox}\par}
+
+
+
+\newtcolorbox{BoxMt}{%
+enhanced,
+breakable,
+sharp corners,arc=0pt,outer arc=0pt,
+boxrule=2pt,boxsep=0pt,top=4pt,left=4pt,right=4pt,bottom=4pt,middle=0pt,
+colback=white, 
+colframe=white, 
+pad at break=0pt,bottomrule at break=0pt,toprule at break=0pt,
+borderline east={1pt}{-0.25pt}{sacado_green,dotted},
+borderline west={1pt}{-0.25pt}{sacado_green,dotted},
+borderline south={1pt}{-0.25pt}{sacado_green,dotted},
+borderline north={1pt}{-0.25pt}{sacado_green,dotted},
+fontupper={\color{sacado_green}}
+        \fcolorbox{sacado_green}{sacado_green}{\color{white}{\small MÉTHODE}}
+        \color{sacado_green}
+}
