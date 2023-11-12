@@ -1469,7 +1469,7 @@ def update_page(request,idb, idp):
                 print(form_b.errors)
 
                 try :
-                    f = open('/var/www/sacado/logs/connexions.log','a')
+                    f = open('/var/www/sacado/logs/debug.log','a')
                     writer_text = "{}".format(form_b.errors)
                     print(writer_text, file=f)
                     f.close()

@@ -21,10 +21,13 @@ define(['jquery', 'bootstrap'], function ($) {
                     dataType: 'json',
                     success: function (data) {
 
-                        console.log(data)
-
                         blocs = data.blocs ; 
-                        
+                        let option = $("<option>", {
+                                        'value': ,
+                                        'html': "Choisir un bloc parent"
+                                    });
+                        $('select[name=insidebloc]').append(option);
+
                         if (blocs.length >0)
                         { for (let i = 0; i < blocs.length; i++) {
                                     
@@ -74,7 +77,7 @@ define(['jquery', 'bootstrap'], function ($) {
                     success: function (data) {
 
                         knowledges = data.knowledges ; 
-                        
+
                         let option = $("<option>", {
                                         'value': ,
                                         'html': "Choisir un bloc parent"

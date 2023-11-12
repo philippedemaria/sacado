@@ -25,7 +25,11 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
                         blocs = data.blocs ; 
-                        
+                        let option = $("<option>", {
+                                        'value': ,
+                                        'html': "Choisir un bloc parent"
+                                    });
+                        $('select[name=insidebloc]').append(option);
                         if (blocs.length >0)
                         { for (let i = 0; i < blocs.length; i++) {
                                     
@@ -79,12 +83,6 @@ define(['jquery', 'bootstrap'], function ($) {
 
                         knowledges = data.knowledges ; 
 
-                        let option = $("<option>", {
-                                        'value': ,
-                                        'html': "Choisir un bloc parent"
-                                    });
-                        $('select[name=knowledge]').append(option);
-                        
                         if (knowledges.length >0)
                         { for (let i = 0; i < knowledges.length; i++) {
                                     
