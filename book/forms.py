@@ -118,6 +118,10 @@ class BlocForm(forms.ModelForm):
 		subject = book.subject
 		paragraphs = page.paragraphs.order_by("ranking")
 
+		blocs = set()
+		for p in paragraphs :
+			blocs.update(p.blocs.all())
+
 
 		thms       = level.themes.all()
 		skills     = Skill.objects.filter(subject=subject) 
@@ -132,6 +136,8 @@ class BlocForm(forms.ModelForm):
 		self.fields['theme']      = forms.ModelChoiceField(queryset=thms,  required=False)
 		self.fields['skills']     = forms.ModelMultipleChoiceField(queryset=skills, required=False)
 		self.fields['knowledges'] = forms.ModelMultipleChoiceField(queryset=knowledges,  required=False)  
+
+		self.fields['insidebloc'] = forms.ModelMultipleChoiceField(queryset=blocs,  required=False)  	
 
 		self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False) 
 		self.fields['exotexs']    = forms.ModelMultipleChoiceField(queryset=exotexs,  required=False)  

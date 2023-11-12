@@ -409,6 +409,8 @@ class Bloc(models.Model):
     is_corrected = models.BooleanField(default=0, verbose_name="Correction ?")
     is_annals    = models.BooleanField(default=0, verbose_name="Annale ?")
 
+    insidebloc   = models.ForeignKey('self', verbose_name="Dans le bloc")
+
     exercises    = models.ManyToManyField(Exercise, blank=True, related_name='blocs', verbose_name="Exercices connexes")
     exotexs      = models.ManyToManyField(Exotex  , blank=True, related_name='blocs', verbose_name="ExoTex connexes")
     appliquettes = models.ManyToManyField(Appliquette, blank=True, related_name='blocs', verbose_name="Appliquettes")

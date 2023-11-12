@@ -123,6 +123,16 @@
                     </div>
 
                     <div class="row">
+                        <div class="col-xs-12 col-md-12">
+                            <label>Insérer dans un bloc</label>
+                            {{ form_b.insidebloc |add_class:"form-control select2" }}
+                            {{ form_b.insidebloc.errors }}
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
                         <div class="col-xs-6 col-md-2">
                             <div class="form-group">
                                 <label>{{ form_b.is_calculator.label_tag }}</label>
