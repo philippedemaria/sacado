@@ -1468,6 +1468,13 @@ def update_page(request,idb, idp):
             else:
                 print(form_b.errors)
 
+                try :
+                    f = open('/var/www/sacado/logs/connexions.log','a')
+                    writer_text = "{}".format(form_b.errors)
+                    print(writer_text, file=f)
+                    f.close()
+                except :
+                    pass 
 
         elif form_action == "new_typebloc" :
             if form_tb.is_valid():
