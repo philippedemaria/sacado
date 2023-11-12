@@ -204,6 +204,7 @@ headheight=20.60pt, %hauteur du header
 \definecolor{sacado_yellow_light}{HTML}{fcfce5} %% Jaune Sacado
 \definecolor{sacado_orange}{HTML}{e8c212} %% Orange Sacado
 \definecolor{sacado_pink}{HTML}{ea4d88} %% Rouge Sacado
+\definecolor{sacado_pink_light}{HTML}{fce5ee} %% Rouge Sacado
 %BOITES 
 
 \definecolor{bleu1}{rgb}{0.54,0.79,0.95} %% Bleu
@@ -538,7 +539,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
  
 %%%%%% Environnement "pageCours" %%%%%%
 \newenvironment{pageCours}{
-\rhead{\includegraphics[scale=1]{../preambule_tex/pageCours.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageCours.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -546,7 +547,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageAD" %%%%%%
 \newenvironment{pageAD}{
-\rhead{\includegraphics[scale=1]{../preambule_tex/pageAd.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageAd.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -555,14 +556,14 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 %%%%%% Environnement "pageParcoursu" %%%%%%
 \newenvironment{pageParcoursu}{
 
-\rhead{\includegraphics[scale=1]{../preambule_tex/pageParcoursu.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageParcoursu.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
 {\newpage}
 %%%%%% Environnement "pageParcoursd" %%%%%%
 \newenvironment{pageParcoursd}{
-\rhead{\includegraphics[scale=1]{../preambule_tex/pageParcoursd.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageParcoursd.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -570,7 +571,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageParcourst" %%%%%%
 \newenvironment{pageParcourst}{
-\rhead{\includegraphics[scale=1]{../preambule_tex/pageParcourst.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageParcourst.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -580,7 +581,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageAuto" %%%%%%
 \newenvironment{pageAuto}{
-\rhead{\includegraphics[scale=1]{../preambule_tex/pageAuto.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageAuto.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -588,20 +589,13 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageAlgo" %%%%%%
 \newenvironment{pageAlgo}{
-\rhead{\includegraphics[scale=1]{../preambule_tex/pageAlgo.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageAlgo.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
 {\newpage}
  
-
-%%%%%% Environnement "pageIntro" %%%%%%
-\newenvironment{pageIntro}{
-\rhead{}
-\lhead{}%
-}
-{\newpage}
-  
+ 
 
 %%%%%% Numéro de page %%%%%%
 \fancyfoot[L]{\colorbox{sacado_purple!70}{\color{white}\thepage}}
@@ -644,15 +638,66 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 %   Définitions des environnements de Définitions, propriétés...
 %
 %----------------------------------------
-\newenvironment{Bloc}[1]{%
+\newenvironment{Def}{%
 \begin{tcolorbox}[colback=sacado_blue_light,colframe=sacado_blue_light,fonttitle=\bfseries,
  boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
 colbacktitle=sacado_blue,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
-title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}
+title= \textbf{$\searrow$}\; Définition. ]\vspace{3mm}
 }%
 {%
 \end{tcolorbox}\par} 
-%%%%%%%%%%%%% Définitions
+
+
+
+\newenvironment{Th}{%
+\begin{tcolorbox}[colback=sacado_yellow_light,colframe=sacado_yellow_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_pink,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Théorème. ]\vspace{3mm}
+}%
+{%
+\end{tcolorbox}\par} 
+
+
+\newenvironment{Pp}{%
+\begin{tcolorbox}[colback=sacado_yellow_light,colframe=sacado_yellow_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_pink,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Propriété. ]\vspace{3mm}
+}%
+{%
+\end{tcolorbox}\par} 
+
+
+\newenvironment{Att}{%
+\begin{tcolorbox}[colback=sacado_pink_light,colframe=sacado_pink_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_pink,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Attention. ]\vspace{3mm}\begin{leftbarPink}}%
+{\end{leftbarPink}%
+\end{tcolorbox}\par}
+
+
+
+\newenvironment{Rq}{%
+\begin{tcolorbox}[colback=sacado_yellow_light,colframe=sacado_yellow_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_pink,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Propriété.  ]\vspace{3mm}
+}%
+{%
+\end{tcolorbox}\par} 
+
+
+
+\newenvironment{Rg}{%
+\begin{tcolorbox}[colback=sacado_yellow_light,colframe=sacado_yellow_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_pink,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Règle. ]\vspace{3mm}
+}%
+{%
+\end{tcolorbox}\par} %%%%%%%%%%%%% Définitions
 %%%%%%%%%%%%%  
 
  
@@ -662,7 +707,7 @@ title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}
 {\end{leftbar}%
 }
 
-\newenvironment{Def}{%
+\newenvironment{Bloc}{%
 \hspace{1mm}
 \begin{minipage}{0.99\linewidth}
 }%
@@ -672,13 +717,13 @@ title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}
 
 
 
-\newenvironment{Th}[1]{%
-\begin{tcolorbox}[colback=sacado_yellow_light,colframe=sacado_yellow_light,fonttitle=\bfseries,
- boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
-colbacktitle=sacado_pink,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
-title= \textbf{$\searrow$}\; Théorème. #1 ]\vspace{3mm}\begin{leftbarPink}}%
+
+\newenvironment{lBarPink} {%
+\begin{leftbarPink}
+}%
 {\end{leftbarPink}%
-\end{tcolorbox}\par}
+}
+
 
 
 \newenvironment{Ex}{%
@@ -708,6 +753,22 @@ fontupper={\color{sacado_green}}
 }
 
 
+\newtcolorbox{ExR}{%
+enhanced,
+breakable,
+sharp corners,arc=0pt,outer arc=0pt,
+boxrule=2pt,boxsep=0pt,top=4pt,left=4pt,right=4pt,bottom=4pt,middle=0pt,
+colback=white, 
+colframe=white, 
+pad at break=0pt,bottomrule at break=0pt,toprule at break=0pt,
+borderline east={1pt}{-0.25pt}{sacado_green,dotted},
+borderline west={1pt}{-0.25pt}{sacado_green,dotted},
+borderline south={1pt}{-0.25pt}{sacado_green,dotted},
+borderline north={1pt}{-0.25pt}{sacado_green,dotted},
+fontupper={\color{sacado_green}}
+        \fcolorbox{sacado_green}{sacado_green}{\color{white}{\small EXERCICE RÉSOLU}}
+        \color{sacado_green}\vspace{1mm}
+}
 
 
 
@@ -720,12 +781,12 @@ fontupper={\color{sacado_green}}
 %%%%%%%%%%%%%%%%%%%%%%%% Condition pour la calculatrice
  \ifthenelse{\equal{#2}{1}}{
  \begin{tikzpicture}
-  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../preambule_tex/calculator.png} };
+  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../MISC/calculator.png} };
  \end{tikzpicture} 
  }{
  \ifthenelse{\equal{#2}{2}}{
  \begin{tikzpicture}
-  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../preambule/no_calculator.png} };
+  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../MISC/no_calculator.png} };
  \end{tikzpicture} 
  }{}
  }

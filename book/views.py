@@ -1099,7 +1099,7 @@ def print_latex_to_pdf(request,idch,idp):
 
 
 
-def print_latex_to_pdf(request,idch,idp):
+#def print_latex_to_pdf(request,idch,idp):
 
 
     preamb = settings.TEX_PREAMBULE_PDF_FILE_BOOK
@@ -1144,7 +1144,26 @@ def print_latex_to_pdf(request,idch,idp):
                         elements += r"\end{minipage}\hfill"
 
                     else :
-                        elements +=  bloc.typebloc_latex()
+                        if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 : 
+                            elements += r'\begin{'+bloc.typebloc.latexbloc+r'}' 
+                            elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'      
+                            close_latextype = bloc.typebloc.latextype
+                            if not bloc.insidebloc : elements += r'\end{'+close_latextype+'}' 
+                        elif bloc.typebloc.id == 4 or bloc.typebloc.id == 16 : 
+                            elements += r'\vspace{2mm}\colorbox{white}{\begin{Ex}' + bloc.content + r'\end{Ex}}' 
+                            elements += r'\end{'+close_latextype+'}' 
+                        elif bloc.typebloc.id == 9 or  bloc.typebloc.id == 13 : 
+                            elements += r'\vspace{2mm}\begin{Ex}' + bloc.content + r'\end{Ex}' 
+                            elements += r'\end{'+close_latextype+'}' 
+                        elif bloc.typebloc.id == 5 : 
+                            elements += r'\end{'+close_latextype+'}' 
+                            elements += r'\begin{Mt}' + bloc.content + r'\end{Mt}'
+                        elif bloc.typebloc.id == 15 : 
+                            elements += r'\end{'+close_latextype+'}' 
+                            elements += r'\begin{ExR}' + bloc.content + r'\end{ExR}'
+                        
+                        if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 and bloc.insidebloc: 
+                            elements += r'\end{'+close_latextype+'}' 
 
             elements += r"\newpage"
 
@@ -1181,21 +1200,26 @@ def print_latex_to_pdf(request,idch,idp):
                     elements +=  bloc.typebloc_latex()
                     elements += r"\end{minipage}\hfill"
                 else :
-                    if bloc.typebloc.id == 1 : typeB , lBar = 'Bloc' , 'lBar'
-                    elif bloc.typebloc.id == 2 : typeB  , lBar = 'Th' , 'lBarPink'
-                    elif bloc.typebloc.id == 3 : typeB , lBar  = 'Pp' , 'lBarPink'
-
-                    elements += r'\begin{'+typeB+'}{'+bloc.title+r'}' 
-                    if bloc.typebloc.id == 1 :
-                        elements += r'\begin{'+lBar+'}' 
-                        elements += r'\begin{Def}'+bloc.content+r'\end{Def}' 
-                        if bloc.typebloc.id == 4 : 
-                            elements += r'\vspace{2mm}\colorbox{white}{\begin{Ex}' + bloc.content + r'\end{Ex}}' 
-                        else : 
-                            elements += r'\end{'+lBar+'}' 
+                    if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 : 
+                        elements += r'\begin{'+bloc.typebloc.latexbloc+r'}' 
+                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'      
+                        close_latextype = bloc.typebloc.latextype
+                        if not bloc.insidebloc : elements += r'\end{'+close_latextype+'}' 
+                    elif bloc.typebloc.id == 4 or bloc.typebloc.id == 16 : 
+                        elements += r'\vspace{2mm}\colorbox{white}{\begin{Ex}' + bloc.content + r'\end{Ex}}' 
+                        elements += r'\end{'+close_latextype+'}' 
+                    elif bloc.typebloc.id == 9 or  bloc.typebloc.id == 13 : 
+                        elements += r'\vspace{2mm}\begin{Ex}' + bloc.content + r'\end{Ex}' 
+                        elements += r'\end{'+close_latextype+'}' 
                     elif bloc.typebloc.id == 5 : 
-                        elements += r'\begin{Mt}' + bloc.content + r'\end{Mt}' 
-                    elements += r'\end{Bloc}' 
+                        elements += r'\end{'+close_latextype+'}' 
+                        elements += r'\begin{Mt}' + bloc.content + r'\end{Mt}'
+                    elif bloc.typebloc.id == 15 : 
+                        elements += r'\end{'+close_latextype+'}' 
+                        elements += r'\begin{ExR}' + bloc.content + r'\end{ExR}'
+                    
+                    if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 and bloc.insidebloc: 
+                        elements += r'\end{'+close_latextype+'}' 
 
 
     elements +=  r"\end{document}"
