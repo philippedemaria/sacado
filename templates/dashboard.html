@@ -975,7 +975,10 @@
                     <div class="col-lg-2 col-xs-2">
                         <a href="{% url 'admin_exotexs' level.id  %}" class="surline"><img src="{% static 'img/tex.png' %}" width="15px"></a>  
                     </div>  
-                </div>
+                    <div class="col-lg-2 col-xs-2">
+                     <a href="{% url 'list_appliquettes'  level.id  %}"><i class="bi bi-app"></i>   </a> 
+                    </div>  
+                </div>  
             {% endfor %} 
     </div>
     {% endif %}
