@@ -23,7 +23,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
                         blocs = data.blocs ; 
                         let option = $("<option>", {
-                                        'value': ,
+                                        'value': 0 ,
                                         'html': "Choisir un bloc parent"
                                     });
                         $('select[name=insidebloc]').append(option);
