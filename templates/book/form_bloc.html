@@ -129,7 +129,7 @@
                         <div class="col-xs-12 col-md-4">
                             <label>Insérer dans un bloc</label>
                             <select id="id_insidebloc" name="insidebloc"  class="form-control select2">
-                                
+                                <option value="">Choisir un bloc parent</option>
                                 {% if bloc %}
                                     {% for b in bloc.paragraph.blocs.all %}
                                     <option value="{{ b.id}}" {% if b.id == bloc.id %} selected{% endif %}>{{ b.title}}</option>
