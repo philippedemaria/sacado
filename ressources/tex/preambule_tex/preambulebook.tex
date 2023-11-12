@@ -1,6 +1,235 @@
-\documentclass[11pt]{article}
-\usepackage[french]{babel}
-\usepackage[utf8]{inputenc}
+\documentclass[dvipsnames,french,10pt]{book}
+%----------------------------------------------------------------------------------------
+%   Géometrie de la page
+%----------------------------------------------------------------------------------------
+\usepackage[
+paperheight=29.5cm, %hauteur du papier
+paperwidth=21cm, %largeur du papier
+left=.8cm, %marge de gauche
+right=.8cm, %marge de droite
+top=1.35cm, %marge du haut
+bottom=1cm, %marge du bas
+%marginparsep=0pt, %distance entre le texte et les notes de marges 
+headheight=20.60pt, %hauteur du header
+%showframe, %permet d'afficher le cadre défini ci-dessus
+%bindingoffset=1cm %permet d'ajouter le décalage dû au reliage
+]{geometry } %Redéfinition de la taille des pages
+\raggedbottom
+
+
+%----------------------------------------------------------------------------------------
+%   Generals
+%----------------------------------------------------------------------------------------
+%\usepackage{fourier} %!! A changer plus tard !!
+\usepackage[scaled]{uarial}
+\renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
+\usepackage{frcursive}
+\usepackage[T1]{fontenc} %Accents handling
+\usepackage[utf8]{inputenc} % Use UTF-8 encoding
+%\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[english, francais]{babel} % Language hyphenation and typographical rules
+\usepackage{marginnote}
+
+
+%----------------------------------------------------------------------------------------
+%   Graphics
+%----------------------------------------------------------------------------------------
+\usepackage{xcolor}
+\usepackage{graphicx, multicol} % Enhanced support for graphics
+\graphicspath{FIG/}
+\usepackage{wrapfig}
+\usepackage{colortbl}
+\usepackage[framemethod=tikz]{mdframed}
+%\usepackage{xsavebox}
+% Il faudrait utiliser xsavebox à l'avenir pour réduire la taille du pdf
+
+%----------------------------------------------------------------------------------------
+%   Other packages
+%----------------------------------------------------------------------------------------
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true, %colorise les liens
+  breaklinks=true, %permet le retour à la ligne dans les liens trop longs
+  urlcolor= sacado_violet,  %couleur des hyperliens et des QR codes
+  linkcolor= sacado_violet, %couleur des liens internes
+  plainpages=false  %pour palier à "Bookmark problems can occur when you have duplicate page numbers, for example, if you have a page i and a page 1."
+}
+\usepackage{tabularx}
+\newcolumntype{M}[1]{>{\arraybackslash}m{#1}} %Defines a scalable column type in tabular
+\usepackage{booktabs} % Enhances quality of tables
+\usepackage{diagbox} % barre en diagonale dans un tableau
+\usepackage{multicol}
+\usepackage[explicit]{titlesec}
+\usepackage{xr}
+\usepackage{xspace}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{fancyvrb} %verbatim
+\usepackage{stmaryrd}
+\usepackage{float}
+
+
+
+% Python style for highlighting
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{white},   
+    commentstyle=\color{sacado_green},
+    keywordstyle=\color{sacado_red},
+    numberstyle=\tiny\color{sacado_orange},
+    stringstyle=\color{sacado_blue},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=false,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4
+}
+
+\lstset{style=mystyle}
+
+%----------------------------------------------------------------------------------------
+%   Headers and footers
+%----------------------------------------------------------------------------------------
+
+\pagestyle{empty}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt} % pas de filet sous le header
+
+%----------------------------------------------------------------------------------------
+%   Mathematics packages
+%----------------------------------------------------------------------------------------
+\usepackage{amsthm, amsmath, amssymb, mathrsfs} % Mathematical typesetting
+\usepackage{marvosym, wasysym} % More symbols
+\usepackage[makeroom]{cancel}
+\usepackage{xlop}
+\usepackage{pgf,tikz,pgfplots}
+\pgfplotsset{compat=1.16}
+\usepackage{pgf-pie}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+\usepackage{pst-plot,pst-tree,pst-func,pstricks-add,pst-node,pst-text}
+%\usepackage{units}
+\usepackage{nicefrac}
+\usepackage[np]{numprint} %Séparation milliers dans un nombre \np{12345} donne 12 345
+\usepackage{multido}
+\newcommand{\RNum}[1]{\uppercase\expandafter{\romannumeral #1\relax}}
+
+%----------------------------------------------------------------------------------------
+%   New text commands
+%----------------------------------------------------------------------------------------
+\usepackage{calc}
+\usepackage{boites}
+ \renewcommand{\arraystretch}{1.6}
+
+%%%%% Pour les imports.
+\usepackage{import}
+
+%%%%% Pour faire des boites
+\usepackage[tikz]{bclogo}
+\usepackage{bclogo}
+\usepackage{framed}
+\usepackage[skins]{tcolorbox}
+\tcbuselibrary{breakable}
+\tcbuselibrary{skins}
+\usetikzlibrary{quotes,babel,arrows.meta,shadows,decorations.pathmorphing,decorations.markings,patterns}
+\usepackage{tikzpagenodes}
+\usetikzlibrary{plotmarks}
+
+
+
+%%%%% Pour une double minipage
+\newcommand{\mini}[4]{
+\noindent
+\begin{minipage}[c]{#1}
+#2
+\end{minipage}
+\hfill
+\noindent
+\begin{minipage}[c]{#3}
+#4
+\end{minipage}
+}
+
+
+\usepackage{enumitem}
+\newlist{todolist}{itemize}{2} %Pour faire des QCM
+\setlist[todolist]{label=$\square$} %Pour faire des QCM \begin{todolist} instead of itemize
+\renewcommand{\FrenchLabelItem}{\textbullet} %bullet dans les items
+
+
+%----------------------------------------------------------------------------------------
+%   Définition de couleurs pour ...
+%----------------------------------------------------------------------------------------
+
+%GEOGEBRA
+
+\definecolor{zzttqq}{rgb}{0.6,0.2,0.} %rouge des polygones
+\definecolor{qqqqff}{rgb}{0.,0.,1.}
+\definecolor{xdxdff}{rgb}{0.49019607843137253,0.49019607843137253,1.}%bleu
+\definecolor{qqwuqq}{rgb}{0.,0.39215686274509803,0.} %vert des angles
+\definecolor{ffqqqq}{rgb}{1.,0.,0.} %rouge vif
+\definecolor{uuuuuu}{rgb}{0.26666666666666666,0.26666666666666666,0.26666666666666666}
+\definecolor{qqzzqq}{rgb}{0.,0.6,0.}
+\definecolor{cqcqcq}{rgb}{0.7529411764705882,0.7529411764705882,0.7529411764705882} %gris
+\definecolor{qqffqq}{rgb}{0.,1.,0.}
+\definecolor{ffdxqq}{rgb}{1.,0.8431372549019608,0.}
+\definecolor{ffffff}{rgb}{1.,1.,1.}
+\definecolor{ududff}{rgb}{0.30196078431372547,0.30196078431372547,1.}
+\definecolor{ffqqff}{rgb}{1.,0.,1.}
+\definecolor{ffxfqq}{rgb}{1,0.4980392156862745,0}
+\definecolor{ffffqq}{rgb}{1,1,0}
+\definecolor{qqttzz}{rgb}{0,0.2,0.6}
+\definecolor{qqccqq}{rgb}{0,0.8,0}
+\definecolor{qqzzff}{rgb}{0,0.6,1}
+\definecolor{qqwwzz}{rgb}{0,0.4,0.6}
+\definecolor{eqeqeq}{rgb}{0.8784313725490196,0.8784313725490196,0.8784313725490196}
+
+%SACADO
+
+\definecolor{fond}{HTML}{542885}  %couleur des entetes etc.  violet sacado
+\definecolor{sacado_purple}{HTML}{542885} %% Violet foncé Sacado
+\definecolor{sacado_violet}{HTML}{ead7ff} %% Violet clair Sacado
+\definecolor{texte}{HTML}{542885} % couleur du texte des entetes etc.
+\definecolor{sacado_blue}{HTML}{54c3e8} %% Bleu Sacado
+\definecolor{sacado_blue_light}{HTML}{e5f4fc} %% Bleu Sacado
+\definecolor{sacado_green}{HTML}{57b13c} %% Vert Sacado
+\definecolor{sacado_green_light}{HTML}{e5fce8} %% Vert Sacado foncé
+\definecolor{sacado_yellow}{HTML}{ffdc7a} %% Jaune Sacado
+\definecolor{sacado_yellow_light}{HTML}{fcfce5} %% Jaune Sacado
+\definecolor{sacado_orange}{HTML}{e8c212} %% Orange Sacado
+\definecolor{sacado_pink}{HTML}{ea4d88} %% Rouge Sacado
+%BOITES 
+
+\definecolor{bleu1}{rgb}{0.54,0.79,0.95} %% Bleu
+\definecolor{sapgreen}{rgb}{0.4, 0.49, 0}
+\definecolor{dvzfxr}{rgb}{0.7,0.4,0.}
+\definecolor{beamer}{rgb}{0.5176470588235295,0.49019607843137253,0.32941176470588235} % couleur beamer
+\definecolor{preuveRbeamer}{rgb}{0.8,0.4,0}
+\definecolor{sectioncolor}{rgb}{0.24,0.21,0.44}
+\definecolor{subsectioncolor}{rgb}{0.1,0.21,0.61}
+\definecolor{subsubsectioncolor}{rgb}{0.1,0.21,0.61}
+\definecolor{info}{rgb}{0.82,0.62,0}
+\definecolor{bleu2}{rgb}{0.38,0.56,0.68}
+\definecolor{bleu3}{rgb}{0.24,0.34,0.40}
+\definecolor{bleu4}{rgb}{0.12,0.20,0.25}
+\definecolor{vert}{rgb}{0.21,0.33,0}
+\definecolor{vertS}{rgb}{0.05,0.6,0.42}
+\definecolor{red}{rgb}{0.78,0,0}
+\definecolor{color5}{rgb}{0,0.4,0.58}
+\definecolor{eduscol4B}{rgb}{0.19,0.53,0.64}
+\definecolor{eduscol4P}{rgb}{0.62,0.12,0.39}
+\definecolor{ill_frame}{HTML}{F0F0F0} %Boite illustration contour
+\definecolor{ill_back}{HTML}{F7F7F7}  %Boite illustration background
+\definecolor{ill_title}{HTML}{AAAAAA} %Boite illustration titre
+
+
+
 \usepackage[T1]{fontenc}
 \usepackage{xspace}
 \usepackage{array}
@@ -12,12 +241,11 @@
 \usepackage{mathrsfs}
 \usepackage{stmaryrd}
 \usepackage{amssymb}
-\usepackage[?]{amsmath}
 \usepackage{epsfig}
 \usepackage{float}
 \usepackage{wrapfig}
 \usepackage{pifont}
-\usepackage{enumerate}
+ 
 \usepackage[np]{numprint} %\np{12345} donne 12 345 
 \usepackage{multicol}
 \newcommand{\second}{2\up{d}\xspace}
@@ -109,7 +337,6 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcommand{\GSO}{\mathcal{SO}}
 \newcommand{\GL}{\mathcal{GL}}
 \renewcommand{\emptyset}{\varnothing}
-\newcommand{\arc}[1]{\overset{\frown}{#1}}
 \newcommand{\rg}{\mathop{\mathrm{rg}}}
 \newcommand{\ds}{\displaystyle}
 \newcommand{\co}[3]{\begin{pmatrix}#1 \\ #2 \\ #3\end{pmatrix}}
@@ -211,20 +438,8 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \vspace{0.2cm}
 \tikz\node[rounded corners=2pt, fill=violet]{\color{white}\textbf{#1}};
 }
-
-
-\newcommand{\competence}[1]{
-  \hfill\textcolor{bleusad}{#1}
-}
-\newcommand{\competences}[1]{
-  {\bf CompÃƒÂ©tences ciblÃƒÂ©es : }
-  \begin{enumerate}
-   \item   #1
-  \end{enumerate}
-
-  \medskip
-}
-
+ 
+ 
 \newcommand{\savoir}[1]{
   {\bf Autre savoir-faire ciblÃƒÂ© : } 
   #1
@@ -249,7 +464,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 }
 
 \setlength{\parindent}{0cm}
-\usepackage[left=1cm,right=1cm,top=0.1cm,bottom=1cm]{geometry}
+ 
 
 \usepackage{multicol}
 
@@ -278,36 +493,173 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 \newcommand{\ligne}[1]{\vspace{0.1cm}\multido{}{#1}{ {\color{cqcqcq}\hrulefill} \medskip \endgraf}}
 
 
-%%%%%%%%%%%%% Définitions
-%%%%%%%%%%%%%  
-\newenvironment{DefT}[1]{%
-\begin{tcolorbox}[colback=sacado_blue_light,colframe=sacado_blue_light,fonttitle=\bfseries,
- boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
-colbacktitle=sacado_blue,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
-title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}}%
-{%
-\end{tcolorbox}\par}
+
+\newcounter{exo}
+\newcounter{cptr}
 
 
-\newenvironment{DefTB}[1]{%
-\begin{tcolorbox}[colback=sacado_blue_light,colframe=sacado_blue_light,fonttitle=\bfseries,
- boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
-colbacktitle=sacado_blue,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
-title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}\begin{leftbar}
-}%
-{\end{leftbar}%
-\end{tcolorbox}\par}
+
+
+\renewenvironment{leftbar}[1][\hsize]
+{% 
+    \def\FrameCommand
+    {%
+       {\color{sacado_purple}\vrule width 1pt}%
+        \hspace{0pt}%must no space.
+        \fboxsep=\FrameSep%\colorbox{yellow}%
+    }%
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}%
+  }
+{\endMakeFramed}
+
+
+\newenvironment{leftbarPink}[1][\hsize]
+{% 
+    \def\FrameCommand
+    {%
+       {\color{sacado_pink}\vrule width 1pt}%
+        \hspace{0pt}%must no space.
+        \fboxsep=\FrameSep%\colorbox{yellow}%
+    }%
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}%
+  }
+{\endMakeFramed}
+
+
+\newcommand{\headerGeneral}[1]{ % intitulé, couleur, qrcode
+\begin{tikzpicture}[remember picture,overlay]
+\coordinate(NO) at (-1.5,0);
+\coordinate(SW) at (22,1);
+\node[text width=6.2cm,font=\small] at (20.7,-0.04) { \color{white}{#1}  }; 
+\end{tikzpicture}
+}
+
 
  
+%%%%%% Environnement "pageCours" %%%%%%
+\newenvironment{pageCours}{
+\rhead{\includegraphics[scale=1]{../preambule_tex/pageCours.jpg} }
+\lhead{}%
+\headerGeneral{p/1234}
+}
+{\newpage}
 
-%%%%%%%%%%%%% EXEMPLES
-\newenvironment{Ex}{%
-\vspace{3mm}
-\colorbox{white}{
-\begin{minipage}{0.98\linewidth}
- }%
-{
-\end{minipage} }
+%%%%%% Environnement "pageAD" %%%%%%
+\newenvironment{pageAD}{
+\rhead{\includegraphics[scale=1]{../preambule_tex/pageAd.jpg} }
+\lhead{}%
+\headerGeneral{p/1234}
+}
+{\newpage}
+
+%%%%%% Environnement "pageParcoursu" %%%%%%
+\newenvironment{pageParcoursu}{
+
+\rhead{\includegraphics[scale=1]{../preambule_tex/pageParcoursu.jpg} }
+\lhead{}%
+\headerGeneral{p/1234}
+}
+{\newpage}
+%%%%%% Environnement "pageParcoursd" %%%%%%
+\newenvironment{pageParcoursd}{
+\rhead{\includegraphics[scale=1]{../preambule_tex/pageParcoursd.jpg} }
+\lhead{}%
+\headerGeneral{p/1234}
+}
+{\newpage}
+
+%%%%%% Environnement "pageParcourst" %%%%%%
+\newenvironment{pageParcourst}{
+\rhead{\includegraphics[scale=1]{../preambule_tex/pageParcourst.jpg} }
+\lhead{}%
+\headerGeneral{p/1234}
+}
+{\newpage}
+ 
+ 
+
+%%%%%% Environnement "pageAuto" %%%%%%
+\newenvironment{pageAuto}{
+\rhead{\includegraphics[scale=1]{../preambule_tex/pageAuto.jpg} }
+\lhead{}%
+\headerGeneral{p/1234}
+}
+{\newpage}
+
+%%%%%% Environnement "pageAlgo" %%%%%%
+\newenvironment{pageAlgo}{
+\rhead{\includegraphics[scale=1]{../preambule_tex/pageAlgo.jpg} }
+\lhead{}%
+\headerGeneral{p/1234}
+}
+{\newpage}
+ 
+ 
+
+%%%%%% Numéro de page %%%%%%
+\fancyfoot[L]{\colorbox{sacado_purple!70}{\color{white}\thepage}}
+\fancyfoot[C]{}
+
+%%%%%% Sections et numéros de sections %%%%%%
+ 
+\renewcommand{\thesection}{\arabic{section}}
+
+
+
+\titleformat{\section}{}{%
+\hspace{-0.15cm}{%
+ \tikz[baseline=(a.base)]\node[draw,circle,inner sep=2pt, line width=0mm, outer sep=2pt,fill=sacado_purple!70](a){\Large {\color{white}\thesection}  };
+ }}{1em}{\bf \Large {\color{sacado_purple}#1}}
+  
+  
+\renewcommand{\thesubsection}{\arabic{subsection}}
+
+\titleformat{\subsection}{}{%
+\hspace{-0.15cm}{%
+ \tikz[baseline=(a.base)]\node[draw,circle,inner sep=2pt, outer sep=2pt,fill=sacado_purple!70](a){\large {\color{white}\thesubsection}  };
+ }}{1em}{\bf \large {\color{sacado_purple}#1}}
+
+
+
+
+\makeatletter
+\newenvironment{TraitV}[1]{%
+% #1 couleur du trait (par défaut CouleurA)
+% #2 largeur du trait
+% #3 distance entre le trait et le texte
+\def\FrameCommand{{\color{#1}\vrule width 2pt}
+\hspace{1em}}\MakeFramed {\advance\hsize-\width}}%
+{\endMakeFramed}
+\makeatother
+
+%----------------------------------------
+%
+%   Définitions des environnements de Définitions, propriétés...
+%
+%----------------------------------------
+\newenvironment{Bloc}[1]{%
+\begin{tcolorbox}[colback=sacado_blue_light,colframe=sacado_blue_light,fonttitle=\bfseries,
+ boxsep=5pt,left=5pt,right=5pt,top=2pt,bottom=2pt,
+colbacktitle=sacado_blue,  enhanced,outer arc=0pt, attach boxed title to top left={xshift=-2mm, yshift=-3mm},
+title= \textbf{$\searrow$}\; Définition. #1 ]\vspace{3mm}
+}%
+{%
+\end{tcolorbox}\par} 
+%%%%%%%%%%%%% Définitions
+%%%%%%%%%%%%%  
+
+ 
+\newenvironment{lBar} {%
+\begin{leftbar}
+}%
+{\end{leftbar}%
+}
+
+\newenvironment{Def}{%
+\hspace{1mm}
+\begin{minipage}{0.99\linewidth}
+}%
+{\end{minipage}%
 }
 
 
@@ -322,8 +674,16 @@ title= \textbf{$\searrow$}\; Théorème. #1 ]\vspace{3mm}\begin{leftbarPink}}%
 \end{tcolorbox}\par}
 
 
+\newenvironment{Ex}{%
+\hspace{1mm} 
+\begin{minipage}{0.97\linewidth} \vspace{1mm}
+}%
+{\vspace{1mm} \end{minipage} %
+}
 
-\newtcolorbox{BoxMt}{%
+
+
+\newtcolorbox{Mt}{%
 enhanced,
 breakable,
 sharp corners,arc=0pt,outer arc=0pt,
@@ -337,5 +697,52 @@ borderline south={1pt}{-0.25pt}{sacado_green,dotted},
 borderline north={1pt}{-0.25pt}{sacado_green,dotted},
 fontupper={\color{sacado_green}}
         \fcolorbox{sacado_green}{sacado_green}{\color{white}{\small MÉTHODE}}
-        \color{sacado_green}
+        \color{sacado_green}\vspace{1mm}
 }
+
+
+
+
+
+%%%%%%%%%%%%% ExoCad 7 paramètres : Compétences, qrcode , calculatrice, python, scratch, tableur, annales
+ 
+\newenvironment{ExoCad}[2]{% code avant
+ 
+\stepcounter{exo}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%% Condition pour la calculatrice
+ \ifthenelse{\equal{#2}{1}}{
+ \begin{tikzpicture}
+  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../preambule_tex/calculator.png} };
+ \end{tikzpicture} 
+ }{
+ \ifthenelse{\equal{#2}{2}}{
+ \begin{tikzpicture}
+  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../preambule/no_calculator.png} };
+ \end{tikzpicture} 
+ }{}
+ }
+ }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%  Exercices   sans contours                            %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcommand{\Sf}[1]{ \vspace{0.1cm}
+{\color{sacado_purple}{\Large \textbf{#1}}  } 
+} 
+
+\newcommand{\Sfe}[1]{ \vspace{0.1cm}
+{\color{sacado_blue}{\Large \textbf{#1}}  } 
+} 
+ 
+
+
+\usepackage{makeidx}
+\makeindex
+
+
+ 
