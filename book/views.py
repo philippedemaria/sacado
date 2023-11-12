@@ -738,8 +738,6 @@ def show_book_document(request):
     document_id  = request.POST.get("document_id" , None )
     this_type  = request.POST.get("this_type" , None )
 
-    print(document_id , this_type)
-
     data = {}
 
     if this_type == "BiblioTex" :
@@ -1097,6 +1095,142 @@ def print_latex_to_pdf(request,idch,idp):
         return FileResponse(open(file_path+".pdf", 'rb'))
     except :
         return FileResponse(open(file_path+".log", 'rb'))
+
+
+
+
+def print_latex_to_pdf(request,idch,idp):
+
+
+    preamb = settings.TEX_PREAMBULE_PDF_FILE_BOOK
+
+    entetes=open(preamb,"r")
+    elements=entetes.read()
+    entetes.close()
+    elements +=r"\begin{document}"+"\n"  
+
+
+    if idch :
+ 
+        chapter = Chapter.objects.get(pk=idch)
+        for page in chapter.pages.filter(is_publish=1).order_by("number"):
+            if 'course_page_top' == page.css  :
+                elements += r"\begin{pageCours}"
+            elif 'ad_page_top' == page.css  :
+                elements += r"\begin{pageAd}"
+            elif 'parcoursu_page_top' == page.css  :
+                elements += r"\begin{pageparcoursu}"
+            elif 'parcoursd_page_top' == page.css  :
+                elements += r"\begin{pageParcoursd}"
+            elif 'parcourst_page_top' == page.css  :
+                elements += r"\begin{pageParcourst}"
+            elif 'parcoursd_page_top' == page.css  :
+                elements += r"\begin{pageParcoursd}"
+            elif 'auto_page_top' == page.css  :
+                elements += r"\begin{pageAuto}"
+            elif 'algo_page_top' == page.css  :
+                elements += r"\begin{pageAlgo}"
+            else :
+                elements += r"\begin{pageIntro}"
+
+
+            for paragraph in page.paragraphs.order_by("ranking"):
+                elements += r'\section{'+paragraph.title+r'}' 
+
+                for bloc in paragraph.blocs.order_by("ranking"):
+                    if bloc.size != 12 :
+                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
+                        elements +=  bloc.typebloc_latex()
+                        elements += r"\end{minipage}\hfill"
+
+                    else :
+                        elements +=  bloc.typebloc_latex()
+
+            elements += r"\newpage"
+
+    elif idp :
+        page = Page.objects.get(pk=idp)
+        if 'course_page_top' == page.css  :
+            elements += r"\begin{pageCours}"
+        elif 'ad_page_top' == page.css  :
+            elements += r"\begin{pageAd}"
+        elif 'parcoursu_page_top' == page.css  :
+            elements += r"\begin{pageparcoursu}"
+        elif 'parcoursd_page_top' == page.css  :
+            elements += r"\begin{pageParcoursd}"
+        elif 'parcourst_page_top' == page.css  :
+            elements += r"\begin{pageParcourst}"
+        elif 'parcoursd_page_top' == page.css  :
+            elements += r"\begin{pageParcoursd}"
+        elif 'auto_page_top' == page.css  :
+            elements += r"\begin{pageAuto}"
+        elif 'algo_page_top' == page.css  :
+            elements += r"\begin{pageAlgo}"
+        else :
+            elements += r"\begin{pageIntro}"
+
+
+        for paragraph in page.paragraphs.order_by("ranking"):
+            elements += r'\section{'+paragraph.title+r'}' 
+
+
+            for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
+
+                if bloc.size != 12 :
+                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
+                    elements +=  bloc.typebloc_latex()
+                    elements += r"\end{minipage}\hfill"
+                else :
+                    if bloc.typebloc.id == 1 : typeB , lBar = 'Bloc' , 'lBar'
+                    elif bloc.typebloc.id == 2 : typeB  , lBar = 'Th' , 'lBarPink'
+                    elif bloc.typebloc.id == 3 : typeB , lBar  = 'Pp' , 'lBarPink'
+
+                    elements += r'\begin{'+typeB+'}{'+bloc.title+r'}' 
+                    if bloc.typebloc.id == 1 :
+                        elements += r'\begin{'+lBar+'}' 
+                        elements += r'\begin{Def}'+bloc.content+r'\end{Def}' 
+                        if bloc.typebloc.id == 4 : 
+                            elements += r'\vspace{2mm}\colorbox{white}{\begin{Ex}' + bloc.content + r'\end{Ex}}' 
+                        else : 
+                            elements += r'\end{'+lBar+'}' 
+                    elif bloc.typebloc.id == 5 : 
+                        elements += r'\begin{Mt}' + bloc.content + r'\end{Mt}' 
+                    elements += r'\end{Bloc}' 
+
+
+    elements +=  r"\end{document}"
+    ################################################################# 
+    ###########################################
+    ###################### Attention ERREUR si non modif
+    # pour windows
+    # file_path = settings.DIR_TMP_TEX+r"\\doc" 
+    # pour le serveur Linux
+ 
+    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+str(idp)
+    ################################################################# 
+    ################################################################# 
+    with open(file_path+".tex" , 'w') as file:
+        file.write(elements)
+        file.close()
+
+    result = subprocess.run(["pdflatex", "-interaction","nonstopmode",  "-output-directory", settings.DIR_TMP_TEX  ,  file_path ])
+
+    if os.path.isfile(file_path+".out"):os.remove(file_path+".out")
+    if os.path.isfile(file_path+".aux"):os.remove(file_path+".aux")    
+ 
+
+    try :
+        return FileResponse(open(file_path+".pdf", 'rb'))
+    except :
+        return FileResponse(open(file_path+".log", 'rb'))
+
+
+
+
+
+
+
+
 
 
 def print_latex_to_tex(request,idch,idp):

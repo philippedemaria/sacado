@@ -338,8 +338,11 @@ class Paragraph(models.Model):
 
 class Typebloc(models.Model):
 
-    title = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
-    css   = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Nom de la classe")
+    title     = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Titre")
+    css       = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Nom de la classe")
+    latexbloc = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Latex Bloc")
+    latextype = models.CharField(max_length=255, null=True, blank=True,   verbose_name="Latex type")
+
 
     def __str__(self):
         return "{}".format(self.title )

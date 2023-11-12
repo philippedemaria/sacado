@@ -594,7 +594,14 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 }
 {\newpage}
  
- 
+
+%%%%%% Environnement "pageIntro" %%%%%%
+\newenvironment{pageIntro}{
+\rhead{}
+\lhead{}%
+}
+{\newpage}
+  
 
 %%%%%% Numéro de page %%%%%%
 \fancyfoot[L]{\colorbox{sacado_purple!70}{\color{white}\thepage}}
