@@ -2295,7 +2295,7 @@ def change_number_in_all_relationships(request,idf, idp):
         r.ranking = i
         r.save()
         i+=1
-    print(idf)
+
     if idf : 
         return redirect('show_parcours',idf,idp)
     else :
