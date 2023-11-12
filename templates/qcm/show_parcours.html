@@ -137,12 +137,17 @@ body{
 
                         {% if folder %}
                             <a href="{% url 'change_publications_in_all_relationships' folder.id parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-toggle-on"></i> <span class="btn_label">Gérer les publications</span></a>
-                            <a href="{% url 'change_situations_in_all_relationships' folder.id parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-123"></i> <span class="btn_label">Gérer le nombre de situations</span></a>                  
-                            <a href="{% url 'change_durations_in_all_relationships' folder.id parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-clock"></i> <span class="btn_label">Gérer les durées</span></a>                               
+                            <a href="{% url 'change_situations_in_all_relationships' folder.id parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-5-circle"></i> <span class="btn_label">Gérer le nombre de situations</span></a>                  
+                            <a href="{% url 'change_durations_in_all_relationships' folder.id parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-clock"></i> <span class="btn_label">Gérer les durées</span></a>
+
+                            <a href="{% url 'change_number_in_all_relationships' folder.id parcours.id  %}"class="btn btn-xs btn-sacado" ><i class="bi bi-123"></i> <span class="btn_label">Renuméroter les exercices</span></a>                              
                         {% else %}
                             <a href="{% url 'change_publications_in_all_relationships' 0 parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-toggle-on" style="margin-right: 0px"></i> <span class="btn_label">Gérer les publications</span></a> 
-                            <a href="{% url 'change_situations_in_all_relationships' 0 parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-123"></i> <span class="btn_label">Gérer le nombre de situations</span></a> 
+                            <a href="{% url 'change_situations_in_all_relationships' 0 parcours.id  %}" class="btn btn-xs btn-sacado"><i class="bi bi-5-circle"></i> <span class="btn_label">Gérer le nombre de situations</span></a> 
                             <a href="{% url 'change_durations_in_all_relationships' 0 parcours.id  %}"class="btn btn-xs btn-sacado" ><i class="bi bi-clock"></i> <span class="btn_label">Gérer les durées</span></a>
+
+                            <a href="{% url 'change_number_in_all_relationships' 0 parcours.id  %}"class="btn btn-xs btn-sacado" ><i class="bi bi-123"></i> <span class="btn_label">Renuméroter les exercices</span></a>
+
 
 
                         {% endif %}
@@ -181,12 +186,14 @@ body{
       
                         <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" ><i class="fa fa-circle-o-notch" style="margin-right: 0px"></i><span class="btn_label"> Gérer les publications</span></a> 
 
-                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" ><i class="bi bi-123"></i> <span class="btn_label">Gérer le nombre de situations</span></a> 
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" ><i class="bi bi-5-circle"></i> <span class="btn_label">Gérer le nombre de situations</span></a> 
 
                         <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" ><i class="bi bi-clock"></i> <span class="btn_label">Gérer les durées</span></a> 
 
                         <a href="#" class="btn btn-xs btn-sacado  no_sacado_asso" ><i class="bi bi-eye"></i> <span class="btn_label">Montrer seulement les exercices publiés</span></a>  
-     
+
+                        <a href="#" class="btn btn-xs btn-sacado no_sacado_asso" ><i class="bi bi-123"></i> <span class="btn_label">Renuméroter les exercices</span></a> 
+                        
                         {% if parcours.is_ia and parcours.is_testpos %}
                             <a  href="#" class="btn btn-xs btn-sacado no_sacado_asso"><b>IA</b> <span class="btn_label">Voir le parcours lié à ce test</span></a>  
                             <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-grid-3x3-gap"></i> <span class="btn_label">Créer le parcours lié à ce test avec l'IA</span></a>    

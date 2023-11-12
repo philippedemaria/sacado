@@ -2285,6 +2285,24 @@ def change_publications_in_all_relationships(request,idf,idp):
 
     return render(request, 'qcm/change_publications.html', context)
 
+
+
+def change_number_in_all_relationships(request,idf, idp):
+
+    parcours = Parcours.objects.get(pk=idp)
+    i=1
+    for r in parcours.parcours_relationship.exclude(exercise__supportfile__is_title=1).order_by("ranking"):
+        r.ranking = i
+        r.save()
+        i+=1
+    print(idf)
+    if idf : 
+        return redirect('show_parcours',idf,idp)
+    else :
+        return redirect('parcours_show_only_exercises',idp)
+
+
+
 ############################################################################################################################################
 ############################################################################################################################################
 ##################   Fin des listes dossiers parcours évaluation archives  #################################################################

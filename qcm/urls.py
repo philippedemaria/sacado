@@ -79,8 +79,7 @@ urlpatterns = [
     path('actioner_parcours', actioner_parcours, name='actioner_parcours'), #archiver ou supprimer une sélection
     path('actioner_course', actioner_course, name='actioner_course'), #archiver ou supprimer une sélection
 
-
-
+    path('change_number_in_all_relationships/<int:idf>/<int:idp>', change_number_in_all_relationships, name='change_number_in_all_relationships'), #archiver ou supprimer une sélection
     path('change_situations/<int:idf>/<int:idp>', change_situations_in_all_relationships , name='change_situations_in_all_relationships'),
     path('change_durations/<int:idf>/<int:idp>', change_durations_in_all_relationships , name='change_durations_in_all_relationships'),
     path('change_publications/<int:idf>/<int:idp>', change_publications_in_all_relationships , name='change_publications_in_all_relationships'),
