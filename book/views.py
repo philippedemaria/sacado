@@ -1525,7 +1525,7 @@ def create_bloc(request, idb, idp):
         else:
             print(form.errors)
 
-    context = {'form': form, 'communications' : [] , 'typebloc': typebloc,   }
+    context = {'form': form, 'communications' : [] , 'typebloc': typebloc, 'book' : book   }
 
     return render(request, 'book/form_typebloc.html', context )
 
@@ -1563,7 +1563,7 @@ def update_bloc(request, idb, idp, idbl):
         else:
             print(form.errors)
 
-    context = {'form_b': form,  'bloc': bloc, 'idb' : idb , 'idp' : idp   }
+    context = {'form_b': form,  'bloc': bloc, 'idb' : idb , 'idp' : idp , 'book' : book  }
 
     return render(request, 'book/form_bloc.html', context )
 
@@ -1790,3 +1790,31 @@ def ajax_display_correcion_bloc(request):
     data['nocss'] = nocss
     return JsonResponse(data) 
  
+
+
+def ajax_insidebloc(request):
+
+    id_paragraph   = request.POST.get('id_paragraph',None)
+    paragraph = Paragraph.objects.get(pk=id_paragraph) 
+    blocs =  list(paragraph.blocs.values_list('id','title'))
+
+    data = {'blocs' : blocs}
+    return JsonResponse(data)
+
+
+
+def ajax_knowledge_inbloc(request):
+
+    id_theme  = request.POST.get('id_theme',None)
+    id_level  = request.POST.get('id_level',None)
+
+    theme = Theme.objects.get(pk=id_theme) 
+    waitings = theme.waitings.filter(level_id=id_level)
+    knowledges = list()
+    for w in waitings :
+        knowledges+=list(w.knowledges.values_list('id','name'))
+
+    data = {'knowledges' : list(knowledges)}
+
+
+    return JsonResponse(data)

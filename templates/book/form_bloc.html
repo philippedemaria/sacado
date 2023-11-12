@@ -10,6 +10,11 @@
     {% else %}
     <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
     {% endif %}
+
+    <script>
+        require(['script/ajax-insidebloc']);
+    </script> 
+
 {% endblock %}
 
 
@@ -93,24 +98,25 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
-                            <div class="form-group">
-                                <label>Savoir faire principal</label>
-                                {{ form_b.knowledge |add_class:"form-control select2" }}
-                                {{ form_b.knowledge.errors }}
-                            </div>
-                        </div>
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-5">
                             <div class="form-group">
                                 <label>Thème</label>
                                 {{ form_b.theme |add_class:"form-control select2" }}
                                 {{ form_b.theme.errors }}
                             </div>
                         </div>
+                        <div class="col-xs-12 col-md-7">
+                            <div class="form-group">
+                                <label>Savoir faire principal</label>
+                                <input type="hidden" name="level" id="id_level" value="{{book.level.id}}">
+                                <select id="id_knowledge" name="knowledge" class="form-control select2">
+                                </select>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 col-md-6">
+                        <div class="col-xs-12 col-md-2">
                             <label>Compétences</label>
                             {{ form_b.skills |add_class:"form-control select2" }}
                             {{ form_b.skills.errors }}
@@ -120,13 +126,15 @@
                             {{ form_b.knowledges |add_class:"form-control select2" }}
                             {{ form_b.knowledges.errors }}
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-xs-12 col-md-12">
+                        <div class="col-xs-12 col-md-4">
                             <label>Insérer dans un bloc</label>
-                            {{ form_b.insidebloc |add_class:"form-control select2" }}
-                            {{ form_b.insidebloc.errors }}
+                            <select id="id_insidebloc" name="insidebloc"  class="form-control select2">
+                                {% if bloc %}
+                                    {% for b in bloc.paragraph.blocs.all %}
+                                    <option value="{{ b.id}}" {% if b.id == bloc.id %} selected{% endif %}>{{ b.title}}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
                         </div>
                     </div>
 

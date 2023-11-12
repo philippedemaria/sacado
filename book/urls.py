@@ -131,5 +131,8 @@ urlpatterns = [
 
     path('ajax_display_correcion_bloc', ajax_display_correcion_bloc, name='ajax_display_correcion_bloc'),
     path('ajax_create_exercise_from_scratch', ajax_create_exercise_from_scratch, name='ajax_create_exercise_from_scratch'),
+    path('ajax_insidebloc', ajax_insidebloc, name='ajax_insidebloc'),
+    path('ajax_knowledge_inbloc', ajax_knowledge_inbloc, name='ajax_knowledge_inbloc'),
 
+ 
  ]
