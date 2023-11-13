@@ -1154,9 +1154,6 @@ def print_latex_to_book(request,idch,idp):
                             elements += r"\end{minipage}"                                  
                         if latextype and not close_latextype :
                             elements += r'\end{'+latextype+'}' 
-                        elements += r'\end{'+latexbloc+'}' 
-
-
 
                         elements += r'\end{'+latexbloc+'}' 
                     else :
@@ -1175,8 +1172,7 @@ def print_latex_to_book(request,idch,idp):
                                     close_latextype = True
                                 elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'                                     
                         if latextype and not close_latextype :
-                            elements += r'\end{'+latextype+'}' 
-                        elements += r'\end{'+latexbloc+'}' 
+                            elements += r'\end{'+latextype+'}'  
 
             if 'course_page_top' == page.css  :
                 elements += r"\end{pageCours}"
@@ -1242,9 +1238,6 @@ def print_latex_to_book(request,idch,idp):
                         elements += r"\end{minipage}"                                  
                     if latextype and not close_latextype :
                         elements += r'\end{'+latextype+'}' 
-                    elements += r'\end{'+latexbloc+'}' 
-
-
 
                     elements += r'\end{'+latexbloc+'}' 
                 else :
@@ -1264,7 +1257,7 @@ def print_latex_to_book(request,idch,idp):
                             elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'                                     
                     if latextype and not close_latextype :
                         elements += r'\end{'+latextype+'}' 
-                    elements += r'\end{'+latexbloc+'}' 
+
 
         if 'course_page_top' == page.css  :
             elements += r"\end{pageCours}"
