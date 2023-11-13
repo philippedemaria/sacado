@@ -1023,8 +1023,6 @@ def sorter_book_pages(request):
 
 def print_latex_to_pdf(request,idch,idp):
 
-
-    #preamb = settings.TEX_PREAMBULE_PDF_FILE_BOOK
     preamb = settings.TEX_PREAMBULE_PDF_FILE
 
     entetes=open(preamb,"r")
