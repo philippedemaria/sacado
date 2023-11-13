@@ -1130,7 +1130,6 @@ def print_latex_to_book(request,idch,idp):
             else :
                 elements += r"\begin{pageIntro}"
 
-
             for paragraph in page.paragraphs.order_by("ranking"):
                 elements += r'\section{'+paragraph.title+r'}' 
 
@@ -1258,7 +1257,7 @@ def print_latex_to_book(request,idch,idp):
     # file_path = settings.DIR_TMP_TEX+r"\\doc" 
     # pour le serveur Linux
  
-    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+str(idp)
+    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_book_"+str(idp)
     ################################################################# 
     ################################################################# 
     with open(file_path+".tex" , 'w') as file:
