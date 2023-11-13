@@ -536,7 +536,13 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 }
 
 
- 
+%%%%%% Environnement "pageCours" %%%%%%
+\newenvironment{pageIntro}{
+\rhead{}
+\lhead{}%
+}
+{\newpage} 
+
 %%%%%% Environnement "pageCours" %%%%%%
 \newenvironment{pageCours}{
 \rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageCours.jpg} }
@@ -791,6 +797,8 @@ fontupper={\color{sacado_green}}
 \newcommand{\Sf}[1]{ \vspace{0.1cm}
 {\color{sacado_purple}{\Large \textbf{#1}}  } 
 } 
+
+ 
 
 \newcommand{\Sfe}[1]{ \vspace{0.1cm}
 {\color{sacado_blue}{\Large \textbf{#1}}  } 

@@ -1178,7 +1178,24 @@ def print_latex_to_book(request,idch,idp):
                             elements += r'\end{'+latextype+'}' 
                         elements += r'\end{'+latexbloc+'}' 
 
-            elements += r"\newpage"
+            if 'course_page_top' == page.css  :
+                elements += r"\end{pageCours}"
+            elif 'ad_page_top' == page.css  :
+                elements += r"\end{pageAd}"
+            elif 'parcoursu_page_top' == page.css  :
+                elements += r"\end{pageparcoursu}"
+            elif 'parcoursd_page_top' == page.css  :
+                elements += r"\end{pageParcoursd}"
+            elif 'parcourst_page_top' == page.css  :
+                elements += r"\end{pageParcourst}"
+            elif 'parcoursd_page_top' == page.css  :
+                elements += r"\end{pageParcoursd}"
+            elif 'auto_page_top' == page.css  :
+                elements += r"\end{pageAuto}"
+            elif 'algo_page_top' == page.css  :
+                elements += r"\end{pageAlgo}"
+            else :
+                elements += r"\end{pageIntro}"
 
     elif idp :
         page = Page.objects.get(pk=idp)
@@ -1249,7 +1266,24 @@ def print_latex_to_book(request,idch,idp):
                         elements += r'\end{'+latextype+'}' 
                     elements += r'\end{'+latexbloc+'}' 
 
-    elements +=  r"\end{document}"
+        if 'course_page_top' == page.css  :
+            elements += r"\end{pageCours}"
+        elif 'ad_page_top' == page.css  :
+            elements += r"\end{pageAd}"
+        elif 'parcoursu_page_top' == page.css  :
+            elements += r"\end{pageparcoursu}"
+        elif 'parcoursd_page_top' == page.css  :
+            elements += r"\end{pageParcoursd}"
+        elif 'parcourst_page_top' == page.css  :
+            elements += r"\end{pageParcourst}"
+        elif 'parcoursd_page_top' == page.css  :
+            elements += r"\end{pageParcoursd}"
+        elif 'auto_page_top' == page.css  :
+            elements += r"\end{pageAuto}"
+        elif 'algo_page_top' == page.css  :
+            elements += r"\end{pageAlgo}"
+        else :
+            elements += r"\end{pageIntro}"
     ################################################################# 
     ###########################################
     ###################### Attention ERREUR si non modif
