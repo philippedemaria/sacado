@@ -1138,6 +1138,7 @@ def print_latex_to_book(request,idch,idp):
                     latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                     if bloc.size != 12 :
                         elements += r'\begin{'+latexbloc+r'}' 
+                        close_latextype = False 
                         if latextype : 
                             elements += r'\begin{'+latextype+r'}' 
                         elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"+bloc.content+ r"\end{minipage}\hfill"
@@ -1163,7 +1164,8 @@ def print_latex_to_book(request,idch,idp):
                         elements += r'\begin{'+latexbloc+r'}' 
                         if latextype : 
                             elements += r'\begin{'+latextype+r'}' 
-                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}'  
+                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}' 
+                        close_latextype = False 
                         for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                             lbloc = b.typebloc.latexbloc
                             if 'Ex' ==  lbloc : 
@@ -1206,6 +1208,7 @@ def print_latex_to_book(request,idch,idp):
             for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
                 latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                 if bloc.size != 12 :
+                    close_latextype = False 
                     elements += r'\begin{'+latexbloc+r'}' 
                     if latextype : 
                         elements += r'\begin{'+latextype+r'}' 
@@ -1232,7 +1235,8 @@ def print_latex_to_book(request,idch,idp):
                     elements += r'\begin{'+latexbloc+r'}' 
                     if latextype : 
                         elements += r'\begin{'+latextype+r'}' 
-                    elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}'  
+                    elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}' 
+                    close_latextype = False  
                     for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                         lbloc = b.typebloc.latexbloc
                         if 'Ex' ==  lbloc : 
