@@ -1099,8 +1099,7 @@ def print_latex_to_pdf(request,idch,idp):
 
 
 
-#def print_latex_to_pdf(request,idch,idp):
-
+def print_latex_to_book(request,idch,idp):
 
     preamb = settings.TEX_PREAMBULE_PDF_FILE_BOOK
 
@@ -1109,9 +1108,7 @@ def print_latex_to_pdf(request,idch,idp):
     entetes.close()
     elements +=r"\begin{document}"+"\n"  
 
-
     if idch :
- 
         chapter = Chapter.objects.get(pk=idch)
         for page in chapter.pages.filter(is_publish=1).order_by("number"):
             if 'course_page_top' == page.css  :
@@ -1137,33 +1134,48 @@ def print_latex_to_pdf(request,idch,idp):
             for paragraph in page.paragraphs.order_by("ranking"):
                 elements += r'\section{'+paragraph.title+r'}' 
 
-                for bloc in paragraph.blocs.order_by("ranking"):
+                for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
+                    latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                     if bloc.size != 12 :
-                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
-                        elements +=  bloc.typebloc_latex()
-                        elements += r"\end{minipage}\hfill"
+                        elements += r'\begin{'+latexbloc+r'}' 
+                        if latextype : 
+                            elements += r'\begin{'+latextype+r'}' 
+                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"+bloc.content+ r"\end{minipage}\hfill"
+                        for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
+                            lbloc = b.typebloc.latexbloc
+                            elements += r"\begin{minipage}{"+str(round(b.size/12 - 0.005,3)).replace(",",".")
+                            if 'Ex' ==  lbloc : 
+                                elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                            else :
+                                if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
+                                    elements += r'\end{'+latextype+'}' 
+                                    close_latextype = True
+                                elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'
+                            elements += r"\end{minipage}"                                  
+                        if latextype and not close_latextype :
+                            elements += r'\end{'+latextype+'}' 
+                        elements += r'\end{'+latexbloc+'}' 
 
+
+
+                        elements += r'\end{'+latexbloc+'}' 
                     else :
-                        if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 : 
-                            elements += r'\begin{'+bloc.typebloc.latexbloc+r'}' 
-                            elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'      
-                            close_latextype = bloc.typebloc.latextype
-                            if not bloc.insidebloc : elements += r'\end{'+close_latextype+'}' 
-                        elif bloc.typebloc.id == 4 or bloc.typebloc.id == 16 : 
-                            elements += r'\vspace{2mm}\colorbox{white}{\begin{Ex}' + bloc.content + r'\end{Ex}}' 
-                            elements += r'\end{'+close_latextype+'}' 
-                        elif bloc.typebloc.id == 9 or  bloc.typebloc.id == 13 : 
-                            elements += r'\vspace{2mm}\begin{Ex}' + bloc.content + r'\end{Ex}' 
-                            elements += r'\end{'+close_latextype+'}' 
-                        elif bloc.typebloc.id == 5 : 
-                            elements += r'\end{'+close_latextype+'}' 
-                            elements += r'\begin{Mt}' + bloc.content + r'\end{Mt}'
-                        elif bloc.typebloc.id == 15 : 
-                            elements += r'\end{'+close_latextype+'}' 
-                            elements += r'\begin{ExR}' + bloc.content + r'\end{ExR}'
-                        
-                        if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 and bloc.insidebloc: 
-                            elements += r'\end{'+close_latextype+'}' 
+                        elements += r'\begin{'+latexbloc+r'}' 
+                        if latextype : 
+                            elements += r'\begin{'+latextype+r'}' 
+                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}'  
+                        for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
+                            lbloc = b.typebloc.latexbloc
+                            if 'Ex' ==  lbloc : 
+                                elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                            else :
+                                if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
+                                    elements += r'\end{'+latextype+'}' 
+                                    close_latextype = True
+                                elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'                                     
+                        if latextype and not close_latextype :
+                            elements += r'\end{'+latextype+'}' 
+                        elements += r'\end{'+latexbloc+'}' 
 
             elements += r"\newpage"
 
@@ -1191,36 +1203,48 @@ def print_latex_to_pdf(request,idch,idp):
 
         for paragraph in page.paragraphs.order_by("ranking"):
             elements += r'\section{'+paragraph.title+r'}' 
-
-
             for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
-
+                latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                 if bloc.size != 12 :
-                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
-                    elements +=  bloc.typebloc_latex()
-                    elements += r"\end{minipage}\hfill"
-                else :
-                    if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 : 
-                        elements += r'\begin{'+bloc.typebloc.latexbloc+r'}' 
-                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'      
-                        close_latextype = bloc.typebloc.latextype
-                        if not bloc.insidebloc : elements += r'\end{'+close_latextype+'}' 
-                    elif bloc.typebloc.id == 4 or bloc.typebloc.id == 16 : 
-                        elements += r'\vspace{2mm}\colorbox{white}{\begin{Ex}' + bloc.content + r'\end{Ex}}' 
-                        elements += r'\end{'+close_latextype+'}' 
-                    elif bloc.typebloc.id == 9 or  bloc.typebloc.id == 13 : 
-                        elements += r'\vspace{2mm}\begin{Ex}' + bloc.content + r'\end{Ex}' 
-                        elements += r'\end{'+close_latextype+'}' 
-                    elif bloc.typebloc.id == 5 : 
-                        elements += r'\end{'+close_latextype+'}' 
-                        elements += r'\begin{Mt}' + bloc.content + r'\end{Mt}'
-                    elif bloc.typebloc.id == 15 : 
-                        elements += r'\end{'+close_latextype+'}' 
-                        elements += r'\begin{ExR}' + bloc.content + r'\end{ExR}'
-                    
-                    if bloc.typebloc.id == 1 or bloc.typebloc.id == 2 or bloc.typebloc.id == 3 or bloc.typebloc.id == 8 or bloc.typebloc.id == 10 or bloc.typebloc.id == 14 and bloc.insidebloc: 
-                        elements += r'\end{'+close_latextype+'}' 
+                    elements += r'\begin{'+latexbloc+r'}' 
+                    if latextype : 
+                        elements += r'\begin{'+latextype+r'}' 
+                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"+bloc.content+ r"\end{minipage}\hfill"
+                    for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
+                        lbloc = b.typebloc.latexbloc
+                        elements += r"\begin{minipage}{"+str(round(b.size/12 - 0.005,3)).replace(",",".")
+                        if 'Ex' ==  lbloc : 
+                            elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                        else :
+                            if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
+                                elements += r'\end{'+latextype+'}' 
+                                close_latextype = True
+                            elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'
+                        elements += r"\end{minipage}"                                  
+                    if latextype and not close_latextype :
+                        elements += r'\end{'+latextype+'}' 
+                    elements += r'\end{'+latexbloc+'}' 
 
+
+
+                    elements += r'\end{'+latexbloc+'}' 
+                else :
+                    elements += r'\begin{'+latexbloc+r'}' 
+                    if latextype : 
+                        elements += r'\begin{'+latextype+r'}' 
+                    elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}'  
+                    for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
+                        lbloc = b.typebloc.latexbloc
+                        if 'Ex' ==  lbloc : 
+                            elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                        else :
+                            if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
+                                elements += r'\end{'+latextype+'}' 
+                                close_latextype = True
+                            elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'                                     
+                    if latextype and not close_latextype :
+                        elements += r'\end{'+latextype+'}' 
+                    elements += r'\end{'+latexbloc+'}' 
 
     elements +=  r"\end{document}"
     ################################################################# 
