@@ -539,7 +539,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
  
 %%%%%% Environnement "pageCours" %%%%%%
 \newenvironment{pageCours}{
-\rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageCours.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageCours.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -547,7 +547,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageAD" %%%%%%
 \newenvironment{pageAD}{
-\rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageAd.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageAd.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -556,14 +556,14 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 %%%%%% Environnement "pageParcoursu" %%%%%%
 \newenvironment{pageParcoursu}{
 
-\rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageParcoursu.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageParcoursu.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
 {\newpage}
 %%%%%% Environnement "pageParcoursd" %%%%%%
 \newenvironment{pageParcoursd}{
-\rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageParcoursd.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageParcoursd.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -571,7 +571,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageParcourst" %%%%%%
 \newenvironment{pageParcourst}{
-\rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageParcourst.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageParcourst.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -581,7 +581,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageAuto" %%%%%%
 \newenvironment{pageAuto}{
-\rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageAuto.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageAuto.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -589,7 +589,7 @@ title= \stepcounter{cpt}  #1  \thecpt \;: #2]}
 
 %%%%%% Environnement "pageAlgo" %%%%%%
 \newenvironment{pageAlgo}{
-\rhead{\includegraphics[scale=1]{/var/www/sacado/ressources/tex/pageAlgo.jpg} }
+\rhead{\includegraphics[scale=1]{../MISC/pageAlgo.jpg} }
 \lhead{}%
 \headerGeneral{p/1234}
 }
@@ -774,11 +774,22 @@ fontupper={\color{sacado_green}}
 
 %%%%%%%%%%%%% ExoCad 7 paramètres : Compétences, qrcode , calculatrice, python, scratch, tableur, annales
  
-\newenvironment{Exo}{% code avant
+\newenvironment{ExoCad}[2]{% code avant
  
 \stepcounter{exo}
-
  
+%%%%%%%%%%%%%%%%%%%%%%%% Condition pour la calculatrice
+ \ifthenelse{\equal{#2}{1}}{
+ \begin{tikzpicture}
+  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../MISC/calculator.png} };
+ \end{tikzpicture} 
+ }{
+ \ifthenelse{\equal{#2}{2}}{
+ \begin{tikzpicture}
+  \node[minimum width=0.7cm]{\includegraphics[scale=0.5]{../MISC/no_calculator.png} };
+ \end{tikzpicture} 
+ }{}
+ }
  }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -802,4 +813,5 @@ fontupper={\color{sacado_green}}
 \makeindex
 
 
- 
+ \begin{document}
+\begin{pageCours}\end{document}
