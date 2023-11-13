@@ -1129,7 +1129,9 @@ def print_latex_to_book(request,idch,idp):
                 elements += r"\begin{pageIntro}"
 
             for paragraph in page.paragraphs.order_by("ranking"):
-                elements += r'\section{'+paragraph.title+r'}' 
+
+                if paragraph.number > 0 : 
+                    elements += r'\section{'+paragraph.title+r'}' 
 
                 for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
                     latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
@@ -1219,7 +1221,9 @@ def print_latex_to_book(request,idch,idp):
 
 
         for paragraph in page.paragraphs.order_by("ranking"):
-            elements += r'\section{'+paragraph.title+r'}' 
+
+            if paragraph.number > 0 : 
+                elements += r'\section{'+paragraph.title+r'}' 
             for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
                 latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                 if bloc.size != 12 :
