@@ -1112,23 +1112,23 @@ def print_latex_to_book(request,idch,idp):
         chapter = Chapter.objects.get(pk=idch)
         for page in chapter.pages.filter(is_publish=1).order_by("number"):
             if 'course_page_top' == page.css  :
-                elements += r"\begin{pageCours}"
+                elements += r"\begin{pageCours}"+"\n"
             elif 'ad_page_top' == page.css  :
-                elements += r"\begin{pageAd}"
+                elements += r"\begin{pageAd}"+"\n"
             elif 'parcoursu_page_top' == page.css  :
-                elements += r"\begin{pageparcoursu}"
+                elements += r"\begin{pageparcoursu}"+"\n"
             elif 'parcoursd_page_top' == page.css  :
-                elements += r"\begin{pageParcoursd}"
+                elements += r"\begin{pageParcoursd}"+"\n"
             elif 'parcourst_page_top' == page.css  :
-                elements += r"\begin{pageParcourst}"
+                elements += r"\begin{pageParcourst}"+"\n"
             elif 'parcoursd_page_top' == page.css  :
-                elements += r"\begin{pageParcoursd}"
+                elements += r"\begin{pageParcoursd}"+"\n"
             elif 'auto_page_top' == page.css  :
-                elements += r"\begin{pageAuto}"
+                elements += r"\begin{pageAuto}"+"\n"
             elif 'algo_page_top' == page.css  :
-                elements += r"\begin{pageAlgo}"
+                elements += r"\begin{pageAlgo}"+"\n"
             else :
-                elements += r"\begin{pageIntro}"
+                elements += r"\begin{pageIntro}"+"\n"
 
             for paragraph in page.paragraphs.order_by("ranking"):
                 elements += r'\section{'+paragraph.title+r'}' 
@@ -1136,45 +1136,45 @@ def print_latex_to_book(request,idch,idp):
                 for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
                     latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                     if bloc.size != 12 :
-                        elements += r'\begin{'+latexbloc+r'}' 
+                        elements += r'\begin{'+latexbloc+r'}'+"\n" 
                         close_latextype = False 
                         if latextype : 
-                            elements += r'\begin{'+latextype+r'}' 
+                            elements += r'\begin{'+latextype+r'}'+"\n" 
                         elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"+bloc.content+ r"\end{minipage}\hfill"
                         for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                             lbloc = b.typebloc.latexbloc
                             elements += r"\begin{minipage}{"+str(round(b.size/12 - 0.005,3)).replace(",",".")
                             if 'Ex' ==  lbloc : 
-                                elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                                elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}'+"\n" 
                             else :
                                 if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
                                     elements += r'\end{'+latextype+'}' 
                                     close_latextype = True
-                                elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'
-                            elements += r"\end{minipage}"                                  
+                                elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'+"\n"
+                            elements += r"\end{minipage}"    +"\n"                              
                         if latextype and not close_latextype :
-                            elements += r'\end{'+latextype+'}' 
+                            elements += r'\end{'+latextype+'}' +"\n"
 
-                        elements += r'\end{'+latexbloc+'}' 
-                        
+                        elements += r'\end{'+latexbloc+'}'+"\n" 
+
                     else :
-                        elements += r'\begin{'+latexbloc+r'}' 
+                        elements += r'\begin{'+latexbloc+r'}'+"\n" 
                         if latextype : 
                             elements += r'\begin{'+latextype+r'}' 
-                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}' 
+                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}'+"\n" 
                         close_latextype = False 
                         for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                             lbloc = b.typebloc.latexbloc
                             if 'Ex' ==  lbloc : 
-                                elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                                elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' +"\n"
                             else :
                                 if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
                                     elements += r'\end{'+latextype+'}' 
                                     close_latextype = True
-                                elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'                                     
+                                elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'   +"\n"                                  
                         if latextype and not close_latextype :
-                            elements += r'\end{'+latextype+'}'  
-                        elements += r'\end{'+latexbloc+r'}'
+                            elements += r'\end{'+latextype+'}'  +"\n"
+                        elements += r'\end{'+latexbloc+r'}'+"\n"
 
             if 'course_page_top' == page.css  :
                 elements += r"\end{pageCours}"
@@ -1198,71 +1198,71 @@ def print_latex_to_book(request,idch,idp):
     elif idp :
         page = Page.objects.get(pk=idp)
         if 'course_page_top' == page.css  :
-            elements += r"\begin{pageCours}"
+            elements += r"\begin{pageCours}"+"\n"
         elif 'ad_page_top' == page.css  :
-            elements += r"\begin{pageAd}"
+            elements += r"\begin{pageAd}"+"\n"
         elif 'parcoursu_page_top' == page.css  :
-            elements += r"\begin{pageparcoursu}"
+            elements += r"\begin{pageparcoursu}"+"\n"
         elif 'parcoursd_page_top' == page.css  :
-            elements += r"\begin{pageParcoursd}"
+            elements += r"\begin{pageParcoursd}"+"\n"
         elif 'parcourst_page_top' == page.css  :
-            elements += r"\begin{pageParcourst}"
+            elements += r"\begin{pageParcourst}"+"\n"
         elif 'parcoursd_page_top' == page.css  :
-            elements += r"\begin{pageParcoursd}"
+            elements += r"\begin{pageParcoursd}"+"\n"
         elif 'auto_page_top' == page.css  :
-            elements += r"\begin{pageAuto}"
+            elements += r"\begin{pageAuto}"+"\n"
         elif 'algo_page_top' == page.css  :
-            elements += r"\begin{pageAlgo}"
+            elements += r"\begin{pageAlgo}"+"\n"
         else :
-            elements += r"\begin{pageIntro}"
+            elements += r"\begin{pageIntro}"+"\n"
 
 
         for paragraph in page.paragraphs.order_by("ranking"):
-            elements += r'\section{'+paragraph.title+r'}' 
+            elements += r'\section{'+paragraph.title+r'}' +"\n"
             for bloc in paragraph.blocs.filter(insidebloc=None).order_by("ranking"):
                 latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                 if bloc.size != 12 :
                     close_latextype = False 
-                    elements += r'\begin{'+latexbloc+r'}' 
+                    elements += r'\begin{'+latexbloc+r'}+"\n"' 
                     if latextype : 
-                        elements += r'\begin{'+latextype+r'}' 
+                        elements += r'\begin{'+latextype+r'}' +"\n"
                     elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"+bloc.content+ r"\end{minipage}\hfill"
                     for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                         lbloc = b.typebloc.latexbloc
                         elements += r"\begin{minipage}{"+str(round(b.size/12 - 0.005,3)).replace(",",".")
                         if 'Ex' ==  lbloc : 
-                            elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                            elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' +"\n"
                         else :
                             if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
-                                elements += r'\end{'+latextype+'}' 
+                                elements += r'\end{'+latextype+'}' +"\n"
                                 close_latextype = True
-                            elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'
+                            elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'+"\n"
                         elements += r"\end{minipage}"                                  
                     if latextype and not close_latextype :
-                        elements += r'\end{'+latextype+'}' 
+                        elements += r'\end{'+latextype+'}' +"\n"
 
-                    elements += r'\end{'+latexbloc+'}' 
+                    elements += r'\end{'+latexbloc+'}' +"\n"
                 else :
-                    elements += r'\begin{'+latexbloc+r'}' 
+                    elements += r'\begin{'+latexbloc+r'}'+"\n" 
                     if latextype : 
-                        elements += r'\begin{'+latextype+r'}' 
-                    elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}' 
+                        elements += r'\begin{'+latextype+r'}' +"\n"
+                    elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}\vspace{2mm}' +"\n"
                     close_latextype = False  
                     for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                         lbloc = b.typebloc.latexbloc
                         if 'Ex' ==  lbloc : 
-                            elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' 
+                            elements += r'\colorbox{white}{\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}}' +"\n"
                         else :
                             if 'Mt' ==  lbloc or 'ExR' ==  lbloc and latextype : 
-                                elements += r'\end{'+latextype+'}' 
+                                elements += r'\end{'+latextype+'}' +"\n"
                                 close_latextype = True
-                            elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'                                     
+                            elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}' +"\n"                                    
                     if latextype and not close_latextype :
-                        elements += r'\end{'+latextype+'}' 
-                    elements += r'\end{'+latexbloc+r'}' 
+                        elements += r'\end{'+latextype+'}' +"\n"
+                    elements += r'\end{'+latexbloc+r'}' +"\n"
 
         if 'course_page_top' == page.css  :
-            elements += r"\end{pageCours}"
+            elements += r"\end{pageCours}" 
         elif 'ad_page_top' == page.css  :
             elements += r"\end{pageAd}"
         elif 'parcoursu_page_top' == page.css  :
@@ -1279,6 +1279,9 @@ def print_latex_to_book(request,idch,idp):
             elements += r"\end{pageAlgo}"
         else :
             elements += r"\end{pageIntro}"
+    
+
+    elements +=r"\n\end{document}"
     ################################################################# 
     ###########################################
     ###################### Attention ERREUR si non modif
