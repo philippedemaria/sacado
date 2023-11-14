@@ -1138,14 +1138,14 @@ def print_latex_to_book(request,idch,idp):
                     latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                     if bloc.size != 12 :
                         elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
+                        if latexbloc == 'Ex' : latexbloc = 'ExP'
                         elements += r'\begin{'+latexbloc+r'}' 
                         close_latextype = False 
                         if latextype : 
                             elements += r'\begin{'+latextype+r'}' 
-                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'                                
+                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'                              
                         if latextype and not close_latextype :
                             elements += r'\end{'+latextype+'}' 
-
 
                         for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                             lbloc = b.typebloc.latexbloc
@@ -1157,10 +1157,10 @@ def print_latex_to_book(request,idch,idp):
                                     elements += r'\end{'+latextype+'}' 
                                     close_latextype = True
                                 elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'
-                            elements += r"\end{minipage}"   
-
-
+                            elements += r"\end{minipage}" 
+                        if latexbloc == 'Ex' : latexbloc = 'ExP'  
                         elements += r'\end{'+latexbloc+r'} \end{minipage} \hfill'
+
                     else :
                         elements += r'\begin{'+latexbloc+r'}' 
                         if latextype : 
@@ -1229,6 +1229,7 @@ def print_latex_to_book(request,idch,idp):
                 latexbloc , latextype = bloc.typebloc.latexbloc, bloc.typebloc.latextype
                 if bloc.size != 12 :
                     elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
+                    if latexbloc == 'Ex' : latexbloc = 'ExP'
                     elements += r'\begin{'+latexbloc+r'}' 
                     close_latextype = False 
                     if latextype : 
@@ -1247,7 +1248,8 @@ def print_latex_to_book(request,idch,idp):
                                 elements += r'\end{'+latextype+'}' 
                                 close_latextype = True
                             elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'
-                        elements += r"\end{minipage}"   
+                        elements += r"\end{minipage}" 
+                    if latexbloc == 'Ex' : latexbloc = 'ExP'  
                     elements += r'\end{'+latexbloc+r'} \end{minipage} \hfill'
 
                 else :
