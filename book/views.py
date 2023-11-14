@@ -1107,6 +1107,7 @@ def print_latex_to_book(request,idch,idp):
     elements +=r"\begin{document}" 
 
     if idch :
+        
         chapter = Chapter.objects.get(pk=idch)
         for page in chapter.pages.filter(is_publish=1).order_by("number"):
             if 'course_page_top' == page.css  :
