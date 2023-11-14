@@ -230,10 +230,16 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \definecolor{ill_title}{HTML}{AAAAAA} %Boite illustration titre
 
 
+\definecolor{gray}{HTML}{c8caca}
+\definecolor{bleusad}{HTML}{0056B3}
+\definecolor{bleu2}{rgb}{0,0.58,0.79}
+\definecolor{violet}{rgb}{0.79,0.66,0.98}
+\definecolor{gray}{rgb}{0.79,0.66,0.98}
+
 
 
 \ifdefined\HCode
-  \def\pgfsysdriver{pgfsys-dvisvgm4ht.def}
+\def\pgfsysdriver{pgfsys-dvisvgm4ht.def}
 \fi 
 \usepackage{pgf,tikz,pgfplots}
 \usepackage{tkz-tab,tkz-fct}
@@ -267,10 +273,6 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
 \newcommand{\exo}{\refstepcounter{cexo} \vskip 1.5em \noindent{\bf Exercice \thecexo.\ }}
 
 
-
-\definecolor{bleu2}{rgb}{0,0.58,0.79}
-\definecolor{violet}{rgb}{0.79,0.66,0.98}
-\definecolor{gray}{rgb}{0.79,0.66,0.98}
 
 \newcommand{\exercice}[1]{ % Exercice directement dans la page
 \vspace{0.2cm}
@@ -456,7 +458,7 @@ $#3$ & $\asso$ & $#4$ \end{tabular}\right.}
  
 \renewcommand{\thesection}{\arabic{section}}
 
-
+\usepackage[explicit]{titlesec}
 
 \titleformat{\section}{}{%
 \hspace{-0.15cm}{%

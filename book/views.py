@@ -1142,7 +1142,7 @@ def print_latex_to_book(request,idch,idp):
                         close_latextype = False 
                         if latextype : 
                             elements += r'\begin{'+latextype+r'}' 
-                        elements += bloc.content                               
+                        elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'                                
                         if latextype and not close_latextype :
                             elements += r'\end{'+latextype+'}' 
 
@@ -1233,7 +1233,7 @@ def print_latex_to_book(request,idch,idp):
                     close_latextype = False 
                     if latextype : 
                         elements += r'\begin{'+latextype+r'}' 
-                    elements += bloc.content                               
+                    elements += r'\begin{Bloc}'+bloc.content+r'\end{Bloc}'                              
                     if latextype and not close_latextype :
                         elements += r'\end{'+latextype+'}' 
 
