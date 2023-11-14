@@ -1237,7 +1237,6 @@ def print_latex_to_book(request,idch,idp):
                     if latextype and not close_latextype :
                         elements += r'\end{'+latextype+'}' 
 
-
                     for b in paragraph.blocs.filter(insidebloc=bloc.id).order_by("ranking"):
                         lbloc = b.typebloc.latexbloc
                         elements += r"\begin{minipage}{"+str(round(b.size/12 - 0.005,3)).replace(",",".")
@@ -1249,9 +1248,8 @@ def print_latex_to_book(request,idch,idp):
                                 close_latextype = True
                             elements += r'\begin{'+lbloc+r'}' + b.content + r'\end{'+lbloc+r'}'
                         elements += r"\end{minipage}"   
-
-
                     elements += r'\end{'+latexbloc+r'} \end{minipage} \hfill'
+
                 else :
                     elements += r'\begin{'+latexbloc+r'}' 
                     if latextype : 
