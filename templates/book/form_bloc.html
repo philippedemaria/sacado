@@ -109,8 +109,8 @@
                             <div class="form-group">
                                 <label>Savoir faire principal</label>
                                 <input type="hidden" name="level" id="id_level" value="{{book.level.id}}">
-                                <select id="id_knowledge" name="knowledge" class="form-control select2">
-                                </select>
+                                {{ form_b.knowledge |add_class:"form-control select2" }}
+                                {{ form_b.knowledge.errors }}
                             </div>
                         </div>
                     </div>
