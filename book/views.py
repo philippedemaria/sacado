@@ -1506,15 +1506,15 @@ def update_page(request,idb, idp):
                         title = nf.title.split(".")[1]
                     except :
                         title = nf.title
-                    exo,created=Exotex.objects.update_or_create(title = title, 
-
+                    exo,created=Exotex.objects.update_or_create( 
                                                 bloc_id=nf.id,
-                                                author = request.user.teacher , 
-                                                subject = page.chapter.book.subject,  
-                                                knowledge = nf.knowledge,   
-                                                level = page.chapter.book.level, 
-                                                theme = nf.theme,
                                                 defaults =  {
+                                                'title' : title , 
+                                                'author' : request.user.teacher , 
+                                                'subject' : page.chapter.book.subject,  
+                                                'knowledge' : nf.knowledge,   
+                                                'level': page.chapter.book.level, 
+                                                'theme': nf.theme,
                                                 'content' : nf.content, 
                                                 'content_html' :nf.content_html,
                                                 'correction' : nf.correction,
