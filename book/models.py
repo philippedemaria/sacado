@@ -436,7 +436,10 @@ class Bloc(models.Model):
             suffixe = "exoT"
         suffixe = self.typebloc.css.split("_")[2] + "T"
 
-        splitter = self.title.split(".")
+        try : splitter = self.title.split(".")
+        except : 
+            if self.title == "" : splitter = ["",""]
+            else : splitter = self.title
 
         details = ""
         if self.correction :
