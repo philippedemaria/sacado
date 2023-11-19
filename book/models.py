@@ -452,6 +452,7 @@ class Bloc(models.Model):
             details +=  r" \href{https://sacado.xyz/a/"+str(a.code)+r"}{App.} "
 
         if splitter and len(splitter)>1 : stringer = r" \begin{GeneriqueT}{"+splitter[0]+r"}{"+splitter[1]+" "+details+" "+ r"}"+self.content+r"\end{GeneriqueT} "
+        elif not splitter : stringer = r" \begin{GeneriqueT}{}{"+details+r"}"+self.content+r"\end{GeneriqueT} "
         else : stringer = r" \begin{GeneriqueT}{"+self.title+r"}{"+details+r"}"+self.content+r"\end{GeneriqueT} "
 
         #return r"\begin{"+suffixe+r"}{"+self.title+r"}"+self.content+r"\end{"+suffixe+r"}"
