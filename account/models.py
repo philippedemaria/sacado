@@ -270,7 +270,7 @@ class Student(ModelWithCode):
 
     def resultexercises(self):
         ''' résultats de l'étudiant aux exercices '''
-        return self.results_e.filter(Q(exercise__supportfile__is_title=0)|Q(exercise__supportfile__is_subtitle=0)).select_related('exercise__knowledge')
+        return self.results_e.filter(exercise__supportfile__is_title=0).select_related('exercise__knowledge')
 
 
     def resultexercises_dict(self):
@@ -278,12 +278,12 @@ class Student(ModelWithCode):
         cle : exercise_id
         valeur : score de l'étudiant à cet exercice
         '''
-        return {exercise_id: point for exercise_id, point in self.results_e.filter(Q(exercise__supportfile__is_title=0)|Q(exercise__supportfile__is_subtitle=0)).values_list('exercise_id', 'point')}
+        return {exercise_id: point for exercise_id, point in self.results_e.filter(exercise__supportfile__is_title=0).values_list('exercise_id', 'point')}
 
 
     def resultexercises_by_theme(self, theme):
         ''' résultats de l'étudiant pour les évaluations de savoirs-faire d'un thème donné'''
-        return self.results_e.filter(Q(exercise__supportfile__is_title=0)|Q(exercise__supportfile__is_subtitle=0), exercise__theme=theme).select_related('exercise')
+        return self.results_e.filter(exercise__supportfile__is_title=0, exercise__theme=theme).select_related('exercise')
 
 
     def resultknowledge(self):
