@@ -9060,7 +9060,7 @@ def store_the_score_relation_ajax(request):
             # Moyenne des scores obtenus par savoir faire enregistré dans Resultknowledge
             knowledge = relation.exercise.knowledge
             try : 
-                score_label = student.answers.filter(exercise = e,exercise__knowledge = knowledge ).aggregate(avg = Avg('point'))
+                score_label = student.answers.filter(exercise = relation.exercise,exercise__knowledge = knowledge ).aggregate(avg = Avg('point'))
                 scored = score_label['avg']
             except : 
                 scored = 0
