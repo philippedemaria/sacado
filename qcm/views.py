@@ -4728,17 +4728,14 @@ def result_parcours(request, id, is_folder):
         folder = Folder.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, folder)
         students = folder.only_students_folder() # liste des élèves d'un parcours donné 
-        relationships = Relationship.objects.filter(parcours__in=folder.parcours.all()).prefetch_related('exercise').order_by("ranking")
+        relationships = Relationship.objects.filter(parcours__in=folder.parcours.filter(is_publish=1),exercise__supportfile__is_title=0,is_publish=1).prefetch_related('exercise').order_by("ranking")
         target = folder
     else :
         parcours = Parcours.objects.get(id=id)
         role, group , group_id , access = get_complement(request, teacher, parcours)
         students =  parcours.only_students(group)
- 
-        if parcours.is_full_display :
-            relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
-        else :
-            relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0,is_publish=1).prefetch_related('exercise').order_by("ranking")
+
+        relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0,is_publish=1).prefetch_related('exercise').order_by("ranking")
 
         target = parcours
 
