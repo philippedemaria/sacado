@@ -23,26 +23,28 @@
         <span class="helper_tip_text_center" style="width:630px; position:relative; top:0px"> <b>Score = {{ score }}%</b><hr/>
           {% for exercise in knowledge.exercises.all %}
 
-              {% get_score exercise student  as score_st %}
+              {% if not exercise.supportfile.is_title %}
+                  {% get_score exercise student  as score_st %}
 
-              <div style="width:300px;height:220px;float:left; margin:5px; position:relative">
-                <img src="{{ exercise.supportfile.imagefile.url }}" width="300px" style="position:absolute;"   /> 
-                 {% if score_st %}                
-                    <h2 style="position:absolute; left: 200px ; top :60px ; border-radius: 50%;
-                           width:60px; height:60px; padding-top:10px;
-                          text-align: center;" class="{% if score_st < stage.low %}
-                                                         red 
-                                                        {% elif score_st < stage.medium %}
-                                                        orange
-                                                        {% elif score_st < stage.up %}
-                                                        green
-                                                        {% else %}
-                                                        darkgreen
-                                                        {% endif %}">
-                      {{ score_st}} 
-                    </h2>
+                  <div style="width:300px;height:220px;float:left; margin:5px; position:relative">
+                    <img src="{{ exercise.supportfile.imagefile.url }}" width="300px" style="position:absolute;"   /> 
+                     {% if score_st %}                
+                        <h2 style="position:absolute; left: 200px ; top :60px ; border-radius: 50%;
+                               width:60px; height:60px; padding-top:10px;
+                              text-align: center;" class="{% if score_st < stage.low %}
+                                                             red 
+                                                            {% elif score_st < stage.medium %}
+                                                            orange
+                                                            {% elif score_st < stage.up %}
+                                                            green
+                                                            {% else %}
+                                                            darkgreen
+                                                            {% endif %}">
+                          {{ score_st}} 
+                        </h2>
+                 {% endif %}
+                  </div>
              {% endif %}
-              </div>
 
           {% endfor %}
 
