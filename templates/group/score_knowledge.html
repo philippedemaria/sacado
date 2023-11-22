@@ -22,8 +22,6 @@
 
         <span class="helper_tip_text_center" style="width:630px; position:relative; top:0px"> <b>Score = {{ score }}%</b><hr/>
           {% for exercise in knowledge.exercises.all %}
-
-              {% if not exercise.supportfile.is_title %}
                   {% get_score exercise student  as score_st %}
 
                   <div style="width:300px;height:220px;float:left; margin:5px; position:relative">
@@ -44,8 +42,6 @@
                         </h2>
                  {% endif %}
                   </div>
-             {% endif %}
-
           {% endfor %}
 
         </span>
