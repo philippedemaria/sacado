@@ -4407,13 +4407,9 @@ def result_parcours_exercises(request, idf = 0, id=0):
         role, group , group_id , access = get_complement(request, teacher, parcours)
         students =  parcours.only_students(group)
 
-    relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
+    relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_ggbfile=1,is_publish=1 , exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
 
-    if parcours.is_full_display :
-        relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
-    else :
-        relationships = parcours.parcours_relationship.filter(exercise__supportfile__is_title=0,is_publish=1).prefetch_related('exercise').order_by("ranking")
-
+ 
     customexercises = parcours.parcours_customexercises.all() 
 
     listing = []
