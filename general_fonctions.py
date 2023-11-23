@@ -1109,8 +1109,11 @@ def unescape_html(string):
 
 def escape_chevron(string):
     '''HTML entity decode'''
-    string = string.replace("<","&lt")
-    string = string.replace(">","&gt")  
+    try : 
+        string = string.replace("<","&lt")
+        string = string.replace(">","&gt")
+    except :
+        pass  
     return string
 
 
