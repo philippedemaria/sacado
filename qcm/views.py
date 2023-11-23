@@ -7041,10 +7041,6 @@ def create_supportfile(request,qtype,ids):
 
 
 
-
-
-
-@user_passes_test(user_is_creator)
 def update_supportfile(request, id, redirection=0):
     supportfile   = Supportfile.objects.get(id=id)
 
