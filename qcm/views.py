@@ -7116,21 +7116,7 @@ def update_supportfile(request, id, redirection=0):
                     for form_answer in form_ans :
                         if form_answer.is_valid():
                             fa = form_answer.save()
-                            # if nf.qtype==10:
-                            #     ##### A tester lors de la création
-                            #     name, ext = os.path.splitext(fa.imageanswer)
-                            #     img = Image.open(os.path.join(dir_in, filename))
-                            #     w, h = img.size
-                                
-                            #     grid = product(range(0, h-h%d, d), range(0, w-w%d, d))
-                            #     for i, j in grid:
-                            #         box = (j, i, j+d, i+d)
-                            #         out = os.path.join(dir_in, f'{name}_{i}_{j}{ext}')
-                            #         img.crop(box).save(out)
-
-                            #         my_c = Supportsubchoice( { 'imageanswer' : f'{name}_{i}_{j}{ext}' , 'answer' : "" ,'retroaction' : "" , 'is_correct' : 0 , 'supportchoice' : fa , 'label' : 0 } )
-                            #         my_c.save()
-                                ####################################
+ 
                 else :
                     formset = formSetNested(request.POST or None,  request.FILES or None, instance=nf)
                     if formset.is_valid():
@@ -7149,7 +7135,7 @@ def update_supportfile(request, id, redirection=0):
 
  
     context = {'form': supportfile_form,  'form_ans' : form_ans, 'form_c' : form_c,  'form_var' : form_var , 'qtype' : qtype  , 'teacher': teacher, 'supportfile': supportfile, 
-                'knowledges': knowledges,  'subjects' : subjects , 'qt' : qto ,
+               'knowledges': knowledges,  'subjects' : subjects , 'qt' : qto ,
                'supportfiles': supportfiles, 'levels': levels,   'communications' : [] , 'knowledge' : knowledge ,    }
 
 

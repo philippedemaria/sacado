@@ -1102,7 +1102,8 @@ def cleanhtml(raw_html): #nettoie le code des balises HTML
 
 def unescape_html(string):
     '''HTML entity decode'''
-    string = html.unescape(string)
+    try : string = html.unescape(string)
+    except : string = "Exercice sans titre"
     return string
 
 
