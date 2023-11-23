@@ -7046,15 +7046,17 @@ def create_supportfile(request,qtype,ids):
 
 @user_passes_test(user_is_creator)
 def update_supportfile(request, id, redirection=0):
+    supportfile   = Supportfile.objects.get(id=id)
 
-    try :
-        teacher = request.user.teacher
-    except :
+    teacher = request.user.teacher
+    if supportfile.author == teacher or request.user.is_superuser :
+        pass
+    else :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
 
     subjects = teacher.subjects.all()
-    supportfile   = Supportfile.objects.get(id=id)
+
     form_template = "qcm/qtype/"+Qtype.objects.get(pk=supportfile.qtype).custom+".html"
 
     knowledge = supportfile.knowledge
