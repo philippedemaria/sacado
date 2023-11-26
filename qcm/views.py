@@ -6971,7 +6971,7 @@ def create_supportfile(request,qtype,ids):
             if nf.qtype == 9    : nf.nb_pseudo  = 1
             elif nf.qtype == 19 : 
                 nf.is_python  = True
-                nf.imagefile = 'qtype_img/python.jpg'
+                nf.imagefile = 'qtype_img/python_img.jpg'
             elif nf.qtype == 100: 
                 nf.is_ggbfile = True
                 nf.is_share   = True

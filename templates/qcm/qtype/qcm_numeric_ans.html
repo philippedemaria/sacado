@@ -18,10 +18,10 @@
 
 		    {% include 'qcm/qtype/_annoncement_instruction.html' %}
 		    <div align="left" style="margin-bottom:20px;">
-				<label class="legend_answer text-green_index zoom_in">Cocher {% if supportfile.qtype %} la bonne réponse{% else %} la ou les bonnes réponses{% endif %}.</label>
+				<label class="legend_answer text-green_index ">Cocher {% if supportfile.qtype %} la bonne réponse{% else %} la ou les bonnes réponses{% endif %}.</label>
 		        <div class="custom_all_answers custom_content">        
 					{% for choice in shufflechoices|index:forloop.counter0 %}
-					<div class="row quizz_item zoom_in" style="padding: 10px;"> 
+					<div class="row quizz_item " style="padding: 10px;"> 
 						<div class="col-xs-11 proposition " align='left'>
 						{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{ choice.answer  }} 
 						</div>  	 

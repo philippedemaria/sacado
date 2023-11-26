@@ -23,12 +23,12 @@
 		        <div class="col-xs-12 col-lg-12 quizz_item_choice" id="sortable{{ forloop.counter }}"  style="max-height:300px;padding:10px"> 
 		        	<input class="answers" name='answers' type='hidden' value="{{this_solution|index:forloop.counter0}} " />       
 					{% for choice in shufflesubchoices|index:forloop.counter0 %}
-						<div class="item_sortable zoom_in" align='center' data-loop="{{ forloop.parentloop.counter }}" data-value="{{ choice.answer }}">
+						<div class="item_sortable " align='center' data-loop="{{ forloop.parentloop.counter }}" data-value="{{ choice.answer }}">
 							{% if choice.imageanswer  %}<img src="{{ choice.imageanswer.url }}" height="80px" />{% endif %} {{ choice.answer  }} 
 						</div>
 					{% endfor %}      
 		        </div>
-		        <div class="legend_answer text-green_index zoom_in"> Glisser/déposer les éléments horizontalement.</div>  
+		        <div class="legend_answer text-green_index "> Glisser/déposer les éléments horizontalement.</div>  
 		    </div>
 		    <div class="row validation">
 		    	<div class="col-xs-12 col-md-3" align="center"  >

@@ -16,18 +16,18 @@
         <li class="this_slide">
 
             {% include 'qcm/qtype/_annoncement_instruction.html' %}
-            <div class="legend_answer text-green_index zoom_in" align="left">Écrire l'anagramme du mot bleu dans les pointillés</div> 
+            <div class="legend_answer text-green_index" align="left">Écrire l'anagramme du mot bleu dans les pointillés</div> 
 
  
             <div class="row"> 
-                <div class="col-xs-12 col-md-5 anagram zoom_in">
+                <div class="col-xs-12 col-md-5 anagram">
                     {{ choice.answer|safe }} <i class="fa fa-caret-right pull-right"></i>  
                 </div>
 
 
 
                 <div class="col-xs-12 col-md-6 text-green_index " align='left'>
-                    <input type="text" name="answers" class="answer_student_box zoom_in" data-choice_id='{{ choice.id }}' data-loop="{{ forloop.counter }}" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}" /> 
+                    <input type="text" name="answers" class="answer_student_box" data-choice_id='{{ choice.id }}' data-loop="{{ forloop.counter }}" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}" /> 
                 </div>
             </div>
  

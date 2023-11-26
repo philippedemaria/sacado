@@ -30,7 +30,7 @@
 						<div class="consigne" align="left"> 
 			 				{{  annoncement|safe }} 
 			 			</div> 
-			 			<div class="legend_answer text-green_index zoom_in" align="left">Écrire la réponse dans les pointillés</div>
+			 			<div class="legend_answer text-green_index " align="left">Écrire la réponse dans les pointillés</div>
 					</div>
 				</div>
 
@@ -50,26 +50,26 @@
 					{% with choice=shufflechoices|index:forloop.counter0 %}
 						{% if choice.answer %}
 							<div class="col-xs-12" align='left'> 
-								<div class="consigne custom_content zoom_in">
+								<div class="consigne custom_content ">
 					 				{{  annoncement|safe }}<br/>
 			
-									<div class="zoom_in" align='center'> 
+									<div class="" align='center'> 
 										{{ choice.answer|safe }}
 									</div>							
 								</div>
-								<div class="legend_answer text-green_index zoom_in" align="left">Ecrire la réponse dans les pointillés</div>	
-								<div class="zoom_in"  align='center'> 
+								<div class="legend_answer text-green_index " align="left">Ecrire la réponse dans les pointillés</div>	
+								<div class=""  align='center'> 
 									<input type="text" name="answers" class="answer_student_box" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}"/>
 								</div>
 							</div>
 						{% else %}
 							<div class="col-xs-12" align='left'>
-								<div class="consigne zoom_in"> 
+								<div class="consigne "> 
 					 				{{  annoncement|safe }}
 					 			</div>
-								<div class="legend_answer text-green_index zoom_in" align="left">Ecrire la réponse dans les pointillés</div>					 			
+								<div class="legend_answer text-green_index " align="left">Ecrire la réponse dans les pointillés</div>					 			
 							</div>
-							<div class="zoom_in" align='center'>
+							<div class="" align='center'>
 								<input type="text" name="answers" class="answer_student_box" style="text-align:center; border : solid 2px {{ supportfile.theme.subject.color }}"/>
 							</div>
 						{% endif %}
