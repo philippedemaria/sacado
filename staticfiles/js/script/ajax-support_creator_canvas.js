@@ -19,10 +19,11 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 filebrowserUploadUrl : '/ckeditor/upload/',    
                 toolbar:    
                     [  
-                        { name: 'document', items: ['Source', 'Maximize','Print']},
+                        { name: 'document', items: ['Source', 'Maximize']},
                         { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
                         { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline', '-','TextColor', 'BGColor' ] },
                         { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','Iframe']},
+                        { name: 'styles', items: ['Styles', 'Format', 'FontSize']},
                     ] ,
             });
 
@@ -32,11 +33,13 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 filebrowserUploadUrl : '/ckeditor/upload/',   
                 toolbar:    
                     [  
-                        { name: 'document', items: ['Source', 'Maximize','Print']},
+                        { name: 'document', items: ['Source', 'Maximize']},
                         { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
                         { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline', '-','TextColor', 'BGColor' ] },
                         { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','Iframe']},
+                        { name: 'styles', items: ['Styles', 'Format', 'FontSize']},
                     ] ,
+
             });
 
    
