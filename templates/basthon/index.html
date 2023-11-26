@@ -34,7 +34,7 @@
     <div id="container">
       {% if relationship %}
       <div class="row">
-          <div class="col-xs-12 col-md-7 consigne zoom_in" >  
+          <div class="col-xs-12 col-md-7 consigne {% if request.user.student and request.user.student.is_ebep  %}zoom_in{% endif %}" >  
 
 
            
