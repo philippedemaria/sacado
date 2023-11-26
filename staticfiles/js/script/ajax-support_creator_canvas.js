@@ -19,9 +19,10 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 filebrowserUploadUrl : '/ckeditor/upload/',    
                 toolbar:    
                     [  
+                        { name: 'document', items: ['Source', 'Maximize','Print']},
                         { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                        { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline',  ] },
-                        { name: 'insert', items: [ 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','Iframe']},
+                        { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline', '-','TextColor', 'BGColor' ] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','Iframe']},
                     ] ,
             });
 
@@ -31,10 +32,10 @@ define(['jquery', 'bootstrap', 'ui','ckeditor'], function ($) {
                 filebrowserUploadUrl : '/ckeditor/upload/',   
                 toolbar:    
                     [  
-                        { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
-                        { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline',  ] },
-                        { name: 'insert', items: [ 'SpecialChar','Iframe']},   
-                        { name: 'styles', items : [ 'Styles', 'TextColor','BGColor' ] },
+                        { name: 'document', items: ['Source', 'Maximize','Print']},
+                        { name: 'paragraph',  items: [ 'NumberedList', 'BulletedList', '-',   'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] }, 
+                        { name: 'basicstyles',  items: [ 'Bold', 'Italic', 'Underline', '-','TextColor', 'BGColor' ] },
+                        { name: 'insert', items: ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar','Iframe']},
                     ] ,
             });
 
