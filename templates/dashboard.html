@@ -264,6 +264,46 @@
 
 </div>
 
+<div class="modal fade" id="remediation" tabindex="-1" role="dialog" aria-labelledby="remediation">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" >
+             
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <h2  class='sacado'  >Ajouter une aide, une consigne</h2>
+            </div>
+            <div class="modal-body">
+                <div id="remediation_form">
+                </div>
+                 <div class="row audio" id="audio" >
+                    <form enctype="multipart/form-data" action="" method="post">                    
+                        <div class="col-xs-12 col-md-12"> 
+                            <label>Audio</label>           
+                            <div class="form-group">
+                                <div id="controls">
+                                    <button type="button" id="recordButton" class="btn btn-danger"><i class="fa fa-microphone"></i></button>
+                                    <button type="button" id="pauseButton" disabled  class="btn btn-default"><i class="fa fa-pause"></i> </button>
+                                    <button type="button" id="stopButton" disabled  class="btn btn-default"><i class="fa fa-stop"></i></button>
+                                </div>
+                                <div id="formats"></div>
+                                <label><small>Vous pouvez vous enregistrer plusieurs fois pour déterminer la meilleure prise.</small></label>
+                                <ol id="recordingsList"></ol>
+                                <!-- inserting these scripts at the end to be able to use all the elements in the DOM  -->
+                                <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+                                <script src="{% static 'js/script/recorder_voice.js' %}"></script>
+                            </div>
+                        </div>                
+                        <input name="id_relationship" id="id_relationship" type="hidden" />
+                        <input name="id_parcours" id="id_parcours" type="hidden" value="{{ parcours.id }}" />
+                    </form>                    
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="modal fade" id="remediation_viewer" tabindex="-1" role="dialog" aria-labelledby="remediation_viewer">
     <div class="modal-dialog" role="document" style="width:70%">
