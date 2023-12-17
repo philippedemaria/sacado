@@ -31,7 +31,6 @@ requirejs.config({
         config_datatable: "script/config-datatable", 
         config_colorpicker: "script/config-colorpicker",       
         chart:["https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min","lib/chart.min"],   
-        popper: 'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min',
         fonctions_jquery: "script/fonctions-jquery",
         fonctions: "script/fonctions",
         uploader: "lib/jquery.smartuploader",
