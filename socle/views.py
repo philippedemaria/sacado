@@ -18,6 +18,10 @@ import re
 @user_is_superuser
 def export_to(request,modelchoice):
 
+
+    dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,14:1,17:18, }
+
+
     if modelchoice == 1 :
      
         themes = Theme.objects.order_by('id')
@@ -29,7 +33,7 @@ def export_to(request,modelchoice):
                     else : image = str(theme.image)
                 except :
                     image = ""
-                themetab.append({'title':theme.name ,'image': image , 'subjectId':theme.subject.id , 'levelId':w.level.id })
+                themetab.append({'title':theme.name ,'image': image , 'subjectId':theme.subject.id , 'levelId':dataLevel[w.level.id] })
 
     elif modelchoice == 2 : 
 
@@ -52,7 +56,7 @@ def export_to(request,modelchoice):
         themes = Skill.objects.order_by('subject')
         themetab = []
         for theme in themes :
-            themetab.append({'title':theme.name , 'subjectId':theme.subject.id  })
+            themetab.append({'title':theme.name , 'subjectId':dataLevel[w.level.id]})
 
     return render(request, 'socle/export_to.html', {'themetab': themetab,  })
  
