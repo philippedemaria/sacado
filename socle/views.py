@@ -24,7 +24,9 @@ def export_to(request,modelchoice):
         themetab = []
         for theme in themes :
             for w in theme.waitings.order_by("level"):
-                themetab.append({'title':theme.name ,'image':theme.image , 'subjectId':theme.subject.id , 'levelId':w.level.id })
+                if theme.image == None : image = ""
+                else : image = theme.image
+                themetab.append({'title':theme.name ,'image': image , 'subjectId':theme.subject.id , 'levelId':w.level.id })
 
     elif modelchoice == 2 : 
 
