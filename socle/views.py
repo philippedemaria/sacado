@@ -38,10 +38,10 @@ def export_to(request,modelchoice):
 
     elif modelchoice == 3 :
  
-        k = Knowledge.objects.order_by('waiting')
+        themes = Knowledge.objects.order_by('waiting')
         themetab = []
         for theme in themes :
-            themetab.append({'title':k.name ,'waitingId':k.waiting.id  })
+            themetab.append({'title':theme.name ,'waitingId':theme.waiting.id  })
 
     elif modelchoice == 4 : 
 
