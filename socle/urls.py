@@ -5,6 +5,9 @@ from socle.views import *
 urlpatterns = [
  
  
+    path('export_to/<int:modelchoice>/', export_to, name='export_to'),
+
+
  
     path('knowledges', list_knowledges, name='knowledges'),
     path('create_knowledge/only/', create_knowledge, name='create_knowledge'),

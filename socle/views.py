@@ -16,6 +16,45 @@ import re
 
 
 @user_is_superuser
+def export_to(request,modelchoice):
+
+    if modelchoice == 1 :
+     
+        themes = Theme.objects.order_by('subject')
+        themetab = []
+        for theme in themes :
+            for w in theme.waitings.order_by("level"):
+                themetab.append({'title':theme.name ,'image':theme.image , 'subjectId':theme.subject.id , 'levelId':w.level.id })
+
+    elif modelchoice == 2 : 
+
+        themes = Waiting.objects.order_by('theme')
+        themetab = []
+        for theme in themes :
+            themetab.append({'title':theme.name , 'themeId':theme.id  })
+     
+
+    elif modelchoice == 3 :
+ 
+        k = Knowledge.objects.order_by('subject')
+        themetab = []
+        for theme in themes :
+            themetab.append({'title':k.name ,'waitingId':k.waiting.id  })
+
+    elif modelchoice == 4 : 
+
+        themes = Skill.objects.order_by('subject')
+        themetab = []
+        for theme in themes :
+            themetab.append({'title':theme.name , 'subjectId':theme.subject.id  })
+
+    return render(request, 'socle/export_to.html', {'themetab': themetab,  })
+ 
+ 
+
+
+
+@user_is_superuser
 def list_themes(request):
  
     themes = Theme.objects.order_by('subject')

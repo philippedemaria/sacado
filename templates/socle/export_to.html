@@ -1,0 +1,62 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block require %}
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
+
+{% endblock %}
+
+
+
+{% block page_title %}
+     Thèmes  
+{% endblock %}    
+ 
+
+
+
+
+{% block page_menu_right %}
+    <li><a href="{% url 'create_theme' %}" class="btn btn-new pull-right" ><i class="fa fa-plus"></i> Nouveau Thème</a>  
+{% endblock %}</li> 
+
+
+
+{% block  body %} 
+
+<section class="content_main"> 
+
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            <a href="{% url 'export_to' 1 %}">Thèmes</a>
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <a href="{% url 'export_to' 2 %}">Attendus</a>
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <a href="{% url 'export_to' 3 %}">Savoir faire</a>
+        </div>
+        <div class="col-xs-12 col-md-12">
+            <a href="{% url 'export_to' 4 %}">Compétences</a>
+        </div>
+    </div>
+ 
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            {{ themetab }}
+        </div>
+    </div>
+</section>
+
+ 
+
+
+
+{% endblock  %}   
+
+
+ 
