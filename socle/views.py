@@ -41,7 +41,8 @@ def export_to(request,modelchoice):
         themes = Knowledge.objects.order_by('waiting')
         themetab = []
         for theme in themes :
-            themetab.append({'title':theme.name ,'waitingId':theme.waiting.id  })
+            if theme.waiting.id :
+                themetab.append({'title':theme.name ,'waitingId':theme.waiting.id  })
 
     elif modelchoice == 4 : 
 
