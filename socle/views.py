@@ -25,7 +25,7 @@ def export_to(request,modelchoice):
         for theme in themes :
             for w in theme.waitings.order_by("level"):
                 if theme.image == None : image = ""
-                else : image = theme.image
+                else : image = theme.image.url
                 themetab.append({'title':theme.name ,'image': image , 'subjectId':theme.subject.id , 'levelId':w.level.id })
 
     elif modelchoice == 2 : 
@@ -38,7 +38,7 @@ def export_to(request,modelchoice):
 
     elif modelchoice == 3 :
  
-        k = Knowledge.objects.order_by('subject')
+        k = Knowledge.objects.order_by('waiting')
         themetab = []
         for theme in themes :
             themetab.append({'title':k.name ,'waitingId':k.waiting.id  })
