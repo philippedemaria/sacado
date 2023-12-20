@@ -36,7 +36,7 @@ def export_to(request,modelchoice):
                 try : 
                     code = str(theme.subject.id)+"-"+str(dataLevel[w.level.id])
                     if not code in this_tab :
-                        themetab += "{ id :"+str(theme.id)+" , title : "+theme.name+" , image : "+image+" , subjectId :"+str(theme.subject.id)+", levelId : "+str(dataLevel[w.level.id])+" },"
+                        themetab += "{ id :"+str(theme.id)+" , title : '"+theme.name+"' , image : '"+image+"' , subjectId :"+str(theme.subject.id)+", levelId : "+str(dataLevel[w.level.id])+" },"
                         this_tab.append(code)
                 except :
                     pass
@@ -46,21 +46,21 @@ def export_to(request,modelchoice):
 
         waitings = Waiting.objects.order_by('id')
         for waiting in waitings :
-            themetab += "{ id :"+str(waiting.id)+" , title : "+waiting.name+" ,   themeId :"+str(waiting.theme.id)+" },"
+            themetab += "{ id :"+str(waiting.id)+" , title : '"+waiting.name+"' ,   themeId :"+str(waiting.theme.id)+" },"
 
     elif modelchoice == 3 :
  
         knowledges = Knowledge.objects.order_by('id')
         for knowledge in knowledges :
             if knowledge.waiting :
-                themetab += "{ id :"+str(knowledge.id)+" , title : "+knowledge.name+" ,   themeId :"+str(knowledge.waiting.id)+" },"
+                themetab += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },"
 
     elif modelchoice == 4 : 
 
         skills = Skill.objects.order_by('subject')
         for skill in skills :
             try :
-                themetab += "{ id :"+str(skill.id)+" , title : "+skill.name+" ,   subjectId :"+str(dataLevel[skill.level.id])+" },"
+                themetab += "{ id :"+str(skill.id)+" , title : '"+skill.name+"' ,   subjectId :"+str(dataLevel[skill.level.id])+" },"
             except :
                 pass
     themetab += "]"    
