@@ -33,14 +33,14 @@ def export_to(request,modelchoice):
                     else : image = str(theme.image)
                 except :
                     image = ""
-                themetab.update({ 'id' : theme.id , 'title' :theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' :dataLevel[w.level.id] })
+                themetab.update({ 'ide' : theme.id , 'title' :theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' :dataLevel[w.level.id] })
 
     elif modelchoice == 2 : 
 
         themes = Waiting.objects.order_by('id')
         themetab = set()
         for theme in themes :
-            themetab.update({ 'id':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
+            themetab.update({ 'ide':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
      
 
     elif modelchoice == 3 :
@@ -49,14 +49,14 @@ def export_to(request,modelchoice):
         themetab = set()
         for theme in themes :
             if theme.waiting :
-                themetab.update( { 'id':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
+                themetab.update( { 'ide':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
 
     elif modelchoice == 4 : 
 
         themes = Skill.objects.order_by('subject')
         themetab = set()
         for theme in themes :
-            themetab.update({ 'id':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
+            themetab.update({ 'ide':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
 
     return render(request, 'socle/export_to.html', {'themetab': themetab,  })
  
