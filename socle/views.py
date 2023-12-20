@@ -21,11 +21,10 @@ def export_to(request,modelchoice):
 
     dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,14:1,17:18, }
 
-
+    themetab = "["
     if modelchoice == 1 :
      
         themes = Theme.objects.order_by('id')
-        themetab = list()
         this_tab = list()
         for theme in themes :
             for w in theme.waitings.order_by("id"):
@@ -37,7 +36,7 @@ def export_to(request,modelchoice):
                 try : 
                     code = str(theme.subject.id)+"-"+str(dataLevel[w.level.id])
                     if not code in this_tab :
-                        themetab.append({ 'id' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
+                        themetab += "{ id :"+str(theme.id)+" , title : "+theme.name+" , image : "+image+" , subjectId :"+str(theme.subject.id)+", levelId : "+str(dataLevel[w.level.id])+" }"
                         this_tab.append(code)
                 except :
                     pass
@@ -45,30 +44,26 @@ def export_to(request,modelchoice):
 
     elif modelchoice == 2 : 
 
-        themes = Waiting.objects.order_by('id')
-        themetab = list()
-        for theme in themes :
-            themetab.append({ 'id':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
-     
+        waitings = Waiting.objects.order_by('id')
+        for waiting in waitings :
+            themetab += "{ id :"+str(waiting.id)+" , title : "+waiting.name+" ,   themeId :"+str(waiting.theme.id)+" }"
 
     elif modelchoice == 3 :
  
-        themes = Knowledge.objects.order_by('id')
-        themetab = list()
-        for theme in themes :
-            if theme.waiting :
-                themetab.append( { 'id':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
+        knowledges = Knowledge.objects.order_by('id')
+        for knowledge in knowledges :
+            if knowledge.waiting :
+                themetab += "{ id :"+str(knowledge.id)+" , title : "+knowledge.name+" ,   themeId :"+str(knowledge.waiting.id)+" }"
 
     elif modelchoice == 4 : 
 
-        themes = Skill.objects.order_by('subject')
-        themetab = list()
-        for theme in themes :
+        skills = Skill.objects.order_by('subject')
+        for skill in skills :
             try :
-                themetab.append({ 'id':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
+                themetab += "{ id :"+str(skill.id)+" , title : "+skill.name+" ,   subjectId :"+str(dataLevel[skill.level.id])+" }"
             except :
                 pass
-
+    themetab += "]"    
 
     return render(request, 'socle/export_to.html', {'themetab': themetab,  })
  
