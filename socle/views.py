@@ -25,7 +25,7 @@ def export_to(request,modelchoice):
     if modelchoice == 1 :
      
         themes = Theme.objects.order_by('id')
-        themetab = []
+        themetab = set()
         for theme in themes :
             for w in theme.waitings.order_by("id"):
                 try :
@@ -33,30 +33,30 @@ def export_to(request,modelchoice):
                     else : image = str(theme.image)
                 except :
                     image = ""
-                themetab.append({ 'id':theme.id, 'title' :theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' :dataLevel[w.level.id] })
+                themetab.update({ 'id' : theme.id , 'title' :theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' :dataLevel[w.level.id] })
 
     elif modelchoice == 2 : 
 
         themes = Waiting.objects.order_by('id')
-        themetab = []
+        themetab = set()
         for theme in themes :
-            themetab.append({ 'id':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
+            themetab.update({ 'id':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
      
 
     elif modelchoice == 3 :
  
         themes = Knowledge.objects.order_by('id')
-        themetab = []
+        themetab = set()
         for theme in themes :
             if theme.waiting :
-                themetab.append( { 'id':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
+                themetab.update( { 'id':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
 
     elif modelchoice == 4 : 
 
         themes = Skill.objects.order_by('subject')
-        themetab = []
+        themetab = set()
         for theme in themes :
-            themetab.append({ 'id':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
+            themetab.update({ 'id':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
 
     return render(request, 'socle/export_to.html', {'themetab': themetab,  })
  
