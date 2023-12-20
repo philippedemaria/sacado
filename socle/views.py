@@ -25,7 +25,7 @@ def export_to(request,modelchoice):
     if modelchoice == 1 :
      
         themes = Theme.objects.order_by('id')
-        themetab = set()
+        themetab = list()
         for theme in themes :
             for w in theme.waitings.order_by("id"):
                 try :
@@ -34,7 +34,7 @@ def export_to(request,modelchoice):
                 except :
                     image = ""
                 try : 
-                    themetab.update({ 'ide' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
+                    themetab.append({ 'ide' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
                 except :
                     pass
 
@@ -42,26 +42,26 @@ def export_to(request,modelchoice):
     elif modelchoice == 2 : 
 
         themes = Waiting.objects.order_by('id')
-        themetab = set()
+        themetab = list()
         for theme in themes :
-            themetab.update({ 'ide':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
+            themetab.append({ 'ide':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
      
 
     elif modelchoice == 3 :
  
         themes = Knowledge.objects.order_by('id')
-        themetab = set()
+        themetab = list()
         for theme in themes :
             if theme.waiting :
-                themetab.update( { 'ide':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
+                themetab.append( { 'ide':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
 
     elif modelchoice == 4 : 
 
         themes = Skill.objects.order_by('subject')
-        themetab = set()
+        themetab = list()
         for theme in themes :
             try :
-                themetab.update({ 'ide':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
+                themetab.append({ 'ide':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
             except :
                 pass
 
