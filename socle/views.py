@@ -20,13 +20,14 @@ def export_to(request,modelchoice):
 
 
     dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,14:1,17:18, }
-
+    i=1
     themetab = "["
     if modelchoice == 1 :
      
         themes = Theme.objects.order_by('id')
         this_tab = list()
         for theme in themes :
+            
             for w in theme.waitings.order_by("id"):
                 try :
                     if theme.image == None : image = ""
@@ -34,10 +35,11 @@ def export_to(request,modelchoice):
                 except :
                     image = ""
                 try : 
-                    code = str(theme.subject.id)+"-"+str(dataLevel[w.level.id])
+                    code = str(theme.name)+"-"+str(theme.subject.id)+"-"+str(dataLevel[w.level.id])
                     if not code in this_tab :
-                        themetab += "{ id :"+str(theme.id)+" , title : '"+theme.name+"' , image : '"+image+"' , subjectId :"+str(theme.subject.id)+", levelId : "+str(dataLevel[w.level.id])+" },<br/>"
+                        themetab += "{ id :"+str(i)+" , title : '"+theme.name+"' , image : '"+image+"' , subjectId :"+str(theme.subject.id)+", levelId : "+str(dataLevel[w.level.id])+" },<br/>"
                         this_tab.append(code)
+                        i+=1
                 except :
                     pass
 
