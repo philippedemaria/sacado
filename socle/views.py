@@ -34,7 +34,7 @@ def export_to(request,modelchoice):
                 except :
                     image = ""
                 try : 
-                    themetab.append({ 'ide' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
+                    themetab.append({ 'id' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
                 except :
                     pass
 
@@ -44,7 +44,7 @@ def export_to(request,modelchoice):
         themes = Waiting.objects.order_by('id')
         themetab = list()
         for theme in themes :
-            themetab.append({ 'ide':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
+            themetab.append({ 'id':theme.id, 'title' :theme.name ,  'themeId' :theme.id  })
      
 
     elif modelchoice == 3 :
@@ -53,7 +53,7 @@ def export_to(request,modelchoice):
         themetab = list()
         for theme in themes :
             if theme.waiting :
-                themetab.append( { 'ide':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
+                themetab.append( { 'id':theme.id, 'title':theme.name , 'waitingId' :theme.waiting.id  })
 
     elif modelchoice == 4 : 
 
@@ -61,7 +61,7 @@ def export_to(request,modelchoice):
         themetab = list()
         for theme in themes :
             try :
-                themetab.append({ 'ide':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
+                themetab.append({ 'id':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
             except :
                 pass
 
