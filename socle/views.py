@@ -33,7 +33,11 @@ def export_to(request,modelchoice):
                     else : image = str(theme.image)
                 except :
                     image = ""
-                themetab.update({ 'ide' : theme.id , 'title' :theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' :dataLevel[w.level.id] })
+                try : 
+                    themetab.update({ 'ide' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
+                except :
+                    pass
+
 
     elif modelchoice == 2 : 
 
@@ -56,7 +60,11 @@ def export_to(request,modelchoice):
         themes = Skill.objects.order_by('subject')
         themetab = set()
         for theme in themes :
-            themetab.update({ 'ide':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
+            try :
+                themetab.update({ 'ide':theme.id, 'title' : theme.name ,  'subjectId' :dataLevel[w.level.id]})
+            except :
+                pass
+
 
     return render(request, 'socle/export_to.html', {'themetab': themetab,  })
  
