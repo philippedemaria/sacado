@@ -26,6 +26,7 @@ def export_to(request,modelchoice):
      
         themes = Theme.objects.order_by('id')
         themetab = list()
+        this_tab = list()
         for theme in themes :
             for w in theme.waitings.order_by("id"):
                 try :
@@ -34,7 +35,10 @@ def export_to(request,modelchoice):
                 except :
                     image = ""
                 try : 
-                    themetab.append({ 'id' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
+                    code = str(theme.subject.id)+"-"+str(dataLevel[w.level.id])
+                    if not code in this_tab :
+                        themetab.append({ 'id' : theme.id , 'title' : theme.name , 'image' : image ,  'subjectId' :theme.subject.id ,  'levelId' : dataLevel[w.level.id] })
+                        this_tab.append(code)
                 except :
                     pass
 
