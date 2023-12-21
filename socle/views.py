@@ -16,102 +16,45 @@ import re
 
 
 @user_is_superuser
-def export_to(request,modelchoice):
+def export_to(request):
 
 
     dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,14:1,17:18, }
     i=1
-    themetab = "["
-    if modelchoice == 1 :
-     
-        themes = Theme.objects.order_by('id')
-        this_tab = list()
-        for theme in themes :
-            
-            for w in theme.waitings.order_by("id"):
-                try :
-                    if theme.image == None : image = ""
-                    else : image = str(theme.image)
-                except :
-                    image = ""
-                try : 
-                    code = str(theme.name)+"-"+str(theme.subject.id)+"-"+str(dataLevel[w.level.id])
-                    if not code in this_tab :
-                        themetab += "{ id :"+str(i)+" , title : '"+theme.name+"' , image : '"+image+"' , subjectId :"+str(theme.subject.id)+", levelId : "+str(dataLevel[w.level.id])+" },<br/>"
-                        this_tab.append(code)
-                        i+=1
-                except :
-                    pass
 
 
-    elif modelchoice == 2 : 
-
-        waitings = Waiting.objects.order_by('id')
-        for waiting in waitings :
-            themetab += "{ id :"+str(waiting.id)+" , title : '"+waiting.name+"' ,   themeId :"+str(waiting.theme.id)+" }, <br/>"
-
-    elif modelchoice == 3 :
  
-        knowledges = Knowledge.objects.order_by('id')
-        for knowledge in knowledges :
-            if knowledge.waiting :
-                themetab += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },<br/>"
-
-    elif modelchoice == 4 : 
-
-        skills = Skill.objects.order_by('subject')
-        for skill in skills :
+    knowledges = Knowledge.objects.order_by('id')
+    str_knowledge, str_waiting, str_theme = "[" ,  "[" ,  "["
+    waiting_list , theme_list  = [], []
+    conversions = dict()
+    for knowledge in knowledges :
+        code = str(knowledge.level.id)+"-"+str(knowledge.theme.id)
+        if code not in theme_list :
+            theme_list.append(code)
             try :
-                themetab += "{ id :"+str(skill.id)+" , title : '"+skill.name+"' ,   subjectId :"+str(dataLevel[skill.level.id])+" },<br/>"
-            except :
-                pass
-    themetab += "]"    
+                str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '"+knowledge.theme.image+"' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
+            except : 
+                str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
+            conversions[knowledge.theme.id] = i
+                
+        if knowledge.waiting not in waiting_list :
+            waiting_list.append(knowledge.waiting)
+            str_waiting += "{ id :"+str(knowledge.waiting.id)+" , title : '"+knowledge.waiting.name+"', themeId : "+str(conversions[knowledge.theme.id])+" },<br/>"
+          
+               
+        if knowledge.waiting :
+            str_knowledge += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },<br/>"
 
-    return render(request, 'socle/export_to.html', {'themetab': themetab,  })
- 
- 
+        i+=1
 
-
-@user_is_superuser
-def export_to_socle(request,modelchoice):
-
-
-    dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,14:1,17:18, }
-    i=1
-
-    if modelchoice == 1 : 
- 
-        knowledges = Knowledge.objects.order_by('id')
-        str_knowledge, str_waiting, str_theme = "[" ,  "[" ,  "["
-        waiting_list , theme_list  = [], []
-        conversions = dict()
-        for knowledge in knowledges :
-            code = str(knowledge.level.id)+"-"+str(knowledge.theme.id)
-            if code not in theme_list :
-                theme_list.append(code)
-                try :
-                    str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '"+knowledge.theme.image+"' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
-                except : 
-                    str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
-                conversions[knowledge.theme.id] = i
-                    
-            if knowledge.waiting not in waiting_list :
-                waiting_list.append(knowledge.waiting)
-                str_waiting += "{ id :"+str(knowledge.waiting.id)+" , title : '"+knowledge.waiting.name+"', themeId : "+str(conversions[knowledge.theme.id])+" },<br/>"
-              
-                   
-            if knowledge.waiting :
-                str_knowledge += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },<br/>"
-
-            i+=1
-
-        str_knowledge += "]" 
-        str_theme += "]" 
-        str_waiting += "]" 
+    str_knowledge += "]" 
+    str_theme += "]" 
+    str_waiting += "]" 
 
 
     str_skill = "["
-    skills = Skill.objects.order_by('subject')
+    skills = Skill.objects.order_by('id')
     for skill in skills :
         try :
             str_skill += "{ id :"+str(skill.id)+" , title : '"+skill.name+"' ,   subjectId :"+str(skill.sunbject.id)+" },<br/>"
