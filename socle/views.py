@@ -45,7 +45,7 @@ def export_to(request):
             except : pass
                
         if knowledge.waiting :
-            str_knowledge += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },<br/>"
+            str_knowledge += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   waitingId :"+str(knowledge.waiting.id)+" },<br/>"
 
 
     str_knowledge += "]" 
