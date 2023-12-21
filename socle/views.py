@@ -19,21 +19,21 @@ import re
 def export_to(request):
 
 
-    dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,14:1,17:18, }
+    dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,13:1,14:3,15:1,16:18}
     i=1
 
 
  
-    knowledges = Knowledge.objects.order_by('id')
+    knowledges = Knowledge.objects.filter(theme__subject__id__lte=15).order_by('id')
     str_knowledge, str_waiting, str_theme = "[" ,  "[" ,  "["
     waiting_list , theme_list  = [], []
     conversions = dict()
     for knowledge in knowledges :
         code = str(knowledge.level.id)+"-"+str(knowledge.theme.id)
-        if code not in theme_list :
+        if code not in theme_list and knowledge.level.id != 13 :
             theme_list.append(code)
             try :
-                str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '"+knowledge.theme.image+"' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
+                str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '"+knowledge.theme.image+"' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[knowledge.level.id])+" },<br/>"
             except : 
                 str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[knowledge.level.id])+" },<br/>"
             conversions[knowledge.theme.id] = i
