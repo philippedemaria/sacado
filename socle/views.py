@@ -24,7 +24,7 @@ def export_to(request):
 
 
  
-    knowledges = Knowledge.objects.filter(theme__subject__id__lte=14).order_by('id')
+    knowledges = Knowledge.objects.filter(theme__subject__id__lte=14).order_by('theme',"waiting")
     str_knowledge, str_waiting, str_theme = "[" ,  "[" ,  "["
     waiting_list , theme_list  = [], []
     conversions = dict()
@@ -37,7 +37,8 @@ def export_to(request):
             except : 
                 str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[knowledge.level.id])+" },<br/>"
             conversions[knowledge.theme.id] = i
-                
+            i+=1
+  
         if knowledge.waiting not in waiting_list :
             waiting_list.append(knowledge.waiting)
             try    : str_waiting += "{ id :"+str(knowledge.waiting.id)+" , title : '"+knowledge.waiting.name+"', themeId : "+str(conversions[knowledge.theme.id])+" },<br/>"
@@ -46,7 +47,6 @@ def export_to(request):
         if knowledge.waiting :
             str_knowledge += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },<br/>"
 
-        i+=1
 
     str_knowledge += "]" 
     str_theme += "]" 
