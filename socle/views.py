@@ -24,7 +24,7 @@ def export_to(request):
 
 
  
-    knowledges = Knowledge.objects.filter(theme__subject__id__lte=15).order_by('id')
+    knowledges = Knowledge.objects.filter(theme__subject__id__lte=14).order_by('id')
     str_knowledge, str_waiting, str_theme = "[" ,  "[" ,  "["
     waiting_list , theme_list  = [], []
     conversions = dict()
