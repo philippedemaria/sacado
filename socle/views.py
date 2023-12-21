@@ -35,7 +35,7 @@ def export_to(request):
             try :
                 str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '"+knowledge.theme.image+"' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
             except : 
-                str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
+                str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[knowledge.level.id])+" },<br/>"
             conversions[knowledge.theme.id] = i
                 
         if knowledge.waiting not in waiting_list :
