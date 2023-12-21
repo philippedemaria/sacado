@@ -57,7 +57,7 @@ def export_to(request):
     skills = Skill.objects.order_by('id')
     for skill in skills :
         try :
-            str_skill += "{ id :"+str(skill.id)+" , title : '"+skill.name+"' ,   subjectId :"+str(skill.sunbject.id)+" },<br/>"
+            str_skill += "{ id :"+str(skill.id)+" , title : '"+skill.name+"' ,   subjectId :"+str(skill.subject.id)+" },<br/>"
         except :
             pass
     str_skill += "]" 
