@@ -291,11 +291,11 @@ def printer(request, relationtex_id, collection,output , obj):
             else :
                 try :
                     if request.POST.get("all_titles",None)   :
-                        elements += r"\vspace{0.2cm} \exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details_skills
+                        elements += r" \exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details_skills
                     else :
-                        elements += r"\vspace{0.2cm} \exercice{Exercice "+ str(j) + r"} "+ details_skills
+                        elements += r" \exercice{Exercice "+ str(j) + r"} "+ details_skills
                 except :
-                    elements += r"\vspace{0.2cm} \exercice{Exercice "+ str(j) + r"} "+ details_skills
+                    elements += r" \exercice{Exercice "+ str(j) + r"} "+ details_skills
                 j+=1
 
                 # impression des savoir faire
@@ -309,7 +309,8 @@ def printer(request, relationtex_id, collection,output , obj):
                         elements += r" \item " +  k.name  
                     elements += r"}"
 
-
+                elements += r"\vspace{0.2cm}"
+                
                 if output == "html_cor" :
                     ctnt =  relationtex.exotex.correction
                 elif output == "html" :
