@@ -72,6 +72,66 @@ def export_to(request,modelchoice):
  
 
 
+@user_is_superuser
+def export_to_socle(request,modelchoice):
+
+
+    dataLevel = {1:4,2:5,3:6,4:7,5:8,6:9,7:10,8:11,9:12,10:13,11:14,12:16,14:1,17:18, }
+    i=1
+
+    if modelchoice == 1 : 
+ 
+        knowledges = Knowledge.objects.order_by('id')
+        str_knowledge, str_waiting, str_theme = "[" ,  "[" ,  "["
+        waiting_list , theme_list  = [], []
+        conversions = dict()
+        for knowledge in knowledges :
+            code = str(knowledge.level.id)+"-"+str(knowledge.theme.id)
+            if code not in theme_list :
+                theme_list.append(code)
+                try :
+                    str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '"+knowledge.theme.image+"' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
+                except : 
+                    str_theme += "{ id :"+str(i)+" , title : '"+knowledge.theme.name+"' , image : '' , subjectId :"+str(knowledge.theme.subject.id)+", levelId : "+str(dataLevel[level.id])+" },<br/>"
+                conversions[knowledge.theme.id] = i
+                    
+            if knowledge.waiting not in waiting_list :
+                waiting_list.append(knowledge.waiting)
+                str_waiting += "{ id :"+str(knowledge.waiting.id)+" , title : '"+knowledge.waiting.name+"', themeId : "+str(conversions[knowledge.theme.id])+" },<br/>"
+              
+                   
+            if knowledge.waiting :
+                str_knowledge += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },<br/>"
+
+            i+=1
+
+        str_knowledge += "]" 
+        str_theme += "]" 
+        str_waiting += "]" 
+
+
+    str_skill = "["
+    skills = Skill.objects.order_by('subject')
+    for skill in skills :
+        try :
+            str_skill += "{ id :"+str(skill.id)+" , title : '"+skill.name+"' ,   subjectId :"+str(skill.sunbject.id)+" },<br/>"
+        except :
+            pass
+    str_skill += "]" 
+
+    return render(request, 'socle/export_to.html', {'str_theme': str_theme, 'str_waiting': str_waiting, 'str_knowledge': str_knowledge, 'str_skill': str_skill,  })
+ 
+ 
+
+
+
+
+
+
+
+
+
+
 
 @user_is_superuser
 def list_themes(request):

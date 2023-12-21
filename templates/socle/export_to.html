@@ -34,27 +34,46 @@
             <a href="{% url 'export_to' 1 %}">Thèmes</a>
         </div>
         <div class="col-xs-3 col-md-3">
-            <a href="{% url 'export_to' 2 %}">Attendus</a>
-        </div>
-        <div class="col-xs-3 col-md-3">
-            <a href="{% url 'export_to' 3 %}">Savoir faire</a>
-        </div>
-        <div class="col-xs-3 col-md-3">
-            <a href="{% url 'export_to' 4 %}">Compétences</a>
+            <a href="{% url 'export_to' 2 %}">Compétences</a>
         </div>
     </div>
     <hr/>
+    <h1>Theme</h1>
 
     <div class="row">
         <div class="col-xs-12 col-md-12">
-            {{ themetab|safe }}
+            {{ str_theme|safe }}
         </div>
     </div>
+    <hr/>
+    <h1>Attendu</h1>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            {{ str_waiting|safe }}
+        </div>
+    </div>
+
+    <hr/>
+    <h1>Savoir faire</h1>
+
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            {{ str_knowledge|safe }}
+        </div>
+    </div>
+
+    <hr/>
+    <h1>Skill</h1>
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            {{ str_skill|safe }}
+        </div>
+    </div>
+
 </section>
 
  
-
-
 
 {% endblock  %}   
 
