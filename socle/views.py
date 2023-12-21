@@ -40,8 +40,8 @@ def export_to(request):
                 
         if knowledge.waiting not in waiting_list :
             waiting_list.append(knowledge.waiting)
-            str_waiting += "{ id :"+str(knowledge.waiting.id)+" , title : '"+knowledge.waiting.name+"', themeId : "+str(conversions[knowledge.theme.id])+" },<br/>"
-          
+            try    : str_waiting += "{ id :"+str(knowledge.waiting.id)+" , title : '"+knowledge.waiting.name+"', themeId : "+str(conversions[knowledge.theme.id])+" },<br/>"
+            except : str_waiting += "{ id :"+str(knowledge.waiting.id)+" , title : '"+knowledge.waiting.name+"', themeId : "" },<br/>" 
                
         if knowledge.waiting :
             str_knowledge += "{ id :"+str(knowledge.id)+" , title : '"+knowledge.name+"' ,   themeId :"+str(knowledge.waiting.id)+" },<br/>"
