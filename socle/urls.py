@@ -5,7 +5,7 @@ from socle.views import *
 urlpatterns = [
  
  
-    path('export_to/<int:modelchoice>/', export_to, name='export_to'),
+    path('export_to', export_to, name='export_to'),
 
 
  
