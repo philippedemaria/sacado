@@ -1186,7 +1186,7 @@ class Parcours(ModelWithCode):
         nb_exo = 0
         for bibliotex in self.bibliotexs.all():
             nb_exo += bibliotex.relationtexs.count() 
-        return nb_exotex
+        return nb_exo
   
 
 
