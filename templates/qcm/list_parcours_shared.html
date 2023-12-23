@@ -201,7 +201,7 @@
                         <div class="quizz_item" style="background-color:{{ grp.color }}">
                             <label  class="btn btn-sacado">Groupe : {{ grp.name|truncatechars:22 }} <input type="checkbox" name="groups" value="{{ grp.id }}" {% if group.id == grp.id %} checked {% endif %}  class="group_name" /> </label>
                             <div class="form_card {% if group.id != grp.id %}no_visu_on_load{% endif %}" style="padding : 15px 5px "><label>Dossiers associés</label> 
-                            {% for folder in  grp.group_folders.all  %}
+                            {% for folder in  grp.folders_not_in_trash   %}
                                 <div class="quizz_item"> 
                                     <label class="btn btn-sacado full_width" style="color:{{ folder.color }}; border:color:{{ folder.color }}">{{ folder.title|truncatechars:29 }} <input type="checkbox" name="folders" value="{{ folder.id }}" /></label>
                                 </div>

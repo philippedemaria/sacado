@@ -2478,13 +2478,13 @@ def all_folders(request):
         group_id = request.session.get("group_id",None)
         if group_id :
             group = Group.objects.get(pk = group_id)
-            same_level_groups = teacher.groups.filter(level=group.level,subject=group.subject)
+            same_level_groups = teacher.groups.filter(level=group.level,subject=group.subject,is_hidden=0)
         else :
             group = None
-            same_level_groups = teacher.groups.all()  
+            same_level_groups = teacher.groups.filter(is_hidden=0)
     except :
         group = None
-        same_level_groups = teacher.groups.all()
+        same_level_groups = teacher.groups.filter(is_hidden=0)
 
 
     if request.user.school != None :
