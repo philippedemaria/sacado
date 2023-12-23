@@ -2427,9 +2427,9 @@ def ajax_all_parcourses(request):
     teacher_id = get_teacher_id_by_subject_id(subject_id)
 
     if is_eval == 2 :
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1,is_trash=0 )  
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_sequence = 1,is_trash=0 )
     else :   
-        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval,is_trash=0 ) 
+        base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval,is_trash=0 )
 
     if subject_id : 
         subject = Subject.objects.get(pk=subject_id)
@@ -2442,7 +2442,7 @@ def ajax_all_parcourses(request):
     if level_id and int(level_id) > 0:
         base = base.filter( level_id = level_id )
 
-    base = base.order_by('teacher').distinct() 
+    base = base.order_by('teacher','title').distinct() 
 
     # if len(theme_ids) > 0 and theme_ids[0] != '' :
     #     nbase = set()
