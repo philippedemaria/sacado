@@ -1184,10 +1184,10 @@ class Parcours(ModelWithCode):
 
 
     def nb_exotex(self):
-        nb_exotex = 0
+        nb_exo = 0
         for bibliotex in self.bibliotexs.all()
-            nb_exotex += bibliotex.relationtexs.count() 
-        return nb_exotex
+            nb_exo += bibliotex.relationtexs.count() 
+        return nb_exo
   
 
 #############################################################################################################################################
