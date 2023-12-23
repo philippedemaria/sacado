@@ -2431,6 +2431,7 @@ def ajax_all_parcourses(request):
     else :   
         base = Parcours.objects.filter(Q(teacher__user__school = teacher.user.school)| Q(teacher__user_id=teacher_id)| Q(teacher_id=teacher_id),  is_share = 1, is_evaluation = is_eval,is_trash=0 )
 
+
     if subject_id : 
         subject = Subject.objects.get(pk=subject_id)
         base = base.filter(subject = subject)
@@ -5501,8 +5502,8 @@ def exercise_parcours_duplicate(request):
         for bibliotex in bibliotexs :  
             relationtexs = bibliotex.relationtexs.all()    
             themes       = bibliotex.subjects.all()  
-            levels       = bibliotex.levels.all()    
-
+            levels       = bibliotex.levels.all()   
+            print("levels",levels) 
             bibliotex.pk      = None
             bibliotex.teacher = teacher
             bibliotex.save()
@@ -5517,14 +5518,17 @@ def exercise_parcours_duplicate(request):
                 relationtex.knowledges.set(knowledges)
                 relationtex.students.set(students)
 
-            bibliotex.themes.set(themes)
+
             bibliotex.levels.set(levels)
             bibliotex.parcours.add(parcours) 
             bibliotex.students.set(students)
             if group :  bibliotex.groups.add(group) 
-            if request.session.get("folder_id",None) :  
+            try :
+                folder_id = request.session.get("folder_id",None) 
                 folder = Folder.objects.get(pk=folder_id)
                 bibliotex.folders.add(folder) 
+            except :
+                pass
 
 
         data["validation"] = "Duplication réussie."
