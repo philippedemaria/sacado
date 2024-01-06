@@ -344,11 +344,11 @@ def printer(request, relationtex_id, collection,output , obj):
             k=1
             for relationtex in relationtexs :
                 if  relationtex.exotex.correction :
-                    elements += r" \\ \exercice{Exercice "+ str(k) + r"} \\"
+                    elements += r" \\ \vspace{0.1cm} \exercice{Exercice "+ str(k) + r"} \\"
                     elements += relationtex.exotex.correction
                     elements += r" \vspace{0.1cm}"
                 else :
-                    elements += r"\\ \exercice{Exercice "+ str(k) + r"} - Non corrigé \\"
+                    elements += r"\\ \vspace{0.1cm} \exercice{Exercice "+ str(k) + r"} - Non corrigé \\"
                     elements += r" \vspace{0.1cm}"
                 k+=1
        
