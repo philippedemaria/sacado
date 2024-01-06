@@ -147,8 +147,6 @@ def printer(request, relationtex_id, collection,output , obj):
             if new_title : title  = new_title
             else : title  = bibliotex.title
             author       = bibliotex.teacher.user.civilite+" "+bibliotex.teacher.user.last_name
-
-
         else :
             relationtex_id = request.POST.get("print_exotex_id",None)  
             relationtex    =  Relationtex.objects.get(pk = relationtex_id) 
@@ -346,11 +344,11 @@ def printer(request, relationtex_id, collection,output , obj):
             k=1
             for relationtex in relationtexs :
                 if  relationtex.exotex.correction :
-                    elements += r"\vspace{0.1cm} \exercice{Exercice "+ str(k) + r"} "
+                    elements += r" \\ \exercice{Exercice "+ str(k) + r"} "
                     elements += relationtex.exotex.correction
                     elements += r" \vspace{0.1cm}"
                 else :
-                    elements += r"\vspace{0.1cm} \exercice{Exercice "+ str(k) + r"} - Non corrigé"
+                    elements += r"\\ \exercice{Exercice "+ str(k) + r"} - Non corrigé"
                     elements += r" \vspace{0.1cm}"
                 k+=1
        
