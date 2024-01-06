@@ -291,11 +291,11 @@ def printer(request, relationtex_id, collection,output , obj):
             else :
                 try :
                     if request.POST.get("all_titles",None)   :
-                        elements += r" \exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details_skills
+                        elements += r"\\ \exercice{Exercice "+ str(j) + r"} {\bf " +  relationtex.exotex.title  +  r" } " + details_skills
                     else :
-                        elements += r" \exercice{Exercice "+ str(j) + r"} "+ details_skills
+                        elements += r"\\ \exercice{Exercice "+ str(j) + r"} "+ details_skills
                 except :
-                    elements += r" \exercice{Exercice "+ str(j) + r"} "+ details_skills
+                    elements += r"\\ \exercice{Exercice "+ str(j) + r"} "+ details_skills
                 j+=1
 
                 # impression des savoir faire
