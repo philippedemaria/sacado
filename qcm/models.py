@@ -1025,7 +1025,7 @@ class Parcours(ModelWithCode):
             low = 35
 
         try :
-            score_ggb = ceil( (score_ggb / coeffs) * data["pc"]/100)
+            score_ggb = min( 100, int(nb_done * 100/nb_exo_in_parcours) )
             data["score_ggb"] = score_ggb
         except :
             score_ggb = None
