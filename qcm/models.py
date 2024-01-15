@@ -970,9 +970,10 @@ class Parcours(ModelWithCode):
         data = {}
         nb_exercise_done = nb_studentanswers + nb_customanswerbystudent
         data["nb"] = nb_exercise_done
-        data["nb_total"] = nb_relationships + nb_customs
+        nb_total   = nb_relationships + nb_customs
+        data["nb_total"] = nb_total
         try :
-            maxi = min( 100, int(nb_done * 100/nb_total) )
+            maxi = min( 100, int(nb_exercise_done * 100/nb_total) )
             data["pc"] = maxi
             data["opac"] = 0.3 + 0.7*maxi/100
         except :
