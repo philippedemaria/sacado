@@ -42,8 +42,8 @@
                         <div style="float: left;margin-right: 5px;">
                             
 
-                            {% if book.is_student %}
-                            <a href="{% url 'show_student_book' book.id 0 %}">{% if book.imagefile  %}<img src='{{ book.imagefile.url }}' width="99px"  />{% else  %}{{book.title }}</a>{% endif  %}
+                            {% if request.user.is_extra or request.user.is_superuser %}
+                            <a href="{% url 'mybooks' %}">{% if book.imagefile  %}<img src='{{ book.imagefile.url }}' width="99px"  />{% else  %}{{book.title }}</a>{% endif  %}
                             {% else  %}
                             <a href="{% url 'show_book' book.id 0 %}">{% if book.imagefile  %}<img src='{{ book.imagefile.url }}' width="99px"  />{% else  %}{{book.title }}</a>{% endif  %}
                             {% endif %}
