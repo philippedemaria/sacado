@@ -87,7 +87,7 @@ h1 {
 }
 
 .parcoursu_page_top{
-  background-color: #16b900;
+  background-color: #FFF;  /* #16b900; */
   padding:10px;
   color:white;
   font-size:14px;
@@ -95,7 +95,7 @@ h1 {
 }
 
 .parcoursd_page_top{
-  background-color: #0093CA;
+  background-color:#FFF; /* #0093CA;*/
   padding:10px;
   color:white;
   font-size:14px;
@@ -103,7 +103,7 @@ h1 {
 }
 
 .parcourst_page_top{
-  background-color: #cb2131;
+  background-color:#FFF; /* #cb2131;*/
   padding:10px;
   color:white;
   font-size:14px;
@@ -111,14 +111,14 @@ h1 {
 }
 
 .auto_page_top{
-  background-color: #ffb400;
+  background-color:#FFF;/* #ffb400;*/
   padding:10px;
   color:white;
   font-size:14px;
   font-weight: 700;
 }
 .intro_page_top{
-  background-color: #FCF8FF;
+  background-color:#FFF;/* #FCF8FF;*/
   padding:10px;
   color:#5d4391;  
   font-size:30px;
@@ -126,7 +126,7 @@ h1 {
 }
 
 .algo_page_top{
-  background-color: #B0A8BA;
+  background-color: #FFF;/*#B0A8BA;*/
   padding:10px;
   color:white;
   font-size:30px;
@@ -284,7 +284,7 @@ h1 {
 
 .global_bloc .bloc_content{
 	color:#5d4391;
-	padding:10px!important;
+	padding:15px!important;
 	font-size: 16px;
 }
 
@@ -329,6 +329,32 @@ h1 {
 	padding:5px;
 	font-weight: normal;
 }
+
+.paragraph_bloc_exo .bloc_content {
+	border-left: 2px solid #5d4391;
+} 
+
+.paragraph_bloc_mt{
+	color:#002804;
+	position:relative;
+	margin: 10px 0px 0px 0px;
+	padding:0px;
+	font-size: 12px;
+}
+
+.paragraph_bloc_mt .bloc_title{
+	color :  white ;
+	border-radius: 3px 3px 0px 0px;
+	background-color:#5c9143;
+	padding:3px;  
+}
+
+.paragraph_bloc_mt .bloc_content, .paragraph_bloc_mt .bloc_content table tr td {
+	color :  #002804 ;
+	border-left: 2px solid #5c9143;
+}  */
+
+
 /* 
 /*  paragraph_bloc_il  */
 /* .paragraph_bloc_il{
