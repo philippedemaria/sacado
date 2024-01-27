@@ -89,31 +89,31 @@ h1 {
 .parcoursu_page_top{
   background-color: #FFF;  /* #16b900; */
   padding:10px;
-  color:white;
   font-size:14px;
   font-weight: 700;
+  color:#5d4391;  
 }
 
 .parcoursd_page_top{
   background-color:#FFF; /* #0093CA;*/
   padding:10px;
-  color:white;
   font-size:14px;
-  font-weight: 700;
+  font-weight: 700;  
+  color:#5d4391;  
 }
 
 .parcourst_page_top{
   background-color:#FFF; /* #cb2131;*/
   padding:10px;
-  color:white;
   font-size:14px;
   font-weight: 700;
+  color:#5d4391;  
 }
 
 .auto_page_top{
   background-color:#FFF;/* #ffb400;*/
   padding:10px;
-  color:white;
+  color:#5d4391;  
   font-size:14px;
   font-weight: 700;
 }
@@ -128,7 +128,7 @@ h1 {
 .algo_page_top{
   background-color: #FFF;/*#B0A8BA;*/
   padding:10px;
-  color:white;
+  color:#5d4391;  
   font-size:30px;
   font-weight: 700;
 }
