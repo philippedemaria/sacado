@@ -107,7 +107,7 @@ class DashboardView(TemplateView): # lorsque l'utilisateur vient de se connecter
 
             if self.request.user.is_teacher:  # Teacher
 
-                ip, is_routable = get_client_ip(request)
+                ip, is_routable = get_client_ip(self.request)
                 f=open("/var/www/sacado/logs/connexions.log",'a')
                 print(ip," ",datetime.now(),",",teacher.user.username, ",",teacher.user.first_name,",", teacher.user.last_name, file=f)
                 f.close()
@@ -324,7 +324,7 @@ def avatar(request) :
             user.save()
             return redirect('profile')
         else:
-            messages.error(request, user_form.errors)
+            messages.error(request, avatar_form.errors)
 
     if request.user.user_type == 0 : adult = 0
     else : adult = 1
@@ -396,7 +396,7 @@ def background(request) :
             user.save()
             return redirect('index')
         else:
-            messages.error(request, user_form.errors)
+            messages.error(request, background_form.errors)
 
     backgrounds = Background.objects.all()
 
@@ -1729,7 +1729,7 @@ def update_parent(request, id):
     user = get_object_or_404(User, pk=id)
     parent = get_object_or_404(Parent, pk=id)
     user_form = UserUpdateForm(request.POST or None, instance=user)
-    parent_form = ParentUpdateForm(request.POST or None, instance=student)
+    parent_form = ParentUpdateForm(request.POST or None, instance=parent)
     if all((user_form.is_valid(), parent_form.is_valid())):
         user_form.save()
         parent_f = parent_form.save(commit=False)

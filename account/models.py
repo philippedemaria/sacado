@@ -54,7 +54,7 @@ class ModelWithCode(models.Model):
 class Connexion(models.Model):
     """docstring for Connexion"""
     date = models.DateTimeField(null=True, blank=True, editable= False)
-    nb   = models.PositiveIntegerField()
+    nb   = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return "{}".format(self.nb )
@@ -737,11 +737,11 @@ class Teacher(models.Model):
         return f"{self.user.last_name.capitalize()} {self.user.first_name.capitalize()}"
 
 
-    def is_done_the_migration(self):
-        is_done = False
-        if student in self.students.all():
-            is_done = True
-        return is_done
+    # def is_done_the_migration(self):
+    #     is_done = False
+    #     if student in self.students.all():
+    #         is_done = True
+    #     return is_done
 
 
 
@@ -804,6 +804,15 @@ class Teacher(models.Model):
         if self.user.is_creator  :
             creator = True
         return creator
+
+
+    def get_book(self):
+        get_this = False
+        for g in self.groups.all() :
+            if g.mybooks.all():
+                get_this = True
+                break
+        return get_this
 
  
 

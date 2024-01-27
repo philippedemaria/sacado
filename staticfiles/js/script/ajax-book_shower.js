@@ -46,7 +46,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         'source_id' : source_id ,
                         'status'    : status ,
                     },
-                    url: "../../ajax_display_correcion_bloc",
+                    url: "../../ajax_display_correction_bloc",
                     success: function (data) {
  
                         if(type_id == "0") { 
@@ -76,14 +76,14 @@ define(['jquery', 'bootstrap'], function ($) {
             )
         }); 
 
-
-
+ 
 
            
         $(document).on('click', ".show_this_bloc_correction" , function (event) {
 
-            var this_html = $(this).data("correction") ; 
-            $("#book_shower_page").modal('toggle');
+            const bloc_id = $(this).data("bloc_id") ; 
+            const this_html = $("#book_shower_this_correction"+bloc_id).html(); ;
+
             $("#book_shower_correction_content").html(this_html);
 
         }); 

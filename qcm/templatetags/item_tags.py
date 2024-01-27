@@ -366,7 +366,6 @@ def get_min_score(obj,student):
     """
     return obj.min_score(student) 
 
-
  
 
 @register.simple_tag
@@ -1304,3 +1303,14 @@ def get_teacher_group_list(obj,teacher):
     retourne  la liste en str des bibliotex utilisées par un exerciceTex
     """
     return obj.teacher_group_list(teacher)
+
+ 
+
+
+@register.simple_tag
+def get_group_display_cor(obj,group):
+    """
+    retourne  si le chapitre contient un bloc corrigé
+    """
+    return obj.is_correction(group) 
+ 

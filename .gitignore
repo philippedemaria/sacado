@@ -31,3 +31,4 @@ sacado/routing.py
 sacado/settings.py~
 sacado/settingsLocalStephan.py
 sacado/wsgi.py
+*.json

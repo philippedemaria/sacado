@@ -13,10 +13,12 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Book, Chapter , Page ,  Bloc   
+ 
+from .models import Book, Chapter , Page ,  Bloc , Mybook , Mybloc
 from .forms import *
+from bibliotex.models import Bibliotex
 from account.models import User
-from qcm.models import Parcours, Docperso
+from qcm.models import Parcours, Docperso , Course
 from tool.models import Mentaltitle, Quizz , Mental
 from tool.views import create_questions_flash_random_variable
 from socle.decorators import user_is_extra
@@ -68,6 +70,16 @@ def books(request):
     return render(request, 'book/books.html', {'other_books': other_books , 'mybooks': mybooks })
 
 
+
+def mybooks(request):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+    teacher = request.user.teacher
+    mybooks = Mybook.objects.filter(group__teacher=teacher).order_by('book__level')
+    return render(request, 'book/configmybooks.html', {'mybooks': mybooks  })
+
+
 @user_is_extra 
 def create_book(request):
 
@@ -117,7 +129,7 @@ def delete_book(request):
 
         request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
         request.session["subtdb"] = "Chapter"
-
+        idb = 1000
         book = Book.objects.get(id=idb)
         book.delete()
     return redirect('books')
@@ -401,7 +413,61 @@ def show_book(request,idb,idch):
 
     return show_conception_book(request,idb,idch,False,False)
 
- 
+
+
+
+def get_mybook(request,idb, idg):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["book_group_id"] = idg
+
+    return show_mybook(request,idb, 0)
+
+
+
+
+def show_mybook(request,idb, n):
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+    group_id = request.session.get("book_group_id")
+    group = Group.objects.get(pk=group_id)
+    book = Book.objects.get(pk=idb)
+    prev_page, this_page , next_page , first_pages = get_the_page(idb,n)
+    this_chapter = this_page.chapter
+    # Appel de la page n
+    use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
+    context = {'book': book, "n" : n ,  'this_chapter' : this_chapter , 'group':group, 'page' : this_page , 'next_page' : next_page  ,
+               'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
+    return render(request, 'book/show_mybook.html', context)
+
+
+def show_mybook_one_page(request,idb, n):
+
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+    group_id = request.session.get("book_group_id")
+    group = Group.objects.get(pk=group_id)
+    book = Book.objects.get(pk=idb)
+    prev_page, this_page , next_page , first_pages = get_the_page(idb,n)
+    this_chapter = this_page.chapter
+    # Appel de la page n
+    use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
+    context = {'book': book, "n" : n ,  'this_chapter' : this_chapter , 'group':group, 'page' : this_page , 'next_page' : next_page  ,
+               'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
+    return render(request, 'book/show_mybook.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
 def conception_book(request,idb,idch):
 
     request.session["show"]   = False
@@ -703,9 +769,9 @@ def update_book_document(request,idb,idch,idd):
     book     = Book.objects.get(pk=idb)
     chapter     = Chapter.objects.get(pk=idch)
     document    = Document.objects.get(pk=idd)
-    form_update = UpdateDocumentForm(instance=document )
  
-    context = { 'form_update' : form_update , 'book' : book , 'chapter' : chapter }
+ 
+    context = {   'book' : book , 'chapter' : chapter }
     return render(request, 'book/form_update_document.html', context)
 
 
@@ -741,7 +807,7 @@ def show_book_document(request):
     data = {}
 
     if this_type == "BiblioTex" :
-        doc = BiblioTex.objects.get(pk=document_id)
+        doc = Bibliotex.objects.get(pk=document_id)
         title = doc.title
         content = str(doc.relationtexs.count()) + " exercices"
     elif this_type == "Course" :
@@ -983,6 +1049,8 @@ def show_student_book_one_page(request,idb, n):
     use_this_css = "css/bookstyle_6_shower_one_page.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
     context = {'book': book, "n" : n ,  'this_chapter' : this_chapter ,  'page' : this_page , 'next_page' : next_page  ,'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
     return render(request, 'book/show_student_page_one_page.html', context)
+
+
 
 
 def student_book_builder(request,idb, n):
@@ -1556,7 +1624,7 @@ def update_page(request,idb, idp):
             if form_page.is_valid():
                 nf = form_page.save()
             else:
-                print(form.errors)
+                print(form_page.errors)
 
         return redirect('update_page',idb,idp)
 
@@ -1749,7 +1817,7 @@ def create_bloc(request, idb, idp):
 
     book = Book.objects.get(id=idb)
     page = Page.objects.get(id=idp)
-    bloc = Bloc.objects.get(id=idb)
+ 
     form = BlocForm(request.POST or None  , book = book, page=page)
     if request.method == "POST" :
         if form.is_valid():
@@ -1759,7 +1827,7 @@ def create_bloc(request, idb, idp):
         else:
             print(form.errors)
 
-    context = {'form': form, 'communications' : [] , 'typebloc': typebloc, 'book' : book   }
+    context = {'form': form, 'communications' : [] ,   'book' : book   }
 
     return render(request, 'book/form_typebloc.html', context )
 
@@ -1883,7 +1951,8 @@ def create_csv_appliquettes(request) :
         if fields[4] != "" : iframe = fields[4]
         
         Appliquette.objects.get_or_create(forme=forme, title=title, url=url, iframe=iframe )
-
+        idb = 1
+        idp = 1
 
     return redirect('update_page',idb, idp)
 
@@ -1978,47 +2047,49 @@ def show_appliquette(request,ida):
 
 
 
-
-
-
-
-
 @csrf_exempt
-def ajax_display_correcion_bloc(request):
+def ajax_display_correction_bloc(request):
 
 
     type_id   = request.POST.get('type_id',None)
     source_id = request.POST.get('source_id',None)
     status    = request.POST.get('status',False)
+    group_id  = request.session.get('book_group_id')
+
+    print(group_id)
 
     if status == "off" : status , css , nocss = True ,  "text-success",  "text-danger"
     else : status , css,nocss =  False , "text-danger",  "text-success"
 
-
-    if type_id == "0" :     
+    if type_id == "0" :         
+        print(source_id)    
         chapter = Chapter.objects.get(pk=source_id)
-        for p in page.chapter.pages.all():
+        for p in chapter.pages.all():
+            print(p)
             for paragraph in p.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
-                    Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
+                    print(bloc)
+                    #Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
+                    Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status,'is_display_comp' :status})  
 
     elif type_id == "1" :  
         page = Page.objects.get(pk=source_id) 
         for paragraph in p.paragraphs.all():
             for bloc in  paragraph.blocs.all():
                 Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
-
+                Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status,'is_display_comp' :status}) 
 
     elif type_id == "2" : 
+
         paragraph = Paragraph.objects.get(pk=source_id) 
         for bloc in  paragraph.blocs.all():
-            Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
-
+            #Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
+            Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status,'is_display_comp' :status}) 
 
     elif  type_id == "3" : 
         Bloc.objects.filter(pk=source_id).update(is_correction = status)
-        
-
+        Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status}) 
+    
     data = {}
     data['css'] = css
     data['nocss'] = nocss

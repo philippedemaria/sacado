@@ -14,6 +14,11 @@ urlpatterns = [
     #################################################################
 
     path('books', books, name='books'),
+    path('mybooks', mybooks, name='mybooks'),
+    path('get_mybook/<int:idb>/<int:idg>', get_mybook, name='get_mybook'),
+
+    path('show_mybook/<int:idb>/<int:n>', show_mybook, name='show_mybook'),
+    path('show_mybook_one_page/<int:idb>/<int:n>', show_mybook_one_page, name='show_mybook_one_page'),
 
     path('create_book/0', create_book, name='create_book'),
     path('update_book/<int:idb>', update_book, name='update_book'),
@@ -129,7 +134,7 @@ urlpatterns = [
 
     
 
-    path('ajax_display_correcion_bloc', ajax_display_correcion_bloc, name='ajax_display_correcion_bloc'),
+    path('ajax_display_correction_bloc', ajax_display_correction_bloc, name='ajax_display_correction_bloc'),
     path('ajax_create_exercise_from_scratch', ajax_create_exercise_from_scratch, name='ajax_create_exercise_from_scratch'),
     path('ajax_insidebloc', ajax_insidebloc, name='ajax_insidebloc'),
     path('ajax_knowledge_inbloc', ajax_knowledge_inbloc, name='ajax_knowledge_inbloc'),

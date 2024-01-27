@@ -1,18 +1,16 @@
 from django.db import models
 
 from django.db import models
-from django.db.models import Sum
+ 
 from account.models import Teacher
-from bibliotex.models import Bibliotex , Exotex
-from flashcard.models import Flashpack , Flashcard
+from bibliotex.models import    Exotex
+from flashcard.models import Flashpack
 from group.models import Group
-from qcm.models import Course, Exercise , Parcours, Docperso
-from tool.models import Quizz, Question
+from qcm.models import   Exercise , Parcours, Docperso
+ 
 from socle.models import Level , Subject , Skill , Knowledge , Theme
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.utils import formats, timezone
-from datetime import datetime, timedelta       
-import uuid
+ 
 
 def image_book_path(instance,filename):
     return "book/{}/{}".format(instance.id,filename)
@@ -92,13 +90,15 @@ class Chapter(models.Model):
         return "{}".format(self.title)
 
 
-    def is_correction(self):
+    def is_correction(self,group):
         test = False
         for page in self.pages.all():
             for paragraph in page.paragraphs.all():
                 for bloc in paragraph.blocs.all():
-                    if bloc.is_correction   : test = True
-                    break
+                    nb_myblocs = bloc.myblocs.values_list("id", flat=True).filter(group=group,is_display_cor=1).count()
+                    if nb_myblocs > 0 : 
+                        test = True
+                        break
         return test
 
 
@@ -276,12 +276,14 @@ class Page(models.Model):
     def __str__(self):
         return "{} : {}".format(self.number,self.title)
 
-    def is_correction(self):
+    def is_correction(self,group):
         test = False
         for paragraph in self.paragraphs.all():
             for bloc in paragraph.blocs.all():
-                if bloc.is_correction : test = True
-                break
+                nb_myblocs = bloc.myblocs.values_list("id", flat=True).filter(group=group,is_display_cor=1).count()
+                if  nb_myblocs  > 0 : 
+                    test = True
+                    break
         return test
 
 
@@ -323,11 +325,13 @@ class Paragraph(models.Model):
         return nb
 
 
-    def is_correction(self):
+    def is_correction(self,group):
         test = False
         for bloc in self.blocs.all():
-            if bloc.is_correction == False : test = False
-            break
+            nb_myblocs = bloc.myblocs.values_list("id", flat=True).filter(group=group,is_display_cor=1).count()
+            if nb_myblocs > 0 : 
+                test = True
+                break
         return test
 
 
@@ -472,3 +476,36 @@ class Bloc(models.Model):
         elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_bloc_t'
         elif self.paragraph.page.css == 'parcourst_page_top' : return 'exo_bloc_auto'
         else :  return ''
+
+
+    def is_correction(self,group):
+        test = False
+        nb_myblocs = self.myblocs.values_list("id", flat=True).filter(group=group,is_display_cor=1).count()
+        if nb_myblocs > 0 : 
+            test = True
+        return test
+    
+
+###############################################################################################################
+############################## Attribution d'un livre à un groupe #############################################
+###############################################################################################################
+
+class Mybook(models.Model):
+
+    group      = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="mybooks", blank=True,null=True,  verbose_name="Groupe")
+    book       = models.ForeignKey(Book, on_delete=models.CASCADE,  blank=True,   related_name='mybooks', editable=False)
+    is_display = models.BooleanField(default=0, verbose_name="Publié ?")
+
+
+    def __str__(self):
+        return "{} > {}".format(self.group.name,self.book.title)
+
+
+class Mybloc(models.Model):
+    group           = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="myblocs", blank=True,null=True,  verbose_name="Groupe")
+    bloc            = models.ForeignKey(Bloc, on_delete=models.CASCADE,  blank=True,   related_name='myblocs', editable=False)
+    is_display_cor  = models.BooleanField(default=0, verbose_name="Publié ?")
+    is_display_comp = models.BooleanField(default=0, verbose_name="Publié ?")
+
+    def __str__(self):
+        return "{} > {} > {}".format(self.group.name,self.bloc.title,self.is_display_cor)

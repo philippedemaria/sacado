@@ -40,7 +40,7 @@ from school.gar import *
 from socle.models import Level, Subject 
 from tool.models import Quizz, Question, Choice , Qtype
 from bibliotex.models import Exotex
-from book.models import Appliquette
+from book.models import Appliquette, Book
 from datetime import date, datetime , timedelta
 
 from itertools import chain
@@ -115,10 +115,10 @@ def index(request):
             this_day = None
 
         if this_day != str(today.date()) or  not request.session.get("is_connexion", None) :
-            connexion, creation_date = Connexion.objects.get_or_create(date = today.date() , defaults = { 'nb' : 1 } )
+            # connexion, creation_date = Connexion.objects.get_or_create(date = today , defaults = { 'nb' : 1 } )
 
-            if not creation_date :
-                Connexion.objects.filter(pk=connexion.id).update(nb=F("nb") + 1)
+            # if not creation_date :
+            #     Connexion.objects.filter(pk=connexion.id).update(nb=F("nb") + 1)
             request.session["is_connexion"] = True
             request.session["this_day"] = str(today.date())
         ############################################################################################
@@ -2313,7 +2313,7 @@ def webinaire_update(request, id):
                 messages.success(request, 'Le webinaire a été modifié avec succès !')
                 return redirect('webinaires')
             else:
-                print(theme_form.errors)
+                print(form.errors)
 
         context = {'form': form,  'webinaire': webinaire,   }
 

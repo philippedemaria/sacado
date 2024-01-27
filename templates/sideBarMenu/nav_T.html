@@ -83,9 +83,17 @@
             </a>
         </li>
 
-        {% if request.user.is_superuser or request.user.is_extra%}
+
+        {% if request.user.is_superuser or request.user.is_extra  %}
         <li class="dropdown {% if  request.session.tdb == 'Books' %}active{% endif %}">
             <a href="{% url 'books' %}" class="main" >
+                <i class="bi bi-book icon_size" ></i> 
+                <div class="captionmenu">Livres numériques</div>
+            </a>
+        </li>
+        {% elif request.user.teacher.get_book %}
+        <li class="dropdown {% if  request.session.tdb == 'Books' %}active{% endif %}">
+            <a href="{% url 'mybooks' %}" class="main" >
                 <i class="bi bi-book icon_size" ></i> 
                 <div class="captionmenu">Livres numériques</div>
             </a>

@@ -1,0 +1,38 @@
+{% extends 'dashboard.html' %} 
+{% load static %} 
+{% load widget_tweaks %} 
+
+{% block page_title %} 
+Mes livres numériques <img src="{% static 'img/angle-right.png' %}" />
+{% endblock %}
+
+
+{% block page_menu_right %} {% endblock %}
+
+
+{% block body %}
+<section class="content_main">
+
+    <form method="post" action="" enctype='multipart/form-data'>
+    {% csrf_token %}
+
+    {% for  mybook in mybooks %}
+
+        <div style="float: left;margin-right: 5px; background-color: white; text-align: center; padding:10px; border-radius:4px">
+                            
+
+    
+                <a href="{% url 'get_mybook' mybook.book.id mybook.group.id %}" target="_blank" >
+                    {% if mybook.book.imagefile  %}
+                        <img src='{{ mybook.book.imagefile.url }}' width="90px"  />
+                    
+                    {% endif  %} <h2>{{mybook.group.name }}</h2> <small>Accéder au livre</small> 
+                </a> 
+   
+ 
+
+        </div>
+    {% endfor %}
+    </form>
+</section>
+{% endblock %}
