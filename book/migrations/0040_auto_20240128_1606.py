@@ -10,10 +10,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='bloc',
-            name='is_correction',
-        ),
         migrations.AlterField(
             model_name='mybloc',
             name='is_display_comp',
