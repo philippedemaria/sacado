@@ -2088,17 +2088,13 @@ def ajax_display_correction_bloc(request):
 
     elif type_id == "2" : 
         if is_correction :
-            print("ici")
             for paragraph in p.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
                     Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
-                    print("ici")
         else :
-            print("là")
             for paragraph in p.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
                     Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
-                    print("là")
     elif  type_id == "3" : 
         if is_correction :
             Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status)  
@@ -2124,7 +2120,7 @@ def group_can_get_the_book(request):
             for p in chapter.pages.all():
                 for paragraph in p.paragraphs.all():
                     for bloc in  paragraph.blocs.all():
-                        Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc, defaults ={ 'is_display_cor':0, 'is_display' : 1 } ) 
+                        Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc, defaults ={ 'is_display_cor':0, 'is_display_comp' : 1 } ) 
 
 
 
