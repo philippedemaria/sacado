@@ -32,10 +32,10 @@ define(['jquery', 'bootstrap'], function ($) {
             
             let source_id = $(this).data("source_id");
             let type_id   = $(this).data("type_id");
- 
+            let paragraph_id   = $(this).data("paragraph_id");
+            let is_correction   = $(this).data("is_correction");
             if ($(this).children().first().hasClass('text-success')){ var status = "on";}
             else { var status = "off";}
-
  
             $.ajax(
                 {
@@ -44,31 +44,78 @@ define(['jquery', 'bootstrap'], function ($) {
                     data: {
                         'type_id'   : type_id,
                         'source_id' : source_id ,
+                        'is_correction' : is_correction ,
                         'status'    : status ,
                     },
                     url: "../../ajax_display_correction_bloc",
                     success: function (data) {
  
                         if(type_id == "0") { 
-                            $("#cc_chapter"+source_id).addClass(data.css);
-                            $("#cc_chapter"+source_id).removeClass(data.nocss);
+
+
+                            if(is_correction){
+                                $("#cc_chapter_cor"+source_id).addClass(data.css);
+                                $("#cc_chapter_cor"+source_id).removeClass(data.nocss);
+    
+                                $(".all_these_blocs_cor").addClass(data.css);
+                                $(".all_these_blocs_cor").removeClass(data.nocss);
+                            }
+                            else{
+                                $("#cc_chapter"+source_id).addClass(data.css);
+                                $("#cc_chapter"+source_id).removeClass(data.nocss);
+    
+                                $(".all_these_blocs").addClass(data.css);
+                                $(".all_these_blocs").removeClass(data.nocss);
+                            }
+
+
+
                         }
                         else if (type_id == "1") { 
-                            $("#cc_page"+source_id).addClass(data.css);
-                            $("#cc_page"+source_id).removeClass(data.nocss);
+
+                            if(is_correction){
+                                $("#cc_page_cor"+source_id).addClass(data.css);
+                                $("#cc_page_cor"+source_id).removeClass(data.nocss);
+
+                                $(".all_these_blocs_cor").addClass(data.css);
+                                $(".all_these_blocs_cor").removeClass(data.nocss);
+                            }
+                            else{
+                                $("#cc_page"+source_id).addClass(data.css);
+                                $("#cc_page"+source_id).removeClass(data.nocss);
+    
+                                $(".all_these_blocs").addClass(data.css);
+                                $(".all_these_blocs").removeClass(data.nocss);
+                            }
+
                         }
                         else if(type_id == "2") { 
-                            $("#cc_paragraph"+source_id).addClass(data.css);
-                            $("#cc_paragraph"+source_id).removeClass(data.nocss);
 
-                            $(".these_blocs").addClass(data.css);
-                            $(".these_blocs").removeClass(data.nocss);
-
+                            if(is_correction){
+                                $("#cc_paragraph_cor"+source_id).addClass(data.css);
+                                $("#cc_paragraph_cor"+source_id).removeClass(data.nocss);
+    
+                                $(".these_blocs_cor"+paragraph_id).addClass(data.css);
+                                $(".these_blocs_cor"+paragraph_id).removeClass(data.nocss);
+                            }
+                            else{
+                                $("#cc_paragraph"+source_id).addClass(data.css);
+                                $("#cc_paragraph"+source_id).removeClass(data.nocss);
+    
+                                $(".these_blocs"+paragraph_id).addClass(data.css);
+                                $(".these_blocs"+paragraph_id).removeClass(data.nocss);
+                            }
 
                         }
                         else if(type_id == "3") { 
-                            $("#cc_bloc"+source_id).addClass(data.css);
-                            $("#cc_bloc"+source_id).removeClass(data.nocss);
+                            if(is_correction){
+                                $("#cc_bloc_cor"+source_id).addClass(data.css);
+                                $("#cc_bloc_cor"+source_id).removeClass(data.nocss);  
+                            }
+                            else{
+                                $("#cc_bloc"+source_id).addClass(data.css);
+                                $("#cc_bloc"+source_id).removeClass(data.nocss);
+                            }
                         }
 
                     }

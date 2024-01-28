@@ -2055,46 +2055,77 @@ def ajax_display_correction_bloc(request):
     source_id = request.POST.get('source_id',None)
     status    = request.POST.get('status',False)
     group_id  = request.session.get('book_group_id')
-
-    print(group_id)
+    is_correction    = request.POST.get('is_correction',False)
+    print(group_id, type_id,type(type_id) , is_correction )
 
     if status == "off" : status , css , nocss = True ,  "text-success",  "text-danger"
     else : status , css,nocss =  False , "text-danger",  "text-success"
 
-    if type_id == "0" :         
-        print(source_id)    
+    if type_id == "0" :            
         chapter = Chapter.objects.get(pk=source_id)
-        for p in chapter.pages.all():
-            print(p)
-            for paragraph in p.paragraphs.all():
-                for bloc in  paragraph.blocs.all():
-                    print(bloc)
-                    #Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
-                    Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status,'is_display_comp' :status})  
+        if is_correction :
+            for p in chapter.pages.all():
+                for paragraph in p.paragraphs.all():
+                    for bloc in  paragraph.blocs.all():
+                        Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
+        else :
+            for p in chapter.pages.all():
+                for paragraph in p.paragraphs.all():
+                    for bloc in  paragraph.blocs.all():
+                        Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "1" :  
-        page = Page.objects.get(pk=source_id) 
-        for paragraph in p.paragraphs.all():
-            for bloc in  paragraph.blocs.all():
-                Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
-                Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status,'is_display_comp' :status}) 
+        if is_correction :
+            page = Page.objects.get(pk=source_id) 
+            for paragraph in p.paragraphs.all():
+                for bloc in  paragraph.blocs.all():
+                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
+        else :
+            page = Page.objects.get(pk=source_id) 
+            for paragraph in p.paragraphs.all():
+                for bloc in  paragraph.blocs.all():
+                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "2" : 
-
-        paragraph = Paragraph.objects.get(pk=source_id) 
-        for bloc in  paragraph.blocs.all():
-            #Bloc.objects.filter(pk=bloc.id).update(is_correction = status)
-            Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status,'is_display_comp' :status}) 
-
+        if is_correction :
+            print("ici")
+            for paragraph in p.paragraphs.all():
+                for bloc in  paragraph.blocs.all():
+                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
+                    print("ici")
+        else :
+            print("là")
+            for paragraph in p.paragraphs.all():
+                for bloc in  paragraph.blocs.all():
+                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+                    print("là")
     elif  type_id == "3" : 
-        Bloc.objects.filter(pk=source_id).update(is_correction = status)
-        Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc,defaults ={'is_display_cor' :status}) 
-    
+        if is_correction :
+            Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status)  
+        else :
+            Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+
     data = {}
     data['css'] = css
     data['nocss'] = nocss
     return JsonResponse(data) 
- 
+
+
+@csrf_exempt
+def group_can_get_the_book(request):    
+    group_id    = request.POST.get('group_id',False)
+
+    if Mybook.objects.filter(group_id = group_id, book_id = 9 ).count() :
+        Mybook.objects.filter(group_id = group_id).delete()
+    else :
+        Mybook.objects.update_or_create(group_id = group_id, book_id = 9 , defaults ={ 'is_display' : 1 })
+        book = Book.objects.get(pk=9)
+        for chapter in book.chapters.all():
+            for p in chapter.pages.all():
+                for paragraph in p.paragraphs.all():
+                    for bloc in  paragraph.blocs.all():
+                        Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc, defaults ={ 'is_display_cor':0, 'is_display' : 1 } ) 
+
 
 
 def ajax_insidebloc(request):

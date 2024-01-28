@@ -139,5 +139,7 @@ urlpatterns = [
     path('ajax_insidebloc', ajax_insidebloc, name='ajax_insidebloc'),
     path('ajax_knowledge_inbloc', ajax_knowledge_inbloc, name='ajax_knowledge_inbloc'),
 
+    
+    path('group_can_get_the_book', group_can_get_the_book, name='group_can_get_the_book'),
  
  ]

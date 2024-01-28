@@ -806,6 +806,10 @@ class Teacher(models.Model):
         return creator
 
 
+    def groups_level_book(self):
+        return self.groups.filter(level_id=10)
+
+
     def get_book(self):
         get_this = False
         for g in self.groups.all() :

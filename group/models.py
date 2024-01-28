@@ -287,6 +287,11 @@ class Group(ModelWithCode):
         data["is_exists"] = is_exists
         data["url"] = url
         return data
+    
+    def get_book(self):
+        test = False
+        if self.mybooks.count() : test = True
+        return test
 
 
 

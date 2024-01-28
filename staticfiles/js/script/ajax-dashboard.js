@@ -17,6 +17,29 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         }, 6000);
 
 
+
+        $(document).on('change','.group_can_get_the_book',function(){
+
+            let group_id  =  $(this).val()  ;
+
+            $.ajax({
+                url: '../../book/group_can_get_the_book',
+                data: {
+                    'group_id': group_id,                      
+                },
+                type: "POST",
+                dataType: "json",
+ 
+            });
+
+
+        })
+
+
+
+
+
+
     
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////

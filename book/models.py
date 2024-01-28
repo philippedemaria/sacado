@@ -102,6 +102,16 @@ class Chapter(models.Model):
         return test
 
 
+    def is_complement(self,group):
+        test = False
+        for page in self.pages.all():
+            for paragraph in page.paragraphs.all():
+                for bloc in paragraph.blocs.all():
+                    nb_myblocs = bloc.myblocs.values_list("id", flat=True).filter(group=group,is_display_comp=1).count()
+                    if nb_myblocs > 0 : 
+                        test = True
+                        break
+        return test
 
 
 class Section(models.Model):
@@ -286,6 +296,16 @@ class Page(models.Model):
                     break
         return test
 
+    def is_correction(self,group):
+        test = False
+        for paragraph in self.paragraphs.all():
+            for bloc in paragraph.blocs.all():
+                nb_myblocs = bloc.myblocs.values_list("id", flat=True).filter(group=group,is_display_comp=1).count()
+                if  nb_myblocs  > 0 : 
+                    test = True
+                    break
+        return test
+    
 
     def body_css(self) :
         if self.css == 'parcoursu_page_top' : return 'course_page_u_main'
@@ -335,6 +355,14 @@ class Paragraph(models.Model):
         return test
 
 
+    def is_complement(self,group):
+        test = False
+        for bloc in self.blocs.all():
+            nb_myblocs = bloc.myblocs.values_list("id", flat=True).filter(group=group,is_display_comp=1).count()
+            if nb_myblocs > 0 : 
+                test = True
+                break
+        return test
 ##################################     doctypes     ################################################    
 ##  doctypes  ["définition","Exemple","url","GGB","Quizz","Course","BiblioTex","Exotex","flashpack","QF"]
 ##  doc_id    [    0    ,   1  ,  2  ,  3  ,   4   ,   5    ,     6     ,   7    ,      8    ,  9 ]
@@ -484,7 +512,13 @@ class Bloc(models.Model):
         if nb_myblocs > 0 : 
             test = True
         return test
-    
+
+    def is_complement(self,group):
+        test = False
+        nb_myblocs = self.myblocs.values_list("id", flat=True).filter(group=group,is_display_comp=1).count()
+        if nb_myblocs > 0 : 
+            test = True
+        return test    
 
 ###############################################################################################################
 ############################## Attribution d'un livre à un groupe #############################################
