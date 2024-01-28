@@ -848,4 +848,5 @@ h1 {
 .complements_img:hover  {
 	width: 300px;
 	position: absolute;
+	z-index:999;
   }
