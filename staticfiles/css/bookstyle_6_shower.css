@@ -846,5 +846,6 @@ h1 {
 	width: 30px;
   }
 .complements_img:hover  {
-	width: 200px;
+	width: 300px;
+	position: absolute;
   }
