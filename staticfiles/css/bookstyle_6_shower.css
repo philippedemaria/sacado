@@ -842,10 +842,9 @@ h1 {
 }
 
 
-img .complements_img{ 
+.complements_img{ 
 	width: 30px;
   }
-  
-img .complements_img:hover  {
+.complements_img:hover  {
 	width: 200px;
   }
