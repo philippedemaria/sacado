@@ -4425,7 +4425,7 @@ def result_parcours_exercises(request, idf = 0, id=0):
         for relationship in relationships :
             nb_time += relationship.duration
             data_r = dict()
-            studentanswer = base_studentanswer.filter(exercise=relationship.exercise, exercise__supportfile__is_ggbfile=1,is_publish=1 , exercise__supportfile__is_title=0).last()
+            studentanswer = base_studentanswer.filter(exercise=relationship.exercise, exercise__supportfile__is_ggbfile=1,  exercise__supportfile__is_title=0).last()
             if studentanswer :
                 global_time += int(studentanswer.secondes)
                 data_r["point"]    = studentanswer.point
