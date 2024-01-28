@@ -36,6 +36,8 @@ define(['jquery', 'bootstrap'], function ($) {
             let is_correction   = $(this).data("is_correction");
             if ($(this).children().first().hasClass('text-success')){ var status = "on";}
             else { var status = "off";}
+
+            $("#spinner-"+type_id+"-"+source_id).html("<i class='fa fa-spinner fa-spin'></i>")
  
             $.ajax(
                 {
@@ -117,7 +119,7 @@ define(['jquery', 'bootstrap'], function ($) {
                                 $("#cc_bloc"+source_id).removeClass(data.nocss);
                             }
                         }
-
+                        $("#spinner-"+type_id+"-"+source_id).html("")
                     }
                 }
             )

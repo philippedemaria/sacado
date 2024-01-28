@@ -76,7 +76,7 @@
                                             <label>{{ g.name }} 
                                                 <input type="checkbox" name="group_id" value="{{ g.id }}" class="group_can_get_the_book"
                                                     {% if g.get_book %} 
-                                                    checked 
+                                                    checked onclick="return TestRemove('{{ g.name}}')"
                                                     {% endif %}
                                                 /></label> 
                                             {% if not forloop.last %}, {% endif %}

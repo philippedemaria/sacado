@@ -2056,7 +2056,6 @@ def ajax_display_correction_bloc(request):
     status    = request.POST.get('status',False)
     group_id  = request.session.get('book_group_id')
     is_correction    = request.POST.get('is_correction',False)
-    print(group_id, type_id,type(type_id) , is_correction )
 
     if status == "off" : status , css , nocss = True ,  "text-success",  "text-danger"
     else : status , css,nocss =  False , "text-danger",  "text-success"
@@ -2067,39 +2066,40 @@ def ajax_display_correction_bloc(request):
             for p in chapter.pages.all():
                 for paragraph in p.paragraphs.all():
                     for bloc in  paragraph.blocs.all():
-                        Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
+                        Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
         else :
             for p in chapter.pages.all():
                 for paragraph in p.paragraphs.all():
                     for bloc in  paragraph.blocs.all():
-                        Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+                        Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "1" :  
         if is_correction :
             page = Page.objects.get(pk=source_id) 
-            for paragraph in p.paragraphs.all():
+            for paragraph in page.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
-                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
+                    Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
         else :
             page = Page.objects.get(pk=source_id) 
-            for paragraph in p.paragraphs.all():
+            for paragraph in page.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
-                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+                    Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "2" : 
         if is_correction :
-            for paragraph in p.paragraphs.all():
-                for bloc in  paragraph.blocs.all():
-                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
+            paragraph = Paragraph.objects.get(pk=source_id) 
+            for bloc in  paragraph.blocs.all():
+                Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
         else :
-            for paragraph in p.paragraphs.all():
-                for bloc in  paragraph.blocs.all():
-                    Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+            paragraph = Paragraph.objects.get(pk=source_id) 
+            for bloc in  paragraph.blocs.all():
+                Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+
     elif  type_id == "3" : 
         if is_correction :
-            Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_cor=status)  
+            Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status)  
         else :
-            Mybloc.objects.get(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+            Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     data = {}
     data['css'] = css
@@ -2113,6 +2113,7 @@ def group_can_get_the_book(request):
 
     if Mybook.objects.filter(group_id = group_id, book_id = 9 ).count() :
         Mybook.objects.filter(group_id = group_id).delete()
+        Mybloc.objects.filter(group_id = group_id).delete()
     else :
         Mybook.objects.update_or_create(group_id = group_id, book_id = 9 , defaults ={ 'is_display' : 1 })
         book = Book.objects.get(pk=9)
