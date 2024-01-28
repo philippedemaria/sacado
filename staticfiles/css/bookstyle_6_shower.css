@@ -840,3 +840,12 @@ h1 {
 .bloc_image_left{
 	float:none;
 }
+
+
+img .complements_img{ 
+	width: 30px;
+  }
+  
+img .complements_img:hover  {
+	width: 200px;
+  }
