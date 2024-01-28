@@ -137,7 +137,7 @@
 
 
 
-                {% for paragraph in page.paragraphs.all %}
+                {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
                     <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"
                     
                     
@@ -169,7 +169,7 @@
                         </div>
                         {% endif %}
                         <div class="row">
-                            {% for bloc in paragraph.blocs.all %} 
+                            {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                                 <div class="col-xs-{{ bloc.size }}" >
                                     <div class="global_bloc {{ bloc.typebloc.css }}"  > 
                                         <div>
