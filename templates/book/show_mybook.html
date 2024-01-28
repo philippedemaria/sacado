@@ -81,7 +81,6 @@
             {% endfor %} 
             <span class="pull-right"> 
                 page {{ n }} 
- 
                 {% if request.user.is_superuser %}
                     <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
                 {% endif %}            
@@ -89,7 +88,7 @@
         </div>
     </div>
 
-    <div class="row {{ page.css }}" style="padding-top:20px">
+    <div class="row {{ page.css }}"  style="padding-top:20px;"> 
         <div class="col-xs-12 col-md-12">
             {% if n == 0  %} 
                 <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
@@ -115,8 +114,30 @@
                 {% endfor %}
                 </div>
             {% else %} 
+
+                
+                <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
+                    {% elif page.css == 'parcoursd_page_top' %} style="width:100%;background-image:url('/static/img/parcours_d.png'); background-repeat: no-repeat ;height:100px"   
+                    {% elif page.css == 'parcourst_page_top' %} style="width:100%;background-image:url('/static/img/parcours_t.png'); background-repeat: no-repeat ;height:100px"  
+                    {% elif page.css == 'algo_page_top' %} style="width:100%;background-image:url('/static/img/parcours_algo.png'); background-repeat: no-repeat ;height:100px"  
+                    {% elif page.css == 'auto_page_top' %} style="width:100%;background-image:url('/static/img/parcours_eval.png'); background-repeat: no-repeat ;height:100px"
+                    {% endif %}> 
+                </div>
+
+
+
                 {% for paragraph in page.paragraphs.all %}
-                    <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}">
+                    <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"
+                    
+                    
+                    {% if  page.css == 'parcoursu_page_top' %} style="padding-top:20px;background-image: url('/static/img/fond_u.png'); background-repeat: repeat-y "   
+                    {% elif page.css == 'parcoursd_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_d.png'); background-repeat: repeat-y "   
+                    {% elif page.css == 'parcourst_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_t.png'); background-repeat: repeat-y"  
+                    {% elif page.css == 'algo_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_a.png'); background-repeat: repeat-y "  
+                    {% elif page.css == 'auto_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_e.png'); background-repeat: repeat-y"
+                    {% else %} style="padding-top:20px;"
+                    {% endif %}
+                    >
                         {% if paragraph.number > 0 %}
                         <div class="row paragraph_label">
                             <div class="col-xs-12">
@@ -146,7 +167,7 @@
                                         </div> 
 
                                         {% if bloc.correction_html %}
-                                        <div style="position:absolute; top:30px;left:50px">
+                                        <div style="position:absolute; top:30px;left:30px">
                                             <a href="javascript:void(0);" data-target="#book_shower_correction" data-toggle="modal" 
                                                 class="show_this_bloc_correction"  data-bloc_id="{{ bloc.id }}" >
                                                 <i class="bi bi-c-circle text-success"></i>

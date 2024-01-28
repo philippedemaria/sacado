@@ -148,7 +148,7 @@ h1 {
   color:white;
 }
 .btn-parcoursu_page_top{
-  background-color: #00B999;  
+  background-color: #5c9143;  
   color:white;
 }
 .btn-parcoursd_page_top{
@@ -277,7 +277,7 @@ h1 {
 .global_bloc{
 	color:#5d4391;
 	position:relative;
-	margin: 10px 0px 0px 0px;
+	margin: 10px 0px;
 	padding:0px;
 	font-size: 16px;
 }
@@ -287,6 +287,8 @@ h1 {
 	padding:15px!important;
 	font-size: 16px;
 }
+
+
 
 
 .global_bloc .bloc_title{
@@ -306,6 +308,24 @@ h1 {
 
 .bottom_bloc{height:20px}
 
+
+.parcoursu_page_top .global_bloc .bloc_title {
+	background-color:#54ba4f;
+	font-size: 16px;
+}
+
+.parcoursd_page_top .global_bloc .bloc_title {
+	background-color:#3fc5e8;
+	font-size: 16px;
+}
+.parcourst_page_top .global_bloc .bloc_title {
+	background-color:#f0558d;
+	font-size: 16px;
+}
+.algo_page_top .global_bloc .bloc_title {
+	background-color:#fed87b;
+	font-size: 16px;
+}
 /*  paragraph_bloc_def  */
 .paragraph_bloc_def{
 	color:#5d4391;
