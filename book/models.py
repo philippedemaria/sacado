@@ -505,7 +505,7 @@ class Mybloc(models.Model):
     group           = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="myblocs", blank=True,null=True,  verbose_name="Groupe")
     bloc            = models.ForeignKey(Bloc, on_delete=models.CASCADE,  blank=True,   related_name='myblocs', editable=False)
     is_display_cor  = models.BooleanField(default=0, verbose_name="Publié ?")
-    is_display_comp = models.BooleanField(default=0, verbose_name="Publié ?")
+    is_display_comp = models.BooleanField(default=1, verbose_name="Publié ?")
 
     def __str__(self):
         return "{} > {} > {}".format(self.group.name,self.bloc.title,self.is_display_cor)
