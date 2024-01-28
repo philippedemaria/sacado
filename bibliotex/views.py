@@ -1977,7 +1977,7 @@ def ajax_affectation_to_group(request):
         for parcours in parcourses :
             bibliotex.parcours.remove(parcours)
         for student in students :
-            bilbiotex.students.remove(student) 
+            bibliotex.students.remove(student) 
         change_link = "change"
     else :
         bibliotex.groups.add(group)
@@ -2178,12 +2178,9 @@ def ajax_individualise(request):
                 if statut=="true" or statut == "True" :
                     somme = 0
                     try :
-                        for s in parcours.students.all() :
-                            exercise = Exercise.objects.get(pk = exercise_id )
-                            if Studentanswer.objects.filter(student = s , exercise = exercise, parcours = relationship.parcours).count() == 0 :
-                                relationship.students.remove(s)
-                                somme +=1
-                            Blacklist.objects.get_or_create(customexercise=None, student = s ,relationship = relationship   )
+                        for s in relationtex.bibliotex.parcours.students.all() :
+                            relationtex.students.remove(s)
+                            Blacklistex.objects.get_or_create( student = s ,relationtex = relationtex   )
                     except :
                         pass
    
@@ -2196,10 +2193,10 @@ def ajax_individualise(request):
                         data["alert"] = False
 
                 else : 
-                    relationship.students.set(parcours.students.all())
-                    for s in parcours.students.all():
-                        if Blacklist.objects.filter(relationship=relationship, student = s ).count() > 0 :
-                            Blacklist.objects.get(relationship=relationship, student = s ).delete()   
+                    relationtex.students.set(relationtex.bibliotex.parcours.students.all())
+                    for s in relationtex.parcours.students.all():
+                        if Blacklistex.objects.filter(relationtex=relationtex, student = s ).count() > 0 :
+                            Blacklistex.objects.get(relationtex=relationtex, student = s ).delete()   
                     data["statut"] = "True"
                     data["class"] = "btn btn-success"
                     data["noclass"] = "btn btn-default"
@@ -2210,24 +2207,20 @@ def ajax_individualise(request):
 
                 if statut=="true" or statut == "True":
 
-                    if Studentanswer.objects.filter(student = student , relationtex = relationtex ).count() == 0 :
-                        relationship.students.remove(student)
-                        Blacklist.objects.get_or_create(relationtex=relationtex, student = student  )
-                        data["statut"] = "False"
-                        data["class"] = "btn btn-default"
-                        data["noclass"] = "btn btn-success"
-                        data["alert"] = False
 
-                    else :
-                        data["statut"] = "True"
-                        data["class"] = "btn btn-success"
-                        data["noclass"] = "btn btn-default"
-                        data["alert"] = True
+                    relationtex.students.remove(student)
+                    Blacklistex.objects.get_or_create(relationtex=relationtex, student = student  )
+                    data["statut"] = "False"
+                    data["class"] = "btn btn-default"
+                    data["noclass"] = "btn btn-success"
+                    data["alert"] = False
+
+ 
 
                 else:
-                    relationship.students.add(student)
-                    if Blacklist.objects.filter(relationtex=relationtex, student = student  ).count()  > 0 :
-                        Blacklist.objects.get(relationtex=relationtex, student = student ).delete()
+                    relationtex.students.add(student)
+                    if Blacklistex.objects.filter(relationtex=relationtex, student = student  ).count()  > 0 :
+                        Blacklistex.objects.get(relationtex=relationtex, student = student ).delete()
                     data["statut"] = "True"
                     data["class"] = "btn btn-success"
                     data["noclass"] = "btn btn-default"
@@ -2299,7 +2292,7 @@ def ajax_individualise_exotex(request):
     if std_g.count() :
         students = [student for student in std_g if student   in std_r] 
     else :
-        students = r_students
+        students = std_r
 
     context = { 'students': students ,  "relationtex" : relationtex }
     data["html"] = render_to_string('bibliotex/ajax_individualise_exercise.html',context)

@@ -245,7 +245,7 @@ class Relationtex(models.Model):
         if group :
             group_students = group.students.all() #.exclude(user__username__contains="_e-test")
             self_students = self.students.exclude(user__username__contains="_e-test")
-            intersection = list(set(group_students) & set(parcours_students))
+            intersection = list(set(group_students) & set(self_students))
         else :
             intersection = self.students.exclude(user__username__contains="_e-test")
  
