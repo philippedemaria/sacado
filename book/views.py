@@ -76,7 +76,7 @@ def mybooks(request):
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
     teacher = request.user.teacher
-    mybooks = Mybook.objects.filter(group__teacher=teacher).order_by('book__level')
+    mybooks = Mybook.objects.filter(group__teacher=teacher)
     return render(request, 'book/configmybooks.html', {'mybooks': mybooks  })
 
 

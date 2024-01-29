@@ -13,8 +13,6 @@ Mes livres numériques <img src="{% static 'img/angle-right.png' %}" />
 {% block body %}
 <section class="content_main">
 
-    <form method="post" action="" enctype='multipart/form-data'>
-    {% csrf_token %}
 
     {% for  mybook in mybooks %}
 
@@ -33,6 +31,6 @@ Mes livres numériques <img src="{% static 'img/angle-right.png' %}" />
 
         </div>
     {% endfor %}
-    </form>
+
 </section>
 {% endblock %}
