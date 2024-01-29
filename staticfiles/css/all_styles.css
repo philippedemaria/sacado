@@ -235,8 +235,9 @@ input.acces_to_page{
   border:1px solid #CCC;
   padding:2px;
   text-align: center;
-  width:100px;
+  width:50px;
   font-size: 18px;
+  display: inline-block;
 }
 
 .ui-sortable .box, .ui-sortable .sorter_group {

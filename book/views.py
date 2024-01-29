@@ -424,15 +424,21 @@ def get_mybook(request,idb, idg):
     return show_mybook(request,idb, 0)
 
 
+@csrf_exempt
+def goto_direct_page(request):
+    n_page  = request.POST.get("acces_to_page" , None )
+    idb = 9
+    return show_mybook(request,idb , n_page)
 
 
 def show_mybook(request,idb, n):
+    print(idb , n)
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
     group_id = request.session.get("book_group_id")
     group = Group.objects.get(pk=group_id)
     book = Book.objects.get(pk=idb)
-    prev_page, this_page , next_page , first_pages = get_the_page(idb,n)
+    prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
     this_chapter = this_page.chapter
     # Appel de la page n
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
@@ -456,16 +462,7 @@ def show_mybook_one_page(request,idb, n):
                'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
     return render(request, 'book/show_mybook.html', context)
 
-
-
-
-
-
-
-
-
-
-
+ 
 
 
 def conception_book(request,idb,idch):

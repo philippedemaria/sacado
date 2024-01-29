@@ -17,37 +17,42 @@
 
 
 {% block page_title %}
-    Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }}  
+    Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }}
+    
     {% if request.user.is_superuser %}
-    <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}"  target="_blank"><small><i class="bi bi-printer"></i></small></a>
+        <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}"  target="_blank"><small><i class="bi bi-printer"></i></small></a>
     {% endif %} 
-    <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 0 > 
-        {% get_group_display_cor this_chapter group as this_chapter_is_cor %}
-            <i class="bi bi-eye text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}" id="cc_chapter{{ this_chapter.id }}"></i> 
-            <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices du chapitre. </div>
-        </span>
-        <img src="{% static 'img/angle-right.png' %}"/> 
-        {% if 'cours' not in this_page.title %}
-        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
-            {% get_group_display_cor this_page group as this_page_is_cor %}
-            <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
-            <div class="helper_tip_text" >Publier/Dépublier les corrections des exercices de la page {{ n }}. </div>
-        </span>
-        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 0> 
-            {% get_group_display_comp this_page group as this_page_is_comp %}
-            <i class="bi bi-circle-fill  text-{% if this_page_is_comp %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
-            <div class="helper_tip_text" >Publier/Dépublier les compléments de la page {{ n }}. </div>
-        </span>
-        <span id="spinner-1-{{ this_page.id }}"></span>
-        {% else %}
-        <span class="helper_tip"> <i class="bi bi-question-circle" id="this_page"></i> 
-            <div class="helper_tip_text" >Page de cours. Pas d'exercice affichable. </div>
-        </span>
-        {% endif %}
-        Accèder à la page 
-        <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3"  class="acces_to_page" />
-        <i class="bi bi-arrow-right-circle"></i>
 
+    <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 0 > 
+    {% get_group_display_cor this_chapter group as this_chapter_is_cor %}
+        <i class="bi bi-eye text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}" id="cc_chapter{{ this_chapter.id }}"></i> 
+        <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices du chapitre. </div>
+    </span>
+    <img src="{% static 'img/angle-right.png' %}"/> 
+
+    {% if 'cours' not in this_page.title %}
+    <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
+        {% get_group_display_cor this_page group as this_page_is_cor %}
+        <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
+        <div class="helper_tip_text" >Publier/Dépublier les corrections des exercices de la page {{ n }}. </div>
+    </span>
+    <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 0> 
+        {% get_group_display_comp this_page group as this_page_is_comp %}
+        <i class="bi bi-circle-fill  text-{% if this_page_is_comp %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
+        <div class="helper_tip_text" >Publier/Dépublier les compléments de la page {{ n }}. </div>
+    </span>
+    <span id="spinner-1-{{ this_page.id }}"></span>
+    {% else %}
+    <span class="helper_tip"> <i class="bi bi-question-circle" id="this_page"></i> 
+        <div class="helper_tip_text" >Page de cours. Pas d'exercice affichable. </div>
+    </span>
+    {% endif %}
+
+    <form action="{% url 'goto_direct_page' %}" method="post" style="display: inline-block; max-width: 300px;">
+        <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à la page :</label>
+        <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3" class="acces_to_page" required />
+        <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-arrow-right"></i></button>
+    </form>
 {% endblock %}
 
 
