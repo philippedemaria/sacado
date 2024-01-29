@@ -21,7 +21,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
         $(document).on('change','.group_can_get_the_book',function(){
 
             let group_id  =  $(this).val()  ;
-
+            $("#spinnerGroup-"+group_id).html("")
             $.ajax({
                 url: '../../book/group_can_get_the_book',
                 data: {
@@ -29,7 +29,7 @@ define(['jquery', 'bootstrap', 'ui', 'ui_sortable'], function ($) {
                 },
                 type: "POST",
                 dataType: "json",
- 
+                success: function (data) {$("#spinnerGroup-"+group_id).html("")}
             });
 
 

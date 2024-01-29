@@ -18,7 +18,7 @@ from django.template.loader import render_to_string
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from account.decorators import user_can_create, user_is_superuser, user_is_creator , user_is_testeur
-from account.models import  Student, Teacher, User,Resultknowledge, Resultskill, Resultlastskill
+from account.models import  Student, Teacher, User,Resultknowledge, Resultskill, Resultlastskill, Parent
 from book.models import *
 from book.forms import SectionForm
 from account.forms import StudentForm, TeacherForm, UserForm
@@ -31,6 +31,7 @@ from qcm.decorators import user_is_parcours_teacher, user_can_modify_this_course
 from qcm.models import *
 from qcm.forms import * 
 from qcm.grid_letters_creator import * 
+from schedule.models import Slotedt
 from school.models import Stage, School
 from sendmail.forms import  EmailForm
 from socle.models import  Theme, Knowledge , Level , Skill , Waiting , Subject
@@ -139,9 +140,9 @@ def is_sacado_asso(this_user, today):
 
 def change_code_exercises_to_book():
 
-    carateres = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    caracteres = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    exercises = Exercises.objects.filter(theme__subject__is_active=1)
+    exercises = Exercise.objects.filter(theme__subject__is_active=1)
     compteurs = dict()
 
     for l in Level.objects.exclude(pk=13).order_by("ranking"):
@@ -560,18 +561,7 @@ def clear_realtime(parcours_tab , today,  timer ):
 ##################################################################################################################################
 ##################################################################################################################################
 
-def new_content_type(s):
-    names = ['Pages', 'Questionnaires', 'Activités', 'Tâches',  'Fichiers', 'Urls externes', 'Discussions' , 'Notes',  'Acquis', 'Participants', 'Suivis' ]                
-    slugs = ['page', 'test',  'activity', 'task', 'file', 'url', 'discussion', 'mark', 'acquis', 'user', 'suivi' ]   
-    verbose_names = ['Toutes les pages', 'Tous les questionnaires', 'Toutes les activités', 'Toutes les tâches',  'Tous les fichiers', 'Toutes les urls externes', 'Toutes les discussions', 'Notes', 'Acquis', 'Tous les participants', 'Les suivis des activités' ] 
-
-    for i in range(len(names)) :
-        verbose_button = verbose_names[i]
-        slug = slugs[i]
-        name = names[i]
-        image = "img/"+slugs[i]+".png"
-        Content_type.objects.create(name = name, image = image , slug = slug ,verbose_button = verbose_button, display = 1 ,section = s)
-
+ 
 def get_time(s,e):
     start_time = s.split(",")[0]
     end_time = e.split(".")[0]
@@ -695,7 +685,7 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     """
     parcours      =  teacher.teacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0)
     parcourses_co = teacher.coteacher_parcours.filter(is_evaluation=is_evaluation,is_archive=is_archive,is_trash=0 )
-    parcourses    = parcours | parcours_co 
+    parcourses    = parcours | parcourses_co 
     prcs          = parcourses.order_by("subject","level")
     return prcs
 
@@ -1152,8 +1142,8 @@ def peuplate_parcours(request,id):
 
         for exercise in exercises_posted_ids :
             try :
-                if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                if Relationship.objects.filter(parcours = parcours , exercise__supportfile = exercise.supportfile ).count() == 0 :
+                    r = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -1224,8 +1214,8 @@ def peuplate_parcours_evaluation(request,id):
 
         for exercise in exercises_posted_ids :
             try :
-                if Relationship.objects.filter(parcours = nf , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = nf , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper,is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                if Relationship.objects.filter(parcours = parcours , exercise__supportfile = exercise.supportfile ).count() == 0 :
+                    r = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper,is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -4545,7 +4535,7 @@ def show_folder_student(request, id):
 
     parcourses = folder.parcours.filter(Q(is_publish=1)|Q(start__lte=today,stop__gte=today)).order_by("ranking")
     nb_parcourses = parcourses.count()
-    context = {'parcourses': parcourses , 'nb_parcourses': nb_parcourses ,   'parcours': parcours ,   'stage' : stage , 'today' : today ,  }
+    context = {'parcourses': parcourses , 'nb_parcourses': nb_parcourses ,   'folder': folder ,   'stage' : stage , 'today' : today ,  }
 
     return render(request, 'qcm/show_parcours_folder_student.html', context)
 
@@ -5320,8 +5310,8 @@ def clone_parcours(request, id, course_on ):
     parcours.target_id = None
     parcours.code = str(uuid.uuid4())[:8]  
     parcours.save()
-    
-    if request.session.get("folder_id",None) :  
+    folder_id = request.session.get("folder_id",None)
+    if folder_id :  
         folder = Folder.objects.get(pk=folder_id)
         folder.parcours.add(parcours) 
 
@@ -6104,8 +6094,8 @@ def ajax_dates(request):  # On conserve relationship_id par commodité mais c'es
                         date = date.split(" ")[0]
                         slot_start = datetime.strptime(date, '%Y-%m-%d').date()
                         slotedt = Slotedt.objects.filter(users=request.user, start__startswith = slot_start, groups = group).first()
-                        slot.content += "Exercice : <a href='http://sacado.xyz/qcm/{}/{}' target='_blank'>{}<a>".format(r.exercise.supportfile.code,r.parcours.id , r.exercise.id )
-                        slot.save()
+                        slotedt.content += "Exercice : <a href='http://sacado.xyz/qcm/{}/{}' target='_blank'>{}<a>".format(r.exercise.supportfile.code,r.parcours.id , r.exercise.id )
+                        slotedt.save()
                     except : pass
 
                     data["class"] = "btn-success"
@@ -7193,7 +7183,7 @@ def show_this_supportfile(request, id):
         url = "basthon/index_supportfile.html"
     else :
         wForm = WrittenanswerbystudentForm(request.POST or None, request.FILES or None )
-        context = {'exercise': exercise, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] , 'today' : today , 'wForm' : wForm }
+        context = {'supportfile':  supportfile, 'start_time': start_time, 'parcours': parcours , 'communications' : [] , 'relationships' : [] ,  'wForm' : wForm }
         url = "qcm/show_teacher_writing.html"  
 
     return render(request, url , context)
@@ -8687,7 +8677,9 @@ def check_secret_answers(request):## 13 mot secret
     data = {}
     supportfile = Supportfile.objects.get(pk=supportfile_id) 
     choice      = Supportchoice.objects.get(pk=choice_id) 
-    
+    ans_to_do = list()
+
+    locutions = []
     for i in range(len(locutions)) :
         if i%2==1 : ans_to_do.append( locutions[i] )
 
@@ -9027,7 +9019,7 @@ def store_the_score_relation_ajax(request):
             else :
                 score = get_the_score(request,relation.exercise.supportfile,answer)            
 
-            Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
+            this_studentanswer = Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
 
             relationship_students_done = Relationship.objects.get(exercise  = relation.exercise , parcours  = relation.parcours)
             relationship_students_done.students_done.add(student)
@@ -10201,7 +10193,7 @@ def ajax_audio_comment_all_exercise(request): # Ajouter un commentaire à un exe
 
 
     if student.user.email :
-        msg = "Vous venez de recevoir une appréciation orale pour l'exercice "+str(exercise)+"\n\n  "+str(comment) 
+        msg = "Vous venez de recevoir une appréciation orale pour l'exercice "+str(exercise) 
         sending_mail("SacAdo Exercice posté",  msg , settings.DEFAULT_FROM_EMAIL , [student.user.email] )
 
     data = {}
@@ -10547,7 +10539,7 @@ def asking_parcours_sacado(request,pk):
     parcourses = teacher.teacher_parcours.filter(level = level, subject = subject)
 
 
-    test = attribute_all_documents_of_groups_to_a_new_students((group,), student)
+    test = attribute_all_documents_of_groups_to_a_new_student((group,), student)
 
     if test :
         test_string = "Je viens de récupérer les exercices."
@@ -10874,11 +10866,11 @@ def create_remediation(request,idr): # Pour la partie superadmin
         nf =  form.save(commit = False)
         nf.relationship = relationship
         nf.save()
-        nf.exercises.add(exercise)
+        nf.exercises.add(relationship.exercise)
         form.save_m2m()
         return redirect('admin_exercises')
 
-    context = {'form': form,  'exercise' : exercise}
+    context = {'form': form,  'exercise' : relationship.exercise}
 
     return render(request, 'qcm/form_remediation.html', context)
 
@@ -10893,11 +10885,11 @@ def update_remediation(request,idr, id): # Pour la partie superadmin
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
-    exercise = Exercise.objects.get(pk=ide) 
-    form = RemediationUpdateForm(request.POST or None, request.FILES or None, instance=remediation, teacher = teacher  )
+    exercise = Exercise.objects.get(pk=id) 
+    form = RemediationForm(request.POST or None, request.FILES or None, instance=remediation, teacher = teacher  )
  
     if form.is_valid():
-        nf.save()
+        form.save()
         return redirect('exercises')
 
     context = {'form': form,  'exercise' : exercise}
@@ -12000,20 +11992,14 @@ def export_result_parcours_exercises(request):
 
     parcours_id = request.POST.get("parcours_id")  
     is_twenty   = request.POST.get("is_twenty",None)  
-
-
     parcours      = Parcours.objects.get(pk = parcours_id)  
-
 
     relationships = Relationship.objects.filter(parcours=parcours, exercise__supportfile__is_title=0).prefetch_related('exercise').order_by("ranking")
     customexercises = parcours.parcours_customexercises.all() 
 
     this_clic = request.POST.get("this_clic_notes")
 
-    try : 
-        students = parcours.only_students(group)
-    except:
-        students = students_from_p_or_g(request,parcours) 
+    students = students_from_p_or_g(request,parcours) 
 
     if this_clic == "csv" : 
 
@@ -12774,16 +12760,13 @@ def course_custom_show_shared(request):
     except :
         messages.error(request,"Vous n'êtes pas enseignant ou pas connecté.")
         return redirect('index')
-
-    teacher = request.user.teacher
-    role, group , group_id , access = get_complement(request, teacher, parcours)
-    request.session["parcours_id"] = parcours.id
-    request.session["group_id"] = group_id
-
+ 
+  
 
     courses = Course.objects.filter( Q(parcours__teacher__user__school = teacher.user.school)| Q(parcours__teacher__user_id=2480),is_share = 1).exclude(teacher = teacher).order_by("parcours","parcours__level")
 
-    return render(request, 'qcm/course/list_courses.html', {  'teacher': teacher , 'courses':courses, 'group': group ,  'parcours': None, 'relationships' : [] ,  'communications': [] , })
+    return render(request, 'qcm/course/list_courses.html', 
+                  {  'teacher': teacher , 'courses':courses,   'parcours': None, 'relationships' : [] ,  'communications': [] , })
   
 
 
@@ -13102,7 +13085,7 @@ def create_demand(request):
 def update_demand(request, id):
  
     demand = Demand.objects.get(id=id)
-    demand_form = DemandForm(request.POST or None, instance=demand, )
+    demand_form = DemandForm(request.POST or None, instance=demand )
     try :
         teacher = request.user.teacher
     except :
@@ -13111,7 +13094,7 @@ def update_demand(request, id):
     
     if request.method == "POST" :
         if demand_form.is_valid():
-            nf =  form.save(commit = False)
+            nf =  demand_form.save(commit = False)
             nf.teacher = teacher
             nf.save()
  
@@ -13121,7 +13104,7 @@ def update_demand(request, id):
         else :
             print(demand_form.errors)
 
-    context = {'form': demand_form,  'demand': demand, 'teacher': teacher , 'parcours': None  , 'relationships': relationships , }
+    context = {'form': demand_form,  'demand': demand, 'teacher': teacher , 'parcours': None  }
 
     return render(request, 'qcm/demand/form_demand.html', context )
 
@@ -13132,7 +13115,7 @@ def delete_demand(request, id  ):
     """
     idc : demand_id et id = parcours_id pour correspondre avec le decorateur
     """
-    demand = Demand.objects.get(id=idc)
+    demand = Demand.objects.get(id=id)
     demand.delete()
     return redirect('index')  
 
@@ -13147,7 +13130,7 @@ def show_demand(request, id ):
 
     user = request.user 
     teacher = user.teacher
-    context = {  'demands': demands, 'teacher': teacher , 'parcours': None , 'group_id' : None, 'communications' : []}
+    context = {  'demand': demand, 'teacher': teacher , 'parcours': None , 'group_id' : None, 'communications' : []}
     return render(request, 'qcm/demand/show_demand.html', context)
 
 
@@ -13853,7 +13836,7 @@ def parcours_delete_from_folder(request):
     if parcours_id :
         folder = Folder.objects.get( pk = int(parcours_id))
 
-        if parcours.teacher == teacher :
+        if folder.teacher == teacher :
             Folder.objects.filter(pk=folder.id).update(is_trash=1)
     data = {}
          

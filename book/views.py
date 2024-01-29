@@ -2110,19 +2110,22 @@ def ajax_display_correction_bloc(request):
 @csrf_exempt
 def group_can_get_the_book(request):    
     group_id    = request.POST.get('group_id',False)
+    data = dict()
+    print(group_id)
 
-    if Mybook.objects.filter(group_id = group_id, book_id = 9 ).count() :
+    if Mybook.objects.filter(group_id = group_id, book_id = 9 ).count() :    
         Mybook.objects.filter(group_id = group_id).delete()
         Mybloc.objects.filter(group_id = group_id).delete()
+
     else :
         Mybook.objects.update_or_create(group_id = group_id, book_id = 9 , defaults ={ 'is_display' : 1 })
         book = Book.objects.get(pk=9)
         for chapter in book.chapters.all():
             for p in chapter.pages.all():
-                for paragraph in p.paragraphs.all():
+                for paragraph in p.paragraphs.all():  
                     for bloc in  paragraph.blocs.all():
                         Mybloc.objects.update_or_create(group_id=group_id, bloc=bloc, defaults ={ 'is_display_cor':0, 'is_display_comp' : 1 } ) 
-
+    return JsonResponse(data)
 
 
 def ajax_insidebloc(request):

@@ -79,6 +79,7 @@
                                                     checked onclick="return TestRemove('{{ g.name}}')"
                                                     {% endif %}
                                                 /></label> 
+                                                <span id="spinnerGroup-{{ g.id }}"></span>
                                             {% if not forloop.last %}, {% endif %}
                                         {% endfor %}
                                     </div>
