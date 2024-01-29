@@ -190,7 +190,9 @@
                                         </div> 
 
                                         {% if bloc.correction_html %}
-                                        <div style="position:absolute; top:30px;left:30px">
+                                        <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:30px;left:20px"
+                                             {% else %} style="position:absolute; top:30px;left:2px"
+                                             {% endif %} >
                                             <a href="javascript:void(0);" data-target="#book_shower_correction" data-toggle="modal" 
                                                 class="show_this_bloc_correction"  data-bloc_id="{{ bloc.id }}" >
                                                 <i class="bi bi-c-circle text-success"></i>
@@ -205,16 +207,12 @@
                                                 </a>
                                                 <span id="spinnerCor-3-{{bloc.id}}"></span>
                                             </div>
-
-
-
                                         </div>
                                         {% endif %} 
-
-
-
-            
-                                        <div class="bloc_content to_projection" {% if 'exo' in bloc.typebloc.css %} style="margin-left:80px" {% endif %}
+                                        <div class="bloc_content to_projection" 
+                                            {% if 'exo' in bloc.typebloc.css  %} style="margin-left:80px"
+                                            {% elif bloc.correction_html %} style="margin-left:20px"
+                                            {% endif %}
                                              data-toggle='modal'   data-target='#book_shower_page'>
                                             {{ bloc.content_html|safe }}
                                         </div>
@@ -224,7 +222,7 @@
                                         <label>
                                         Compléments 
                                         {% get_group_display_comp bloc group as this_bloc_is_comp %}
-                                        <a class="display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
+                                        <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
                                             <i class="bi bi-circle-fill text-{% if this_bloc_is_comp %}success{% else %}danger{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
                                                 id="cc_bloc{{ bloc.id }}">
                                             </i> 
@@ -244,14 +242,13 @@
                                         {% for e in bloc.exotexs.all %} 
                                             <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
                                         {% endfor %}
+                                        <span id="spinner-3-{{bloc.id}}"></span>
                                     </div>
                                     {% endif %}                                
                                 </div>
                                 {% get_bloc_col_width paragraph  forloop.counter as col_width %}
-                                {% if col_width|divisibleby:"12"  and paragraph.total_size > 12 %}</div><div class="row">{% endif %}  
-                                <div class="bottom_bloc"></div>    
-                                    
-
+                                {% if col_width|divisibleby:"12" and paragraph.total_size > 12 %}</div><div class="row">{% endif %}  
+                                <div class="bottom_bloc"></div>     
                             {% endfor %}
                         </div>
                     </div>

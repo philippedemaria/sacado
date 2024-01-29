@@ -2097,9 +2097,9 @@ def ajax_display_correction_bloc(request):
 
     elif  type_id == "3" : 
         if is_correction :
-            Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status)  
+            Mybloc.objects.filter(group_id=group_id, bloc=source_id).update(is_display_cor=status)  
         else :
-            Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
+            Mybloc.objects.filter(group_id=group_id, bloc=source_id).update(is_display_comp=status) 
 
     data = {}
     data['css'] = css

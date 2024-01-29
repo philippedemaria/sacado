@@ -12,25 +12,14 @@ Mes livres numériques <img src="{% static 'img/angle-right.png' %}" />
 
 {% block body %}
 <section class="content_main">
-
-
     {% for  mybook in mybooks %}
-
         <div style="float: left;margin-right: 5px; background-color: white; text-align: center; padding:10px; border-radius:4px">
-                            
-
-    
                 <a href="{% url 'get_mybook' mybook.book.id mybook.group.id %}" target="_blank" >
                     {% if mybook.book.imagefile  %}
                         <img src='{{ mybook.book.imagefile.url }}' width="90px"  />
-                    
                     {% endif  %} <h2>{{mybook.group.name }}</h2> <small>Accéder au livre</small> 
                 </a> 
-   
- 
-
         </div>
     {% endfor %}
-
 </section>
 {% endblock %}
