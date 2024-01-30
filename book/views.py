@@ -432,7 +432,6 @@ def goto_direct_page(request):
 
 
 def show_mybook(request,idb, n):
-    print(idb , n)
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
     group_id = request.session.get("book_group_id")

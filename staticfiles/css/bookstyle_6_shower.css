@@ -495,6 +495,7 @@ h1 {
 .paragraph_bloc_exo .bloc_title{
 	padding:5px;
 	margin-left:15px;
+	min-width:50px;
 }
 /*
 .paragraph_bloc_exo .bloc_content, .paragraph_bloc_exo .bloc_content table tr td , .paragraph_bloc_ex .bloc_content table tr td p{
