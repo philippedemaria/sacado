@@ -251,6 +251,15 @@ h1 {
 }
 
 
+.paragraph_comp{
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: right;
+}
+
+
+
+
 .paragraph_number{
 	padding :3px 10px;
 	background-color:#5d4391;
