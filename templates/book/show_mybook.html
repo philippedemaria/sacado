@@ -179,20 +179,22 @@
                             </div>
                         </div>
                         {% else %}
-                        <div class="row paragraph_comp">
-                            <div class="col-xs-12">
-                                <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
-                                        data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                    {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
-                                    Afficher/cacher les corrections <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                </a>
-                                |
-                                <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
-                                data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                    {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
-                                    Afficher/cacher les compléments <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                </a>
-                                <span id="spinner-2-{{paragraph.id}}"></span>
+                        <div class="paragraph_comp">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
+                                            data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
+                                        {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
+                                        Afficher/cacher les corrections <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
+                                    </a>
+                                    |
+                                    <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
+                                    data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
+                                        {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
+                                        Afficher/cacher les compléments <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
+                                    </a>
+                                    <span id="spinner-2-{{paragraph.id}}"></span>
+                                </div>
                             </div>
                         </div>
                         {% endif %}
