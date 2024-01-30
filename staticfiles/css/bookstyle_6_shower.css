@@ -489,13 +489,13 @@ h1 {
 
 /*  paragraph_bloc_exo  */
  .paragraph_bloc_exo{
-	border-radius: 4px!important;
+	border-radius: 4px 0px 0px 4px!important;
 }
 
 .paragraph_bloc_exo .bloc_title{
 	padding:5px;
 	margin-left:15px;
-	min-width:45px;
+	width:45px;
 	text-align: center;
 }
 /*
