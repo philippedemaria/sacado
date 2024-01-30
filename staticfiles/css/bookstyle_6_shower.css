@@ -123,6 +123,8 @@ h1 {
   color:#5d4391;  
   font-size:30px;
   font-weight: 700;
+  height:100vh;
+  overflow: hidden
 }
 
 .algo_page_top{
@@ -292,14 +294,6 @@ h1 {
 	font-size: 16px;
 }
 
-.global_bloc .bloc_content{
-	color:#5d4391;
-	padding:15px!important;
-	font-size: 16px;
-}
-
-
-
 
 .global_bloc .bloc_title{
 	color :  white ;
@@ -308,13 +302,24 @@ h1 {
 	padding:3px;  
 }
 
-.global_bloc .bloc_content, .global_bloc .bloc_content table tr td {
+
+
+.global_bloc .bloc_content{
+	color:#5d4391;
+	padding:15px!important;
+	font-size: 16px;
+	font-weight: normal;
+}
+
+.global_bloc .bloc_content table tr td {
 	color :  #5d4391 ;
 	border-radius:0px 0px 3px 3px;
 	background-color: #FFF;
 	padding:5px;
 	font-weight: normal;
 }
+
+
 
 .bottom_bloc{height:20px}
 
@@ -375,13 +380,13 @@ h1 {
 .paragraph_bloc_mt .bloc_title{
 	color :  white ;
 	border-radius: 3px 3px 0px 0px;
-	background-color:#5c9143;
+	background-color:#54ba4f;
 	padding:3px;  
 }
 
 .paragraph_bloc_mt .bloc_content, .paragraph_bloc_mt .bloc_content table tr td {
 	color :  #002804 ;
-	border-left: 2px solid #5c9143;
+	border-left: 2px solid #54ba4f;
 }  
 
 
@@ -425,7 +430,7 @@ h1 {
 .paragraph_bloc_mt .bloc_title{
 	color :  white ;
 	border-radius: 3px 3px 0px 0px;
-	background-color:#5c9143;
+	background-color:#54ba4f;
 	padding:3px;  
 }
 
@@ -480,13 +485,13 @@ h1 {
 .paragraph_bloc_ex .bloc_title{
 	color :  white ;
 	border-radius: 3px 3px 0px 0px;
-	background-color:#5c9143;
+	background-color:#54ba4f;
 	padding:5px;
 	width:100%;
 }
 
 .paragraph_bloc_ex .bloc_content, .paragraph_bloc_ex .bloc_content table tr td{
-	color :  #5c9143 ;
+	color :  #54ba4f ;
 	border-radius: 3px;
 	background-color:white;
 	padding:5px;
@@ -520,7 +525,7 @@ h1 {
 } */
 
 .exo_u{
-	background-color:#00B999!important ;
+	background-color:#54ba4f!important ;
 }
 .exo_d{
 	background-color:#0093CA!important ;
@@ -536,7 +541,7 @@ h1 {
 
 
 .exo_bloc_u{
-	border: 2px solid  #00B999;
+	border: 2px solid  #54ba4f;
 	border-radius: 5px;
 	color:#222;
 	position:relative;
@@ -573,10 +578,55 @@ h1 {
 
 
 
+.paragraph_bloc_mm{
+	border-radius: 30px 0px 0px 30px;
+	background-color:#5d4391;
+	color:white;
+	position:absolute;
+	padding:40px;
+	right:0px;
+	top:150px;
+	width:70%;
+}
 
+.paragraph_bloc_mm .bloc_content{
+	color:white!important;
+}
 
+.paragraph_bloc_sf{
+	position:absolute;
+	right:0px;
+	top:450px;
+	width:60%;
+}
 
+.paragraph_bloc_sf .bloc_title{
+	color :  #54ba4f ;
+	background-color: white;
+	font-weight: normal;
+	font-size:20px;
+}
 
+.paragraph_bloc_sf .bloc_content{
+	color :  #5d4391 ;
+	font-weight: normal;
+	border-top : dotted 2px #54ba4f ;
+}
+
+.paragraph_bloc_img{
+	position:absolute;
+	width:200px;
+	height:200px;
+	top: 150px;
+	left: 10%;
+}
+
+.paragraph_bloc_rl{
+	position:absolute;
+	width:250px;
+	top: 300px;
+	left: 10%;
+}
 
 /*  paragraph_bloc_rm  */
 /* .paragraph_bloc_rm{
@@ -680,23 +730,7 @@ h1 {
 	padding:0px;
 }
 
-.paragraph_bloc_sf .bloc_title{
-	color :  #5d4391 ;
-	border-radius: 3px 3px 0px 0px;
-	background-color: #f7e7ff;
-	padding:10px;  
-	width:100%;
-	font-weight:600; 
-}
-
-.paragraph_bloc_sf .bloc_content, .paragraph_bloc_sf .bloc_content table tr td{
-	color :  #5d4391 ;
-	border-radius:0px 0px 3px 3px;
-	background-color: #f7e7ff;
-	padding:10px;
-	width:100%;
-	font-weight: normal;
-} */
+  */
 
 
  /*  paragraph_bloc_intro  */
@@ -813,17 +847,10 @@ h1 {
 
 
 /*  paragraph_bloc_preuve  */
-/* .paragraph_bloc_mm{
-	border-radius: 5px;
-	color:#4D8075;
-	position:relative;
-	margin:30px 20px 0px 50px;
-	padding:0px;
-
-}
 
 
 
+/*
 .paragraph_bloc_mm .bloc_title{
 	color :  #4D8075 ;
 	border-radius:0px 0px 3px 3px;

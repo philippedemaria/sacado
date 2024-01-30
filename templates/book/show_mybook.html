@@ -135,22 +135,23 @@
                 {% endfor %}
                 </div>
             {% else %} 
-
-                
                 <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
                     {% elif page.css == 'parcoursd_page_top' %} style="width:100%;background-image:url('/static/img/parcours_d.png'); background-repeat: no-repeat ;height:100px"   
                     {% elif page.css == 'parcourst_page_top' %} style="width:100%;background-image:url('/static/img/parcours_t.png'); background-repeat: no-repeat ;height:100px"  
                     {% elif page.css == 'algo_page_top' %} style="width:100%;background-image:url('/static/img/parcours_algo.png'); background-repeat: no-repeat ;height:100px"  
                     {% elif page.css == 'auto_page_top' %} style="width:100%;background-image:url('/static/img/parcours_eval.png'); background-repeat: no-repeat ;height:100px"
+                    {% elif page.css == 'intro_page_top' %} style="width:30%; border-radius:0px 50px 50px 0px;color:white;background-color:#3fc5e8;font-size:25px;padding:20px"
                     {% endif %}> 
+                    {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }}_{% endif %}
                 </div>
-
-
+                {% if page.css == 'intro_page_top' %}
+                <div style="position:absolute; top:60px; right:0 ; width:75%; opacity:0.9; border-radius:50px 0px  0px 50px;color:white;background-color:#f0558d; font-size:30px;padding:20px"> 
+                    {{ this_chapter.title }}
+                </div>
+                {% endif %}
 
                 {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
                     <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"
-                    
-                    
                     {% if  page.css == 'parcoursu_page_top' %} style="padding-top:20px;background-image: url('/static/img/fond_u.png'); background-repeat: repeat-y "   
                     {% elif page.css == 'parcoursd_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_d.png'); background-repeat: repeat-y "   
                     {% elif page.css == 'parcourst_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_t.png'); background-repeat: repeat-y"  
@@ -178,9 +179,10 @@
                                 <span id="spinner-2-{{paragraph.id}}"></span>
                             </div>
                         </div>
+                        {% elif page.css == 'intro_page_top' %}
+                        <div></div>
                         {% else %}
-                        <div class="paragraph_comp">
-                            <div class="row">
+                            <div class="row" align="right">
                                 <div class="col-xs-12">
                                     <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
                                             data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
@@ -196,7 +198,6 @@
                                     <span id="spinner-2-{{paragraph.id}}"></span>
                                 </div>
                             </div>
-                        </div>
                         {% endif %}
                         <div class="row">
                             {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
@@ -207,6 +208,12 @@
                                                 <div class="bloc_title {{ bloc.typebloc.css }}">
                                                     {{ bloc.title }}
                                                 </div> 
+                                            {% elif 'sf' in bloc.typebloc.css  %}
+                                                <div class="bloc_title">
+                                                    {{ bloc.title }}
+                                                </div> 
+                                            {% elif 'mm' in bloc.typebloc.css  %}
+                                                <div></div> 
                                             {% else %}
                                                 <span class="bloc_title {{ bloc.typebloc.css }}">
                                                     {% if 'def' in bloc.typebloc.css %}
