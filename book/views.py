@@ -77,7 +77,10 @@ def mybooks(request):
     request.session["subtdb"] = "Chapter"
     teacher = request.user.teacher
     mybooks = Mybook.objects.filter(group__teacher=teacher)
-    return render(request, 'book/configmybooks.html', {'mybooks': mybooks  })
+    book= None
+    if mybooks.count() == 0 :
+        book =  Book.objects.get(pk=9)
+    return render(request, 'book/configmybooks.html', {'mybooks': mybooks , 'book' : book })
 
 
 @user_is_extra 
@@ -419,7 +422,8 @@ def show_book(request,idb,idch):
 def get_mybook(request,idb, idg):
 
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
-    request.session["book_group_id"] = idg
+    if idg > 0 :  request.session["book_group_id"] = idg
+    else :   request.session["book_group_id"] = None
 
     return show_mybook(request,idb, 0)
 
@@ -434,9 +438,11 @@ def goto_direct_page(request):
 def show_mybook(request,idb, n):
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
-    group_id = request.session.get("book_group_id")
-    group = Group.objects.get(pk=group_id)
+    group_id = request.session.get("book_group_id",None)
+    if group_id : group = Group.objects.get(pk=group_id)
+    else : group = None
     book = Book.objects.get(pk=idb)
+
     prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
     this_chapter = this_page.chapter
     # Appel de la page n
