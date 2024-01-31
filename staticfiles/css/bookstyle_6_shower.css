@@ -377,6 +377,12 @@ h1 {
 	background-color: white;
 } 
 
+.paragraph_bloc_rm .bloc_content {
+	border-left: 2px solid #5d4391;
+	background-color: white;
+} 
+
+
 .paragraph_bloc_mt{
 	color:#002804;
 	position:relative;
