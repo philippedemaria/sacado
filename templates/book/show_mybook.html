@@ -204,7 +204,7 @@
                             {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                                 <div class="col-xs-{{ bloc.size }}" >
                                     <div class="global_bloc {{ bloc.typebloc.css }}"  > 
-                                        <div>
+                                        <div id="title_bloc{{ bloc.id }}">
                                             {% if 'exo' in bloc.typebloc.css  %}
                                                 <div class="bloc_title {{ bloc.typebloc.css }}">
                                                     {{ bloc.title }}
