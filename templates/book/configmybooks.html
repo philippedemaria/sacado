@@ -25,9 +25,9 @@ Mes livres numériques <img src="{% static 'img/angle-right.png' %}" />
         <a href="{% url 'get_mybook' book.id 0 %}" target="_blank" >
             {% if book.imagefile  %}
                 <img src='{{ book.imagefile.url }}' width="90px"  />
-            {% endif  %}  <small>Accéder au livre</small> 
+            {% endif  %}  <h2>Accéder au livre</h2> 
         </a> 
-</div>
+    </div>
     {% endfor %}
 </section>
 {% endblock %}
