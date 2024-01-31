@@ -501,11 +501,13 @@ h1 {
 	width:200px;
 	height:200px;
 	top: 100px;
-	left: 30%;
+	left: 20%;
+	z-index:999;
 }
 
 .paragraph_bloc_img img{
 	height:150px;
+	border : solid 2px #5d4391 ;
 }
 
 
