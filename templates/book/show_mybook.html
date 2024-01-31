@@ -85,7 +85,8 @@
         <div class="col-xs-12 col-md-12">
             {% for fpage in first_pages %}
                 {% if fpage %}
-                <a href="{% url 'show_mybook' book.id fpage.number %}" class="btn btn-xs btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}"> 
+                <a href="{% url 'show_mybook' book.id fpage.number %}" 
+                    class="btn btn-xs btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}"> 
                     <b>{% if fpage.chapter.theme %}  {{ fpage.chapter.theme }}{% else %}{{ fpage.chapter.title }} {% endif %} {{ forloop.counter0 }}</b>
                 </a>
                 {% endif %}
