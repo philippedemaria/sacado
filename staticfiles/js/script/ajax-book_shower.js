@@ -21,7 +21,7 @@ define(['jquery', 'bootstrap'], function ($) {
 
 
             $("#book_shower_page_content").css("font-size",value*12);
-            $("#book_shower_page_content").css("line-height",'1.2em');
+            $("#book_shower_page_content").css("line-height",'1.3em');
             $("#book_shower_page_content table tr td").css("font-size",value*12);
             $("#book_shower_page_content img").css("width",'200%'); 
             $("#book_shower_page_content img").css("height",'200%'); 
@@ -152,7 +152,7 @@ define(['jquery', 'bootstrap'], function ($) {
             var value = $(this).val() ; 
 
             $("#book_shower_page_content").css("font-size",value*12);
-            $("#book_shower_page_content").css("line-height",'1.2em');
+            $("#book_shower_page_content").css("line-height",'1.3em');
             $("#book_shower_page_content img").css("width",'200%'); 
             $("#book_shower_page_content img").css("height",'200%'); 
         });  
