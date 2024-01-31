@@ -28,7 +28,9 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
 	cursor:pointer;
 }
 
-
+.small_size{
+	font-size:12px
+}
 
 .content-wrapper, .right-side {
     min-height: 100%;
