@@ -506,12 +506,13 @@ h1 {
 
 .paragraph_bloc_rl{
 	position:absolute;
-	width:3000px;
+	width:300px;
 	top: 250px;
 	left: 10%;
 	border : solid 2px #5d4391 ;
 	border-left : solid 1px #5d4391 ;
 	border-bottom : solid 1px #5d4391 ;
+	z-index: 99999;
 }
 
 /*  paragraph_bloc_rm  */
