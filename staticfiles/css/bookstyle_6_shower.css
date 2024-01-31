@@ -367,20 +367,14 @@ h1 {
 	font-weight: normal;
 }
 
-.paragraph_bloc_ex .bloc_content {
+
+
+.paragraph_bloc_ex .bloc_content, .paragraph_bloc_at .bloc_content, .paragraph_bloc_rm .bloc_content , .paragraph_bloc_pp .bloc_content {
 	border-left: 2px solid #5d4391;
 	background-color: white;
 } 
 
-.paragraph_bloc_at .bloc_content {
-	border-left: 2px solid #5d4391;
-	background-color: white;
-} 
 
-.paragraph_bloc_rm .bloc_content {
-	border-left: 2px solid #5d4391;
-	background-color: white;
-} 
 
 
 .paragraph_bloc_mt{
