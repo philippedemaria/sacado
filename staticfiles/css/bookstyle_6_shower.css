@@ -468,7 +468,7 @@ h1 {
 	position:absolute;
 	padding:40px;
 	right:0px;
-	top:150px;
+	top:110px;
 	width:70%;
 }
 
@@ -500,9 +500,14 @@ h1 {
 	position:absolute;
 	width:200px;
 	height:200px;
-	top: 150px;
-	left: 10%;
+	top: 100px;
+	left: 30%;
 }
+
+.paragraph_bloc_img img{
+	height:150px;
+}
+
 
 .paragraph_bloc_rl{
 	position:absolute;
