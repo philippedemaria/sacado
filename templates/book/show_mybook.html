@@ -106,7 +106,12 @@
 
     <div class="row {{ page.css }}"  style="padding-top:20px;"> 
         <div class="col-xs-12 col-md-12">
-            {% if n == 0  %} 
+            {% if n == 0  %}
+            
+            {% if not group %}
+            <div class="alert alert-danger">Tous les liens vers les corrections et les compléments sont désactivés.</div>
+            {% endif %}
+            
                 <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
                 {% for fpage in first_pages %}
                     <div class="this_paragraph" id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
