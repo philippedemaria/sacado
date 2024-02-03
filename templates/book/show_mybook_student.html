@@ -1,0 +1,233 @@
+{% extends 'dashboard.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load item_tags %}
+
+
+{% block require %}
+ 
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common3.js' %}"></script>
+ 
+    <script>
+        require(['script/ajax-book_shower']);
+    </script> 
+
+
+{% endblock %}
+
+
+{% block page_title %}
+    Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }}
+    
+    <img src="{% static 'img/angle-right.png' %}"/> 
+
+    <form action="{% url 'goto_direct_page' %}" method="post" style="display: inline-block; max-width: 300px;">
+        <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à la page :</label>
+        <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3" class="acces_to_page" required />
+        <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-arrow-right"></i></button>
+    </form>
+{% endblock %}
+
+
+{% block styleMk4ht %}
+    <link rel="stylesheet" href="{% static use_this_css %}">
+{% endblock %} 
+
+
+
+{% block page_menu_right %}
+
+
+ 
+{% if  prev_page %}
+<a href="{% url 'show_mybook' book.id prev_page.number %}" class="btn btn-default">Précédente</a>
+ {% endif %}
+{% if  next_page %}
+<a href="{% url 'show_mybook' book.id next_page.number %}" class="btn btn-default">Suivante</a>
+ {% endif %}
+
+{% endblock %}
+
+
+
+
+
+{% block body  %}  
+<section class="main_book"> 
+    <div class="row">
+        <div class="col-xs-12 col-md-12">
+            {% for fpage in first_pages %}
+                {% if fpage %}
+                <a href="{% url 'show_mybook' book.id fpage.number %}" 
+                    class="btn btn-xs btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}"> 
+                    <b>{% if fpage.chapter.theme %}  {{ fpage.chapter.theme }}{% else %}{{ fpage.chapter.title }} {% endif %} {{ forloop.counter0 }}</b>
+                </a>
+                {% endif %}
+            {% endfor %} 
+            <span class="pull-right"> 
+                page {{ n }}         
+            </span>   
+        </div>
+    </div>
+
+    <div class="row {{ page.css }}"  style="padding-top:20px;"> 
+        <div class="col-xs-12 col-md-12">
+            {% if n == 0  %}
+                <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
+                {% for fpage in first_pages %}
+                    <div class="this_paragraph" id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
+                        <div class="row">
+                            <div class="col-xs-12" >
+                                <span class="paragraph_number">{{ forloop.counter }}</span>
+                                <a href="{% url 'show_mybook' book.id fpage.number %}" class="paragraph_title">
+                                    {{ fpage.chapter.title }} 
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %} 
+                <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
+                    {% elif page.css == 'parcoursd_page_top' %} style="width:100%;background-image:url('/static/img/parcours_d.png'); background-repeat: no-repeat ;height:100px"   
+                    {% elif page.css == 'parcourst_page_top' %} style="width:100%;background-image:url('/static/img/parcours_t.png'); background-repeat: no-repeat ;height:100px"  
+                    {% elif page.css == 'algo_page_top' %} style="width:100%;background-image:url('/static/img/parcours_algo.png'); background-repeat: no-repeat ;height:100px"  
+                    {% elif page.css == 'auto_page_top' %} style="width:100%;background-image:url('/static/img/parcours_eval.png'); background-repeat: no-repeat ;height:100px"
+                    {% elif page.css == 'intro_page_top' %} style="width:30%; border-radius:0px 50px 50px 0px;color:white;background-color:#3fc5e8;font-size:25px;padding:20px"
+                    {% endif %}> 
+                    {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }}_{% endif %}
+                </div>
+                {% if page.css == 'intro_page_top' %}
+                <div style="position:absolute; top:60px; right:0 ; width:75%; opacity:0.9; border-radius:50px 0px  0px 50px;color:white;background-color:#f0558d; font-size:30px;padding:20px"> 
+                    {{ this_chapter.title }}
+                </div>
+                {% endif %}
+
+                {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
+                    <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"
+                    {% if  page.css == 'parcoursu_page_top' %} style="padding-top:20px;background-image: url('/static/img/fond_u.png'); background-repeat: repeat-y "   
+                    {% elif page.css == 'parcoursd_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_d.png'); background-repeat: repeat-y "   
+                    {% elif page.css == 'parcourst_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_t.png'); background-repeat: repeat-y"  
+                    {% elif page.css == 'algo_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_a.png'); background-repeat: repeat-y "  
+                    {% elif page.css == 'auto_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_e.png'); background-repeat: repeat-y"
+                    {% else %} style="padding-top:20px;"
+                    {% endif %}
+                    >
+                        {% if paragraph.number > 0 %}
+                        <div class="row paragraph_label">
+                            <div class="col-xs-12">
+                                    <span class="paragraph_number">{{ paragraph.number }}</span>
+                                    <span class="paragraph_title">{{ paragraph.title }}</span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div></div>
+                        {% endif %}
+                        <div class="row">
+                            {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
+                                <div class="col-xs-{{ bloc.size }}" >
+                                    <div class="global_bloc {{ bloc.typebloc.css }}"  > 
+                                        <div id="title_bloc{{ bloc.id }}">
+                                            {% if 'exo' in bloc.typebloc.css  %}
+                                                <div class="bloc_title {{ bloc.typebloc.css }}">
+                                                    {{ bloc.title }}
+                                                </div> 
+                                            {% elif 'sf' in bloc.typebloc.css  %}
+                                                <div class="bloc_title">
+                                                    {{ bloc.title }}
+                                                </div> 
+                                            {% elif 'mm' in bloc.typebloc.css or 'img' in bloc.typebloc.css or 'rl' in bloc.typebloc.css %}
+                                                <div></div> 
+                                            {% else %}
+                                                <span class="bloc_title {{ bloc.typebloc.css }}">
+                                                    {% if 'def' in bloc.typebloc.css %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-right" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0z"/>
+                                                    </svg>
+                                                    {% endif %}
+                                                    {{ bloc.title }}
+                                                </span> 
+                                            {% endif %}
+                                        </div> 
+                                        {% get_bloc_cor_visible_by_student student groups as is_bloc_cor_visible_by_student %}
+                                        {% if is_bloc_cor_visible_by_student %}
+                                        <div class="bloc_content to_projection" 
+                                            {% if 'exo' in bloc.typebloc.css  %} style="margin-left:80px"
+                                            {% elif bloc.correction_html %} style="margin-left:20px"
+                                            {% endif %}
+                                             data-toggle='modal'   data-target='#book_shower_page'>
+                                            {{ bloc.content_html|safe }}
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    {% get_bloc_comp_visible_by_student student groups as is_bloc_comp_visible_by_student %}
+                                    {% if is_bloc_comp_visible_by_student %}
+                                    <div {% if 'exo' in bloc.typebloc.css %} style="margin-left:80px" {% endif %}>  
+                                        <label>Compléments :</label>
+                                            {% for a in bloc.appliquettes.all %}
+                                                <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
+                                            {% endfor %}
+                                            {% for e in bloc.exercises.all %} 
+                                                {% if e.supportfile.imagefile %}
+                                                    <a href="#" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% for e in bloc.exotexs.all %} 
+                                                <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}                                
+                                </div>
+                                {% get_bloc_col_width paragraph  forloop.counter as col_width %}
+                                {% if col_width|divisibleby:"12" and paragraph.total_size > 12 %}</div><div class="row">{% endif %}  
+                                <div class="bottom_bloc"></div>     
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %} 
+        </div>
+
+    </div>
+</section>
+
+
+
+<div class="modal fade" id="book_shower_page" tabindex="-1" role="dialog" aria-labelledby="book_shower_page">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <input type="range" class="form-range" id="customRange"  min="1" max="5" step="1" value="1">
+            </div>
+            <div class="modal-body" id="book_shower_page_content">
+ 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="book_shower_correction" tabindex="-1" role="dialog" aria-labelledby="book_shower_correction">
+    <div class="modal-dialog" role="document" style="width:70%">
+        <div class="modal-content" >
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button> 
+                <input type="range" class="form-range" id="customRanger"  min="1" max="5" step="1" value="1">
+            </div>
+            <div class="modal-body" id="book_shower_correction_content">
+ 
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock  %}   
+
+

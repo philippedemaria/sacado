@@ -520,6 +520,23 @@ class Bloc(models.Model):
             test = True
         return test    
 
+    def bloc_cor_visible_by_student(self, groups) :
+        test = False
+        for group in groups :
+            nb_myblocs = self.myblocs.filter(group=group,is_display_cor=1)
+            if nb_myblocs > 0 : 
+                test = True
+                break
+        return test   
+
+    def bloc_comp_visible_by_student(self, groups) :
+        test = False
+        for group in groups :
+            nb_myblocs = self.myblocs.filter(group=group,is_display_comp=1)
+            if nb_myblocs > 0 : 
+                test = True
+                break
+        return test    
 ###############################################################################################################
 ############################## Attribution d'un livre à un groupe #############################################
 ###############################################################################################################

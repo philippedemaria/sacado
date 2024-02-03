@@ -8,6 +8,7 @@ from association.models import Accounting , Rate , Abonnement
 from sendmail.models import Email, Message
 from socle.models import Level
 from school.models import School
+from book.models import Mybook
 from group.models import Group
 from tool.models import Tool,Qtype
 from datetime import datetime , timedelta 
@@ -156,7 +157,11 @@ def menu(request):
             
             student = Student.objects.get(user=request.user)
             groups = student.students_to_group.all()
- 
+
+            can_get_the_book = False
+            mybooks = Mybook.objects.filter(book_id=9)
+            get_the_group_book = [ g for g in groups if g in mybooks] 
+            if len(get_the_group_book) > 0 : can_get_the_book = True
 
             teacher_to_student = False
             if "_e-test" in student.user.username :
@@ -182,6 +187,7 @@ def menu(request):
             return {
                 'is_gar_check' : is_gar_check,
                 'student': student,
+                'can_get_the_book' : can_get_the_book,
                 'sacado_asso' : sacado_asso , 
                 'group' : group , 'url_helper' : url_helper ,
                 'groups' : groups,

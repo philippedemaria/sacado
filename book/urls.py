@@ -20,6 +20,9 @@ urlpatterns = [
     path('show_mybook/<int:idb>/<int:n>', show_mybook, name='show_mybook'),
     path('show_mybook_one_page/<int:idb>/<int:n>', show_mybook_one_page, name='show_mybook_one_page'),
 
+
+    path('show_mybook_student/<int:idb>/<int:n>', show_mybook_student, name='show_mybook_student'),
+
     path('create_book/0', create_book, name='create_book'),
     path('update_book/<int:idb>', update_book, name='update_book'),
     path('delete_book/<int:idb>', delete_book, name='delete_book'), 

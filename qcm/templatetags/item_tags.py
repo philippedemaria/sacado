@@ -1322,3 +1322,19 @@ def get_group_display_comp(obj,group):
     retourne  si le chapitre contient un bloc corrigé
     """
     return obj.is_complement(group) 
+
+
+@register.simple_tag
+def get_bloc_cor_visible_by_student(obj,groups):
+    """
+    retourne  si le chapitre contient un bloc corrigé
+    """
+    return obj.bloc_cor_visible_by_student(groups) 
+
+
+@register.simple_tag
+def get_bloc_comp_visible_by_student(obj,groups):
+    """
+    retourne  si le chapitre contient un bloc corrigé
+    """
+    return obj.bloc_comp_visible_by_student(groups) 

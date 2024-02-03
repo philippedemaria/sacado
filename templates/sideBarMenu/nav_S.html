@@ -55,6 +55,19 @@ active
         <div class="captionmenu">Suivis</div>
     </a>
 </li>
+
+{% if can_get_the_book  %}
+<li class="dropdown {% if  request.session.tdb == 'Books' %}active{% endif %}">
+    <a href="{% url 'show_mybook_student' 9 0 %}" class="main" >
+        <i class="bi bi-book icon_size" ></i> 
+        <div class="captionmenu">Livre numérique</div>
+    </a>
+</li>
+{% endif %}
+
+
+
+
 <!-- 
 <li  class='dropdown {% if 'exercise' in request.path %}
 active
