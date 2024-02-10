@@ -99,12 +99,11 @@
 
     <div class="row {{ page.css }} two_page" style="margin-top:20px;"> 
  
-        <div class="col-xs-12 col-md-6 no_padding_right">
+        <div class="col-xs-12 col-md-6 no_padding_right" {% if page.css == 'intro_page_top' %} stuyle="height:100vh"{% endif %}>
             {% if n == 0  %}
                     {% if not group %}
                     <div class="alert alert-danger">Tous les liens vers les corrections et les compléments sont désactivés.</div>
                     {% endif %}
-    
                     <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
                     {% for fpage in first_pages %}
                         <div class="this_paragraph" id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
@@ -150,221 +149,220 @@
                         </div>
                     {% endfor %}
                     </div>
-                
-                {% else %} 
-                
-                    <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
-                        {% elif page.css == 'parcoursd_page_top' %} style="width:100%;background-image:url('/static/img/parcours_d.png'); background-repeat: no-repeat ;height:100px"   
-                        {% elif page.css == 'parcourst_page_top' %} style="width:100%;background-image:url('/static/img/parcours_t.png'); background-repeat: no-repeat ;height:100px"  
-                        {% elif page.css == 'algo_page_top' %} style="width:100%;background-image:url('/static/img/parcours_algo.png'); background-repeat: no-repeat ;height:100px"  
-                        {% elif page.css == 'auto_page_top' %} style="width:100%;background-image:url('/static/img/parcours_eval.png'); background-repeat: no-repeat ;height:100px"
-                        {% elif page.css == 'intro_page_top' %} style="width:30%; border-radius:0px 50px 50px 0px;color:white;background-color:#3fc5e8;font-size:25px;padding:20px"
-                        {% elif page.css == 'ad_page_top' %} style="width:100%;background-image: url('/static/img/ad_book.png'); background-repeat: repeat-x;height:100px"
-                        {% elif page.css == 'course_page_top' %} style="width:100%;background-image: url('/static/img/course_book.png'); background-repeat: no-repeat ;height:100px"
-                        {% endif %}> 
-                        {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }}_{% endif %}
-                    </div>
-                    {% if page.css == 'intro_page_top' %}
-                    <div style="position:absolute; top:60px; right:0 ; width:75%; opacity:0.9; border-radius:50px 0px  0px 50px;color:white;background-color:#f0558d; font-size:30px;padding:20px"> 
-                        {{ this_chapter.title }}
-                    </div>
-                    {% endif %}
+            {% else %} 
+            
+                <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
+                    {% elif page.css == 'parcoursd_page_top' %} style="width:100%;background-image:url('/static/img/parcours_d.png'); background-repeat: no-repeat ;height:100px"   
+                    {% elif page.css == 'parcourst_page_top' %} style="width:100%;background-image:url('/static/img/parcours_t.png'); background-repeat: no-repeat ;height:100px"  
+                    {% elif page.css == 'algo_page_top' %} style="width:100%;background-image:url('/static/img/parcours_algo.png'); background-repeat: no-repeat ;height:100px"  
+                    {% elif page.css == 'auto_page_top' %} style="width:100%;background-image:url('/static/img/parcours_eval.png'); background-repeat: no-repeat ;height:100px"
+                    {% elif page.css == 'intro_page_top' %} style="width:30%; border-radius:0px 50px 50px 0px; margin-top: 80px ;color:white;background-color:#3fc5e8;font-size:25px;padding:20px"
+                    {% elif page.css == 'ad_page_top' %} style="width:100%;background-image: url('/static/img/ad_book.png'); background-repeat: repeat-x;height:100px"
+                    {% elif page.css == 'course_page_top' %} style="width:100%;background-image: url('/static/img/course_book.png'); background-repeat: no-repeat ;height:100px"
+                    {% endif %}> 
+                    {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }}_{% endif %}
+                </div>
+                {% if page.css == 'intro_page_top' %}
+                <div style="position:absolute; top:140px; right:0 ; width:75%; opacity:0.9;  border-radius:50px 0px  0px 50px;color:white;background-color:#f0558d; font-size:30px;padding:20px"> 
+                    {{ this_chapter.title }}
+                </div>
+                {% endif %}
 
-                    {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
-                        <div id="this_paragraph{{ paragraph.id }}" class="this_paragraph {% if  page.css == 'parcoursu_page_top' %} this_paragraph_u  
-                                                                            {% elif page.css == 'parcoursd_page_top' %} this_paragraph_d  
-                                                                            {% elif page.css == 'parcourst_page_top' %} this_paragraph_t 
-                                                                            {% elif page.css == 'ad_page_top' %} this_paragraph_none
-                                                                            {% elif page.css == 'course_page_top' %} this_paragraph_course
-                                                                            {% elif page.css == 'algo_page_top' %} this_paragraph_a
-                                                                            {% elif page.css == 'auto_page_top' %} this_paragraph_e
-                                                                            {% else %} this_paragraph_none{% endif %}">
-                            {% if paragraph.number > 0 %}
-                            <div class="row paragraph_label">
+                {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
+                    <div id="this_paragraph{{ paragraph.id }}" class="this_paragraph {% if  page.css == 'parcoursu_page_top' %} this_paragraph_u  
+                                                                        {% elif page.css == 'parcoursd_page_top' %} this_paragraph_d  
+                                                                        {% elif page.css == 'parcourst_page_top' %} this_paragraph_t 
+                                                                        {% elif page.css == 'ad_page_top' %} this_paragraph_none
+                                                                        {% elif page.css == 'course_page_top' %} this_paragraph_course
+                                                                        {% elif page.css == 'algo_page_top' %} this_paragraph_a
+                                                                        {% elif page.css == 'auto_page_top' %} this_paragraph_e
+                                                                        {% else %} this_paragraph_none{% endif %}">
+                        {% if paragraph.number > 0 %}
+                        <div class="row paragraph_label">
+                            <div class="col-xs-12">
+                                {% if group %}
+                                    <span class="paragraph_number">{{ paragraph.number }}</span>
+                                    <span class="paragraph_title">{{ paragraph.title }}</span>
+                                    <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
+                                            data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
+                                        {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
+                                        <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> Afficher/Cacher les corrections  
+                                    </a>
+                                    |
+                                    <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
+                                    data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
+                                        {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
+                                        <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
+                                        Afficher/Cacher les compléments  </a>
+                                    <span id="spinner-2-{{paragraph.id}}"></span>
+
+                                {% else %}
+                                    {% if not forloop.first %}
+                                    <a href="javascript:void(0);" class="no_sacado_asso small_size"> 
+                                        <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher toutes les corrections du chapitre
+                                        
+                                    </a>
+                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"   > 
+                                        <i class="bi bi-circle-fill text-default"></i> Afficher/Cacher tous les compléments du chapitre 
+                                        
+                                    </a>
+                                    {% endif %}
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        {% elif page.css == 'intro_page_top' %}
+                        <div></div>
+                        {% else %}
+                            <div class="row" align="right">
                                 <div class="col-xs-12">
                                     {% if group %}
-                                        <span class="paragraph_number">{{ paragraph.number }}</span>
-                                        <span class="paragraph_title">{{ paragraph.title }}</span>
                                         <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
                                                 data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                                             {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
-                                            <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> Afficher/Cacher les corrections  
-                                        </a>
+                                            <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> 
+                                            Afficher/Cacher les corrections  </a>
                                         |
                                         <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
                                         data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                                             {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
                                             <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                            Afficher/Cacher les compléments  </a>
+                                            Afficher/Cacher les compléments   </a>
                                         <span id="spinner-2-{{paragraph.id}}"></span>
-
-                                    {% else %}
-                                        {% if not forloop.first %}
-                                        <a href="javascript:void(0);" class="no_sacado_asso small_size"> 
-                                            <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher toutes les corrections du chapitre
-                                            
-                                        </a>
-                                        <a href="javascript:void(0);"  class="no_sacado_asso small_size"   > 
-                                            <i class="bi bi-circle-fill text-default"></i> Afficher/Cacher tous les compléments du chapitre 
-                                            
-                                        </a>
-                                        {% endif %}
+                                {% else %}
+                                    {% if not forloop.first %}
+                                    <a href="javascript:void(0);"   class="no_sacado_asso small_size" > 
+                                        <i class="bi bi-circle-fill text-default"></i>Afficher/Cacher toutes les corrections du chapitre
+                                        
+                                    </a>
+                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"> 
+                                        <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher tous les compléments du chapitre 
+                                        
+                                    </a>
                                     {% endif %}
-
+                                {% endif %}
                                 </div>
                             </div>
-                            {% elif page.css == 'intro_page_top' %}
-                            <div></div>
-                            {% else %}
-                                <div class="row" align="right">
-                                    <div class="col-xs-12">
-                                        {% if group %}
-                                            <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
-                                                    data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                                {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
-                                                <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> 
-                                                Afficher/Cacher les corrections  </a>
-                                            |
-                                            <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
-                                            data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                                {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
-                                                <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                                Afficher/Cacher les compléments   </a>
-                                            <span id="spinner-2-{{paragraph.id}}"></span>
-                                    {% else %}
-                                        {% if not forloop.first %}
-                                        <a href="javascript:void(0);"   class="no_sacado_asso small_size" > 
-                                            <i class="bi bi-circle-fill text-default"></i>Afficher/Cacher toutes les corrections du chapitre
-                                            
-                                        </a>
-                                        <a href="javascript:void(0);"  class="no_sacado_asso small_size"> 
-                                            <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher tous les compléments du chapitre 
-                                            
-                                        </a>
-                                        {% endif %}
-                                    {% endif %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                            <div class="row">
-                                {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
-                                    <div class="col-xs-{{ bloc.size }}" >
-                                        <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
-                                            <div id="title_bloc{{ bloc.id }}" {% if 'exo' in bloc.typebloc.css  %} style="float:left"{% endif %}>
-                                                {% if 'exo' in bloc.typebloc.css  %}
-                                                    <div class="bloc_title {{ bloc.typebloc.css }}">
-                                                        {{ bloc.title }}
-                                                    </div> 
-                                                {% elif 'sf' in bloc.typebloc.css  %}
-                                                    <div class="bloc_title">
-                                                        {{ bloc.title }}
-                                                    </div> 
-                                                {% elif 'mm' in bloc.typebloc.css or 'img' in bloc.typebloc.css or 'rl' in bloc.typebloc.css %}
-                                                    <div></div> 
-                                                {% else %}
-                                                    <span class="bloc_title {{ bloc.typebloc.css }}">
-                                                        {% if 'def' in bloc.typebloc.css %}
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-right" viewBox="0 0 16 16">
-                                                            <path fill-rule="evenodd" d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0z"/>
-                                                        </svg>
-                                                        {% endif %}
-                                                        {{ bloc.title }}
-                                                    </span> 
-                                                {% endif %}
-                                            </div> 
-
-                                            {% if bloc.correction_html %}
-                                            <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:30px;left:20px"
-                                                {% else %} style="position:absolute; top:40px;left:5px"
-                                                {% endif %} >
-                                                <a href="javascript:void(0);" data-target="#book_shower_correction" data-toggle="modal" 
-                                                    class="show_this_bloc_correction"  data-bloc_id="{{ bloc.id }}" >
-                                                    <i class="bi bi-c-circle text-success"></i>
-                                                </a> 
-                                                <div class="no_visu_on_load" id="book_shower_this_correction{{ bloc.id }}">{{ bloc.correction_html|safe }}</div>
-                                                <div style="margin-top :10px;">
-                                                {% if group %}
-                                                    {% get_group_display_cor bloc group as this_bloc_is_cor %}
-                                                    <a class="display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-is_correction = 1   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
-                                                        <i class="bi bi-circle-fill text-{% if this_bloc_is_cor %}success{% else %}danger{% endif %} these_blocs_cor{{ paragraph.id }} all_these_blocs_cor"
-                                                            id="cc_bloc_cor{{ bloc.id }}">
-                                                        </i> 
-                                                    </a>
-                                                    <span id="spinnerCor-3-{{bloc.id}}"></span>
-                                                {% else %}
-                                                    {% if not forloop.first %}
-                                                    <span class="no_sacado_asso small_size"> 
-                                                        <i class="bi bi-circle-fill text-default"></i> 
-                                                    </span>
+                        {% endif %}
+                        <div class="row">
+                            {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
+                                <div class="col-xs-{{ bloc.size }}" >
+                                    <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
+                                        <div id="title_bloc{{ bloc.id }}" {% if 'exo' in bloc.typebloc.css  %} style="float:left"{% endif %}>
+                                            {% if 'exo' in bloc.typebloc.css  %}
+                                                <div class="bloc_title {{ bloc.typebloc.css }}">
+                                                    {{ bloc.title }}
+                                                </div> 
+                                            {% elif 'sf' in bloc.typebloc.css  %}
+                                                <div class="bloc_title">
+                                                    {{ bloc.title }}
+                                                </div> 
+                                            {% elif 'mm' in bloc.typebloc.css or 'img' in bloc.typebloc.css or 'rl' in bloc.typebloc.css %}
+                                                <div></div> 
+                                            {% else %}
+                                                <span class="bloc_title {{ bloc.typebloc.css }}">
+                                                    {% if 'def' in bloc.typebloc.css %}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-right" viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd" d="M14 13.5a.5.5 0 0 1-.5.5h-6a.5.5 0 0 1 0-1h4.793L2.146 2.854a.5.5 0 1 1 .708-.708L13 12.293V7.5a.5.5 0 0 1 1 0z"/>
+                                                    </svg>
                                                     {% endif %}
-                                                {% endif %}
-                                                </div>
-                                            </div>
-                                            {% endif %} 
-                                            <div class="bloc_content" 
-                                                {% if 'exo' in bloc.typebloc.css  %} style="margin-left:80px;"
-                                                {% elif bloc.correction_html %} style="margin-left:20px"
-                                                {% endif %}
-                                                data-toggle='modal'   data-target='#book_shower_page'>
-                                                {{ bloc.content_html|safe }}
-                                            </div>
-                                        </div>
-                                        {% if bloc.display_qr %} 
-                                        <div {% if 'exo' in bloc.typebloc.css %} style="margin-left:80px" {% endif %}>  
-                                            <label>
-                                            Compléments 
-                                            {% if group %}
-                                                {% get_group_display_comp bloc group as this_bloc_is_comp %}
-                                                <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
-                                                    <i class="bi bi-circle-fill text-{% if this_bloc_is_comp %}success{% else %}danger{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
-                                                        id="cc_bloc{{ bloc.id }}">
-                                                    </i> 
-                                                    Afficher/Cacher
-                                                </a>
-                                                <span id="spinnerµ-3-{{bloc.id}}"></span>
-                                                :
-                                                </label>
-                                                {% for a in bloc.appliquettes.all %}
-                                                    <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
-                                                {% endfor %}
-                                                {% for e in bloc.exercises.all %} 
-                                                {% if e.supportfile.imagefile %}
-                                                        <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
-                                                    {% endif %}
-                                                {% endfor %}
-                                                {% for e in bloc.exotexs.all %} 
-                                                    <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
-                                                {% endfor %}
-                                                <span id="spinner-3-{{bloc.id}}"></span>
-                                                {% else %}
-                                                <a class="no_sacado_asso small_size"  > 
-                                                    <i class="bi bi-circle-fill text-default"></i> 
-                                                    Afficher/Cacher
-                                                </a>
-                                                :
-                                                </label>
-                                                {% for a in bloc.appliquettes.all %}
-                                                    <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
-                                                {% endfor %}
-                                                {% for e in bloc.exercises.all %} 
-                                                    {% if e.supportfile.imagefile %}
-                                                        <a href="#" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
-                                                    {% endif %}
-                                                {% endfor %}
-                                                {% for e in bloc.exotexs.all %} 
-                                                    <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
-                                                {% endfor %}
+                                                    {{ bloc.title }}
+                                                </span> 
                                             {% endif %}
+                                        </div> 
+
+                                        {% if bloc.correction_html %}
+                                        <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:30px;left:20px"
+                                            {% else %} style="position:absolute; top:40px;left:5px"
+                                            {% endif %} >
+                                            <a href="javascript:void(0);" data-target="#book_shower_correction" data-toggle="modal" 
+                                                class="show_this_bloc_correction"  data-bloc_id="{{ bloc.id }}" >
+                                                <i class="bi bi-c-circle text-success"></i>
+                                            </a> 
+                                            <div class="no_visu_on_load" id="book_shower_this_correction{{ bloc.id }}">{{ bloc.correction_html|safe }}</div>
+                                            <div style="margin-top :10px;">
+                                            {% if group %}
+                                                {% get_group_display_cor bloc group as this_bloc_is_cor %}
+                                                <a class="display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-is_correction = 1   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
+                                                    <i class="bi bi-circle-fill text-{% if this_bloc_is_cor %}success{% else %}danger{% endif %} these_blocs_cor{{ paragraph.id }} all_these_blocs_cor"
+                                                        id="cc_bloc_cor{{ bloc.id }}">
+                                                    </i> 
+                                                </a>
+                                                <span id="spinnerCor-3-{{bloc.id}}"></span>
+                                            {% else %}
+                                                {% if not forloop.first %}
+                                                <span class="no_sacado_asso small_size"> 
+                                                    <i class="bi bi-circle-fill text-default"></i> 
+                                                </span>
+                                                {% endif %}
+                                            {% endif %}
+                                            </div>
                                         </div>
-                                        {% endif %}                                
+                                        {% endif %} 
+                                        <div class="bloc_content" 
+                                            {% if 'exo' in bloc.typebloc.css  %} style="margin-left:80px;"
+                                            {% elif bloc.correction_html %} style="margin-left:20px"
+                                            {% endif %}
+                                            data-toggle='modal'   data-target='#book_shower_page'>
+                                            {{ bloc.content_html|safe }}
+                                        </div>
                                     </div>
-                                    {% get_bloc_col_width paragraph  forloop.counter as col_width %}
-                                    {% if col_width|divisibleby:"12" and paragraph.total_size > 12 %}</div><div class="row">{% endif %}  
-                                    <div class="bottom_bloc"></div>     
-                                {% endfor %}
-                            </div>
+                                    {% if bloc.display_qr %} 
+                                    <div {% if 'exo' in bloc.typebloc.css %} style="margin-left:80px" {% endif %}>  
+                                        <label>
+                                        Compléments 
+                                        {% if group %}
+                                            {% get_group_display_comp bloc group as this_bloc_is_comp %}
+                                            <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
+                                                <i class="bi bi-circle-fill text-{% if this_bloc_is_comp %}success{% else %}danger{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
+                                                    id="cc_bloc{{ bloc.id }}">
+                                                </i> 
+                                                Afficher/Cacher
+                                            </a>
+                                            <span id="spinnerµ-3-{{bloc.id}}"></span>
+                                            :
+                                            </label>
+                                            {% for a in bloc.appliquettes.all %}
+                                                <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
+                                            {% endfor %}
+                                            {% for e in bloc.exercises.all %} 
+                                            {% if e.supportfile.imagefile %}
+                                                    <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% for e in bloc.exotexs.all %} 
+                                                <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
+                                            {% endfor %}
+                                            <span id="spinner-3-{{bloc.id}}"></span>
+                                            {% else %}
+                                            <a class="no_sacado_asso small_size"  > 
+                                                <i class="bi bi-circle-fill text-default"></i> 
+                                                Afficher/Cacher
+                                            </a>
+                                            :
+                                            </label>
+                                            {% for a in bloc.appliquettes.all %}
+                                                <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
+                                            {% endfor %}
+                                            {% for e in bloc.exercises.all %} 
+                                                {% if e.supportfile.imagefile %}
+                                                    <a href="#" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% for e in bloc.exotexs.all %} 
+                                                <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}                                
+                                </div>
+                                {% get_bloc_col_width paragraph  forloop.counter as col_width %}
+                                {% if col_width|divisibleby:"12" and paragraph.total_size > 12 %}</div><div class="row">{% endif %}  
+                                <div class="bottom_bloc"></div>     
+                            {% endfor %}
                         </div>
-                    {% endfor %}
+                    </div>
+                {% endfor %}
             {% endif %}
         </div>     
         <div class="col-xs-12 col-md-6 no_padding_left">
