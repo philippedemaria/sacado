@@ -583,6 +583,7 @@ h1 {
 	right:0px;
 	top:110px;
 	width:70%;
+	text-align: justify;
 }
 
 
@@ -593,8 +594,9 @@ h1 {
 	position:absolute;
 	padding:40px;
 	right:0px;
-	top:110px;
-	width:70%;
+	top:180px;
+	width:67%;
+	text-align: justify;
 }
 
 
