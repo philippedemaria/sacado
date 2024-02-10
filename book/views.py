@@ -453,6 +453,28 @@ def show_mybook(request,idb, n):
 
 
 
+def show_mybook_two_pages(request,idb, n):
+    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
+    request.session["subtdb"] = "Chapter"
+    group_id = request.session.get("book_group_id",None)
+    if group_id : group = Group.objects.get(pk=group_id)
+    else : group = None
+    book = Book.objects.get(pk=idb)
+
+    prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
+    this_chapter = this_page.chapter
+    # Appel de la page n
+    use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
+    context = {'book': book, "n" : n ,  'this_chapter' : this_chapter , 'group':group, 'page' : this_page , 'next_page' : next_page  ,
+               'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
+    return render(request, 'book/show_mybook_two_pages.html', context)
+
+
+
+
+
+
+
 def show_mybook_student(request,idb, n):
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
@@ -469,39 +491,6 @@ def show_mybook_student(request,idb, n):
     return render(request, 'book/show_mybook_student.html', context)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def show_mybook_one_page(request,idb, n):
-
-    request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
-    request.session["subtdb"] = "Chapter"
-    group_id = request.session.get("book_group_id")
-    group = Group.objects.get(pk=group_id)
-    book = Book.objects.get(pk=idb)
-    prev_page, this_page , next_page , first_pages = get_the_page(idb,n)
-    this_chapter = this_page.chapter
-    # Appel de la page n
-    use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
-    context = {'book': book, "n" : n ,  'this_chapter' : this_chapter , 'group':group, 'page' : this_page , 'next_page' : next_page  ,
-               'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
-    return render(request, 'book/show_mybook.html', context)
-
- 
 
 
 def conception_book(request,idb,idch):
@@ -1880,8 +1869,7 @@ def update_bloc(request, idb, idp, idbl):
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save()
-            Exotex.objects.filter(bloc_id=nf.id).update(title = nf.title, 
-                                                            content = nf.content, 
+            Exotex.objects.filter(bloc_id=nf.id).update(content = nf.content, 
                                                             content_html =nf.content_html,
                                                             calculator = nf.is_calculator,
                                                             knowledge = nf.knowledge,   

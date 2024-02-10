@@ -1022,7 +1022,7 @@ a.no_decoration:hover{
   opacity:0.97;
 }
 
-.remove_more, .remove_sub_more, .display_correction_bloc_button {
+.remove_more, .remove_sub_more {
   cursor: pointer!important ;
   font-size:14px;
 }
@@ -2296,19 +2296,19 @@ input:invalid:focus {
 }
 
 input[type=range].form-range {
-  appearance: none;
-  -webkit-appearance: none;     /*nécessaire pour Chrome */
+  appearance:  'button'; 
+  -webkit-appearance: 'button';     /*nécessaire pour Chrome */
   padding: 0;                   /* nécessaire pour IE */
   font: inherit;                /* même rendu suivant font document */
-  outline: none;
-  color: #1a2696;               /* sert pour couleur de référence, via currentColor, pour le curseur */
-  opacity: .8;
-  background: #CCC;             /* sert pour couleur de fond de la zone de déplacement */
-  box-sizing: border-box;       /* même modèle de boîte pour tous */
-  transition: opacity .2s;
+  outline: none;              /* sert pour couleur de référence, via currentColor, pour le curseur */
+  accent-color: #e8dcff;    /* sert pour couleur de fond de la zone de déplacement */
+  box-sizing: borgb(223, 208, 251)x;       /* même modèle de boîte pour tous */
   cursor: pointer;
   border-radius: 5px;
+  height: 5px;
+  margin: 9px;
 }
+
 
 .show_this_document{
   font-size:14px;

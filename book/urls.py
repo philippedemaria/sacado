@@ -18,7 +18,7 @@ urlpatterns = [
     path('get_mybook/<int:idb>/<int:idg>', get_mybook, name='get_mybook'),
 
     path('show_mybook/<int:idb>/<int:n>', show_mybook, name='show_mybook'),
-    path('show_mybook_one_page/<int:idb>/<int:n>', show_mybook_one_page, name='show_mybook_one_page'),
+    path('show_mybook_two_pages/<int:idb>/<int:n>', show_mybook_two_pages, name='show_mybook_two_pages'),
 
 
     path('show_mybook_student/<int:idb>/<int:n>', show_mybook_student, name='show_mybook_student'),

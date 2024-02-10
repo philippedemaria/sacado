@@ -17,27 +17,18 @@
 
 
 {% block page_title %}
-    Livret {{ book.level.shortname_full|safe }} <img src="{% static 'img/angle-right.png' %}"/> {{ this_chapter }}
+    <img src="{{ book.imagefile.url }}" height="40px"/>   {{ this_chapter }}
     
     {% if request.user.is_superuser %}
         <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}"  target="_blank"><small><i class="bi bi-printer"></i></small></a>
     {% endif %} 
 
-    {% if group %}
-    <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 0 > 
-    {% get_group_display_cor this_chapter group as this_chapter_is_cor %}
-        <i class="bi bi-eye text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}" id="cc_chapter{{ this_chapter.id }}"></i> 
-        <div class="helper_tip_text" >Publier/Dépublier l'ensemble des corrections des exercices du chapitre. </div>
-    </span>
-    {% endif %}
 
-
-    <img src="{% static 'img/angle-right.png' %}"/> 
     {% if group %}
         {% if 'cours' not in this_page.title %}
         <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
             {% get_group_display_cor this_page group as this_page_is_cor %}
-            <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
+            <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_page_cor{{ this_page.id }}"></i> 
             <div class="helper_tip_text" >Publier/Dépublier les corrections des exercices de la page {{ n }}. </div>
         </span>
         <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 0> 
@@ -46,10 +37,6 @@
             <div class="helper_tip_text" >Publier/Dépublier les compléments de la page {{ n }}. </div>
         </span>
         <span id="spinner-1-{{ this_page.id }}"></span>
-        {% else %}
-        <span class="helper_tip"> <i class="bi bi-question-circle" id="this_page"></i> 
-            <div class="helper_tip_text" >Page de cours. Pas d'exercice affichable. </div>
-        </span>
         {% endif %}
     {% endif %}
     <form action="{% url 'goto_direct_page' %}" method="post" style="display: inline-block; max-width: 300px;">
@@ -71,12 +58,18 @@
 
  
 {% if  prev_page %}
-<a href="{% url 'show_mybook' book.id prev_page.number %}" class="btn btn-default">Précédente</a>
+<a href="{% url 'show_mybook' book.id prev_page.number %}" class="btn btn-default"  title="Page précédente"><i class="bi bi-chevron-left"></i></a>
  {% endif %}
 {% if  next_page %}
-<a href="{% url 'show_mybook' book.id next_page.number %}" class="btn btn-default">Suivante</a>
+<a href="{% url 'show_mybook' book.id next_page.number %}" class="btn btn-default"  title="Page suivante"><i class="bi bi-chevron-right"></i></a>
  {% endif %}
 
+ <a href="{% url 'show_mybook_two_pages' book.id page.number %}" class="btn btn-default" title="Voir les pages 2 par 2"><i class="bi bi-book-fill"></i></a>
+
+<button id="start_fullscreen" class="btn btn-default"><i class="bi bi-arrows-fullscreen"></i></button>
+<button id="stop_fullscreen" class="btn btn-default"><i class="bi bi-fullscreen-exit"></i></button>
+
+ 
 {% endblock %}
 
 
@@ -95,22 +88,22 @@
                 </a>
                 {% endif %}
             {% endfor %} 
-            <span class="pull-right"> 
+            <label class="pull-right"> 
                 page {{ n }} 
                 {% if request.user.is_superuser %}
                     <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
                 {% endif %}            
-            </span>   
+            </label>   
         </div>
     </div>
 
-    <div class="row {{ page.css }}"  style="padding-top:20px;"> 
-        <div class="col-xs-12 col-md-12">
+    <div class="row {{ page.css }} one_page" style="margin-top:20px;"> 
+        <div class="col-xs-12 page_book">
             {% if n == 0  %}
             
-            {% if not group %}
-            <div class="alert alert-danger">Tous les liens vers les corrections et les compléments sont désactivés.</div>
-            {% endif %}
+                {% if not group %}
+                <div class="alert alert-danger">Tous les liens vers les corrections et les compléments sont désactivés.</div>
+                {% endif %}
 
                 <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
                 {% for fpage in first_pages %}
@@ -123,18 +116,18 @@
                                 </a>
                                 {% if group %}
                                     {% if not forloop.first %}
-                                    <a href="javascript:void(0);" class="display_correction_bloc_button" style="color:gray;font-weight:normal" 
+                                    <a href="javascript:void(0);" class="display_correction_bloc_button active_small_size" 
                                             data-source_id = "{{fpage.chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 1 > 
                                         {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
-                                        Afficher/cacher toutes les corrections du chapitre
+                                        Afficher/Cacher toutes les corrections du chapitre
                                         <i class="bi bi-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}" 
                                         id="cc_chapter_cor{{ fpage.chapter.id }}"
                                         title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                     </a>
-                                    <a href="javascript:void(0);"  class="display_correction_bloc_button"   style="color:gray;font-weight:normal" 
+                                    <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
                                     data-source_id = "{{fpage.chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 0  > 
                                         {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
-                                        Afficher/cacher tous les compléments du chapitre 
+                                        Afficher/Cacher tous les compléments du chapitre 
                                         <i class="bi bi-circle-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}" 
                                         id="cc_chapter{{ fpage.chapter.id }}"></i> 
                                     </a>
@@ -142,15 +135,14 @@
                                     {% endif %}
                                 {% else %}
                                     {% if not forloop.first %}
-                                    <a href="javascript:void(0);" class="no_sacado_asso small_size" style="color:gray;font-weight:normal" > 
-                                        Afficher/cacher toutes les corrections du chapitre
+                                    <a href="javascript:void(0);" class="no_sacado_asso small_size" > 
+                                        Afficher/Cacher toutes les corrections du chapitre
                                         <i class="bi bi-circle-fill text-default"></i> 
                                     </a>
-                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"   style="color:gray;font-weight:normal"  > 
-                                        Afficher/cacher tous les compléments du chapitre 
+                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"  > 
+                                        Afficher/Cacher tous les compléments du chapitre 
                                         <i class="bi bi-circle-fill text-default"></i> 
                                     </a>
-                                    <span id="spinner-0-{{ fpage.chapter.id }}"></span>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -165,6 +157,8 @@
                     {% elif page.css == 'algo_page_top' %} style="width:100%;background-image:url('/static/img/parcours_algo.png'); background-repeat: no-repeat ;height:100px"  
                     {% elif page.css == 'auto_page_top' %} style="width:100%;background-image:url('/static/img/parcours_eval.png'); background-repeat: no-repeat ;height:100px"
                     {% elif page.css == 'intro_page_top' %} style="width:30%; border-radius:0px 50px 50px 0px;color:white;background-color:#3fc5e8;font-size:25px;padding:20px"
+                    {% elif page.css == 'ad_page_top' %} style="width:100%;background-image: url('/static/img/ad_book.png'); background-repeat: repeat-x;height:100px"
+                    {% elif page.css == 'course_page_top' %} style="width:100%;background-image: url('/static/img/course_book.png'); background-repeat: no-repeat ;height:100px"
                     {% endif %}> 
                     {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }}_{% endif %}
                 </div>
@@ -175,15 +169,14 @@
                 {% endif %}
 
                 {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
-                    <div class="this_paragraph" id="this_paragraph{{ paragraph.id }}"
-                    {% if  page.css == 'parcoursu_page_top' %} style="padding-top:20px;background-image: url('/static/img/fond_u.png'); background-repeat: repeat-y "   
-                    {% elif page.css == 'parcoursd_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_d.png'); background-repeat: repeat-y "   
-                    {% elif page.css == 'parcourst_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_t.png'); background-repeat: repeat-y"  
-                    {% elif page.css == 'algo_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_a.png'); background-repeat: repeat-y "  
-                    {% elif page.css == 'auto_page_top' %} style="padding-top:20px;background-image:url('/static/img/fond_e.png'); background-repeat: repeat-y"
-                    {% else %} style="padding-top:20px;"
-                    {% endif %}
-                    >
+                    <div id="this_paragraph{{ paragraph.id }}" class="this_paragraph {% if  page.css == 'parcoursu_page_top' %} this_paragraph_u  
+                                                                        {% elif page.css == 'parcoursd_page_top' %} this_paragraph_d  
+                                                                        {% elif page.css == 'parcourst_page_top' %} this_paragraph_t 
+                                                                        {% elif page.css == 'ad_page_top' %} this_paragraph_none
+                                                                        {% elif page.css == 'course_page_top' %} this_paragraph_course
+                                                                        {% elif page.css == 'algo_page_top' %} this_paragraph_a
+                                                                        {% elif page.css == 'auto_page_top' %} this_paragraph_e
+                                                                        {% else %} this_paragraph_none{% endif %}">
                         {% if paragraph.number > 0 %}
                         <div class="row paragraph_label">
                             <div class="col-xs-12">
@@ -193,27 +186,26 @@
                                     <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
                                             data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                                         {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
-                                        Afficher/cacher les corrections <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
+                                        <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> Afficher/Cacher les corrections  
                                     </a>
                                     |
                                     <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
                                     data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                                         {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
-                                        Afficher/cacher les compléments <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                    </a>
+                                        <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
+                                        Afficher/Cacher les compléments  </a>
                                     <span id="spinner-2-{{paragraph.id}}"></span>
 
                                 {% else %}
                                     {% if not forloop.first %}
-                                    <a href="javascript:void(0);" class="no_sacado_asso small_size" style="color:gray;font-weight:normal" > 
-                                        Afficher/cacher toutes les corrections du chapitre
-                                        <i class="bi bi-circle-fill text-default"></i> 
+                                    <a href="javascript:void(0);" class="no_sacado_asso small_size"> 
+                                        <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher toutes les corrections du chapitre
+                                        
                                     </a>
-                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"   style="color:gray;font-weight:normal"  > 
-                                        Afficher/cacher tous les compléments du chapitre 
-                                        <i class="bi bi-circle-fill text-default"></i> 
+                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"   > 
+                                        <i class="bi bi-circle-fill text-default"></i> Afficher/Cacher tous les compléments du chapitre 
+                                         
                                     </a>
-                                    <span id="spinner-0-{{ fpage.chapter.id }}"></span>
                                     {% endif %}
                                 {% endif %}
 
@@ -228,26 +220,25 @@
                                         <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
                                                 data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                                             {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
-                                            Afficher/cacher les corrections <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                        </a>
+                                            <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> 
+                                            Afficher/Cacher les corrections  </a>
                                         |
                                         <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
                                         data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                                             {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
-                                            Afficher/cacher les compléments <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                        </a>
+                                            <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
+                                            Afficher/Cacher les compléments   </a>
                                         <span id="spinner-2-{{paragraph.id}}"></span>
                                 {% else %}
                                     {% if not forloop.first %}
-                                    <a href="javascript:void(0);" class="no_sacado_asso small_size" style="color:gray;font-weight:normal" > 
-                                        Afficher/cacher toutes les corrections du chapitre
-                                        <i class="bi bi-circle-fill text-default"></i> 
+                                    <a href="javascript:void(0);"   class="no_sacado_asso small_size" > 
+                                        <i class="bi bi-circle-fill text-default"></i>Afficher/Cacher toutes les corrections du chapitre
+                                         
                                     </a>
-                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"   style="color:gray;font-weight:normal"  > 
-                                        Afficher/cacher tous les compléments du chapitre 
-                                        <i class="bi bi-circle-fill text-default"></i> 
+                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"> 
+                                        <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher tous les compléments du chapitre 
+                                        
                                     </a>
-                                    <span id="spinner-0-{{ fpage.chapter.id }}"></span>
                                     {% endif %}
                                 {% endif %}
                                 </div>
@@ -256,8 +247,8 @@
                         <div class="row">
                             {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                                 <div class="col-xs-{{ bloc.size }}" >
-                                    <div class="global_bloc {{ bloc.typebloc.css }}"  > 
-                                        <div id="title_bloc{{ bloc.id }}">
+                                    <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
+                                        <div id="title_bloc{{ bloc.id }}" {% if 'exo' in bloc.typebloc.css  %} style="float:left"{% endif %}>
                                             {% if 'exo' in bloc.typebloc.css  %}
                                                 <div class="bloc_title {{ bloc.typebloc.css }}">
                                                     {{ bloc.title }}
@@ -300,16 +291,16 @@
                                                 <span id="spinnerCor-3-{{bloc.id}}"></span>
                                             {% else %}
                                                 {% if not forloop.first %}
-                                                <a href="javascript:void(0);" class="no_sacado_asso small_size" style="color:gray;font-weight:normal" > 
+                                                <span class="no_sacado_asso small_size"> 
                                                     <i class="bi bi-circle-fill text-default"></i> 
-                                                </a>
+                                                </span>
                                                 {% endif %}
                                             {% endif %}
                                             </div>
                                         </div>
                                         {% endif %} 
-                                        <div class="bloc_content to_projection" 
-                                            {% if 'exo' in bloc.typebloc.css  %} style="margin-left:80px"
+                                        <div class="bloc_content" 
+                                            {% if 'exo' in bloc.typebloc.css  %} style="margin-left:80px;"
                                             {% elif bloc.correction_html %} style="margin-left:20px"
                                             {% endif %}
                                              data-toggle='modal'   data-target='#book_shower_page'>
@@ -326,7 +317,7 @@
                                                 <i class="bi bi-circle-fill text-{% if this_bloc_is_comp %}success{% else %}danger{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
                                                     id="cc_bloc{{ bloc.id }}">
                                                 </i> 
-                                                Afficher/cacher
+                                                Afficher/Cacher
                                             </a>
                                             <span id="spinnerµ-3-{{bloc.id}}"></span>
                                             :
@@ -346,7 +337,7 @@
                                             {% else %}
                                             <a class="no_sacado_asso small_size"  > 
                                                 <i class="bi bi-circle-fill text-default"></i> 
-                                                Afficher/cacher
+                                                Afficher/Cacher
                                             </a>
                                             :
                                             </label>
@@ -381,16 +372,30 @@
 
 
 <div class="modal fade" id="book_shower_page" tabindex="-1" role="dialog" aria-labelledby="book_shower_page">
-    <div class="modal-dialog" role="document" style="width:70%">
-        <div class="modal-content" >
+    <div class="modal-dialog" role="document" style="width:70%;">
+        <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <input type="range" class="form-range" id="customRange"  min="1" max="5" step="1" value="1">
+                <div class="row">
+                    <div class="col-xs-3 col-md-2">
+                        <label class="pull-right">Taille du texte</label>
+                    </div>
+                    <div class="col-xs-3">
+                        <input type="range" class="form-range customRange" min="1" max="3"  value="1">
+                    </div>
+                    <div class="col-xs-3 col-md-2">
+                        <label class="pull-right">Taille des images</label>
+                    </div>
+                    <div class="col-xs-3" >
+                        <input type="range" class="form-range customRangeImage" min="1" max="3" value="1">
+                    </div>
+                </div>
             </div>
-            <div class="modal-body" id="book_shower_page_content">
- 
+            <div class="modal-body">
+                <div class="global_bloc" id="book_shower_page_content">
+                </div>
             </div>
         </div>
     </div>
@@ -398,16 +403,17 @@
 
 
 <div class="modal fade" id="book_shower_correction" tabindex="-1" role="dialog" aria-labelledby="book_shower_correction">
-    <div class="modal-dialog" role="document" style="width:70%">
-        <div class="modal-content" >
+    <div class="modal-dialog" role="document" style="width:70%;">
+        <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
-                <input type="range" class="form-range" id="customRanger"  min="1" max="5" step="1" value="1">
+                <input type="range" class="form-range customRange" id="customRanger"  min="1" max="5" step="1" value="1">
             </div>
-            <div class="modal-body" id="book_shower_correction_content">
- 
+            <div class="modal-body"  style="background-color:e8dcff;">
+                <div id="book_shower_correction_content">
+                </div>
             </div>
         </div>
     </div>
