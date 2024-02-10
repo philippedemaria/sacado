@@ -58,10 +58,10 @@
 
  
 {% if  prev_page %}
-<a href="{% url 'show_mybook_two_pages' book.id prev_page.number %}" class="btn btn-default" title="Page précédente"><i class="bi bi-chevron-left"></i></a>
+<a href="{% url 'show_mybook_two_pages' book.id prev_page_number %}" class="btn btn-default" title="Page précédente"><i class="bi bi-chevron-left"></i></a>
  {% endif %}
 {% if  next_page %}
-<a href="{% url 'show_mybook_two_pages' book.id next_page.number %}" class="btn btn-default" title="Page suivante"><i class="bi bi-chevron-right"></i></a>
+<a href="{% url 'show_mybook_two_pages' book.id next_page_number %}" class="btn btn-default" title="Page suivante"><i class="bi bi-chevron-right"></i></a>
  {% endif %}
 
  <a href="{% url 'show_mybook' book.id page.number %}" class="btn btn-default"  title="Voir par page"><i class="bi bi-book-half"></i></a>

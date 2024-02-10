@@ -463,12 +463,13 @@ def show_mybook_two_pages(request,idb, n):
  
 
     prev_page, this_page , next_page , first_pages = get_the_pages(int(idb),int(n))
- 
-
+    prev_page_number = this_page.number - 2
+    next_page_number = this_page.number + 2
     this_chapter = this_page.chapter
     # Appel de la page n
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
     context = {'book': book, "n" : n ,  'this_chapter' : this_chapter , 'group':group, 'page' : this_page , 'next_page' : next_page  ,
+               'next_page_number' : next_page_number , 'prev_page_number' : prev_page_number ,
                'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css }
     return render(request, 'book/show_mybook_two_pages.html', context)
 
@@ -1075,7 +1076,7 @@ def get_the_pages(idb,n):
     prev_page , next_page = None, None
     page = all_pages[n]    
     if n > 1 : prev_page = all_pages[n-2]
-    if n < len(all_pages)-2 : next_page = all_pages[n+2]
+    if n < len(all_pages)-2 : next_page = all_pages[n+1]
     return  prev_page , page , next_page , first_pages
 
 
