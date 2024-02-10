@@ -386,6 +386,14 @@ h1 {
 	background-color: white;
 }
 
+
+.global_bloc .bloc_content table {
+	color :  #5d4391 ;
+	border-radius:0px 0px 3px 3px;
+	width:500px
+}
+
+
 .global_bloc .bloc_content table tr td {
 	color :  #5d4391 ;
 	border-radius:0px 0px 3px 3px;
