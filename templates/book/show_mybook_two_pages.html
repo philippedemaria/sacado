@@ -97,9 +97,9 @@
         </div>
     </div>
 
-    <div class="row {{ page.css }} two_page" style="margin-top:20px;"> 
+    <div class="row two_page" style="margin-top:20px;"> 
  
-        <div class="col-xs-12 col-md-6 no_padding_right" {% if page.css == 'intro_page_top' %} stuyle="height:100vh"{% endif %}>
+        <div class="col-xs-12 col-md-6 no_padding_right  {{ page.css }}" {% if page.css == 'intro_page_top' %} stuyle="height:100vh"{% endif %}>
             {% if n == 0  %}
                     {% if not group %}
                     <div class="alert alert-danger">Tous les liens vers les corrections et les compléments sont désactivés.</div>
@@ -365,7 +365,7 @@
                 {% endfor %}
             {% endif %}
         </div>     
-        <div class="col-xs-12 col-md-6 no_padding_left">
+        <div class="col-xs-12 col-md-6 no_padding_left {{ next_page.css }}">
             <div {% if  next_page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
                 {% elif next_page.css == 'parcoursd_page_top' %} style="width:100%;background-image:url('/static/img/parcours_d.png'); background-repeat: no-repeat ;height:100px"   
                 {% elif next_page.css == 'parcourst_page_top' %} style="width:100%;background-image:url('/static/img/parcours_t.png'); background-repeat: no-repeat ;height:100px"  
