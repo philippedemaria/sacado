@@ -7,11 +7,13 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', ".to_projection" , function (event) {
 
             var this_html = $(this).html() ; 
-            var this_css = $(this).attr('class') ;
+            var this_css_ = $(this).attr('class') ;
+            const this_css = this_css_.replace('to_projection', '');
+
+
             var paragraph_id = $(this).data('paragraph_id') ;
             var this_paragraph_u = $("#this_paragraph"+paragraph_id).attr('class') ;
 
-            console.log(this_paragraph_u)
             $("#book_shower_page_content").html(this_html); 
             $("#book_shower_page_content").removeClass(); 
             $("#book_shower_page_content").addClass('global_bloc');
