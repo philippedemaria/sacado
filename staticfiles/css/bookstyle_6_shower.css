@@ -505,16 +505,6 @@ h1 {
 }  
 
 
-
-.modal-body .paragraph_bloc_sf , .modal-body .paragraph_bloc_rl {
-    width: 60%;
-}
- 
- 
-
-
-
-
 /*  paragraph_bloc_exo  */
  .paragraph_bloc_exo{
 	border-radius: 4px 0px 0px 4px!important;
@@ -675,6 +665,16 @@ h1 {
 	background-color: white;
 	opacity:0.95;
 }
+
+
+
+.modal-body .paragraph_bloc_sf , .modal-body .paragraph_bloc_rl  {
+    width: 60%;
+	position:relative;
+}
+ 
+
+
 
 .two_page .paragraph_bloc_rl{
     position: absolute;
