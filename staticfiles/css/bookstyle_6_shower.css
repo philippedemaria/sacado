@@ -304,11 +304,17 @@ h1 {
 
 
 
+
+
 .paragraph_label{
 	margin-top: 10px;
 	margin-bottom: 10px;
 }
 
+.two_page .paragraph_label{
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
 
 .paragraph_comp{
 	margin-top: 10px;
@@ -317,7 +323,12 @@ h1 {
 	right:0px;
 }
 
-
+.two_page .paragraph_comp{
+	margin-top: 0px;
+	margin-bottom: 0px;
+	position:absolute;
+	right:0px;
+}
 
 
 .paragraph_number{
@@ -574,6 +585,20 @@ h1 {
 	width:70%;
 }
 
+
+.two_page .paragraph_bloc_mm{
+	border-radius: 30px 0px 0px 30px;
+	background-color:#5d4391;
+	color:white;
+	position:absolute;
+	padding:40px;
+	right:0px;
+	top:110px;
+	width:70%;
+}
+
+
+
 .paragraph_bloc_mm .bloc_content, .modal-body .paragraph_bloc_mm .bloc_title{
 	color:white!important;   
 	background-color: #5d4391;
@@ -605,7 +630,7 @@ h1 {
 	position:absolute;
 	width:200px;
 	height:200px;
-	top: 100px;
+	top: 70px;
 	left: 15%;
 	z-index:999;
 }
@@ -735,4 +760,4 @@ a.active_small_size{
 	font-weight : 500 ;
 	border-radius: 5px;
 }
-
+ 
