@@ -460,8 +460,11 @@ def show_mybook_two_pages(request,idb, n):
     if group_id : group = Group.objects.get(pk=group_id)
     else : group = None
     book = Book.objects.get(pk=idb)
+ 
 
-    prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
+    prev_page, this_page , next_page , first_pages = get_the_pages(int(idb),int(n))
+ 
+
     this_chapter = this_page.chapter
     # Appel de la page n
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
@@ -1054,6 +1057,29 @@ def get_the_page(idb,n):
     if n > 0 : prev_page = all_pages[n-1]
     if n < len(all_pages)-1 : next_page = all_pages[n+1]
     return  prev_page , page , next_page , first_pages
+
+
+
+
+def get_the_pages(idb,n):
+
+    book = Book.objects.get(pk=idb)
+    all_pages   = dict()
+    first_pages = list()
+    for chapter in book.chapters.order_by('ranking'):
+        pages = chapter.pages.order_by('number')
+        first_pages.append(pages.first())
+        for page in pages :
+            all_pages[page.number] = page
+
+    prev_page , next_page = None, None
+    page = all_pages[n]    
+    if n > 1 : prev_page = all_pages[n-2]
+    if n < len(all_pages)-2 : next_page = all_pages[n+2]
+    return  prev_page , page , next_page , first_pages
+
+
+
 
 
 def show_student_book(request,idb, n):
