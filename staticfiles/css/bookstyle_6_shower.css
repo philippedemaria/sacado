@@ -35,6 +35,13 @@ background-image:-webkit-gradient(linear, left bottom, right top, from(#6d327c),
     -moz-box-shadow:-2px 2px 19px rgba(160,153,172, 0.7);
 }
 
+.modal-body .to_projection:hover{
+	cursor:pointer;    
+    box-shadow: 0px ;
+    -webkit-box-shadow: 0px;
+    -moz-box-shadow:0px;
+}
+
 .content-wrapper, .right-side {
     min-height: 100%;
     margin-right: 0px;
