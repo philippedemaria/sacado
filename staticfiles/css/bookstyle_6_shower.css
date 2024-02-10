@@ -671,6 +671,8 @@ h1 {
 .modal-body .paragraph_bloc_sf , .modal-body .paragraph_bloc_rl  {
     width: 60%;
 	position:relative;
+	top:0px;	
+	border : 0px ;
 }
  
 
