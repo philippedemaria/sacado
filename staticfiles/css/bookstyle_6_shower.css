@@ -177,9 +177,9 @@ h1 {
 	padding-right: 0px;
 	padding-top: 0px;
 	border-radius:0px 4px 4px 0px;
-	box-shadow: 1px -3px 20px rgb(89 90 125 / 70%) inset;
-    -webkit-box-shadow: 1px -3px 20px rgb(89 90 125 / 70%) inset;
-    -moz-box-shadow: 1px -3px 20px rgb(89 90 125 / 70%) inset;
+	box-shadow: 2px 0px 10px 0px rgb(89 90 125 / 70%) inset;
+    -webkit-box-shadow: 2px 0px 10px 0px rgb(89 90 125 / 70%) inset;
+    -moz-box-shadow: 2px 0px 10px 0px rgb(89 90 125 / 70%) inset;
 	border-right:2px solid  rgb(89 90 125 / 70%);
 }
 
