@@ -156,7 +156,7 @@ h1 {
 }
 
 .two_page *  {
-	font-size:0.8rem!important;  
+	font-size:0.95em!important;  
 }
 
 
@@ -165,9 +165,9 @@ h1 {
 	padding-left: 0px;
 	padding-top: 0px;
 	border-radius: 4px 0px 0px 4px;
-	box-shadow: -6px 0px 6px rgb(89 90 125 / 70%) inset;
-    -webkit-box-shadow: -6px 0px 6px rgb(89 90 125 / 70%) inset;
-    -moz-box-shadow: -6px 0px 6px rgb(89 90 125 / 70%) inset;
+	box-shadow: -2px -1px 6px rgb(89 90 125 / 70%) inset;
+    -webkit-box-shadow: -2px -1px 6px rgb(89 90 125 / 70%) inset;
+    -moz-box-shadow: -2px -1px 6px rgb(89 90 125 / 70%) inset;
 	border-left:2px solid  rgb(89 90 125 / 70%);
 }
 
@@ -291,6 +291,18 @@ h1 {
 	border-radius: 0px 0px 0px 5px;
 	padding:20px;
 }
+
+.two_page .this_paragraph {
+    border-radius: 0px 0px 0px 5px;
+    padding: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-bottom: 0px;
+    padding-left: 20px;
+}
+
+
+
 
 .paragraph_label{
 	margin-top: 10px;
@@ -570,7 +582,7 @@ h1 {
 .paragraph_bloc_sf{
 	position:absolute;
 	right:0px;
-	top:450px;
+	top:550px;
 	width:60%;
 }
 
@@ -615,6 +627,19 @@ h1 {
 	z-index: 999;
 	background-color: white;
 	opacity:0.95;
+}
+
+.two_page .paragraph_bloc_rl{
+    position: absolute;
+    width: 200px;
+    top: 380px;
+    left: 10%;
+    border: solid 2px #5d4391;
+    border-left: solid 1px #5d4391;
+    border-top: solid 1px #5d4391;
+    z-index: 999;
+    background-color: white;
+    opacity: 0.95;
 }
 
 
