@@ -595,7 +595,7 @@ h1 {
 	position:absolute;
 	padding:40px;
 	right:0px;
-	top:110px;
+	top:200px;
 	width:70%;
 	text-align: justify;
 }
@@ -608,7 +608,7 @@ h1 {
 	position:absolute;
 	padding:40px;
 	right:0px;
-	top:180px;
+	top:200px;
 	width:67%;
 	text-align: justify;
 }
@@ -660,7 +660,7 @@ h1 {
 .paragraph_bloc_rl{
 	position:absolute;
 	width:300px;
-	top: 250px;
+	top: 400px;
 	left: 10%;
 	border : solid 2px #5d4391 ;
 	border-left : solid 1px #5d4391 ;

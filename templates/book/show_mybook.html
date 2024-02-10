@@ -98,7 +98,7 @@
     </div>
 
     <div class="row {{ page.css }} one_page" style="margin-top:20px;"> 
-        <div class="col-xs-12 page_book">
+        <div class="col-xs-12 page_book" {% if page.css == 'intro_page_top' %} style="height:1100px" {% endif %}>
             {% if n == 0  %}
             
                 {% if not group %}
@@ -364,6 +364,9 @@
                     </div>
                 {% endfor %}
             {% endif %} 
+        
+        
+        
         </div>
 
     </div>
