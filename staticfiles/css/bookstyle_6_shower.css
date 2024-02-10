@@ -163,6 +163,7 @@ h1 {
 .no_padding_right{
 	padding-right:1px!important;  
 	padding-left: 0px;
+	padding-top: 0px;
 	border-radius: 4px 0px 0px 4px;
 	box-shadow: -6px 0px 6px rgb(89 90 125 / 70%) inset;
     -webkit-box-shadow: -6px 0px 6px rgb(89 90 125 / 70%) inset;
@@ -174,6 +175,7 @@ h1 {
 .no_padding_left{
 	padding-left:1px!important;
 	padding-right: 0px;
+	padding-top: 0px;
 	border-radius:0px 4px 4px 0px;
 	box-shadow: 1px -3px 20px rgb(89 90 125 / 70%) inset;
     -webkit-box-shadow: 1px -3px 20px rgb(89 90 125 / 70%) inset;
