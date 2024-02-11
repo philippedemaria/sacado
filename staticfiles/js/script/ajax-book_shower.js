@@ -155,12 +155,12 @@ define(['jquery', 'bootstrap'], function ($) {
         $(document).on('click', ".show_this_bloc_correction" , function (event) {
 
             const bloc_id = $(this).data("bloc_id") ; 
-            const this_title_bloc = $("#title_bloc"+bloc_id+" .bloc_title").html().replace("this_paragraph_none","");
-            const this_content_html = $("#book_shower_this_correction"+bloc_id).html().replace("this_paragraph_none",""); 
+            const this_title_bloc = $("#title_bloc"+bloc_id+" .bloc_title").html();
+            const this_content_html = $("#book_shower_this_correction"+bloc_id).html(); 
             const this_html = this_title_bloc+this_content_html;
 
 
-            $("#book_shower_correction_content").html(this_html);
+            $("#book_shower_correction_content").html(this_html.replace("this_paragraph_none",""));
 
         }); 
 
