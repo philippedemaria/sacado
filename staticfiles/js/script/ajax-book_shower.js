@@ -18,7 +18,7 @@ define(['jquery', 'bootstrap'], function ($) {
             $("#book_shower_page_content").removeClass(); 
             $("#book_shower_page_content").addClass('global_bloc');
             $("#book_shower_page_content").addClass(this_css);
-            $("#book_shower_page .modal-body").addClass(this_paragraph_u);
+            $(".modal-body").addClass(this_paragraph_u);
 
             $(".modal-dialog").css("margin-top","100px");
             $("#book_shower_page_content").css("min-height","400px");
