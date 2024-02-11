@@ -51,6 +51,38 @@ define(['jquery', 'bootstrap'], function ($) {
         });  
  
 
+
+           
+        $(document).on('change', ".customRangeCor" , function (event) {
+
+            var value = $(this).val() ; 
+            $("#book_shower_correction_content *").css("font-size",value*12);
+            $("#book_shower_correction_content").css("line-height",'1.3em');
+            $("#book_shower_correction_content .bloc_content").css("height",'');   
+        }); 
+
+        var init_test = 0  ;    
+        $(document).on('change', ".customRangeImageCor" , function (event) {
+            var value = $(this).val() ; 
+ 
+            if (init_test == 0 )
+                { var height = $("#book_shower_correction_content img").height()*1.2 ; init_test = height;}
+            else{
+                height = init_test
+            }
+            $("#book_shower_correction_content img").css("width",''); 
+            $("#book_shower_correction_content img").css("height",height*value); 
+            $("#book_shower_correction_content .bloc_content").css("height",height*value+40);   
+        });  
+
+
+
+
+
+
+
+
+
  
         $(document).on('click', '.display_correction_bloc_button' , function (event) {
             
