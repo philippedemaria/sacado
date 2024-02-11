@@ -163,7 +163,7 @@ h1 {
 }
 
 .two_page{
-	width: 95%;
+	width: 90%;
 	margin-left: auto;
 	margin-right: auto;  
 }
@@ -357,8 +357,36 @@ h1 {
 
 .main_book{
 	margin : 0px 15px;
+	position:relative;
 }
 
+
+.prev_page{
+	position: absolute;
+	top :500px;
+	left:0px; 
+	font-size: 100px;
+}
+.prev_page:hover{
+	position: absolute;
+	top :500px;
+	left:0px; 
+	font-size: 100px;
+	color:#f0558d;
+}
+.next_page{
+	position: absolute;
+	top :500px;
+	right:0px;
+	font-size: 100px;
+}
+.next_page:hover{
+	position: absolute;
+	top :500px;
+	right:0px;
+	font-size: 100px;
+	color : #f0558d;
+}
 
 /*  global_bloc  */
 .global_bloc{

@@ -55,16 +55,7 @@
 
 {% block page_menu_right %}
 
-
- 
-{% if  prev_page %}
-<a href="{% url 'show_mybook_two_pages' book.id prev_page_number %}" class="btn btn-default" title="Page précédente"><i class="bi bi-chevron-left"></i></a>
- {% endif %}
-{% if  next_page %}
-<a href="{% url 'show_mybook_two_pages' book.id next_page_number %}" class="btn btn-default" title="Page suivante"><i class="bi bi-chevron-right"></i></a>
- {% endif %}
-
- <a href="{% url 'show_mybook' book.id page.number %}" class="btn btn-default"  title="Voir par page"><i class="bi bi-book-half"></i></a>
+<a href="{% url 'show_mybook' book.id page.number %}" class="btn btn-default"  title="Voir par page"><i class="bi bi-book-half"></i></a>
 
 <button id="start_fullscreen" class="btn btn-default"><i class="bi bi-arrows-fullscreen"></i></button>
 <button id="stop_fullscreen" class="btn btn-default"><i class="bi bi-fullscreen-exit"></i></button>
@@ -78,6 +69,17 @@
 
 {% block body  %}  
 <section class="main_book"> 
+
+ 
+    {% if  prev_page %}
+    <a href="{% url 'show_mybook_two_pages' book.id prev_page_number %}" class="prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i></a>
+     {% endif %}
+    {% if  next_page %}
+    <a href="{% url 'show_mybook_two_pages' book.id next_page_number %}" class="next_page" title="Page suivante"><i class="bi bi-chevron-right"></i></a>
+     {% endif %}
+
+
+
     <div class="row">
         <div class="col-xs-12 col-md-12">
             {% for fpage in first_pages %}
