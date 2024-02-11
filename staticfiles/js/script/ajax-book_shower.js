@@ -189,10 +189,10 @@ define(['jquery', 'bootstrap'], function ($) {
             const bloc_id = $(this).data("bloc_id") ; 
             const this_title_bloc = $("#title_bloc"+bloc_id).html();
             const this_content_html = $("#book_shower_this_correction"+bloc_id).html(); 
-            const this_html = this_title_bloc+this_content_html;
+ 
 
-            $("#book_shower_correction_content").html(this_html);
-
+            $("#book_shower_correction_exo").html(this_title_bloc);
+            $("#book_shower_correction_content").html(this_content_html);
         }); 
 
 
