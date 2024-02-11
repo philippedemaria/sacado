@@ -792,3 +792,13 @@ a.active_small_size{
 	border-radius: 5px;
 }
  
+.book_shower_correction_content{
+	padding-top:20px;
+	background-color:#dcffeb;
+}
+
+#book_shower_correction_content{
+	padding:15px;
+	border-radius:5px;
+	background-color:#FFF;
+}
