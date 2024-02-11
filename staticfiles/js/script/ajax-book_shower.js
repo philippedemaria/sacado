@@ -26,8 +26,18 @@ define(['jquery', 'bootstrap'], function ($) {
         }); 
 
 
+        var left_height = $(".no_padding_left").height();
+        var right_height = $(".no_padding_right").height();
 
-           
+        two_pages_height = Math.max(left_height,right_height)
+
+        $(".no_padding_right").height(two_pages_height)
+        $(".no_padding_left").height(two_pages_height)
+
+
+
+
+
         $(document).on('change', ".customRange" , function (event) {
 
             var value = $(this).val() ; 
