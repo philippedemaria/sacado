@@ -307,16 +307,10 @@ h1 {
 
 .two_page .this_paragraph {
     border-radius: 0px 0px 0px 5px;
-    padding: 20px;
-    padding-top: 20px;
     padding-right: 20px;
     padding-bottom: 0px;
     padding-left: 20px;
 }
-
-
-
-
 
 
 .paragraph_label{
@@ -720,7 +714,11 @@ h1 {
 	padding-top:20px;background-image: url('/static/img/fond_e.png'); background-repeat: repeat-y
 }
 
-.this_paragraph_none, .this_paragraph_course{
+.this_paragraph_none{
+	padding-top:0px; 
+}
+
+.this_paragraph_course{
 	padding-top:20px; 
 }
 
