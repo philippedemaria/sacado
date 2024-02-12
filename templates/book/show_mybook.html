@@ -97,6 +97,14 @@
             </label>   
         </div>
     </div>
+    <div id="page_controller"> 
+        {% if  prev_page %}
+        <a href="{% url 'show_mybook' book.id prev_page.number %}" class="page_controller_prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i> Page précédente</a>
+        {% endif %}
+        {% if  next_page %} |
+        <a href="{% url 'show_mybook' book.id next_page.number %}" class="page_controller_next_page" title="Page suivante"> Page suivante <i class="bi bi-chevron-right"></i></a>
+        {% endif %}
+    </div>
 
     <div class="row {{ page.css }} one_page" style="margin-top:20px;"> 
         <div class="col-xs-12 page_book" {% if page.css == 'intro_page_top' %} style="height:1100px" {% endif %}>
@@ -157,14 +165,14 @@
                     {% elif page.css == 'parcourst_page_top' %} style="width:100%;background-image:url('/static/img/parcours_t.png'); background-repeat: no-repeat ;height:100px"  
                     {% elif page.css == 'algo_page_top' %} style="width:100%;background-image:url('/static/img/parcours_algo.png'); background-repeat: no-repeat ;height:100px"  
                     {% elif page.css == 'auto_page_top' %} style="width:100%;background-image:url('/static/img/parcours_eval.png'); background-repeat: no-repeat ;height:100px"
-                    {% elif page.css == 'intro_page_top' %} style="margin-top:150px; width:30%; border-radius:0px 50px 50px 0px;color:white;background-color:#3fc5e8;font-size:25px;padding:20px"
+                    {% elif page.css == 'intro_page_top' %} class="chapter_title"
                     {% elif page.css == 'ad_page_top' %} style="width:100%;background-image: url('/static/img/ad_book.png'); background-repeat: repeat-x;height:70px"
                     {% elif page.css == 'course_page_top' %} style="width:100%;background-image: url('/static/img/course_book.png'); background-repeat: no-repeat ;height:100px"
                     {% endif %}> 
                     {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }}_{% endif %}
                 </div>
                 {% if page.css == 'intro_page_top' %}
-                <div style="position:absolute; top:210px; right:0 ; width:75%; opacity:0.9; border-radius:50px 0px  0px 50px;color:white;background-color:#f0558d; font-size:30px;padding:20px"> 
+                <div class="title_intro_page"> 
                     {{ this_chapter.title }}
                 </div>
                 {% endif %}
