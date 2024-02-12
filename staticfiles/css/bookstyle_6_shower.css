@@ -834,15 +834,15 @@ a.active_small_size{
 		position:absolute;
 		padding:40px;
 		right:0px;
-		top:250px;
+		top:100px;
 		width:70%;
 		text-align: justify;
 	}
 	.paragraph_bloc_img{
 		position:absolute;
 		max-width:200px;
-		height:200px;
-		top: 200px;
+		height:100px;
+		top: 50px;
 		left: 0%;
 		z-index:999;
 	}
@@ -850,7 +850,7 @@ a.active_small_size{
 	.paragraph_bloc_rl{
 		position:absolute;
 		width:100%;
-		top: 500px;
+		top: 400px;
 		left: 0;
 		border : solid 2px #5d4391 ;
 		border-left : solid 1px #5d4391 ;
