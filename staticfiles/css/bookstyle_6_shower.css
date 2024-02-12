@@ -913,7 +913,9 @@ a.active_small_size{
 	letter-spacing: 0.3;
 }
 
-
+#book_shower_correction_content p{
+	margin : 5px 0px 5px 0px;
+}
 
 
 @media (max-width: 1000px) {
