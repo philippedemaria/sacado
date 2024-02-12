@@ -360,33 +360,49 @@ h1 {
 	position:relative;
 }
 
+@media (max-width: 1000px) {
+	#page_controller{ display :block; text-align: center;}
 
-.prev_page{
-	position: absolute;
-	top :500px;
-	left:0px; 
-	font-size: 100px;
+	.prev_page,.next_page{
+		display :none
+	}
 }
-.prev_page:hover{
-	position: absolute;
-	top :500px;
-	left:0px; 
-	font-size: 100px;
-	color:#f0558d;
+
+@media (min-width: 1000px) {
+	#page_controller{ display :none}
+	.prev_page{
+		position: absolute;
+		top :500px;
+		left:0px; 
+		font-size: 100px;
+	}
+	.prev_page:hover{
+		position: absolute;
+		top :500px;
+		left:0px; 
+		font-size: 100px;
+		color:#f0558d;
+	}
+	.next_page{
+		position: absolute;
+		top :500px;
+		right:0px;
+		font-size: 100px;
+	}
+	.next_page:hover{
+		position: absolute;
+		top :500px;
+		right:0px;
+		font-size: 100px;
+		color : #f0558d;
+	}
 }
-.next_page{
-	position: absolute;
-	top :500px;
-	right:0px;
-	font-size: 100px;
-}
-.next_page:hover{
-	position: absolute;
-	top :500px;
-	right:0px;
-	font-size: 100px;
-	color : #f0558d;
-}
+
+
+
+
+
+
 
 /*  global_bloc  */
 .global_bloc{

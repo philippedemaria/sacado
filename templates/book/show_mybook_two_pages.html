@@ -70,16 +70,6 @@
 {% block body  %}  
 <section class="main_book"> 
 
- 
-    {% if  prev_page %}
-    <a href="{% url 'show_mybook_two_pages' book.id prev_page_number %}" class="prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i></a>
-     {% endif %}
-    {% if  next_page %}
-    <a href="{% url 'show_mybook_two_pages' book.id next_page_number %}" class="next_page" title="Page suivante"><i class="bi bi-chevron-right"></i></a>
-     {% endif %}
-
-
-
     <div class="row">
         <div class="col-xs-12 col-md-12">
             {% for fpage in first_pages %}
@@ -97,6 +87,22 @@
                 {% endif %}            
             </label>   
         </div>
+    </div>
+
+    {% if  prev_page %}
+    <a href="{% url 'show_mybook_two_pages' book.id prev_page_number %}" class="prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i></a>
+     {% endif %}
+    {% if  next_page %}
+    <a href="{% url 'show_mybook_two_pages' book.id next_page_number %}" class="next_page" title="Page suivante"><i class="bi bi-chevron-right"></i></a>
+     {% endif %}
+
+     <div id="page_controller"> 
+        {% if  prev_page %}
+        <a href="{% url 'show_mybook_two_pages' book.id prev_page_number %}" class="page_controller_prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i> Page précédente</a>
+        {% endif %}
+        {% if  next_page %} |
+        <a href="{% url 'show_mybook_two_pages' book.id next_page_number %}" class="page_controller_next_page" title="Page suivante"> Page suivante <i class="bi bi-chevron-right"></i></a>
+        {% endif %}
     </div>
 
     <div class="row two_page" style="margin-top:20px;"> 
