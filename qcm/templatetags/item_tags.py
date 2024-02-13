@@ -18,6 +18,11 @@ def create_slug(arg, slug):
 def mark_to_point(arg):
     return str(arg).replace(",",".")
  
+@register.filter
+def transform_number_to_letter(p):
+    alphabets = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+    return alphabets[p.number]
+
 
 @register.filter
 def add_parameters(arg, index):
