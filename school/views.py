@@ -706,6 +706,7 @@ def ajax_subject_teacher(request):
     tchs = []
     for t in teachers : 
     	tchs.append([t.user.id, t.user.last_name+" "+t.user.first_name])
+		
     data['teachers'] = list(tchs)
  
     return JsonResponse(data)

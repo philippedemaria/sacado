@@ -1307,15 +1307,21 @@ def register_teacher(request):
             if school_id :
                 user.school_id  =  school_id
                 user.country_id =  request.POST.get("country_school",None)
+                user.set_password(user_form.cleaned_data["password1"])
+                user.time_zone = 'Europe/Paris'
+                user.save()
+                username = user_form.cleaned_data['username']
+                password = user_form.cleaned_data['password1']
+                user = authenticate(username=username, password=password)
+                login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
+                teacher = Teacher.objects.create(user=user)
 
-            user.set_password(user_form.cleaned_data["password1"])
-            user.time_zone = 'Europe/Paris'
-            user.save()
-            username = user_form.cleaned_data['username']
-            password = user_form.cleaned_data['password1']
-            user = authenticate(username=username, password=password)
-            login(request, user,  backend='django.contrib.auth.backends.ModelBackend' )
-            teacher = Teacher.objects.create(user=user)
+
+            else :
+                messages.error(request, "L'établissement n'est pas renseigné")
+                redirect("index")
+
+
 
             try :#Envoi de mail aux admin de l'établissement
                 school = School.objects.get(pk=school_id)

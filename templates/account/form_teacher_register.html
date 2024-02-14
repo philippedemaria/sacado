@@ -34,7 +34,7 @@
                       <div class="row">
                           <div class="col-xs-12 col-md-12">
                               <div class="form-group"><label>Sélectionner le pays. <small>Pour la France, munissez-vous du RNE.</small></label>
-                                  <select id="id_country_school" name="country_school" class="form-control select2" required>
+                                  <select id="id_country_school" name="country_school" class="form-control select2" required >
                                       <option value=" ">--------------</option>
                                       {% for c in countries %}
                                           <option value="{{ c.id }}">{{ c.name }}</option>
