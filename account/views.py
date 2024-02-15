@@ -1326,7 +1326,7 @@ def register_teacher(request):
             try :#Envoi de mail aux admin de l'établissement
                 school = School.objects.get(pk=school_id)
                 for u in school.users.filter(is_manager=1) :
-                    msg = "Bonjour "+ u.first_name +" " + u.last_name+",\n\nL'enseignant "+user.first_name +" " + user.last_name+" vient de s'inscrire comme collègue de votre établissement.\n\nIl va donc avoir accès à vos documents mutualisés.\n\nSi ce collègue n'appartient pas à votre établissement, attention à bien le désinscrire depuis votre interface ADMIN.\n\nIl est possible que ce soit un élève qui veuille avoir accès à vos données mutualiséses ou un collègue qui s'est trompé d'établissement.\n\nCe mail est automatique, merci de ne pas répondre mais de faire le nécessaire le cas échéant."
+                    msg = "Bonjour "+ u.first_name +" " + u.last_name+",\n\nL'enseignant "+user.first_name +" " + user.last_name+" vient de s'inscrire comme collègue de votre établissement.\n\nIl va donc avoir accès à vos documents mutualisés.\n\nSi ce collègue n'appartient pas à votre établissement, attention à bien le désinscrire depuis votre interface ADMIN.\n\nIl est possible que ce soit un élève qui voulant avoir accès à vos données mutualiséses ou un collègue qui s'est trompé d'établissement.\n\nCe mail est automatique, merci de ne pas répondre mais de faire le nécessaire le cas échéant."
                     send_mail('INSCRIPTION SACADO', msg ,settings.DEFAULT_FROM_EMAIL,[u.email, ])
             except :
                 pass
