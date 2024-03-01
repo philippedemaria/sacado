@@ -68,27 +68,6 @@ import csv
 # return redirect('index')
 
 
-def export_schools(request):
-
-	schools = School.objects.all()
-
-	str_school = "["
-	for school in schools :
-		try :
-			timezone=school.users.filter(user_type=2).first().timezone
-		except :
-			timezone="Europe/Paris"
-		try :
-			str_school += "{'id':"+str(school.id)+",'name':"+school.name+",'address':"+school.address+",'rne':"+school.code_acad+",'timezone':"+timezone+",'townId':"+str(school.town.id)+",'logo':"+school.logo+",'isPrimary':"+str(school.is_primaire)+",'isManaging':"+str(school.is_managing)+",'nbStudent':"+str(school.nbstudents)+"},"
-		except :
-			pass
-	str_school += "]" 
-
- 
-	return render(request,'school/export_schools.html', {  'str_school': str_school    })
-
-
-
 def authorizing_access_school(teacher, school) :
 	if (school == teacher.user.school and teacher.user.is_manager) or (school in teacher.user.schools.all() and teacher.user.is_manager) or teacher.user.is_superuser :
 		return True
@@ -160,6 +139,27 @@ def sharing_teachers(request,group, teachers):
 			flashpack.coteachers.add(teacher)
 
 
+
+
+@user_is_superuser
+def export_schools(request):
+
+	schools = School.objects.all()
+
+	str_school = "["
+	for school in schools :
+		try :
+			timezone=school.users.filter(user_type=2).first().timezone
+		except :
+			timezone="Europe/Paris"
+		try :
+			str_school += "{'id':"+str(school.id)+",'name':"+school.name+",'address':"+school.address+",'rne':"+school.code_acad+",'timezone':"+timezone+",'townId':"+str(school.town.id)+",'logo':"+school.logo+",'isPrimary':"+str(school.is_primaire)+",'isManaging':"+str(school.is_managing)+",'nbStudent':"+str(school.nbstudents)+"},"
+		except :
+			pass
+	str_school += "]" 
+
+ 
+	return render(request,'school/export_all_schools.html', {  'str_school': str_school    })
 
 
 

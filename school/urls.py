@@ -94,4 +94,9 @@ urlpatterns = [
 
     path('paypal_module', paypal_module, name='paypal_module'),
     path('approve_payment_paypal', approve_payment_paypal, name='approve_payment_paypal'),
+
+
+    path('export_schools' , export_schools , name='export_schools'),
+
+    
 ]
