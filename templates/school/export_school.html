@@ -1,0 +1,40 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+ 
+
+{% block require %}
+ 
+
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common-index.js' %}"></script>
+
+ 
+{% endblock %}
+
+
+
+{% block page_title %}  
+     <i class="fa fa-university"></i> Exportation des établissements
+{% endblock %}
+
+{% block page_menu_right %}
+    
+{% endblock %}
+
+
+ 
+     
+{% block body %}     
+<div class="content_main">
+    <div class="row">  
+        <div class="col-xs-12 col-md-12">
+           {{ str_school }}
+        </div>
+    </div>
+    
+
+</div> 
+        
+{% endblock %}
