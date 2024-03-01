@@ -153,14 +153,11 @@ def export_schools(request):
 		except :
 			timezone="Europe/Paris"
 
-
 		town = Town.objects.filter(country=school.country,zip_code=school.zip_code).first()
 
 
-		try :
-			str_school += "{'id':"+str(school.id)+",'name':"+school.name+",'address':"+school.address+",'rne':"+school.code_acad+",'timezone':"+timezone+",'townId':"+str(town.id)+",'logo':"+school.logo+",'isPrimary':"+str(school.is_primaire)+",'isManaging':"+str(school.is_managing)+",'nbStudent':"+str(school.nbstudents)+"},"
-		except :
-			pass
+		str_school += "{'id':"+str(school.id)+",'name':"+school.name+",'address':"+school.address+",'rne':"+school.code_acad+",'timezone':"+timezone+",'townId':"+str(town.id)+",'logo':"+school.logo+",'isPrimary':"+str(school.is_primaire)+",'isManaging':"+str(school.is_managing)+",'nbStudent':"+str(school.nbstudents)+"},"
+
 	str_school += "]" 
 
  
