@@ -85,7 +85,7 @@ def export_schools(request):
 	str_school += "]" 
 
  
-	return render(request, 'school/export_schools.html', {  'str_school': str_school    })
+	return render(request,'school/export_schools.html', {  'str_school': str_school    })
 
 
 
