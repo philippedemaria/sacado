@@ -144,7 +144,7 @@ def sharing_teachers(request,group, teachers):
 @user_is_superuser
 def export_schools(request):
 
-	schools = School.objects.all()
+	schools = School.objects.filter(id__lt=10000)
 
 	str_school = "["
 	for school in schools :
