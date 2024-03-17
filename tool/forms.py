@@ -4,7 +4,7 @@ from .models import *
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill , Level
 from group.models import Group
-from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+#from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from django.forms import MultiWidget, TextInput , CheckboxInput
 from django.template.defaultfilters import filesizeformat
 from django.conf import settings
@@ -186,7 +186,7 @@ class QFlashForm(forms.ModelForm):
 
 
 		if teacher.user.is_superuser :  levels = Level.objects.exclude(pk=13).order_by("ranking")
-		else : levels = Level.objects.exclude(pk__gt=8).order_by("ranking")
+		else : levels = Level.objects.exclude(pk__gt=10).order_by("ranking")
 		#teacher.levels.order_by("ranking")
 		self.fields['title'].required = False
 		self.fields['levels']   = forms.ModelMultipleChoiceField(queryset=levels, required=False)
