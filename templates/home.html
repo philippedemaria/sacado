@@ -62,8 +62,12 @@ Intro Section -
                     de {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}, <span style="color: #0093CA">auto-corrigé{{  nb_parcours|pluralize }}</span> de la Maternelle à la Terminale en <span style="color: #00B999">apprentissage  adaptatif</span>.
 
                     <div>
-                        <a href="#" data-toggle='modal' data-target='#bookviewer' style="font-size:12px"><img src="https://sacado.xyz/ressources/book/6/vp_2.jpg" class="float:left; padding:10px; border:0" />
-                            en partenariat avec Génération 5, SACADO propose sa première édition du livre de Seconde. Des cours augmentés par des appliquettes dynamiques, des exercices secondés par la plateforme pour la remédiation ou pour aller plus loin.
+                        <a href="#" data-toggle='modal' data-target='#bookviewer' style="font-size:12px">
+                            <img src="https://sacado.xyz/ressources/book/6/vp_2.jpg" class="float:left; padding:10px; border:0" />
+                            <div class="float:left; padding:10px">En partenariat avec Génération 5, SACADO propose sa première édition du livre de Seconde. 
+                                Des cours augmentés par des appliquettes dynamiques, des exercices secondés par la plateforme pour 
+                                la remédiation ou pour aller plus loin.
+                            </div>
                         </a>
                     </div>
 
@@ -393,16 +397,16 @@ Intro Section -
 </div>
 
 <div class="modal fade" id="bookviewer" tabindex="-1" role="dialog" aria-labelledby="bookviewer">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" style="width:640px" role="document">
         <div class="modal-content" >
             <div class="modal-header">
-                <p class='sacado'  >Génération 5 et <span class="sacado">SACADO</span> propose le livre augmenté en Seconde</p>              
+                <p class='sacado'  >Génération 5 et <span class="sacado">SACADO</span>  propose le livre augmenté en Seconde</p>              
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button> 
             </div>
             <div class="modal-body">
-                <iframe src="ressources/book/book2.pdf" width="600px" height="800px"></iframe>
+                <iframe src="ressources/book/book2.pdf" width="600px" height="600px"></iframe>
             </div>
         </div>
     </div> 
