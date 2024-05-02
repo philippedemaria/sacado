@@ -464,7 +464,6 @@ h1 {
   padding: 15px !important;
   font-size: 16px;
   font-weight: normal;
-  background-color: #5d4391;
 }
 
 .global_bloc .bloc_content table {
@@ -720,9 +719,9 @@ h1 {
   position: absolute;
   max-width: 200px;
   height: 200px;
-  top: 170px;
+  top: 240px;
   left: 100px;
-  z-index: 999;
+  z-index: 1000;
 }
 
 .paragraph_bloc_img img {
@@ -740,6 +739,7 @@ h1 {
   opacity: 0.95;
   border-radius: 20px;
   padding: 20;
+  color: white;
 }
 
 .modal-body .paragraph_bloc_sf,
