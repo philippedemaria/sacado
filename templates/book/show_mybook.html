@@ -109,14 +109,14 @@
     <div class="row {{ page.css }} one_page" style="margin-top:20px;"> 
         <div class="col-xs-12 page_book" {% if page.css == 'intro_page_top' %} style="height:1100px" {% endif %}>
             {% if n == 0  %}
-            
+        
                 {% if not group %}
                 <div class="alert alert-danger">Tous les liens vers les corrections et les compléments sont désactivés.</div>
                 {% endif %}
 
                 <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
                 {% for fpage in first_pages %}
-                    <div class="this_paragraph" id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
+                    <div {% if n == 0 %}class="this_paragraph0"{% else %}class="this_paragraph"{% endif %} id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
                         <div class="row">
                             <div class="col-xs-12" >
                                 <span class="paragraph_number">{{ forloop.counter }}</span>
@@ -169,13 +169,10 @@
                     {% elif page.css == 'ad_page_top' %} style="width:100%;background-image: url('/static/img/ad_book.png'); background-repeat: repeat-x;height:70px"
                     {% elif page.css == 'course_page_top' %} style="width:100%;background-image: url('/static/img/course_book.png'); background-repeat: no-repeat ;height:100px"
                     {% endif %}> 
-                    {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }}_{% endif %}
+                    {% if page.css == 'intro_page_top' %}Chapitre {{ this_chapter.ranking }} <br />
+                    {{ this_chapter.title }}{% endif %}
                 </div>
-                {% if page.css == 'intro_page_top' %}
-                <div class="title_intro_page"> 
-                    {{ this_chapter.title }}
-                </div>
-                {% endif %}
+
 
                 {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
                     <div id="this_paragraph{{ paragraph.id }}" class="this_paragraph {% if  page.css == 'parcoursu_page_top' %} this_paragraph_u  
