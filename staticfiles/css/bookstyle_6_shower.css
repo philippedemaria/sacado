@@ -172,7 +172,7 @@ h1 {
   color: white;
   background-color: #f0558d;
   font-size: 20px;
-  padding: 20px;
+  padding: 20 20 20 50px;
 }
 
 .chapter_title {
@@ -377,7 +377,7 @@ h1 {
 
 .this_paragraph {
   border-radius: 0px 0px 0px 5px;
-  padding: 20px;
+  padding: 15px;
 }
 
 .two_page .this_paragraph {
@@ -461,11 +461,10 @@ h1 {
 }
 
 .global_bloc .bloc_content {
-  color: #5d4391;
   padding: 15px !important;
   font-size: 16px;
   font-weight: normal;
-  background-color: white;
+  background-color: #5d4391;
 }
 
 .global_bloc .bloc_content table {
@@ -661,15 +660,17 @@ h1 {
 }
 
 .paragraph_bloc_mm {
-  border-radius: 30px 0px 0px 30px;
-  background-color: #5d4391;
+  border-radius: 20px;
+  background-color: #f0558d;
   color: white;
   position: absolute;
-  padding: 40px;
-  right: 0px;
-  top: 200px;
-  width: 70%;
+  padding: 20px;
+  left: 70px;
+  top: 350px;
+  width: 80%;
   text-align: justify;
+  z-index: 999;
+  border: 10px solid white;
 }
 
 .two_page .paragraph_bloc_mm {
@@ -687,14 +688,18 @@ h1 {
 .paragraph_bloc_mm .bloc_content,
 .modal-body .paragraph_bloc_mm .bloc_title {
   color: white !important;
-  background-color: #5d4391;
+  background-color: #f0558d;
 }
 
 .paragraph_bloc_sf {
   position: absolute;
   right: 0px;
-  top: 650px;
+  top: 0px;
   width: 60%;
+  border: 1px solid #5d4391;
+  border-right: none;
+  border-radius: 5px 0px 5px 0px;
+  padding: 20px 20px 0px 20px;
 }
 
 .paragraph_bloc_sf .bloc_title,
@@ -715,27 +720,26 @@ h1 {
   position: absolute;
   max-width: 200px;
   height: 200px;
-  top: 70px;
-  left: 15%;
+  top: 170px;
+  left: 100px;
   z-index: 999;
 }
 
 .paragraph_bloc_img img {
   height: 150px;
-  border: solid 2px #5d4391;
+  border: solid 10px white;
 }
 
 .paragraph_bloc_rl {
   position: absolute;
-  width: 230px;
-  top: 400px;
+  width: 85%;
+  top: 515px;
   left: 10%;
-  border: solid 2px #5d4391;
-  border-left: solid 1px #5d4391;
-  border-top: solid 1px #5d4391;
-  z-index: 999;
-  background-color: white;
+  z-index: 99;
+  background-color: #5d4391;
   opacity: 0.95;
+  border-radius: 20px;
+  padding: 20;
 }
 
 .modal-body .paragraph_bloc_sf,
