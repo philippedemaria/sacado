@@ -665,8 +665,8 @@ h1 {
   position: absolute;
   padding: 20px;
   left: 70px;
-  top: 395px;
-  width: 80%;
+  top: 350px;
+  width: 75%;
   text-align: justify;
   z-index: 999;
   border: 10px solid white;
@@ -732,7 +732,7 @@ h1 {
 .paragraph_bloc_rl {
   position: absolute;
   width: 85%;
-  top: 515px;
+  top: 500px;
   left: 10%;
   z-index: 99;
   background-color: #5d4391;
