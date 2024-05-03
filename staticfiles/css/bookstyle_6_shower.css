@@ -613,7 +613,8 @@ h1 {
 
 /*  paragraph_bloc_exo  */
 .paragraph_bloc_exo {
-  border-radius: 4px 0px 0px 4px !important;
+  border-radius: 4px !important;
+  padding: 10px 20px !important;
 }
 
 .paragraph_bloc_exo .bloc_title {
