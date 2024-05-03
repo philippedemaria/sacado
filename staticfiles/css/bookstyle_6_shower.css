@@ -572,6 +572,9 @@ h1 {
 .paragraph_bloc_rm {
   margin-left: 30px;
 }
+.paragraph_bloc_rm .paragraph_bloc_rm {
+  margin-left: 0px;
+}
 
 .paragraph_bloc_rm .bloc_title {
   color: white;
