@@ -564,6 +564,10 @@ h1 {
   margin-left: 30px;
 }
 
+.paragraph_bloc_ex {
+  background-color: transparent !important;
+}
+
 .paragraph_bloc_rm .bloc_title {
   color: white;
   border-radius: 3px 3px 0px 0px;
