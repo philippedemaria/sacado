@@ -546,11 +546,22 @@ h1 {
   font-weight: normal;
 }
 
-.paragraph_bloc_ex .bloc_content,
 .paragraph_bloc_at .bloc_content,
 .paragraph_bloc_pp .bloc_content {
   border-left: 3px solid #5d4391;
   background-color: white;
+}
+
+.paragraph_bloc_ex .bloc_content {
+  border-left: 3px solid #3fc5e8;
+  background-color: white;
+  margin-left: 30px;
+}
+
+.paragraph_bloc_ex .bloc_title {
+  color: #3fc5e8;
+  padding: 3px;
+  margin-left: 30px;
 }
 
 .paragraph_bloc_rm .bloc_title {
