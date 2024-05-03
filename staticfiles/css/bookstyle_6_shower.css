@@ -562,10 +562,15 @@ h1 {
   color: #3fc5e8;
   padding: 3px;
   margin-left: 30px;
+  font-weight: 400;
 }
 
 .paragraph_bloc_ex {
   background-color: transparent !important;
+}
+
+.paragraph_bloc_rm {
+  margin-left: 30px;
 }
 
 .paragraph_bloc_rm .bloc_title {
@@ -595,6 +600,7 @@ h1 {
   margin: 10px 0px 0px 0px;
   padding: 0px;
   font-size: 13px;
+  background-color: white;
 }
 
 .paragraph_bloc_mt .bloc_title,
