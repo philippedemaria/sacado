@@ -526,7 +526,7 @@ h1 {
   color: #5d4391;
   position: relative;
   margin: 10px 0px 0px 0px;
-  padding: 0px;
+  padding: 0px 30px;
   font-size: 16px;
 }
 
@@ -548,9 +548,20 @@ h1 {
 
 .paragraph_bloc_ex .bloc_content,
 .paragraph_bloc_at .bloc_content,
-.paragraph_bloc_rm .bloc_content,
 .paragraph_bloc_pp .bloc_content {
   border-left: 3px solid #5d4391;
+  background-color: white;
+}
+
+.paragraph_bloc_rm .bloc_title {
+  color: white;
+  border-radius: 3px 3px 0px 0px;
+  background-color: #3fc5e8;
+  padding: 3px;
+}
+
+.paragraph_bloc_rm .bloc_content {
+  border-left: 3px solid #3fc5e8;
   background-color: white;
 }
 
@@ -697,7 +708,7 @@ h1 {
   width: 60%;
   border: 1px solid #5d4391;
   border-right: none;
-  border-radius: 5px 0px 5px 0px;
+  border-radius: 5px 0px 0px 5px;
   padding: 20px 20px 0px 20px;
 }
 
