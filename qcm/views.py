@@ -2649,7 +2649,7 @@ def clone_folder(request, id ):
 
         for bibliotex in p.bibliotexs.all() :  
             relationtexs = bibliotex.relationtexs.all()    
-            subjects     = bibliotex.subjects.all()  
+            subjects       = bibliotex.subjects.all()  
             levels       = bibliotex.levels.all()    
 
             bibliotex.pk      = None
@@ -2674,7 +2674,7 @@ def clone_folder(request, id ):
 
         for flashpack in p.flashpacks.all() :  
             flashcards = flashpack.flashcards.all()    
-            themes     = flashpack.subjects.all()  
+            subjects     = flashpack.subjects.all()  
             levels     = flashpack.levels.all()    
 
             flashpack.pk      = None
@@ -2688,7 +2688,7 @@ def clone_folder(request, id ):
 
             flashpack.authors.add(teacher.user)
             flashpack.parcours.add(p)
-            flashpack.themes.set(themes)
+            flashpack.subjects.set(subjects)
             flashpack.levels.set(levels)
             flashpack.students.set(students)
         i += 1
@@ -2744,8 +2744,6 @@ def duplicate_folder(request):
         for p in prcs :
             courses       = p.course.all()
             relationships = p.parcours_relationship.all()
-            bibliotexs    = p.bibliotexs.all() 
- 
             p.pk = None
             p.code = str(uuid.uuid4())[:8] 
             p.teacher = teacher
@@ -2791,27 +2789,28 @@ def duplicate_folder(request):
                 except :
                     print("erreur de duplication ", relationship.pk)
 
- 
-            for b in bibliotexs :  
-                relationtexs = b.relationtexs.all()    
-                subjects       = b.subjects.all()  
-                levels       = b.levels.all()    
 
-                b.pk      = None
-                b.teacher = teacher
-                b.save()
-                for r in relationtexs :
-                    knowledges = r.knowledges.all() 
-                    skills     = r.skills.all()
-                    r.pk = None
-                    r.bibliotex = b                    
-                    r.teacher = teacher
-                    r.save()
-                    r.skills.set(skills)
-                    r.knowledges.set(knowledges)
-                    r.students.set(students)
-                b.subjects.set(subjects)
-                b.levels.set(levels)
+            for bibliotex in p.bibliotexs.all() :  
+                relationtexs = bibliotex.relationtexs.all()    
+                subjects       = bibliotex.subjects.all()  
+                levels       = bibliotex.levels.all()    
+
+                bibliotex.pk      = None
+                bibliotex.teacher = teacher
+                bibliotex.save()
+
+                for relationtex in relationtexs :
+                    knowledges = relationtex.knowledges.all() 
+                    skills     = relationtex.skills.all() 
+                    relationtex.pk        = None
+                    relationtex.bibliotex = bibliotex
+                    relationtex.teacher   = teacher
+                    relationtex.save()
+                    relationtex.skills.set(skills)
+                    relationtex.knowledges.set(knowledges)
+                    relationtex.students.set(students)
+                bibliotex.subjects.set(subjects)
+                bibliotex.levels.set(levels)
 
             i += 1
 
