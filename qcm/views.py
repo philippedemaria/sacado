@@ -2811,6 +2811,12 @@ def duplicate_folder(request):
                     relationtex.students.set(students)
                 bibliotex.subjects.set(subjects)
                 bibliotex.levels.set(levels)
+                bibliotex.folders.add(folder)
+                bibliotex.parcours.add(p)
+                for grp_id in groups :
+                    group = Group.objects.get(pk=grp_id)
+                    bibliotex.groups.add(group)
+
 
             i += 1
 
