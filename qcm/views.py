@@ -2706,7 +2706,7 @@ def duplicate_folder(request):
     """ cloner un dossier """
 
     folder_id  = request.POST.get("this_document_id",None)
-    groups       = request.POST.getlist("groups",[])
+    groups     = request.POST.getlist("groups",[])
     teacher = request.user.teacher
     data = {}
 
@@ -2730,7 +2730,8 @@ def duplicate_folder(request):
         folder.save()
         folder.students.set(students)
         folder.groups.set(groups)
-        for g in groups :
+        for grp_id in groups :
+            group = Group.objects.get(pk=grp_id)
             Folder.objects.filter(pk=folder.pk).update(level = group.level)
             Folder.objects.filter(pk=folder.pk).update(subject = group.subject)
         #################################################
@@ -2743,6 +2744,7 @@ def duplicate_folder(request):
         for p in prcs :
             courses       = p.course.all()
             relationships = p.parcours_relationship.all()
+            bibliotexs    = p.bibliotexs.all() 
             p.pk = None
             p.code = str(uuid.uuid4())[:8] 
             p.teacher = teacher
@@ -2787,6 +2789,31 @@ def duplicate_folder(request):
                     relationship.students.set(students) 
                 except :
                     print("erreur de duplication ", relationship.pk)
+
+
+            for bibliotex in bibliotexs :  
+                relationtexs = bibliotex.relationtexs.all()    
+                themes       = bibliotex.subjects.all()  
+                levels       = bibliotex.levels.all()    
+
+                bibliotex.pk      = None
+                bibliotex.teacher = teacher
+                bibliotex.save()
+
+                for relationtex in relationtexs :
+                    knowledges = relationtex.knowledges.all() 
+                    skills     = relationtex.skills.all() 
+                    relationtex.pk        = None
+                    relationtex.bibliotex = bibliotex
+                    relationtex.teacher   = teacher
+                    relationtex.save()
+                    relationtex.skills.set(skills)
+                    relationtex.knowledges.set(knowledges)
+                    relationtex.students.set(students)
+
+                bibliotex.themes.set(themes)
+                bibliotex.levels.set(levels)
+
             i += 1
 
         data["validation"] = "Duplication réussie. Retrouvez-le depuis le menu Groupes."
