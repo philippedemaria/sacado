@@ -2744,6 +2744,7 @@ def duplicate_folder(request):
         for p in prcs :
             courses       = p.course.all()
             relationships = p.parcours_relationship.all()
+            bibliotexs    = p.bibliotexs.all()
             p.pk = None
             p.code = str(uuid.uuid4())[:8] 
             p.teacher = teacher
@@ -2788,11 +2789,10 @@ def duplicate_folder(request):
                     relationship.students.set(students) 
                 except :
                     print("erreur de duplication ", relationship.pk)
-
-
-            for bibliotex in p.bibliotexs.all() :  
+   
+            for bibliotex in bibliotexs :  
                 relationtexs = bibliotex.relationtexs.all()    
-                subjects       = bibliotex.subjects.all()  
+                subjects     = bibliotex.subjects.all()  
                 levels       = bibliotex.levels.all()    
 
                 bibliotex.pk      = None
