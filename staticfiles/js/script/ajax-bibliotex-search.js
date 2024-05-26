@@ -139,6 +139,8 @@ define(["jquery", "bootstrap"], function ($) {
       let keyword = $(this).val();
       let theme_id = $("#id_theme").val();
 
+      console.log(keywords);
+
       let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
       if ($("#loading")) {
         $("#loading").html(
