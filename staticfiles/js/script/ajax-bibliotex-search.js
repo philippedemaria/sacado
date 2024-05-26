@@ -164,7 +164,7 @@ define(["jquery", "bootstrap"], function ($) {
           },
           url: "ajax_search_bibliotex",
           success: function (data) {
-            $("#my_biblio").html(data.html);
+            $("#bibliotex_details").html(data.html);
           },
         });
       }
