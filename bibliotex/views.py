@@ -1184,12 +1184,15 @@ def ajax_search_bibliotex(request):
         subject = Subject.objects.get(pk=subject_id)
         base = base.filter(subjects=subject)
 
-    if  keywords :
-        base = base.filter(Q(title__icontains = keywords) |  Q(exotexs__title__icontains = keywords) | Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
-
     if level_id :
         level = Level.objects.get(pk=int(level_id))
         base = base.filter( levels = level )
+
+
+    if  keywords :
+        base = base.filter(Q(title__icontains = keywords) |  Q(exotexs__title__icontains = keywords) | Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
+
+
 
     if len(theme_ids) > 0 and theme_ids[0] != '' :
         base = base.filter(exotexs__knowledge__theme_id__in = theme_ids )
