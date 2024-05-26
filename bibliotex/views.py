@@ -1185,7 +1185,7 @@ def ajax_search_bibliotex(request):
         base = base.filter(subjects=subject)
 
     if  keywords :
-        base = base.filter(  Q(exotexs__title__icontains = keywords) | Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
+        base = base.filter(Q(title__icontains = keywords) |  Q(exotexs__title__icontains = keywords) | Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
 
     if level_id :
         level = Level.objects.get(pk=int(level_id))
