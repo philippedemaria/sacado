@@ -142,21 +142,16 @@ define(["jquery", "bootstrap"], function ($) {
     }
 
     $(document).on("keyup", "#keywords", function () {
-      let level_id = $("#id_level").val();
-      let subject_id = $("#id_subject").val();
-      let keyword = $("#keywords").val();
-      let theme_id = $("#id_theme").val();
+      const level_id = $("#id_level").val();
+      const subject_id = $("#id_subject").val();
+      const keyword = $("#keywords").val();
+      const theme_id = $("#id_theme").val();
+      const csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
       console.log("keywords : ", keyword);
 
-      var is_annale;
-      if ($("#id_annale").is(":checked")) {
-        is_annale = "yes";
-      } else {
-        is_annale = "no";
-      }
+      const is_annale = $("#id_annale").is(":checked") ? "yes" : "no";
 
-      let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
       if ($("#loading")) {
         $("#loading").html(
           "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>"
@@ -180,7 +175,11 @@ define(["jquery", "bootstrap"], function ($) {
           url: "ajax_search_bibliotex",
           success: function (data) {
             $("#bibliotex_details").html(data.html);
-            $("#loading").html();
+            $("#loading").html("");
+          },
+          error: function (xhr, status, error) {
+            console.error("Erreur AJAX:", status, error);
+            $("#loading").html(""); // Efface le loader en cas d'erreur
           },
         });
       }
