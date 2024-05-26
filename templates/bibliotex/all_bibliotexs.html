@@ -1,101 +1,107 @@
-{% extends 'dashboard.html' %}
-{% load static %}
-{% load widget_tweaks %}
-{% load item_tags %}
+{% extends 'dashboard.html' %} {% load static %} {% load widget_tweaks %} {%
+load item_tags %} {% block require %}
 
+<script
+  src="{% static 'js/require.js' %}"
+  data-main="{% static 'js/common2.js' %}"
+></script>
 
-{% block require %}
- 
-    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2.js' %}"></script>
- 
-    <script>
-        require(['script/ajax-bibliotex-search']);
-    </script> 
+<script>
+  require(["script/ajax-bibliotex-search"]);
+</script>
 
+{% endblock %} {% block page_title %} {% include 'qcm/breadcrumb.html' %}
+<small> BiblioTex mutualisées </small>
+{% endblock %} {% block page_menu_right %}
+<li><a href="javascript:history.back()" class="btn btn-default"> Retour</a></li>
+{% endblock %} {% block body %}
+<style type="text/css">
+  body {
+    overflow-x: hidden;
+  }
+</style>
 
-{% endblock %}
+<section class="content_main">
+  <form action="" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row search_bar">
+      <div class="col-xs-12 col-md-3 col-lg-3" id="subject_div">
+        <select id="id_subject" name="subject" class="form-control select2">
+          {% for s in teacher.subjects.all %}
+          <option value="{{s.id}}">{{ s.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-xs-9 col-md-3 col-lg-2" id="level_div">
+        <select id="id_level" name="level" class="form-control select2">
+          <option value=" ">Choisir un niveau</option>
+          {% if group %}
+          <option value="{{group.level.id}}">{{ group.level.name }}</option>
+          {% else %} {% for l in teacher.levels.all|dictsort:"ranking" %}
+          <option value="{{l.id}}">{{ l.name }}</option>
+          {% endfor %} {% endif %}
+        </select>
+      </div>
 
-{% block page_title %}
-    {% include 'qcm/breadcrumb.html' %} <small>   BiblioTex mutualisées </small>  
-{% endblock %}
+      <div class="col-xs-3 col-md-2 col-lg-1 no_visu_on_load" id="is_annale">
+        <input
+          type="checkbox"
+          id="id_annale"
+          data-toggle="toggle"
+          data-onstyle="primary"
+          data-offstyle="default"
+          data-on="Annale"
+          data-off="Exercice"
+          data-width="100%"
+        />
+      </div>
 
+      <div class="col-xs-12 col-md-3 col-lg-4" id="theme_div">
+        <select
+          id="id_theme"
+          name="theme"
+          class="form-control select2"
+          multiple
+        >
+          <option value=" ">Choisir un niveau puis un thème</option>
+        </select>
+      </div>
 
-{% block page_menu_right %}
-     <li> <a href="javascript:history.back()"   class="btn btn-default"> Retour</a> </li>  
-{% endblock %}
+      <div class="col-xs-12 col-md-3 col-lg-3" id="keyword_div">
+        <input
+          type="text"
+          name="keywords"
+          id="keywords"
+          placeholder="Mots-clés"
+          class="form-control"
+        />
+      </div>
+    </div>
 
-
-
-{% block body  %}  
-<style type="text/css">body{overflow-x: hidden;}</style>
-
-<section class="content_main"> 
-    <form action="" method="POST" enctype='multipart/form-data'> 
-        {% csrf_token %}
-        <div class="row search_bar">
-            <div class="col-xs-12 col-md-3 col-lg-3"  id="subject_div">
-                <select id="id_subject" name="subject" class="form-control select2">
-                    {% for s in teacher.subjects.all %}
-                        <option value="{{s.id}}">{{ s.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-xs-9 col-md-3 col-lg-2"  id="level_div">
-                <select id="id_level" name="level" class="form-control select2" >
-                    <option value=" ">Choisir un niveau</option>
-                    {% if group %}
-                        <option value="{{group.level.id}}">{{ group.level.name }}</option>
-                    {% else %}
-                        {% for l in teacher.levels.all|dictsort:"ranking" %}
-                            <option value="{{l.id}}">{{ l.name }}</option>
-                        {% endfor %}
-                    {% endif %}
-                </select>
-            </div>
-
-            <div class="col-xs-3 col-md-2 col-lg-1 no_visu_on_load" id="is_annale">
-                <input type="checkbox" id="id_annale" data-toggle="toggle"  data-onstyle="primary" data-offstyle="default" data-on="Annale" data-off="Exercice" data-width="100%" />
-            </div>
-
-            <div class="col-xs-12 col-md-3 col-lg-4"  id="theme_div">
-                    <select id="id_theme" name="theme" class="form-control select2" multiple>
-                        <option value=" ">Choisir un niveau puis un thème</option>
-                    </select>
-            </div>
-
-            <div class="col-xs-12 col-md-3 col-lg-3" id="keyword_div">
-                    <input type="text" name="keywords" id="keywords" placeholder="Mots-clés" class="form-control" />
-            </div>
-
+    <div class="row" id="bibliotex_details">
+      <div class="col-xs-12 col-md-12">
+        <div style="margin-top: 50px">
+          <div class="col-xs-12 col-md-12 form_card">
+            Pour trouver des biblioTex mutualisées, vous devez :
+            <div style="height: 20px"></div>
+            <ol>
+              Sélectionner une matière
+            </ol>
+            <ol>
+              Sélectionner un niveau
+            </ol>
+            <ol>
+              Sélectionner un thème
+            </ol>
+            <ol>
+              ou choisir un mot clé
+            </ol>
+            <div id="loading"></div>
+          </div>
         </div>
-
-        <div class="row" id="bibliotex_details">
-
-            <div class="col-xs-12 col-md-12">
- 
-                <div style="margin-top:50px">
-                        <div class="col-xs-12 col-md-12  form_card">
-                            Pour trouver des biblioTex mutualisées, vous devez :                
-                            <div style="height:20px"></div>
-                            <ol>Sélectionner une matière</ol>
-                            <ol>Sélectionner un niveau</ol>
-                            <ol>Sélectionner un thème</ol> 
-                            <ol>ou choisir un mot clé</ol>                
-                            <div id="loading"></div>
-                        </div>
-
-                </div> 
-
-            </div>
-
-        </div>
-
-  
-    </form>  
+      </div>
+    </div>
+  </form>
 </section>
 
-
-
-{% include 'bibliotex/duplication_modal.html' %}
-
-{% endblock  %}  
+{% include 'bibliotex/duplication_modal.html' %} {% endblock %}
