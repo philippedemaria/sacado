@@ -135,12 +135,13 @@ define(["jquery", "bootstrap"], function ($) {
       });
     }
 
-    $("#keywords").on("keyup", function (event) {
+    $("#keywords").on("change", function (event) {
       let level_id = $("#id_level").val();
       let subject_id = $("#id_subject").val();
       let keyword = $(this).val();
       let theme_id = $("#id_theme").val();
 
+      console.log(keyword);
       let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
       if ($("#loading")) {
         $("#loading").html(
@@ -155,6 +156,7 @@ define(["jquery", "bootstrap"], function ($) {
       }
 
       if (keyword.length > 3) {
+        console.log(keyword + " 3 LETTRES");
         $.ajax({
           type: "POST",
           dataType: "json",
