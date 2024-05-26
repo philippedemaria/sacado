@@ -135,7 +135,7 @@ define(["jquery", "bootstrap"], function ($) {
       });
     }
 
-    $("#keywords").on("keyup", function (event) {
+    $(document).on("keyup", "#keywords", function (event) {
       let level_id = $("#id_level").val();
       let subject_id = $("#id_subject").val();
       let keyword = $("#keywords").val();
@@ -178,7 +178,7 @@ define(["jquery", "bootstrap"], function ($) {
       }
     });
 
-    $("#id_annale").on("change", function (event) {
+    $(document).on("change", "#id_annale", function (event) {
       if ($(this).is(":checked")) {
         var is_annale = "yes";
       } else {
