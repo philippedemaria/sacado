@@ -126,6 +126,7 @@ define(["jquery", "bootstrap"], function ($) {
         url: url,
         success: function (data) {
           $("#bibliotex_details").html("").html(data.html);
+          $("#loading").html();
         },
       });
     }
@@ -165,6 +166,7 @@ define(["jquery", "bootstrap"], function ($) {
           url: "ajax_search_bibliotex",
           success: function (data) {
             $("#bibliotex_details").html(data.html);
+            $("#loading").html();
           },
         });
       }
@@ -208,6 +210,7 @@ define(["jquery", "bootstrap"], function ($) {
         url: url_,
         success: function (data) {
           $("#bibliotex_details").html("").html(data.html);
+          $("#loading").html();
         },
       });
     });
