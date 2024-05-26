@@ -1184,9 +1184,10 @@ def ajax_search_bibliotex(request):
         subject = Subject.objects.get(pk=subject_id)
         base = base.filter(subjects=subject)
 
-    if level_id or level_id!='' or level_id !=' ' :
+    try :
         level = Level.objects.get(pk=int(level_id))
         base = base.filter( levels = level )
+    except :pass
 
     if  keywords :
         #base = base.filter(Q(title__icontains = keywords) |  Q(exotexs__title__icontains = keywords) | Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
