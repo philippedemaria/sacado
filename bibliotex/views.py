@@ -1184,7 +1184,7 @@ def ajax_search_bibliotex(request):
         subject = Subject.objects.get(pk=subject_id)
         base = base.filter(subjects=subject)
 
-    if level_id :
+    if level_id or level_id!='' or level_id !=' ' :
         level = Level.objects.get(pk=int(level_id))
         base = base.filter( levels = level )
 
