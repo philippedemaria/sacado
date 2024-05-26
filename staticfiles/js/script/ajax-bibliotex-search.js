@@ -22,6 +22,7 @@ define(["jquery", "bootstrap"], function ($) {
       } else {
         var is_annale = "no";
       }
+      let keyword = $("#keywords").val();
       $.ajax({
         type: "POST",
         dataType: "json",
@@ -30,6 +31,7 @@ define(["jquery", "bootstrap"], function ($) {
           id_level: id_level,
           id_subject: id_subject,
           is_annale: is_annale,
+          keyword: keyword,
           csrfmiddlewaretoken: csrf_token,
         },
         url: url_,
@@ -99,7 +101,7 @@ define(["jquery", "bootstrap"], function ($) {
       let theme_id = param1.val();
       let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
       let subject_id = $("#id_subject").val();
-      let keyword = $("#keyword").val();
+      let keyword = $("#keywords").val();
       url = "ajax_search_bibliotex";
       if ($("#id_annale").is(":checked")) {
         var is_annale = "yes";
@@ -139,7 +141,7 @@ define(["jquery", "bootstrap"], function ($) {
       let keyword = $(this).val();
       let theme_id = $("#id_theme").val();
 
-      console.log(keywords);
+      console.log(keyword);
 
       let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
       if ($("#loading")) {
@@ -191,7 +193,7 @@ define(["jquery", "bootstrap"], function ($) {
       let id_subject = $("#id_subject").val();
       let bibliotex_id = $("#bibliotex_id").val();
       let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
-
+      let keyword = $("#keywords").val();
       url_ = "ajax_search_bibliotex";
 
       if ($("#loading")) {
@@ -209,6 +211,7 @@ define(["jquery", "bootstrap"], function ($) {
           subject_id: id_subject,
           bibliotex_id: bibliotex_id,
           is_annale: is_annale,
+          keyword: keyword,
           csrfmiddlewaretoken: csrf_token,
         },
         url: url_,
