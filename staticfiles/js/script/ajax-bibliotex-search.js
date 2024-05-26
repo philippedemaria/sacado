@@ -148,18 +148,16 @@ define(["jquery", "bootstrap"], function ($) {
       const theme_id = $("#id_theme").val();
       const csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-      console.log("keywords : ", keyword);
+      const is_annale =
+        $("#id_annale") && $("#id_annale").is(":checked") ? "yes" : "no";
 
-      const is_annale = $("#id_annale").is(":checked") ? "yes" : "no";
-
-      if ($("#loading")) {
+      if (keyword.length > 3) {
         $("#loading").html(
           "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>"
         );
-      }
 
-      if (keyword.length > 3) {
         console.log(keyword + " 3 LETTRES");
+
         $.ajax({
           type: "POST",
           dataType: "json",
