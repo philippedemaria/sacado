@@ -135,10 +135,10 @@ define(["jquery", "bootstrap"], function ($) {
       });
     }
 
-    $("#keywords").on("change", function (event) {
+    $("#keywords").on("keyup", function (event) {
       let level_id = $("#id_level").val();
       let subject_id = $("#id_subject").val();
-      let keyword = $(this).val();
+      let keyword = $("#keywords").val();
       let theme_id = $("#id_theme").val();
 
       console.log(keyword);
