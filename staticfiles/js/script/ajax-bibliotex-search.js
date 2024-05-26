@@ -2,7 +2,7 @@ define(["jquery", "bootstrap"], function ($) {
   $(document).ready(function () {
     console.log("chargement JS ajax-bibiotex.js OK");
 
-    $("#id_level").on("change", function (event) {
+    $("#id_level").on("change", function () {
       let id_level = $(this).val();
       let id_subject = $("#id_subject").val();
       if (id_subject == "" || id_subject == " ") {
@@ -23,6 +23,13 @@ define(["jquery", "bootstrap"], function ($) {
         var is_annale = "no";
       }
       let keyword = $("#keywords").val();
+
+      if ($("#loading")) {
+        $("#loading").html(
+          "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>"
+        );
+      }
+
       $.ajax({
         type: "POST",
         dataType: "json",
@@ -37,13 +44,12 @@ define(["jquery", "bootstrap"], function ($) {
         url: url_,
         success: function (data) {
           $("#bibliotex_details").html(data.html);
-
+          $("#loading").html();
           themes = data["themes"];
           $("select[name=theme]").empty("");
 
           if (themes.length > 0) {
             for (let i = 0; i < themes.length; i++) {
-              console.log(themes[i]);
               let themes_id = themes[i][0];
               let themes_name = themes[i][1];
               let option = $("<option>", {
@@ -87,7 +93,7 @@ define(["jquery", "bootstrap"], function ($) {
       });
     });
 
-    $(document).on("change", "#id_theme", function (event) {
+    $(document).on("change", "#id_theme", function () {
       if ($("select[name=level]").val() > 0) {
         ajax_choice($("select[name=level]"), $("select[name=theme]"));
       } else {
@@ -135,24 +141,26 @@ define(["jquery", "bootstrap"], function ($) {
       });
     }
 
-    $(document).on("keyup", "#keywords", function (event) {
+    $(document).on("keyup", "#keywords", function () {
       let level_id = $("#id_level").val();
       let subject_id = $("#id_subject").val();
       let keyword = $("#keywords").val();
       let theme_id = $("#id_theme").val();
 
-      console.log(keyword);
+      console.log("keywords : ", keyword);
+
+      var is_annale;
+      if ($("#id_annale").is(":checked")) {
+        is_annale = "yes";
+      } else {
+        is_annale = "no";
+      }
+
       let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
       if ($("#loading")) {
         $("#loading").html(
           "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>"
         );
-      }
-
-      if ($("#id_annale").is(":checked")) {
-        var is_annale = "yes";
-      } else {
-        var is_annale = "no";
       }
 
       if (keyword.length > 3) {
