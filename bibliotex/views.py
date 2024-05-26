@@ -1174,7 +1174,7 @@ def ajax_search_bibliotex(request):
     level_id   = request.POST.get('level_id',None)
     subject_id = request.POST.get('subject_id',None)
     id_annale  = request.POST.get('is_annale',None)
-    keywords = request.POST.get('keywords',None)   
+    keywords = request.POST.get('keyword',None)   
     theme_ids = request.POST.getlist('theme_id',[])
 
     teacher_id = get_teacher_id_by_subject_id(subject_id)
