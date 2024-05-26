@@ -1189,9 +1189,13 @@ def ajax_search_bibliotex(request):
         base = base.filter( levels = level )
 
 
+    print(keywords)
     if  keywords :
         #base = base.filter(Q(title__icontains = keywords) |  Q(exotexs__title__icontains = keywords) | Q(exotexs__content__icontains = keywords) |Q(teacher__user__first_name__icontains = keywords) |Q(teacher__user__last_name__icontains = keywords))
-        base = base.filter(title__icontains = keywords)
+        base = base.filter(title__contains= keywords)
+
+
+
 
     if len(theme_ids) > 0 and theme_ids[0] != '' :
         base = base.filter(exotexs__knowledge__theme_id__in = theme_ids )
