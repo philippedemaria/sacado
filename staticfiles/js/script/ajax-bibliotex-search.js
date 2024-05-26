@@ -148,19 +148,13 @@ define(["jquery", "bootstrap"], function ($) {
       const theme_id = $("#id_theme").val();
       const csrf_token = $("input[name='csrfmiddlewaretoken']").val();
 
-      console.log("is_annale");
-
       const is_annale =
         $("#id_annale") && $("#id_annale").is(":checked") ? "yes" : "no";
-
-      console.log(is_annale);
 
       if (keyword.length > 3) {
         $("#loading").html(
           "<i class='fa fa-spinner fa-pulse fa-3x fa-fw'></i>"
         );
-
-        console.log(keyword + " 3 LETTRES");
 
         $.ajax({
           type: "POST",
