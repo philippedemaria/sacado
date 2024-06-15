@@ -129,8 +129,8 @@
                                                 class="display_correction_complements_div" 
                                                 style="font-size: 12px; border:solid 1px gray; padding:5px; border-radius:4px"
                                                 data-source_id = "{{fpage.chapter.id}}">
-                                                {{ forloop.counter0 }}. <span class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
-                                                et <span class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</span>  <i class="bi bi-chevron-down"></i>
+                                                {{ forloop.counter0 }}. <span id="label_cor{{fpage.chapter.id}}" class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
+                                                et <span id="label_comp{{fpage.chapter.id}}" class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</span>  <i class="bi bi-chevron-down"></i>
                                             </a>
                                         </div>
                                         <div    id="cor_and_comp{{ fpage.chapter.id }}"  
