@@ -203,7 +203,7 @@
                                                             data-type_id = "0"  
                                                             data-paragraph_id = "0" 
                                                             data-is_correction = 1 
-                                                            style="font-size:16px!important"> 
+                                                            style="font-size:30px!important; padding:10px"> 
                                                             {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %} 
                                                             <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
                                                             id="cc_chapter_cor{{ fpage.chapter.id }}"
@@ -216,14 +216,14 @@
                                                     <div>                                                        
                                                         <i class="bi bi-plus-square-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}"></i>
                                                     </div>
-                                                    <div class="margin-top:10px;margin-bottom:10px" >
+                                                    <div >
                                                         {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
                                                             data-source_id = "{{fpage.chapter.id}}" 
                                                             data-type_id = "0"  
                                                             data-paragraph_id = "0" 
                                                             data-is_correction = 0  
-                                                            style="font-size:16px!important"> 
+                                                            style="font-size:30px!important; padding:10px"> 
                                                              
                                                             <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
                                                             id="cc_chapter{{ fpage.chapter.id }}"></i> 
