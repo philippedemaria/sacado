@@ -84,10 +84,8 @@ define(["jquery", "bootstrap"], function ($) {
       function (event) {
         const source_id = $(this).data("source_id");
         const cor_and_comp = $("#cor_and_comp" + source_id);
-        $("all_cor_and_comp").addClass("no_visu_on_load");
-        if (cor_and_comp.hasClass("no_visu_on_load")) {
-          cor_and_comp.removeClass("no_visu_on_load");
-        }
+        $(".all_cor_and_comp").addClass("no_visu_on_load");
+        cor_and_comp.removeClass("no_visu_on_load");
       }
     );
 
