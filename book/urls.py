@@ -49,6 +49,7 @@ urlpatterns = [
     path('print_latex_to_pdf/<int:idch>/<int:idp>', print_latex_to_pdf , name='print_latex_to_pdf'), 
     path('print_latex_to_tex/<int:idch>/<int:idp>', print_latex_to_tex , name='print_latex_to_tex'), 
     path('print_latex_to_book/<int:idch>/<int:idp>', print_latex_to_book , name='print_latex_to_book'), 
+    path('print_latex_to_tex_avec_cor/<int:idch>/<int:idp>', print_latex_to_tex_avec_cor , name='print_latex_to_tex_avec_cor'),
     #################################################################
     # document
     #################################################################

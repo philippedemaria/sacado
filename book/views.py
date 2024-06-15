@@ -1440,6 +1440,68 @@ def print_latex_to_book(request,idch,idp):
 
 
 
+def print_latex_to_tex_avec_cor(request,idch,idp):
+
+
+    elements =""  
+
+    if idch :
+ 
+        chapter = Chapter.objects.get(pk=idch)
+        for page in chapter.pages.filter(is_publish=1).order_by("number"):
+            if page.paragraphs.count()>0 :
+                elements +=  r'{\LARGE '+ page.title+r'} \hfill '+str(chapter.book.level.shortname)+". "+  chapter.title
+                elements +=  r" \hrule"
+            for paragraph in page.paragraphs.order_by("ranking"):
+                if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
+                elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
+ 
+                for bloc in paragraph.blocs.order_by("ranking"):
+
+                    if bloc.size != 12 :
+                        elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
+                        elements +=  bloc.typebloc_latex(inclureCor=True)
+                        elements += r"\end{minipage}\hfill"
+
+                    else : 
+                        elements +=  bloc.typebloc_latex(inclureCor=True)
+
+ 
+
+            elements += r"\newpage"
+
+    elif idp :
+        page = Page.objects.get(pk=idp)
+        elements +=  r'{\LARGE '+ page.title+r'}'
+        elements +=  r" \hrule"
+        for paragraph in page.paragraphs.order_by("ranking"):
+            if 'Cours' in page.title : elements += r'\section{'+paragraph.title+r'}'
+            elif paragraph.number > 0 : elements += r'\section*{'+paragraph.title+r'}' 
+
+            for bloc in paragraph.blocs.order_by("ranking"):
+                if bloc.size != 12 :
+                    elements += r"\begin{minipage}{"+str(round(bloc.size/12 - 0.005,3)).replace(",",".") +r"\linewidth}"
+                    elements +=  bloc.typebloc_latex(inclureCor=True)
+                    elements += r"\end{minipage}\hfill"
+
+                else : 
+                    elements +=  bloc.typebloc_latex(inclureCor=True)
+
+    ################################################################# 
+    ###########################################
+    ###################### Attention ERREUR si non modif
+    # pour windows
+    # file_path = settings.DIR_TMP_TEX+r"\\doc" 
+    # pour le serveur Linux
+ 
+    file_path = settings.DIR_TMP_TEX+ str(request.user.id)+"_"+str(idp)
+    ################################################################# 
+    ################################################################# 
+    with open(file_path+".tex" , 'w', encoding='UTF-8') as file:
+        file.write(elements)
+        file.close()
+
+    return FileResponse( open(file_path+".tex",'rb') , as_attachment=True, filename="Source_Tex.tex")
 
 
 
