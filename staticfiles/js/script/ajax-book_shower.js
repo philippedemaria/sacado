@@ -91,6 +91,16 @@ define(["jquery", "bootstrap"], function ($) {
 
     $(document).on(
       "click",
+      ".close_correction_complements_div",
+      function (event) {
+        const source_id = $(this).data("source_id");
+        const cor_and_comp = $("#cor_and_comp" + source_id);
+        cor_and_comp.addClass("no_visu_on_load");
+      }
+    );
+
+    $(document).on(
+      "click",
       ".display_correction_bloc_button",
       function (event) {
         let source_id = $(this).data("source_id");
@@ -120,14 +130,14 @@ define(["jquery", "bootstrap"], function ($) {
           success: function (data) {
             if (type_id == "0") {
               if (is_correction) {
-                $("#cc_chapter_cor" + source_id).addClass(data.css);
                 $("#cc_chapter_cor" + source_id).removeClass(data.nocss);
+                $("#cc_chapter_cor" + source_id).addClass(data.css);
 
                 $(".all_these_blocs_cor").addClass(data.css);
                 $(".all_these_blocs_cor").removeClass(data.nocss);
               } else {
-                $("#cc_chapter" + source_id).addClass(data.css);
                 $("#cc_chapter" + source_id).removeClass(data.nocss);
+                $("#cc_chapter" + source_id).addClass(data.css);
 
                 $(".all_these_blocs").addClass(data.css);
                 $(".all_these_blocs").removeClass(data.nocss);
