@@ -179,9 +179,9 @@
                                         <div style="font-size: 12px">
                                             <a href="javascript:void(0);" 
                                                 class="display_correction_complements_div" 
-                                                style="font-size: 12px"
+                                                style="font-size: 12px; border:solid 1px gray; padding:5px; border-radius:4px"
                                                 data-source_id = "{{fpage.chapter.id}}">
-                                                CORRIGES et COMPLEMENTS
+                                                {{ forloop.counter }}. CORRIGES et COMPLEMENTS  <i class="bi bi-chevron-down"></i>
                                             </a>
                                         </div>
                                         <div    id="cor_and_comp{{ fpage.chapter.id }}"  
