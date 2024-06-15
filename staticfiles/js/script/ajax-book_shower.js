@@ -133,12 +133,17 @@ define(["jquery", "bootstrap"], function ($) {
                 $("#cc_chapter_cor" + source_id).removeClass(data.nocss);
                 $("#cc_chapter_cor" + source_id).addClass(data.css);
 
+                $("#bi-c-circle-fill" + source_id).removeClass(data.nocss);
+                $("#bi-c-circle-fill" + source_id).removeClass(data.css);
+
                 if (status == "off") {
                   $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-off");
                   $("#cc_chapter_cor" + source_id).addClass("bi-toggle-on");
+                  $("#legendcor" + source_id).html("visibles");
                 } else {
                   $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-on");
                   $("#cc_chapter_cor" + source_id).addClass("bi-toggle-off");
+                  $("#legendcor" + source_id).html("cachés");
                 }
 
                 $(".all_these_blocs_cor").addClass(data.css);
@@ -150,10 +155,14 @@ define(["jquery", "bootstrap"], function ($) {
                 if (status == "off") {
                   $("#cc_chapter" + source_id).removeClass("bi-toggle-off");
                   $("#cc_chapter" + source_id).addClass("bi-toggle-on");
+                  $("#legend" + source_id).html("visibles");
                 } else {
                   $("#cc_chapter" + source_id).removeClass("bi-toggle-on");
                   $("#cc_chapter" + source_id).addClass("bi-toggle-off");
+                  $("#legend" + source_id).html("cachés");
                 }
+                $("#bi-plus-square-fill" + source_id).removeClass(data.nocss);
+                $("#bi-plus-square-fill" + source_id).removeClass(data.css);
 
                 $(".all_these_blocs").addClass(data.css);
                 $(".all_these_blocs").removeClass(data.nocss);

@@ -197,7 +197,7 @@
                                             <div class="padding-top:10px" >
                                                 <div class="col-xs-6" style="background-color: #FFF;text-align: center;padding:10px" >
                                                     <div>
-                                                        <i class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
+                                                        <i id="bi-c-circle-fill{{fpage.chapter.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
                                                     </div>
                                                     <div class="margin-top:10px;margin-bottom:10px" >
                                                         <a href="javascript:void(0);" 
@@ -213,11 +213,13 @@
                                                             title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                                         </a>
                                                     </div>
-                                                    <div style="font-size:12px">Corrigés <br/>{% if this_chapter_is_cor %}visibles{% else %}cachés{% endif %}</div>
+                                                    <div style="font-size:12px">Corrigés <br/>
+                                                        <span id="legend{{fpage.chapter.id}}">{% if this_chapter_is_cor %}visibles{% else %}cachés{% endif %}</span>
+                                                    </div>
                                                 </div>
                                                 <div class="col-xs-6" style="background-color: #FFF;text-align: center;padding:10px">
                                                     <div>                                                        
-                                                        <i class="bi bi-plus-square-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}"></i>
+                                                        <i id="bi-plus-square-fill{{fpage.chapter.id}}" class="bi bi-plus-square-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}"></i>
                                                     </div>
                                                     <div > 
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
@@ -231,7 +233,9 @@
                                                             id="cc_chapter{{ fpage.chapter.id }}"></i> 
                                                         </a>
                                                     </div>
-                                                    <div style="font-size:12px">Compléments <br/>{% if this_chapter_is_comp %}visibles{% else %}cachés{% endif %}</div>
+                                                    <div style="font-size:12px">Compléments <br/>
+                                                        <span id="legendcor{{fpage.chapter.id}}">{% if this_chapter_is_comp %}visibles{% else %}cachés{% endif %}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="padding-top:10px;text-align:center" >
