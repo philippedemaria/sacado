@@ -134,7 +134,7 @@ define(["jquery", "bootstrap"], function ($) {
                 $("#cc_chapter_cor" + source_id).addClass(data.css);
 
                 $("#bi-c-circle-fill" + source_id).removeClass(data.nocss);
-                $("#bi-c-circle-fill" + source_id).removeClass(data.css);
+                $("#bi-c-circle-fill" + source_id).addClass(data.css);
 
                 if (status == "off") {
                   $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-off");
@@ -162,7 +162,7 @@ define(["jquery", "bootstrap"], function ($) {
                   $("#legend" + source_id).html("cachés");
                 }
                 $("#bi-plus-square-fill" + source_id).removeClass(data.nocss);
-                $("#bi-plus-square-fill" + source_id).removeClass(data.css);
+                $("#bi-plus-square-fill" + source_id).addClass(data.css);
 
                 $(".all_these_blocs").addClass(data.css);
                 $(".all_these_blocs").removeClass(data.nocss);
