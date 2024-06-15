@@ -133,11 +133,27 @@ define(["jquery", "bootstrap"], function ($) {
                 $("#cc_chapter_cor" + source_id).removeClass(data.nocss);
                 $("#cc_chapter_cor" + source_id).addClass(data.css);
 
+                if (status == "off") {
+                  $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_chapter_cor" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_chapter_cor" + source_id).addClass("bi-toggle-off");
+                }
+
                 $(".all_these_blocs_cor").addClass(data.css);
                 $(".all_these_blocs_cor").removeClass(data.nocss);
               } else {
                 $("#cc_chapter" + source_id).removeClass(data.nocss);
                 $("#cc_chapter" + source_id).addClass(data.css);
+
+                if (status == "off") {
+                  $("#cc_chapter" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_chapter" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_chapter" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_chapter" + source_id).addClass("bi-toggle-off");
+                }
 
                 $(".all_these_blocs").addClass(data.css);
                 $(".all_these_blocs").removeClass(data.nocss);
