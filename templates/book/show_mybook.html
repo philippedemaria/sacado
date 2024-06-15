@@ -175,13 +175,16 @@
                                 {% else %}
                                     {% if not forloop.first %}
 
+                                    {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
+                                    {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
                                     <div class="relative pull-right" style="width: 410px;">
                                         <div style="font-size: 12px;text-align:center">
                                             <a href="javascript:void(0);" 
                                                 class="display_correction_complements_div" 
                                                 style="font-size: 12px; border:solid 1px gray; padding:5px; border-radius:4px"
                                                 data-source_id = "{{fpage.chapter.id}}">
-                                                {{ forloop.counter }}. CORRIGES et COMPLEMENTS  <i class="bi bi-chevron-down"></i>
+                                                {{ forloop.counter }}. <span class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
+                                                et <span class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</span>  <i class="bi bi-chevron-down"></i>
                                             </a>
                                         </div>
                                         <div    id="cor_and_comp{{ fpage.chapter.id }}"  
@@ -204,7 +207,7 @@
                                                             data-paragraph_id = "0" 
                                                             data-is_correction = 1 
                                                             style="font-size:30px!important; padding:10px"> 
-                                                            {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %} 
+                                                             
                                                             <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
                                                             id="cc_chapter_cor{{ fpage.chapter.id }}"
                                                             title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
@@ -216,8 +219,7 @@
                                                     <div>                                                        
                                                         <i class="bi bi-plus-square-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}"></i>
                                                     </div>
-                                                    <div >
-                                                        {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
+                                                    <div > 
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
                                                             data-source_id = "{{fpage.chapter.id}}" 
                                                             data-type_id = "0"  
