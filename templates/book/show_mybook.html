@@ -191,18 +191,19 @@
                                                     Gérer tout le chapitre {{ forloop.counter }}.
                                                 </div>
                                             </div> 
-                                            <div  >
+                                            <div class="padding-top:10px" >
                                                 <div class="col-xs-6" style="background-color: #FFF;text-align: center;padding:10px" >
                                                     <div>
-                                                        {% if this_chapter_is_cor %}
-                                                            <i class="bi bi-c-circle-fill text-success"></i>
-                                                        {% else %}
-                                                            <i class="bi bi-c-circle-fill text-danger"></i>
-                                                        {% endif %}
+                                                        <i class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
                                                     </div>
-                                                    <div>
-                                                        <a href="javascript:void(0);" class="display_correction_bloc_button active_small_size" 
-                                                        data-source_id = "{{fpage.chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 1 > 
+                                                    <div class="margin-top:10px;margin-bottom:10px" >
+                                                        <a href="javascript:void(0);" 
+                                                        class="display_correction_bloc_button active_small_size" 
+                                                            data-source_id = "{{fpage.chapter.id}}" 
+                                                            data-type_id = "0"  
+                                                            data-paragraph_id = "0" 
+                                                            data-is_correction = 1 
+                                                            style="font-size:16px!important"> 
                                                             {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %} 
                                                             <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
                                                             id="cc_chapter_cor{{ fpage.chapter.id }}"
@@ -211,21 +212,18 @@
                                                     </div>
                                                     <div style="font-size:12px">Corrigés <br/>{% if this_chapter_is_cor %}visibles{% else %}cachés{% endif %}</div>
                                                 </div>
-                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;">
+                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;padding:10px">
                                                     <div>                                                        
-                                                        {% if this_chapter_is_comp %}
-                                                        <i class="bi bi-plus-square-fill text-success"></i>
-                                                        
-                                                        {% else %}
-                                                        
-                                                        <i class="bi bi-plus-square-fill text-danger"></i>
-                                                        
-                                                        {% endif %}
+                                                        <i class="bi bi-plus-square-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}"></i>
                                                     </div>
-                                                    <div>
+                                                    <div class="margin-top:10px;margin-bottom:10px" >
                                                         {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
-                                                        data-source_id = "{{fpage.chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 0  > 
+                                                            data-source_id = "{{fpage.chapter.id}}" 
+                                                            data-type_id = "0"  
+                                                            data-paragraph_id = "0" 
+                                                            data-is_correction = 0  
+                                                            style="font-size:16px!important"> 
                                                              
                                                             <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
                                                             id="cc_chapter{{ fpage.chapter.id }}"></i> 
