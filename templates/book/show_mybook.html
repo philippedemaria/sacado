@@ -109,10 +109,6 @@
     <div class="row {{ page.css }} one_page" style="margin-top:20px;"> 
         <div class="col-xs-12 page_book" {% if page.css == 'intro_page_top' %} style="height:1100px" {% endif %}>
             {% if n == 0  %}
-        
-                {% if not group %}
-                <div class="alert alert-danger">Tous les liens vers les corrections et les compléments sont désactivés.</div>
-                {% endif %}
 
                 <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
                 {% for fpage in first_pages %}
@@ -125,6 +121,9 @@
                                 </a>
                                 {% if group %}
                                     {% if not forloop.first %}
+ 
+
+
                                     <a href="javascript:void(0);" class="display_correction_bloc_button active_small_size" 
                                             data-source_id = "{{fpage.chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 1 > 
                                         {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
@@ -141,17 +140,76 @@
                                         id="cc_chapter{{ fpage.chapter.id }}"></i> 
                                     </a>
                                     <span id="spinner-0-{{ fpage.chapter.id }}"></span>
+
+                                    <div class="relative pull-right" style="width: 300px;">
+                                        <div><a href="#">CORRIGES</a> et <a href="#">COMPLEMENTS</a></div>
+                                        <div id="cor_and_comp{{ fpage.chapter.id }}"  style="background-color: #f7f7f7;" class="no_visu_on_load">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    Gérer tout le chapitre
+                                                </div>
+                                            </div> 
+                                            <div class="row">
+                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;" >
+                                                    <div>C</div>
+                                                    <div>
+                                                        <a href="javascript:void(0);" class="no_sacado_asso small_size" > 
+                                                            Corrections 
+                                                            <i class="bi bi-circle-fill text-default"></i> 
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;">
+                                                    <div>P</div>
+                                                    <div>
+                                                        <a href="javascript:void(0);" class="no_sacado_asso small_size" > 
+                                                            Compléments
+                                                            <i class="bi bi-circle-fill text-default"></i> 
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                     {% endif %}
                                 {% else %}
                                     {% if not forloop.first %}
-                                    <a href="javascript:void(0);" class="no_sacado_asso small_size" > 
-                                        Afficher/Cacher toutes les corrections du chapitre
-                                        <i class="bi bi-circle-fill text-default"></i> 
-                                    </a>
-                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"  > 
-                                        Afficher/Cacher tous les compléments du chapitre 
-                                        <i class="bi bi-circle-fill text-default"></i> 
-                                    </a>
+
+                                    <div class="relative pull-right" style="width: 300px;">
+                                        <div><a href="#">CORRIGES</a> et <a href="#">COMPLEMENTS</a></div>
+                                        <div id="cor_and_comp{{ fpage.chapter.id }}"  style="background-color: #f7f7f7;" class="no_visu_on_load">
+                                            <div class="row">
+                                                <div class="col-xs-12">
+                                                    Gérer tout le chapitre
+                                                </div>
+                                            </div> 
+                                            <div class="row">
+                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;" >
+                                                    <div>C</div>
+                                                    <div>
+                                                        <a href="javascript:void(0);" class="no_sacado_asso small_size" > 
+                                                            Corrections 
+                                                            <i class="bi bi-circle-fill text-default"></i> 
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;">
+                                                    <div>P</div>
+                                                    <div>
+                                                        <a href="javascript:void(0);" class="no_sacado_asso small_size" > 
+                                                            Compléments
+                                                            <i class="bi bi-circle-fill text-default"></i> 
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     {% endif %}
                                 {% endif %}
                             </div>
@@ -159,6 +217,12 @@
                     </div>
                 {% endfor %}
                 </div>
+            {% elif n < 9  %}
+
+
+                    page de sommaire
+
+
             {% else %} 
                 <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
                     {% elif page.css == 'parcoursd_page_top' %} style="width:100%;background-image:url('/static/img/parcours_d.png'); background-repeat: no-repeat ;height:100px"   
