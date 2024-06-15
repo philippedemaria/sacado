@@ -200,8 +200,7 @@
                                 {% else %}
                                     {% if not forloop.first %}
 
-                                    {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
-                                    {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
+                                    <!-- Dans cette partie, il n'y a pas de groupe affecté, donc les boutons deviennent inactifs mais restent apparents. -->
                                     <div class="relative pull-right" style="width: 410px;">
                                         <div style="font-size: 12px;text-align:center">
                                             <a href="javascript:void(0);" 
@@ -270,6 +269,7 @@
                                                     style="font-size:16px!important; padding:10px"> 
                                                     Fermer
                                                 </a>
+                                                ! Vous n'avez pas optez pour acheter la version papier. Les boutons sont inactifs sur le contenus.
                                             </div>
                                         </div>
                                     </div>
