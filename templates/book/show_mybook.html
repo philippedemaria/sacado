@@ -115,7 +115,7 @@
                     <div {% if n == 0 %}class="this_paragraph0"{% else %}class="this_paragraph"{% endif %} id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
                         <div class="row">
                             <div class="col-xs-12" >
-                                <span class="paragraph_number">{{ forloop.counter }}</span>
+                                {% if forloop.counter0 > 0 %}<span class="paragraph_number">{{ forloop.counter0 }}</span>{% endif %}
                                 <a href="{% url 'show_mybook' book.id fpage.number %}" class="paragraph_title">
                                     {{ fpage.chapter.title }} 
                                 </a>
@@ -129,7 +129,7 @@
                                                 class="display_correction_complements_div" 
                                                 style="font-size: 12px; border:solid 1px gray; padding:5px; border-radius:4px"
                                                 data-source_id = "{{fpage.chapter.id}}">
-                                                {{ forloop.counter }}. <span class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
+                                                {{ forloop.counter0 }}. <span class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
                                                 et <span class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</span>  <i class="bi bi-chevron-down"></i>
                                             </a>
                                         </div>
@@ -208,7 +208,7 @@
                                                 class="display_correction_complements_div" 
                                                 style="font-size: 12px; border:solid 1px gray; padding:5px; border-radius:4px"
                                                 data-source_id = "{{fpage.chapter.id}}">
-                                                {{ forloop.counter }}. <span class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
+                                                {{ forloop.counter0 }}. <span class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
                                                 et <span class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</span>  <i class="bi bi-chevron-down"></i>
                                             </a>
                                         </div>
