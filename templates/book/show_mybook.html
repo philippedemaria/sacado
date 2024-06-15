@@ -195,19 +195,15 @@
                                                 <div class="col-xs-6" style="background-color: #FFF;text-align: center;padding:10px" >
                                                     <div>
                                                         {% if this_chapter_is_cor %}
-                                                        <i class="bi bi-c-circle-fill text-success"></i>
-                                                        
+                                                            <i class="bi bi-c-circle-fill text-success"></i>
                                                         {% else %}
-                                                        
-                                                        <i class="bi bi-c-circle-fill text-danger"></i>
-                                                        
+                                                            <i class="bi bi-c-circle-fill text-danger"></i>
                                                         {% endif %}
                                                     </div>
                                                     <div>
                                                         <a href="javascript:void(0);" class="display_correction_bloc_button active_small_size" 
                                                         data-source_id = "{{fpage.chapter.id}}" data-type_id = "0"  data-paragraph_id = "0" data-is_correction = 1 > 
-                                                            {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
-                                                             
+                                                            {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %} 
                                                             <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
                                                             id="cc_chapter_cor{{ fpage.chapter.id }}"
                                                             title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
