@@ -188,7 +188,7 @@
                                                 class="all_cor_and_comp no_visu_on_load">
                                             <div  style="background-color: #FFF;padding:10px">
                                                 <div  style="font-size: 12px; text-align: center;">
-                                                    Gérer tout le chapitre
+                                                    Gérer tout le chapitre {{ forloop.counter }}.
                                                 </div>
                                             </div> 
                                             <div  >
@@ -225,6 +225,7 @@
                                                         <i class="bi bi-plus-square-fill text-danger"></i>
                                                         
                                                         {% endif %}
+                                                    </div>
                                                     <div>
                                                         {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
