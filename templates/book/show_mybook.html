@@ -288,15 +288,11 @@
                     <div class="row">
                         {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
 
-                            <div class="col-xs-{{ bloc.size }}" >
-                                <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
 
-    
-                                        {{ bloc.content_html|safe }}
-                              
-                                </div>
-                                                           
-                            </div>
+                            <div>bloc : {{bloc.content_html|safe }}</div>
+
+            
+ 
     
                         {% endfor %}
                     </div>
