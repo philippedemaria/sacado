@@ -439,8 +439,8 @@ def show_mybook(request,idb, n):
     request.session["tdb"] = "Books" # permet l'activation du surlignage de l'icone dans le menu gauche
     request.session["subtdb"] = "Chapter"
     group_id = request.session.get("book_group_id",None)
-    if group_id : group = Group.objects.get(pk=group_id)
-    else : group = None
+    try: group = Group.objects.get(pk=group_id)
+    except : group = None
     book = Book.objects.get(pk=idb)
 
     prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
