@@ -280,25 +280,15 @@
                     </div>
                 {% endfor %}
                 </div>
-            {% elif n < 9  %}
+            {% elif this_page.title == "Sommaire"  %}
             
                 {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
-    
-    
-                    <div class="row">
+  
                         {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
-
-
-                            <div>{{bloc.content_html|safe }}</div>
-
-            
- 
-    
+                            {{bloc.content_html|safe }}
                         {% endfor %}
-                    </div>
-        
+                 
                 {% endfor %}
-
 
             {% else %} 
                 <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
