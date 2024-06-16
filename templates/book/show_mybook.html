@@ -284,15 +284,17 @@
             
 <div>page : {{page}}</div>
 
-<div>page.paragraphs.all : {{page.paragraphs.allage}}</div>
+<div>page.paragraphs.all : {{page.paragraphs.all}}</div>
                 {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
     
     
                     <div class="row">
                         {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
 
+                        
+                        <div>bloc : {{bloc.content_html|safe }}</div>
 
-                        <div>bloc : {{bloc}}</div>
+                        <div>bloc : {{bloc.content_html }}</div>
 
                             <div class="col-xs-{{ bloc.size }}" >
                                 <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
