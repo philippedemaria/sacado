@@ -280,7 +280,7 @@
                     </div>
                 {% endfor %}
                 </div>
-            {% elif this_page.title == "Sommaire"  %}
+            {% elif n < 9  %}
             
                 {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
   
