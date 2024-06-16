@@ -283,7 +283,30 @@
             {% elif n < 9  %}
 
 
-                    page de sommaire
+            {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
+ 
+ 
+                <div class="row">
+                    {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
+                        <div class="col-xs-{{ bloc.size }}" >
+                            <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
+ 
+
+                  
+ 
+                                <div class="bloc_content" >
+                                    {{ bloc.content_html|safe }}
+                                </div>
+                            </div>
+                             
+                    
+                            {% endif %}                                
+                        </div>
+  
+                    {% endfor %}
+                </div>
+    
+            {% endfor %}
 
 
             {% else %} 
