@@ -5,7 +5,7 @@ from django.forms.models import inlineformset_factory, BaseInlineFormSet , Model
 
 from .models import  *
 from tool.models import Quizz
-from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+#from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from itertools import groupby
 from general_fonctions import *
 
@@ -123,7 +123,7 @@ class BlocForm(forms.ModelForm):
 		knowledges = level.knowledges.filter(theme__subject=subject)
 		exercises  = level.exercises.filter(theme__subject=subject)
 		exotexs    = level.level_exotexs.filter(theme__subject=subject)
-		appliquettes = level.appliquettes.all()
+		#appliquettes = level.appliquettes.all()
 
 		self.fields['paragraph'] = forms.ModelChoiceField(queryset=paragraphs)  
 
@@ -133,7 +133,7 @@ class BlocForm(forms.ModelForm):
 
 		self.fields['exercises']  = forms.ModelMultipleChoiceField(queryset=exercises,  required=False) 
 		self.fields['exotexs']    = forms.ModelMultipleChoiceField(queryset=exotexs,  required=False)  
-		self.fields['appliquettes'] = forms.ModelMultipleChoiceField(queryset=appliquettes,  required=False)  
+		#self.fields['appliquettes'] = forms.ModelMultipleChoiceField(queryset=appliquettes,  required=False)  
 
 
 
