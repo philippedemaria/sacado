@@ -1,5 +1,5 @@
 
-<div style="position:relative; height:195px;overflow-y:hidden;width:100%;padding-top:5px; ">
+<div style="position:relative; height:195px;overflow-y:hidden;width:100%;padding-top:5px; ">{{available}}
 	{% if rc.exercise.supportfile.imagefile %}
 	<img src="{{ rc.exercise.supportfile.imagefile.url }}"  class="image_parcours"  style="position:absolute;{% if not rc.is_publish %}opacity:0.8{% endif %}" >
 	{% endif %}	  

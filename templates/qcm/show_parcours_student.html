@@ -295,7 +295,7 @@
  
                                     {% else %}  
                                         {% if parcours_available.is_ok %} 
-                                            {{available}}
+                                            
                                             {% if parcours.is_next and not available.is_ok %} 
                                                 <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
                                                       <i class="fa fa-lock"></i>  Vous devez passer à l'exercice suivant 
