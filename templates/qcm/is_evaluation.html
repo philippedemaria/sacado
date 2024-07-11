@@ -5,9 +5,9 @@
 
 	 		<span id="is_storage"></span>
 
-{{ available }}
+
 		 		{% if available.is_ok %} 
- 				
+ 				{{ parcours.is_next }}
 				 		{% if parcours.is_next  %}  
 				    		<input  class="btn btn-primary parcours_is_stop"   type="submit" id="submit_button_evaluation"  value="Passer à l'exercice suivant"  />
 						 {% else %} 
