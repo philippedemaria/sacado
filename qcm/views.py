@@ -8083,6 +8083,12 @@ def execute_exercise(request, idp,ide):
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
 
+    try :
+        parcoursList = [p.id for p  in parcours]
+        indexExercise = parcoursList.index(exercise.id)
+        nextExerciseId = parcoursList[indexExercise+1]
+    except :
+        nextExerciseId = False
 
     if Relationship.objects.filter(parcours=parcours, exercise=exercise).count() == 0 :
         messages.error(request,"Cet exercercice n'est plus disponible.")
@@ -8100,7 +8106,7 @@ def execute_exercise(request, idp,ide):
         return show_supportfile_student(request,relation  )
 
     else :
-        context = {'exercise': exercise,  'start_time' : start_time,  'student' : student,  'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
+        context = {'exercise': exercise,  'start_time' : start_time,  'student' : student, 'nextExercise':nextExercise, 'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
         return render(request, 'qcm/show_relation.html', context)
 
 
