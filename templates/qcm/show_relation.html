@@ -588,6 +588,10 @@
                      if($('#parcours_is_next').hasClass('parcours_is_stop')) {$('#parcours_is_next').removeClass('parcours_is_stop')}
                      setTimeout(function(){ $('#is_storage').hide() }, 3000);
  
+                    if (situation == data.numexo)
+                    { 
+                      $('#submit_button_evaluation').show(); }
+                     }
                   });
             }
 
