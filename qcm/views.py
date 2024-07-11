@@ -6892,7 +6892,7 @@ def exercises_level(request, id):
 
 def exercises_level_subject(request, id, subject_id):
 
-    exercises = Exercise.objects.filter(level_id=id,supportfile__is_title=0,theme__subject_id = subject_id).order_by("theme","knowledge__waiting","knowledge","ranking")
+    exercises = Exercise.objects.filter(level_id=id,supportfile__qtype=100,supportfile__is_title=0,theme__subject_id = subject_id).order_by("theme","knowledge__waiting","knowledge","ranking")
     level = Level.objects.get(pk=id)
     themes =  level.themes.all()
     form = AuthenticationForm() 
