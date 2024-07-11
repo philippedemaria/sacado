@@ -45,10 +45,7 @@
     {% endif %}
   </div>
 
-  <script
-    type="text/javascript"
-    src="{% static 'js/lib/geogebra.js' %}"
-  ></script>
+  <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
 
   <script type="text/javascript">
       // parameters of the geogebra app
@@ -71,7 +68,7 @@
           "showToolBarHelp":false,
           "errorDialogsActive":false,
           "useBrowserForJS":false,
-              "langage":"en",
+          "langage":"en",
       "filename":"{{ exercise.supportfile.ggbfile.url }}"
     };
 
