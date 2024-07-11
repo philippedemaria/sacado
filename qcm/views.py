@@ -8082,13 +8082,12 @@ def execute_exercise(request, idp,ide):
 
     parcours = Parcours.objects.get(id= idp)
     exercise = Exercise.objects.get(id= ide)
-    relations = Relationship.objects.get(parcours=parcours, exercise=exercise).order_by("ranking")
-
+    relations = Relationship.objects.filter(parcours=parcours).order_by("ranking")
 
     try :
         relationsList = [r.exercise.id for r  in relations]
         indexExercise = relationsList.index(ide)
-        nextExerciseId = relationsList[indexExercise+1]
+        nextExerciseId = parcoursList[indexExercise+1]
     except :
         nextExerciseId = False
 
@@ -8096,7 +8095,7 @@ def execute_exercise(request, idp,ide):
         messages.error(request,"Cet exercercice n'est plus disponible.")
         return redirect("index")
 
-
+    relation  = Relationship.objects.get(parcours=parcours, exercise=exercise) 
     request.session['level_id'] = exercise.level.id
     start_time =  time.time()
 
