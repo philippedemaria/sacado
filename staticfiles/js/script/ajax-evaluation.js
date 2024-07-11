@@ -11,9 +11,9 @@ define(['jquery','bootstrap'], function ($) {
         $('#id_is_share').prop('checked', false); 
         $('#id_is_publish').prop('checked', false); 
         $('#id_is_achievement').prop('checked', false); 
-        $('#id_is_next').prop('checked', false); 
+ 
         $('#id_is_exit').prop('checked', false); 
-        $('#id_is_stop').prop('checked', false); 
+ 
         $('#id_is_exit_div').hide(); 
  
         $("#id_is_next").change(function () {
