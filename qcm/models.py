@@ -587,7 +587,7 @@ class Parcours(ModelWithCode):
     is_evaluation = models.BooleanField(default=0, editable=False)
     is_active = models.BooleanField( default=0,  verbose_name="Page d'accueil élève")  
 
-    is_next = models.BooleanField(default=0, verbose_name="Suivant ?")
+    is_next = models.BooleanField(default=1, verbose_name="Suivant ?")
     is_exit = models.BooleanField(default=0, verbose_name="Retour aux exercices ?")
     is_stop = models.BooleanField(default=0, verbose_name="Limité ?")
 

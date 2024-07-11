@@ -7,8 +7,10 @@
 
 
 		 		{% if available.is_ok %} 
- 				 
-				 		{% if parcours.is_next  %}  
+ 				
+				 		{% if parcours.is_stop  %}  
+				    		<input  class="btn btn-primary parcours_is_stop"   type="submit" id="submit_button_evaluation"  value="Passer à l'exercice suivant"  />
+						 {% elif parcours.is_next  %}  
 				 			{% if nextExerciseId %}
 				    			<a href="{% url 'execute_exercise' parcours.id   nextExerciseId %}"  class="btn btn-primary parcours_is_stop" id="parcours_is_next" >    Passer à l'exercice suivant </a>
 							{% else %}
@@ -19,6 +21,10 @@
 						 {% else %} 
 				    		<input  class="btn btn-primary"   type="submit" id="submit_button_evaluation"  value="Enregistrer l'exercice"  />
 						{% endif %}
+
+
+
+
 
 				{% endif %}
 
