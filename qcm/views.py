@@ -8084,13 +8084,11 @@ def execute_exercise(request, idp,ide):
     exercise = Exercise.objects.get(id= ide)
     relations = Relationship.objects.filter(parcours=parcours).order_by("ranking")
 
-    try :
-        relationsList = [r.exercise.id for r  in relations]
-        indexExercise = relationsList.index(ide)
-        nextExerciseId = parcoursList[indexExercise+1]
-    except :
-        nextExerciseId = False
-
+ 
+    relationsList = [r.exercise.id for r  in relations]
+    indexExercise = relationsList.index(ide)
+    nextExerciseId = parcoursList[indexExercise+1]
+ 
     if Relationship.objects.filter(parcours=parcours, exercise=exercise).count() == 0 :
         messages.error(request,"Cet exercercice n'est plus disponible.")
         return redirect("index")
