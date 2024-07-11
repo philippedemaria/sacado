@@ -4,12 +4,12 @@
 {% load widget_tweaks %} 
 
 {% block general_js %}
-
-<script
-  src="{% static 'js/require.js' %}"
-  data-main="{% static 'js/common3.js' %}"
-></script>
+<script src="{% static 'js/require.js' %}" data-main="{% static 'js/common3_withoutMathJax.js' %}"></script>
 {% endblock %} 
+
+
+ 
+
 
 
 {% block body %}
@@ -45,7 +45,7 @@
     {% endif %}
   </div>
 
-  <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/lib/geogebra.js' %}"></script>
 
     <script type="text/javascript">
         // parameters of the geogebra app
