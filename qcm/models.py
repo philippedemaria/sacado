@@ -597,7 +597,7 @@ class Parcours(ModelWithCode):
 
     zoom = models.BooleanField(default=1, verbose_name="Zoom ?")
 
-    maxexo = models.IntegerField(default=-1,  blank=True, null=True,  verbose_name="Tentatives")
+    maxexo = models.IntegerField(default=1,  blank=True, null=True,  verbose_name="Tentatives")
 
     vignette = models.ImageField(upload_to=vignette_directory_path, verbose_name="Vignette d'accueil", blank=True, default ="")
     ranking = models.PositiveIntegerField(  default=0,  blank=True, null=True, editable=False)
