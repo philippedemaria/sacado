@@ -1,10 +1,18 @@
-{% extends 'base.html' %} {% load static %} {% load widget_tweaks %} {% block
-general_js %}
+{% extends 'layout.html' %} 
+
+{% load static %} 
+{% load widget_tweaks %} 
+
+{% block general_js %}
+
 <script
   src="{% static 'js/require.js' %}"
   data-main="{% static 'js/common3.js' %}"
 ></script>
-{% endblock %} {% block body %}
+{% endblock %} 
+
+
+{% block body %}
 
 <section class="content_main">
   <div class="logolevel">
