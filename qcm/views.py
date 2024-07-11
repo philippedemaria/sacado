@@ -8106,7 +8106,7 @@ def execute_exercise(request, idp,ide):
         return show_supportfile_student(request,relation  )
 
     else :
-        context = {'exercise': exercise,  'start_time' : start_time,  'student' : student, 'nextExercise':nextExercise, 'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
+        context = {'exercise': exercise,  'start_time' : start_time,  'student' : student, 'nextExerciseId':nextExerciseId, 'parcours' : parcours,  'relation' : relation , 'timer' : timer ,'today' : today , 'communications' : [] , 'relationships' : [] }
         return render(request, 'qcm/show_relation.html', context)
 
 
