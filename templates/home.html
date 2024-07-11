@@ -10,10 +10,6 @@
 
 
 
-
-
-
-
 {% if messages %}
 <ul class="messages" id="container_messages">
     {% for message in messages %}
@@ -61,7 +57,8 @@ Intro Section -
  
                     de {% for s in subjects %}{{ s.shortname }}{% if not forloop.last %}, {% endif %}{% endfor %}, <span style="color: #0093CA">auto-corrigé{{  nb_parcours|pluralize }}</span> de la Maternelle à la Terminale en <span style="color: #00B999">apprentissage  adaptatif</span>.
                     <div>
-                        <a href="#" data-toggle='modal' data-target='#bookviewer' style="font-size: 14px; display: flex;  align-items: center;">
+                        <a href="#" data-toggle='modal' data-target='#bookviewer' 
+                                    style="font-size: 14px; display: flex;  align-items: center;">
                             
                              
                                 
@@ -95,7 +92,7 @@ Intro Section -
 
 
             <div class="col-xs-12 col-md-12 col-lg-7 no_mobile_exercises" >
-                <small style="margin-left:150px">Cliquez sur l'écran pour tester l'exercice en cours.</small>
+                <small style="margin-left:150px"> </small>
                 <div style="position: relative;text-align:center">
                     <a href="{% url 'show_exercise'   exercise.id     %}" target="_blank">
                         {% if exercise.id|divisibleby:"3" %}
