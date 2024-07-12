@@ -159,9 +159,11 @@ def menu(request):
             groups = student.students_to_group.all()
 
             can_get_the_book = False
-            mybooks = Mybook.objects.filter(book_id=9)
-            get_the_group_book = [ g for g in groups if g in mybooks] 
-            if len(get_the_group_book) > 0 : can_get_the_book = True
+            mybookGroupIds = Mybook.objects.values_list("group_id").filter(book_id=9) # MyBook est la table qui lie le livre au groupe
+            for g in groups:
+                if g in mybookGroupIds :
+                    can_get_the_book = True
+                    break
 
             teacher_to_student = False
             if "_e-test" in student.user.username :
