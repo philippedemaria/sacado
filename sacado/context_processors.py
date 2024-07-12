@@ -159,7 +159,7 @@ def menu(request):
             groups = student.students_to_group.all()
 
             can_get_the_book = False
-            mybookGroupIds = Mybook.objects.values_list("group_id").filter(book_id=9) # MyBook est la table qui lie le livre au groupe
+            mybookGroupIds = Mybook.objects.values_list("group_id",flat=True).filter(book_id=9) # MyBook est la table qui lie le livre au groupe
             open("logs/debug.log",'a').write(str(mybookGroupIds))
  
             for g in groups:
