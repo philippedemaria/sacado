@@ -160,8 +160,6 @@ def menu(request):
 
             can_get_the_book = False
             mybookGroupIds = Mybook.objects.values_list("group_id",flat=True).filter(book_id=9) # MyBook est la table qui lie le livre au groupe
-            open("logs/debug.log",'a').write(str(mybookGroupIds))
- 
             for g in groups:
                 if g.id in mybookGroupIds :
                     can_get_the_book = True
