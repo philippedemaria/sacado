@@ -2826,53 +2826,21 @@ def print_accounting(request, id ):
 
 
 
-    #########################################################################################
-         ### Reglement facture
-    #########################################################################################
 
-    elements.append(Spacer(0,1*inch))
+ 
+    #########################################################################################
+    ### Reglement facture
+    #########################################################################################
+    elements.append(Spacer(0,1*inch)) 
     label_facture = ""
     if accounting.date_payment  :
-        label_facture = "Facture réglée le " +str(accounting.date_payment.strftime("%d-%m-%Y")) +" "+accounting.mode
+        label_facture = "Facture réglée le " + str(accounting.date_payment.strftime("%d-%m-%Y")) +" "+accounting.mode
 
-        facture = Paragraph(  label_facture  , normal )
-        elements.append(facture)
-        offs +=1
-        offset = offs + OFFSET_INIT
-    else :
-        # RIB à encadrer
-        texte = """RELEVÉ D'IDENTITÉ BANCAIRE
+    facture = Paragraph(  label_facture  , normal )
+    elements.append(facture)
+    offs +=1
 
-CR AQUITAINE
-
-Code banque 13306 Code guichet 00106
-
-Numéro de compte 23107166394 Clé RIB 26
-
-IBAN FR76 1330 6001 0623 1071 6639 426
-
-Code BIC (Bank identification code) - code SWIFT AGRIFRPP833
-"""
-
-        paragraphe = Paragraph(texte, normal_style)
-        table = Table([[paragraphe]], colWidths='*', rowHeights='*')
-        table.setStyle(TableStyle([
-        ('BOX', (0, 0), (-1, -1), 2, colors.black),  # Bordure autour
-        de la table
-        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),     # Aligne le texte
-        au milieu verticalement
-        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),      # Aligne le texte
-        au centre horizontalement
-        ('LEFTPADDING', (0, 0), (-1, -1), 10),      # Padding à gauche
-        ('RIGHTPADDING', (0, 0), (-1, -1), 10),     # Padding à droite
-        ('TOPPADDING', (0, 0), (-1, -1), 10),       # Padding en haut
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 10)     # Padding en bas
-        ]))
-
-        # Génère le PDF
-        elements.append(table)
-        offs +=5
-        offset = offs + OFFSET_INIT
+    offset = offs + OFFSET_INIT
 
 
     #########################################################################################
