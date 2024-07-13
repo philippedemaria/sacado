@@ -622,10 +622,12 @@ def set_exotex_in_bibliotex(request,id):
         nf.save()
         form.save_m2m() 
         
-        try :save_html = compile_html(request,nf)
+        try :
+            save_html = compile_html(request,nf)
         except : save_html = False
 
-        bibliotex.exotexs.add(nf)
+        try :bibliotex.exotexs.add(nf)
+        except : pass
         try :
             msg = "Salut Bruno, Philippe, \n\nUn exercice Latex vient d'être posté. Vous devriez aller y jeter quand même un oeil.\n\n ===> https://savado.xyz/bibliotex/exercise_exotex_update/"+str(nf.pk)
         except : msg = "Erreur dans le message d'envoi."
