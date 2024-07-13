@@ -610,7 +610,7 @@ def set_exotex_in_bibliotex(request,id):
     if form.is_valid():
         nf = form.save(commit = False) 
         nf.author = teacher
-        nf.teacher = teacher
+        nf.teacher_id = teacher.id
         nf.is_share = 0
         nf.is_read = 0
         knowledges = request.POST.getlist("knowledgess")
