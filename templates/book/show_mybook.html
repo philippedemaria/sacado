@@ -22,16 +22,16 @@
     <div class="row">
         <div class="cols-xs-2" style="background-color: #7F62B4;">
             <form action="{% url 'goto_direct_page' %}" method="post" style="display: inline-block; max-width: 300px;">
-                <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à la page :</label>
+                <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à une page </label><br/>
                 <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3" class="acces_to_page" required />
-                <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-arrow-right"></i></button>
+                <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-search"></i></button>
             </form>
         </div>
         <div class="cols-xs-10">
  
             {% for fpage in first_pages %}
                 {% if fpage %}
-                <a href="{% url 'show_mybook' book.id fpage.number %}" 
+                <a href="{% url 'show_mybook' book.id fpage.number %}"   style="font-size:10px"
                     class="btn btn-xs btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}">
                     {% if forloop.counter0 == 0 %}
                     <b>Sommaire</b>
@@ -42,7 +42,7 @@
                 {% endif %}
             {% endfor %} 
             <label class="pull-right"> 
-                page {{ n }} 
+               
                 {% if request.user.is_superuser %}
                     <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
                 {% endif %}            
@@ -100,7 +100,7 @@
 {% block body  %} 
 <section class="main_book"> 
     <div class="row">
-        <div class="cols-xs-1" style="background-color: #7F62B4;"></div>
+        <div class="cols-xs-1" style="background-color: #7F62B4;"> page {{ n }} </div>
         <div class="cols-xs-11"><b>Chapitre . {{this_chapter}}</b></div>
     </div>
 
