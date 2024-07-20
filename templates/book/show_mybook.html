@@ -17,13 +17,40 @@
 
 
 {% block page_title %}
-    <img src="{{ book.imagefile.url }}" height="40px"/>   {{ this_chapter }}
-    
-    {% if request.user.is_superuser %}
-        <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}"  target="_blank"><small><i class="bi bi-printer"></i></small></a>
-    {% endif %} 
 
 
+    <div class="row">
+        <div class="cols-xs-2" style="background-color: #7F62B4;">
+            <form action="{% url 'goto_direct_page' %}" method="post" style="display: inline-block; max-width: 300px;">
+                <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à la page :</label>
+                <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3" class="acces_to_page" required />
+                <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-arrow-right"></i></button>
+            </form>
+        </div>
+        <div class="cols-xs-10">
+ 
+            {% for fpage in first_pages %}
+                {% if fpage %}
+                <a href="{% url 'show_mybook' book.id fpage.number %}" 
+                    class="btn btn-xs btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}">
+                    {% if forloop.counter0 == 0 %}
+                    <b>Sommaire</b>
+                    {% else %}
+                    <b>Chap. {{ forloop.counter0 }}</b>
+                    {% endif %}
+                </a>
+                {% endif %}
+            {% endfor %} 
+            <label class="pull-right"> 
+                page {{ n }} 
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
+                {% endif %}            
+            </label>   
+ 
+        </div>
+    </div>
+ 
     {% if group %}
         {% if 'cours' not in this_page.title %}
         <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
@@ -39,11 +66,14 @@
         <span id="spinner-1-{{ this_page.id }}"></span>
         {% endif %}
     {% endif %}
-    <form action="{% url 'goto_direct_page' %}" method="post" style="display: inline-block; max-width: 300px;">
-        <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à la page :</label>
-        <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3" class="acces_to_page" required />
-        <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-arrow-right"></i></button>
-    </form>
+ 
+
+    <img src="{{ book.imagefile.url }}" height="40px"/>   {{ this_chapter }}
+    
+    {% if request.user.is_superuser %}
+        <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}"  target="_blank"><small><i class="bi bi-printer"></i></small></a>
+    {% endif %} 
+
 {% endblock %}
 
 
@@ -67,8 +97,16 @@
 
 
 
-{% block body  %}  
+{% block body  %} 
 <section class="main_book"> 
+    <div class="row">
+        <div class="cols-xs-1" style="background-color: #7F62B4;"></div>
+        <div class="cols-xs-11"><b>Chapitre . {{this_chapter}}</b></div>
+    </div>
+
+
+
+
 
     {% if  prev_page %}
     <a href="{% url 'show_mybook' book.id prev_page.number %}" class="prev_page"  title="Page précédente"><i class="bi bi-chevron-left"></i></a>
@@ -79,24 +117,7 @@
 
 
 
-    <div class="row">
-        <div class="col-xs-12 col-md-12">
-            {% for fpage in first_pages %}
-                {% if fpage %}
-                <a href="{% url 'show_mybook' book.id fpage.number %}" 
-                    class="btn btn-xs btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}"> 
-                    <b>{% if fpage.chapter.theme %}  {{ fpage.chapter.theme }}{% else %}{{ fpage.chapter.title }} {% endif %} {{ forloop.counter0 }}</b>
-                </a>
-                {% endif %}
-            {% endfor %} 
-            <label class="pull-right"> 
-                page {{ n }} 
-                {% if request.user.is_superuser %}
-                    <a href="{% url 'print_latex_to_pdf' 0 page.id  %}" class="white" target="_blank"><i class="bi bi-printer"></i></a>
-                {% endif %}            
-            </label>   
-        </div>
-    </div>
+
     <div id="page_controller"> 
         {% if  prev_page %}
         <a href="{% url 'show_mybook' book.id prev_page.number %}" class="page_controller_prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i> Page précédente</a>
