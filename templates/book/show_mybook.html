@@ -168,27 +168,9 @@
                                     {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
                                     {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
                                     <div class="relative pull-right" style="width: 410px;">
-                                        <div style="font-size: 12px;text-align:center">
-                                            <a href="javascript:void(0);" 
-                                                class="display_correction_complements_div" 
-                                                style="font-size: 12px; border:solid 1px gray; padding:5px; border-radius:4px"
-                                                data-source_id = "{{fpage.chapter.id}}">
-                                                {{ forloop.counter0 }}. <span id="label_cor{{fpage.chapter.id}}" class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</span> 
-                                                et <span id="label_comp{{fpage.chapter.id}}" class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</span>  <i class="bi bi-chevron-down"></i>
-                                            </a>
-                                        </div>
-                                        <div    id="cor_and_comp{{ fpage.chapter.id }}"  
-                                                class="all_cor_and_comp no_visu_on_load">
-                                            <div  style="background-color: #FFF;padding:10px">
-                                                <div  style="font-size: 12px; text-align: center;">
-                                                    Gérer tout le chapitre {{ forloop.counter }}.
-                                                </div>
-                                            </div> 
-                                            <div class="padding-top:10px" >
-                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;padding:10px" >
-                                                    <div>
-                                                        <i id="bi-c-circle-fill{{fpage.chapter.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
-                                                    </div>
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <div id="label_cor{{fpage.chapter.id}}" class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</div>
                                                     <div class="margin-top:10px;margin-bottom:10px" >
                                                         <a href="javascript:void(0);" 
                                                         class="display_correction_bloc_button active_small_size" 
@@ -203,15 +185,11 @@
                                                             title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                                         </a>
                                                     </div>
-                                                    <div style="font-size:12px">Corrigés <br/>
-                                                        <span id="legendcor{{fpage.chapter.id}}">{% if this_chapter_is_cor %}visibles{% else %}cachés{% endif %}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xs-6" style="background-color: #FFF;text-align: center;padding:10px">
-                                                    <div>                                                        
-                                                        <i id="bi-plus-square-fill{{fpage.chapter.id}}" class="bi bi-plus-square-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}"></i>
-                                                    </div>
-                                                    <div > 
+
+                                            </div> 
+                                            <div class="col-xs-6">
+                                                <div id="label_comp{{fpage.chapter.id}}" class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</div>
+                                                <div > 
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
                                                             data-source_id = "{{fpage.chapter.id}}" 
                                                             data-type_id = "0"  
@@ -223,19 +201,7 @@
                                                             id="cc_chapter{{ fpage.chapter.id }}"></i> 
                                                         </a>
                                                     </div>
-                                                    <div style="font-size:12px">Compléments <br/>
-                                                        <span id="legend{{fpage.chapter.id}}">{% if this_chapter_is_comp %}visibles{% else %}cachés{% endif %}</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="padding-top:10px;text-align:center" >
-                                                <a href="javascript:void(0);" 
-                                                    class="close_correction_complements_div" 
-                                                    data-source_id = "{{fpage.chapter.id}}" 
-                                                    style="font-size:16px!important; padding:10px"> 
-                                                    Fermer
-                                                </a>
-                                            </div>
+                                            </div>   
                                         </div>
                                     </div>
 
