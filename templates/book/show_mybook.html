@@ -274,20 +274,27 @@
 
             {% else %} 
 
-                <div class="absolute pull-right" style="width: 410px;border-radius: 5px;border:1px solid color:#7F62B4;">
+                <div class="absolute pull-right" 
+                        style="width: 410px;border-radius: 5px;border:1px solid color:#7F62B4;background-color: white;">
                     <div class="row">
-                        <div class="col-xs-12" aligbn="center">Gérer toute la page</div>
+                        <div class="col-xs-12" align="center">Gérer toute la page</div>
                     </div>
                     <div class="row">
                         {% if group %}
-                        <div class="col-xs-6" aligbn="center">
+                        <div class="col-xs-6" align="center">
+                            <div>
+                                <i id="bi-c-circle-fill{{fpage.chapter.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
+                            </div>
                             <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
                             data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                             {% get_group_display_cor page group as this_page_is_cor %}
                             <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> 
                             Afficher/Cacher les corrections  </a>
                         </div>
-                        <div class="col-xs-6" aligbn="center">
+                        <div class="col-xs-6" align="center">
+                            <div>                                                        
+                                <i id="bi-plus-square-fill{{fpage.chapter.id}}" class="bi bi-plus-square-fill text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}"></i>
+                            </div>
                             <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
                             data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
                             {% get_group_display_comp page group as this_page_is_comp %}
