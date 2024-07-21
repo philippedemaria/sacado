@@ -282,7 +282,7 @@
                                     style="font-size:30px!important; padding:10px"> 
  
                                     <i class="bi {% if this_page_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-danger{% endif %}" 
-                                    id="cc_page_cor{{ fpage.chapter.id }}"
+                                    id="cc_page_cor{{ this_page.id }}"
                                     title="Corrections{% if this_page_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                 </a>
                             </div>
@@ -299,7 +299,7 @@
                             {% get_group_display_comp page group as this_page_is_comp %}
                             <div  style="margin-top:5px;margin-bottom:5px;"  >
                                 <a href="javascript:void(0);" 
-                                class="display_correction_bloc_button active_small_size" 
+                                    class="display_correction_bloc_button active_small_size" 
                                     data-source_id = "{{this_page.id}}" 
                                     data-type_id = "0"  
                                     data-paragraph_id = "0" 
