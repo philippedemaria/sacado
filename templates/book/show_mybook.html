@@ -281,13 +281,13 @@
                     </div>
                     <div class="row">
                         {% if group %}
-                        <div class="col-xs-6" align="center" style="background-color: #F7F7F7;">
+                        <div class="col-xs-6" align="center">
                             <div>
                                 <i id="bi-c-circle-fill{{fpage.chapter.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
                             </div>
     
 
-                            <div class="margin-top:10px;margin-bottom:10px" >
+                            <div style="margin-top:10px;margin-bottom:10px" >
                                 <a href="javascript:void(0);" 
                                 class="display_correction_bloc_button active_small_size" 
                                     data-source_id = "{{fpage.chapter.id}}" 
@@ -301,7 +301,7 @@
                                     title="Corrections{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                 </a>
                             </div>
-                            <div class="margin-top:10px;margin-bottom:10px" >
+                            <div style="margin-top:10px;margin-bottom:10px;font-size:12px" >
                          
                             {% get_group_display_cor page group as this_page_is_cor %}
                             Corrections<br/>
@@ -310,14 +310,14 @@
                             </div>
 
                         </div>
-                        <div class="col-xs-6" align="center" style="background-color: #F7F7F7;">
+                        <div class="col-xs-6" align="center" >
                             <div>                                                        
                                 <i id="bi-plus-square-fill{{fpage.chapter.id}}" class="bi bi-plus-square-fill"
                                 style="color:#7F62B4;"></i>
                             </div>
  
 
-                            <div class="margin-top:10px;margin-bottom:10px" >
+                            <div  style="margin-top:10px;margin-bottom:10px;"  >
                                 <a href="javascript:void(0);" 
                                 class="display_correction_bloc_button active_small_size" 
                                     data-source_id = "{{fpage.chapter.id}}" 
@@ -331,10 +331,11 @@
                                     title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                 </a>
                             </div>
+                            <div style="margin-top:10px;margin-bottom:10px;font-size:12px">
                             {% get_group_display_comp page group as this_page_is_comp %}
                             Compléments<br/>
-                            {% if this_page_is_comp %}activées{% else %}désactivées{% endif %}
-
+                            {% if this_page_is_comp %}activés{% else %}désactivés{% endif %}
+                            </div>
                         </div>
                         {% else %}
                         <div class="col-xs-6" aligbn="center">
