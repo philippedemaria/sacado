@@ -115,9 +115,12 @@
 
 {% else %}
 
-<div class="content_title" id="content_title_page">
-    {% if '/get_mybook' in request.path or '/show_mybook' in request.path or '/show_mybook_two_pages' in request.path %}<div>{% else %}
-        <h1>{% endif %}
+
+    {% if '/get_mybook' in request.path or '/show_mybook' in request.path or '/show_mybook_two_pages' in request.path %}
+        <div>
+    {% else %}
+        <div class="content_title" id="content_title_page"><h1>
+    {% endif %}
         <nav class="navbar navbar-default">
             <div class="container-fluid">
                 <div class="row">
@@ -217,8 +220,8 @@
             </div>
         </nav> 
     {% if '/get_mybook' in request.path or '/show_mybook' in request.path or '/show_mybook_two_pages' in request.path %}</div>{% else %}
-        </h1>{% endif %}
-</div>
+        </h1></div>{% endif %}
+
 {% endif %}
 
 <div class="content-wrapper">
