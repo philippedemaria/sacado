@@ -170,7 +170,8 @@
                                     <div class="relative pull-right" style="width: 410px;">
                                         <div class="row">
                                             <div class="col-xs-6">
-                                                <div id="label_cor{{fpage.chapter.id}}" class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</div>
+                                                <div id="label_cor{{fpage.chapter.id}}"  style="font-size: 12px;text-align:center"
+                                                class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</div>
                                                     <div class="margin-top:10px;margin-bottom:10px" >
                                                         <a href="javascript:void(0);" 
                                                         class="display_correction_bloc_button active_small_size" 
@@ -188,7 +189,10 @@
 
                                             </div> 
                                             <div class="col-xs-6">
-                                                <div id="label_comp{{fpage.chapter.id}}" class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</div>
+                                                <div id="label_comp{{fpage.chapter.id}}" 
+                                                 style="font-size: 12px;text-align:center"
+
+                                                class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</div>
                                                 <div > 
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
                                                             data-source_id = "{{fpage.chapter.id}}" 
