@@ -285,11 +285,7 @@
                             <div>
                                 <i id="bi-c-circle-fill{{fpage.chapter.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
                             </div>
-                            <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
-                            data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                            {% get_group_display_cor page group as this_page_is_cor %}
-                            <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> 
-                            Afficher/Cacher les corrections  </a>
+    
 
                             <div class="margin-top:10px;margin-bottom:10px" >
                                 <a href="javascript:void(0);" 
@@ -305,9 +301,13 @@
                                     title="Corrections{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                 </a>
                             </div>
-
-
-
+                            <div class="margin-top:10px;margin-bottom:10px" >
+                         
+                            {% get_group_display_cor page group as this_page_is_cor %}
+                            Corrections<br/>
+                            {% if this_page_is_cor %}activées{% else %}désactivées{% endif %}
+                   
+                            </div>
 
                         </div>
                         <div class="col-xs-6" align="center" style="background-color: #F7F7F7;">
@@ -331,7 +331,9 @@
                                     title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                 </a>
                             </div>
-
+                            {% get_group_display_comp page group as this_page_is_comp %}
+                            Compléments<br/>
+                            {% if this_page_is_comp %}activées{% else %}désactivées{% endif %}
 
                         </div>
                         {% else %}
