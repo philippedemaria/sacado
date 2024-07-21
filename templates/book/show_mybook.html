@@ -170,8 +170,7 @@
                                     <div class="relative pull-right" style="width: 410px; border:1px solid #7F62B4;border-radius:5px">
                                         <div class="row">
                                             <div class="col-xs-6"  align="center" >
-                                                <div id="label_cor{{fpage.chapter.id}}"  style="font-size: 12px;text-align:center"
-                                                class="text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}">CORRIGES</div>
+                                                <div id="label_cor{{fpage.chapter.id}}"  style="font-size: 12px;text-align:center">Corrigés</div>
                                                     <div class="margin-top:10px;margin-bottom:10px" >
                                                         <a href="javascript:void(0);" 
                                                         class="display_correction_bloc_button active_small_size" 
@@ -181,7 +180,7 @@
                                                             data-is_correction = 1 
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
-                                                            <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
+                                                            <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-danger{% endif %}" 
                                                             id="cc_chapter_cor{{ fpage.chapter.id }}"
                                                             title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                                         </a>
@@ -190,9 +189,7 @@
                                             </div> 
                                             <div class="col-xs-6"  align="center" >
                                                 <div id="label_comp{{fpage.chapter.id}}" 
-                                                 style="font-size: 12px;text-align:center"
-
-                                                class="text-{% if this_chapter_is_comp %}success{% else %}danger{% endif %}">COMPLEMENTS</div>
+                                                 style="font-size: 12px;text-align:center">Compléments</div>
                                                 <div > 
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
                                                             data-source_id = "{{fpage.chapter.id}}" 
@@ -201,7 +198,7 @@
                                                             data-is_correction = 0  
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
-                                                            <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off{% endif %}" 
+                                                            <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off  text-danger{% endif %}" 
                                                             id="cc_chapter{{ fpage.chapter.id }}"></i> 
                                                         </a>
                                                     </div>
@@ -215,7 +212,7 @@
                                     {% if not forloop.first %}
 
                                     <!-- Dans cette partie, il n'y a pas de groupe affecté, donc les boutons deviennent inactifs mais restent apparents. -->
-                                    <div class="relative pull-right" style="width: 410px;width: 410px; border:1px solid #7F62B4;border-radius:5px">
+                                    <div class="relative pull-right" style="width: 410px;border:1px solid #7F62B4;border-radius:5px">
                                         <div class="row">
                                             <div class="col-xs-6">
                                                 <div id="label_cor{{fpage.chapter.id}}"  style="font-size: 12px;text-align:center"
