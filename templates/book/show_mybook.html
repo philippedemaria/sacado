@@ -43,11 +43,6 @@
         {% endif %}
     {% endif %}
 
-    
-    {% if request.user.is_superuser %}
-        <a href="{% url 'print_latex_to_pdf' this_chapter.id 0  %}"  target="_blank"><small><i class="bi bi-printer"></i></small></a>
-    {% endif %} 
-
 {% endblock %}
 
 
