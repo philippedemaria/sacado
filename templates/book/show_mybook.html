@@ -26,6 +26,22 @@
                 <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-search"></i></button>
             </form>
  
+ 
+    {% if group %}
+        {% if 'cours' not in this_page.title %}
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
+            {% get_group_display_cor this_page group as this_page_is_cor %}
+            <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_page_cor{{ this_page.id }}"></i> 
+            <div class="helper_tip_text" >Publier/Dépublier les corrections des exercices de la page {{ n }}. </div>
+        </span>
+        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 0> 
+            {% get_group_display_comp this_page group as this_page_is_comp %}
+            <i class="bi bi-circle-fill  text-{% if this_page_is_comp %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
+            <div class="helper_tip_text" >Publier/Dépublier les compléments de la page {{ n }}. </div>
+        </span>
+        <span id="spinner-1-{{ this_page.id }}"></span>
+        {% endif %}
+    {% endif %}
 
 {% endblock %}
 
@@ -257,97 +273,78 @@
                 {% endfor %}
 
             {% else %} 
- 
-                    <div class="absolute pull-right" 
-                            style="width: 310px;border-radius: 5px;border:1px solid #7F62B4;background-color: white;">
-                        <div class="row">
-                            <div class="col-xs-12" align="center" style="padding:10px">Gérer toute la page</div>
-                        </div>
-                        <div class="row">
-                            {% if group %}
-                            <div class="col-xs-6" align="center">
-                                <div>
-                                    <i id="bi-c-circle-fill{{fpage.chapter.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
-                                </div>
-                                {% get_group_display_cor page group as this_page_is_cor %}
-                                <div style="margin-top:5px;margin-bottom:5px" >
-                   
-                                    <span class="display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
-                                        {% get_group_display_cor this_page group as this_page_is_cor %}
-                                        <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_page_cor{{ this_page.id }}"></i> 
-                                    </span>
-                                  
-                                </div>
-                                <div style="margin-top:5px;margin-bottom:5px;font-size:12px" >
-                                    Corrections<br/>
-                                    {% if this_page_is_cor %}activées{% else %}désactivées{% endif %}
-                                </div>
-                            </div>
-                            <div class="col-xs-6" align="center" >
-                                <div>                                                        
-                                    <i id="bi-plus-square-fill{{fpage.chapter.id}}" class="bi bi-plus-square-fill"
-                                    style="color:#7F62B4;"></i>
-                                </div>
-                                {% get_group_display_comp page group as this_page_is_comp %}
-                                <div  style="margin-top:5px;margin-bottom:5px;"  >
-                                    <span class="display_complement_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
-                                        <i class="bi {% if this_page_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-danger{% endif %}" id="cc_page_comp{{ this_page.id }}"></i> 
-                                    </span>
-                                </div>
-                                <div style="margin-top:5px;margin-bottom:5px;font-size:12px">
-                                
-                                Compléments<br/>
-                                {% if this_page_is_comp %}activés{% else %}désactivés{% endif %}
-                                </div>
-                            </div>
-                            {% else %}
-                            <div class="col-xs-6" aligbn="center">
-                                <a href="javascript:void(0);"> 
-                                <i class="bi bi-circle-fill"></i> 
-                                Afficher/Cacher les corrections  </a>
-                            </div>
-                            <div class="col-xs-6" aligbn="center">
-                                <a href="javascript:void(0);"> 
-                                <i class="bi bi-circle-fill"></i> 
-                                Afficher/Cacher les compléments   </a>
-                            </div>
-                            {% endif %}
-                        </div>
+
+                <div class="absolute pull-right" 
+                        style="width: 310px;border-radius: 5px;border:1px solid #7F62B4;background-color: white;">
+                    <div class="row">
+                        <div class="col-xs-12" align="center" style="padding:10px">Gérer toute la page</div>
                     </div>
-     
-
-
-    {% if group %}
-        {% if 'cours' not in this_page.title %}
-        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 1> 
-            {% get_group_display_cor this_page group as this_page_is_cor %}
-            <i class="bi bi-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}" id="cc_page_cor{{ this_page.id }}"></i> 
-            <div class="helper_tip_text" >Publier/Dépublier les corrections des exercices de la page {{ n }}. </div>
-        </span>
-        <span class="helper_tip display_correction_bloc_button" data-source_id = "{{this_page.id}}" data-type_id = "1"  data-paragraph_id = "0" data-is_correction = 0> 
-            {% get_group_display_comp this_page group as this_page_is_comp %}
-            <i class="bi bi-circle-fill  text-{% if this_page_is_comp %}success{% else %}danger{% endif %}" id="cc_page{{ this_page.id }}"></i> 
-            <div class="helper_tip_text" >Publier/Dépublier les compléments de la page {{ n }}. </div>
-        </span>
-        <span id="spinner-1-{{ this_page.id }}"></span>
-        {% endif %}
-    {% endif %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <div class="row">
+                        {% if group %}
+                        <div class="col-xs-6" align="center">
+                            <div>
+                                <i id="bi-c-circle-fill{{fpage.chapter.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
+                            </div>
+    
+                            {% get_group_display_cor page group as this_page_is_cor %}
+                            <div style="margin-top:5px;margin-bottom:5px" >
+                                <a href="javascript:void(0);" 
+                                class="display_correction_bloc_button active_small_size" 
+                                    data-source_id = "{{fpage.chapter.id}}" 
+                                    data-type_id = "0"  
+                                    data-paragraph_id = "0" 
+                                    data-is_correction = 1 
+                                    style="font-size:30px!important; padding:10px"> 
+                                     
+                                    <i class="bi {% if this_page_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-danger{% endif %}" 
+                                    id="cc_page_cor{{ fpage.chapter.id }}"
+                                    title="Corrections{% if this_page_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
+                                </a>
+                            </div>
+                            <div style="margin-top:5px;margin-bottom:5px;font-size:12px" >
+                                Corrections<br/>
+                                {% if this_page_is_cor %}activées{% else %}désactivées{% endif %}
+                            </div>
+                        </div>
+                        <div class="col-xs-6" align="center" >
+                            <div>                                                        
+                                <i id="bi-plus-square-fill{{fpage.chapter.id}}" class="bi bi-plus-square-fill"
+                                style="color:#7F62B4;"></i>
+                            </div>
+                            {% get_group_display_comp page group as this_page_is_comp %}
+                            <div  style="margin-top:5px;margin-bottom:5px;"  >
+                                <a href="javascript:void(0);" 
+                                class="display_correction_bloc_button active_small_size" 
+                                    data-source_id = "{{fpage.chapter.id}}" 
+                                    data-type_id = "0"  
+                                    data-paragraph_id = "0" 
+                                    data-is_correction = 1 
+                                    style="font-size:30px!important; padding:10px"> 
+                                    <i class="bi {% if this_page_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-danger{% endif %}" 
+                                    id="cc_page_comp{{ fpage.chapter.id }}"
+                                    title="Compléments{% if this_page_is_comp %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
+                                </a>
+                            </div>
+                            <div style="margin-top:5px;margin-bottom:5px;font-size:12px">
+                            
+                            Compléments<br/>
+                            {% if this_page_is_comp %}activés{% else %}désactivés{% endif %}
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="col-xs-6" aligbn="center">
+                            <a href="javascript:void(0);"> 
+                            <i class="bi bi-circle-fill"></i> 
+                            Afficher/Cacher les corrections  </a>
+                        </div>
+                        <div class="col-xs-6" aligbn="center">
+                            <a href="javascript:void(0);"> 
+                            <i class="bi bi-circle-fill"></i> 
+                            Afficher/Cacher les compléments   </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
 
 
                 <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
