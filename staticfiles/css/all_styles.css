@@ -529,9 +529,9 @@ table.puzzle td {
 }
  
  .navbar{
-  /*margin-bottom: 25px;*/
-  padding-top: 5px;
-  min-height: 45px;
+  /*margin-bottom: 25px;
+  padding-top: 5px;*/
+  min-height: 40px;
 }
 
 .navbar-right {
