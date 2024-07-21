@@ -1320,7 +1320,6 @@ def get_group_display_cor(obj,group):
     return obj.is_correction(group) 
 
 
-
 @register.simple_tag
 def get_group_display_comp(obj,group):
     """

@@ -296,7 +296,7 @@ class Page(models.Model):
                     break
         return test
 
-    def is_correction(self,group):
+    def is_complement(self,group):
         test = False
         for paragraph in self.paragraphs.all():
             for bloc in paragraph.blocs.all():
