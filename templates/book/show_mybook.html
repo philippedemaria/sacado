@@ -159,10 +159,16 @@
                     <div {% if n == 0 %}class="this_paragraph0"{% else %}class="this_paragraph"{% endif %} id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
                         <div class="row">
                             <div class="col-xs-12">
-                                {% if forloop.counter0 > 0 %}<span class="paragraph_number">{{ forloop.counter0 }}</span>{% endif %}  
+                                {% if forloop.counter0 > 0 %}<span class="paragraph_number">{{ forloop.counter0 }}</span> 
                                 <a href="{% url 'show_mybook' book.id fpage.number %}" class="paragraph_title">
                                     {{ fpage.chapter.title }} 
                                 </a>
+                                {% else %}  
+                                <a href="{% url 'show_mybook' book.id fpage.number %}"
+                                style="font-size:30px;padding:10px; color:#fc499d;border-bottom:1px solid #fc499d;">
+                                    {{ fpage.chapter.title }} 
+                                </a>
+                                {% endif %}  
                                 {% if group %}
                                     {% if not forloop.first %}
                                     {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
