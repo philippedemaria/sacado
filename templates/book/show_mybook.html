@@ -19,7 +19,8 @@
 {% block page_title %}
 
  
-            <form action="{% url 'goto_direct_page' %}" method="post" style="display: inline-block; max-width: 300px;">
+            <form action="{% url 'goto_direct_page' %}" method="post" 
+                    style="display: inline-block; max-width: 300px; padding:10px;background-color:#7F62B4; color:white">
                 <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à une page </label><br/>
                 <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3" class="acces_to_page" required />
                 <button type="submit" class="btn btn-xs btn-sacado"><i class="bi bi-search"></i></button>
@@ -113,7 +114,7 @@
 
             
                 {% if n == 0  %}
-                    <b style="font-size:20px;padding:10px; color:#fc499d;">Sommaire</b>
+                    <b style="font-size:30px;padding:10px; color:#fc499d;">Sommaire</b>
                 {% else %}
                     <b>Chapitre . {{this_chapter}}</b>
                 {% endif %}
@@ -124,7 +125,7 @@
             <div class="pull-right" style="padding:10px;">
                 <a href="{% url 'show_mybook_two_pages' book.id page.number %}" class="btn btn-default" title="Voir les pages 2 par 2"><i class="bi bi-book-fill"></i></a>
 
-                <button id="start_fullscreen" class="btn btn-default"><i class="bi bi-arrows-fullscreen"></i></button>
+                <button id="start_fullscreen" class="btn btn-default"><i class="bi bi-arrows-fullscreen" title="plein écran"></i></button>
                 <button id="stop_fullscreen" class="btn btn-default"><i class="bi bi-fullscreen-exit"></i></button>
             </div>
         </div>
