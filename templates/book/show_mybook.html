@@ -159,7 +159,7 @@
                                     <div class="relative pull-right" style="width: 410px; border:1px solid #7F62B4;border-radius:5px">
                                         <div class="row">
                                             <div class="col-xs-6"  align="center" >
-                                                <div id="label_cor{{fpage.chapter.id}}"  style="font-size: 12px;text-align:center">Corrigés</div>
+                                                <div style="font-size: 12px;text-align:center">Corrigés</div>
                                                     <div class="margin-top:10px;margin-bottom:10px" >
                                                         <a href="javascript:void(0);" 
                                                         class="display_correction_bloc_button active_small_size" 
@@ -177,7 +177,7 @@
 
                                             </div> 
                                             <div class="col-xs-6"  align="center" >
-                                                <div id="label_comp{{fpage.chapter.id}}" 
+                                                <div 
                                                  style="font-size: 12px;text-align:center">Compléments</div>
                                                 <div > 
                                                         <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
@@ -279,7 +279,7 @@
                                     data-is_correction = 1 
                                     style="font-size:30px!important; padding:10px"> 
  
-                                    <i class="bi {% if this_page_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-danger{% endif %}" 
+                                    <i class="bi {% if this_page_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-on text-secondary{% endif %}" 
                                     id="cc_page_cor{{ page.id }}"
                                     title="Corrections{% if this_page_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                 </a>
@@ -290,11 +290,11 @@
                             </div>
                         </div>
                         <div class="col-xs-6" align="center" >
-                            <div>                                                        
-                                <i id="bi-plus-square-fill" class="bi bi-plus-square-fill"
-                                style="color:#7F62B4;"></i>
-                            </div>
                             {% get_group_display_comp page group as this_page_is_comp %}
+                            <div>                                                        
+                                <i id="bi-plus-square-fill" class="bi bi-plus-square-fill {% if not this_page_is_comp %}text-secondary{% endif %}" ></i>
+                            </div>
+                            
                             <div  style="margin-top:5px;margin-bottom:5px;"  >
                                 <a href="javascript:void(0);" 
                                     class="display_correction_bloc_button active_small_size" 
@@ -303,7 +303,7 @@
                                     data-paragraph_id = "0" 
                                     data-is_correction = 0 
                                     style="font-size:30px!important; padding:10px"> 
-                                    <i class="bi {% if this_page_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-danger{% endif %}" 
+                                    <i class="bi {% if this_page_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-on text-secondary{% endif %}" 
                                     id="cc_page{{ page.id }}"
                                     title="Compléments{% if this_page_is_comp %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                 </a>
