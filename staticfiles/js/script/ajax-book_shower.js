@@ -137,12 +137,8 @@ define(["jquery", "bootstrap"], function ($) {
                 $("#bi-c-circle-fill" + source_id).addClass(data.css);
 
                 if (status == "off") {
-                  $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-off");
-                  $("#cc_chapter_cor" + source_id).addClass("bi-toggle-on");
                   $("#legendcor" + source_id).html("visibles");
                 } else {
-                  $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-on");
-                  $("#cc_chapter_cor" + source_id).addClass("bi-toggle-off");
                   $("#legendcor" + source_id).html("cachés");
                 }
                 $("#label_cor" + source_id).removeClass(data.nocss);
