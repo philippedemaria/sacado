@@ -238,6 +238,7 @@ input.acces_to_page{
   width:50px;
   font-size: 18px;
   display: inline-block;
+  color:#7F62B4;;
 }
 
 .ui-sortable .box, .ui-sortable .sorter_group {
