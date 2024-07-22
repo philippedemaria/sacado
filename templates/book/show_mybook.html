@@ -256,7 +256,9 @@
                 {% endfor %}
 
             {% else %} 
+
                 <!-- Div de gestion de page -->
+                {% if isMenuDisplay %}
                 <div class="absolute pull-right" 
                         style="width: 310px;border-radius: 5px;border:1px solid #7F62B4;background-color: white;">
                     <div class="row">
@@ -328,6 +330,7 @@
                         {% endif %}
                     </div>
                 </div>
+                {% endif %}
                 <!-- Fin de la div de gestion de page -->
 
                 <div {% if  page.css == 'parcoursu_page_top' %} style="width:100%;background-image: url('/static/img/parcours_u.png'); background-repeat: no-repeat ;height:100px"   
