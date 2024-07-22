@@ -2171,9 +2171,9 @@ def ajax_display_correction_bloc(request):
     is_correction    = request.POST.get('is_correction',False)
 
     if status == "off" : 
-        status , css , nocss = True ,  "text-success",  "text-danger"
+        status , css , nocss = True ,  "text-success",  "text-secondary"
     else : 
-        status , css,nocss =  False , "text-danger",  "text-success"
+        status , css,nocss =  False , "text-secondary",  "text-success"
 
     if type_id == "0" :            
         chapter = Chapter.objects.get(pk=source_id)
