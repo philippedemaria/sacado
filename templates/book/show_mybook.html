@@ -361,75 +361,12 @@
                         {% if paragraph.number > 0 %}
                         <div class="row paragraph_label">
                             <div class="col-xs-12">
-                                {% if group %}
-                                    <span class="paragraph_number">{{ paragraph|transform_number_to_letter  }}</span>
-                                    {% if paragraph.title %}
-                                    <span class="paragraph_title">{{ paragraph.title }}</span>
-                                    {% endif %}
-                                    <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
-                                            data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                        {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
-                                        <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> Afficher/Cacher les corrections  
-                                    </a>
-                                    |
-                                    <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
-                                    data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                        {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
-                                        <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                        Afficher/Cacher les compléments  </a>
-                                    <span id="spinner-2-{{paragraph.id}}"></span>
-
-                                {% else %}
                                     <span class="paragraph_number">{{ paragraph|transform_number_to_letter }}</span>
                                     {% if paragraph.title %}
                                     <span class="paragraph_title">{{ paragraph.title }}</span>
                                     {% endif %}
-
-                                    <a href="javascript:void(0);" class="no_sacado_asso small_size"> 
-                                        <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher toutes les corrections 
-                                        
-                                    </a>
-                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"   > 
-                                        <i class="bi bi-circle-fill text-default"></i> Afficher/Cacher tous les compléments 
-                                         
-                                    </a>
-    
-                                {% endif %}
-
                             </div>
                         </div>
-                        {% elif page.css == 'intro_page_top' %}
-                        <div></div>
-                        {% else %}
-                            <div class="row" align="right">
-                                <div class="col-xs-12">
-                                    {% if group %}
-                                        <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 1
-                                                data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                            {% get_group_display_cor paragraph group as this_paragraph_is_cor %}
-                                            <i class="bi bi-circle-fill text-{% if this_paragraph_is_cor %}success{% else %}danger{% endif %}" id="cc_paragraph_cor{{ paragraph.id }}"></i> 
-                                            Afficher/Cacher les corrections  </a>
-                                        |
-                                        <a href="javascript:void(0);"  class="display_correction_bloc_button"   data-paragraph_id = "{{paragraph.id}}" data-is_correction = 0
-                                        data-source_id = "{{paragraph.id}}" data-type_id = "2" > 
-                                            {% get_group_display_comp paragraph group as this_paragraph_is_comp %}
-                                            <i class="bi bi-circle-fill text-{% if this_paragraph_is_comp %}success{% else %}danger{% endif %}" id="cc_paragraph{{ paragraph.id }}"></i> 
-                                            Afficher/Cacher les compléments   </a>
-                                        <span id="spinner-2-{{paragraph.id}}"></span>
-                                {% else %}
-                                    {% if not forloop.first %}
-                                    <a href="javascript:void(0);"   class="no_sacado_asso small_size" > 
-                                        <i class="bi bi-circle-fill text-default"></i>Afficher/Cacher toutes les corrections du chapitre
-                                         
-                                    </a>
-                                    <a href="javascript:void(0);"  class="no_sacado_asso small_size"> 
-                                        <i class="bi bi-circle-fill text-default"></i>  Afficher/Cacher tous les compléments du chapitre 
-                                        
-                                    </a>
-                                    {% endif %}
-                                {% endif %}
-                                </div>
-                            </div>
                         {% endif %}
 
 
