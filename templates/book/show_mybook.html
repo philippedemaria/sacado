@@ -423,21 +423,21 @@
                                         </div>
                                     </div>
                                     {% if bloc.display_qr %} 
-                                    <div {% if 'exo' in bloc.typebloc.css %} style="margin-left:400px" {% endif %}>  
+                                    <div {% if 'exo' in bloc.typebloc.css %} style="float:right" {% endif %}>  
                                         <label>
                                         {% if group %}
                                             {% get_group_display_comp bloc group as this_bloc_is_comp %}
                                             <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
-                                                <i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
+                                                <i class="bi bi-toggle-on text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
                                                     id="cc_bloc{{ bloc.id }}">
                                                 </i> 
-                                                Afficher/Cacher
+                                                
                                             </a>
                                             <span id="spinner-3-{{bloc.id}}"></span>
                                             :
                                             </label>
                                             {% for a in bloc.appliquettes.all %}
-                                                <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-badge-vr"></i></a>
+                                                <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill"></i></a>
                                             {% endfor %}
                                             {% for e in bloc.exercises.all %} 
                                             {% if e.supportfile.imagefile %}
@@ -445,7 +445,7 @@
                                                 {% endif %}
                                             {% endfor %}
                                             {% for e in bloc.exotexs.all %} 
-                                                <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
+                                                <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill"></i></a>
                                             {% endfor %}
                                             <span id="spinner-3-{{bloc.id}}"></span>
                                             {% else %}
@@ -463,7 +463,7 @@
                                                 {% endif %}
                                             {% endfor %}
                                             {% for e in bloc.exotexs.all %} 
-                                                <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-explicit"></i></a>
+                                                <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill"></i></a>
                                             {% endfor %}
                                         {% endif %}
                                     </div>
