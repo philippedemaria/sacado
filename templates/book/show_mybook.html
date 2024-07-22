@@ -434,9 +434,7 @@
                                             {% endif %}
                                              data-toggle='modal'   data-target='#book_shower_page'>
                                             {{ bloc.content_html|safe }}
-                                        </div>
-
-                                    {% if bloc.display_qr %} 
+                                                                                {% if bloc.display_qr %} 
                                     <div {% if 'exo' in bloc.typebloc.css %} style="float:right" {% endif %}>  
                                         <label>
                                         {% if group %}
@@ -478,7 +476,10 @@
                                             {% endfor %}
                                         {% endif %}
                                     </div>
-                                    {% endif %}                                          
+                                    {% endif %}  
+                                        </div>
+
+                                        
                                     </div>
                               
                                 </div>
