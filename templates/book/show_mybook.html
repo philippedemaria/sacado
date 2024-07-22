@@ -294,7 +294,7 @@
                         <div class="col-xs-6" align="center" >
                             {% get_group_display_comp page group as this_page_is_comp %}
                             <div>                                                        
-                                <i id="bi-plus-square-fill" class="bi bi-plus-square-fill {% if not this_page_is_comp %}text-secondary{% endif %}" ></i>
+                                <i id="bi-plus-square-fill" class="bi bi-plus-square-fill {% if this_page_is_comp %}text-success{% else %} text-secondary{% endif %}" ></i>
                             </div>
                             
                             <div  style="margin-top:5px;margin-bottom:5px;"  >

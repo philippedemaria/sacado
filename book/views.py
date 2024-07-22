@@ -447,8 +447,8 @@ def show_mybook(request,idb, n):
     this_chapter = this_page.chapter
 
     isMenuDisplay = True
-    if this_page in [] : isMenuDisplay = False
-    
+    if this_page in [9,21,33,47,61,75,87,103,119,135,147,161,175,203,213] : isMenuDisplay = False
+
     # Appel de la page n
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
     context = {'book': book, "n" : n ,  'this_chapter' : this_chapter , 'group':group, 'page' : this_page , 'next_page' : next_page  ,
