@@ -427,7 +427,7 @@
                                         <label>
                                         {% if group %}
                                             {% get_group_display_comp bloc group as this_bloc_is_comp %}
-                                            <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" > 
+                                            <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
                                                 <i class="bi bi-toggle-on text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
                                                     id="cc_bloc{{ bloc.id }}">
                                                 </i>   
@@ -440,11 +440,11 @@
                                             {% endfor %}
                                             {% for e in bloc.exercises.all %} 
                                             {% if e.supportfile.imagefile %}
-                                                    <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                    <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
                                                 {% endif %}
                                             {% endfor %}
                                             {% for e in bloc.exotexs.all %} 
-                                                <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
+                                                <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
                                             {% endfor %}
                                             <span id="spinner-3-{{bloc.id}}"></span>
                                             {% else %}
