@@ -261,13 +261,13 @@
 
                 {% if isMenuDisplay %}
                 <div class="absolute pull-right" 
-                        style="width: 310px;border-radius: 5px;border:1px solid #7F62B4;background-color: white;">
+                        style="width:{% if isMenuDisplayComp %}310{% else %}155{% else %}px ;border-radius: 5px;border:1px solid #7F62B4;background-color: white;">
                     <div class="row">
                         <div class="col-xs-12" align="center" style="padding:10px">Gérer toute la page</div>
                     </div>
                     <div class="row">
                         {% if group %}
-                        <div class="col-xs-6" align="center">
+                        <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} align="center">
                             <div>
                                 <i id="bi-c-circle-fill{{page.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
                             </div>
@@ -292,7 +292,8 @@
                                 {% if this_page_is_cor %}activées{% else %}désactivées{% endif %}
                             </div>
                         </div>
-                        <div class="col-xs-6" align="center" >
+                        {% if isMenuDisplayComp %}
+                        <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} align="center" >
                             {% get_group_display_comp page group as this_page_is_comp %}
                             <div>                                                        
                                 <i id="bi-plus-square-fill" class="bi bi-plus-square-fill {% if this_page_is_comp %}text-success{% else %} text-secondary{% endif %}" ></i>
@@ -316,18 +317,22 @@
                             Compléments<br/>
                             {% if this_page_is_comp %}activés{% else %}désactivés{% endif %}
                             </div>
+                            {% endif  %}
                         </div>
                         {% else %}
-                        <div class="col-xs-6" aligbn="center">
-                            <a href="javascript:void(0);"> 
-                            <i class="bi bi-circle-fill"></i> 
-                            Afficher/Cacher les corrections  </a>
-                        </div>
-                        <div class="col-xs-6" aligbn="center">
-                            <a href="javascript:void(0);"> 
-                            <i class="bi bi-circle-fill"></i> 
-                            Afficher/Cacher les compléments   </a>
-                        </div>
+                            <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} 
+                                align="center">
+                                <a href="javascript:void(0);"> 
+                                <i class="bi bi-circle-fill"></i> 
+                                Afficher/Cacher les corrections  </a>
+                            </div>
+                            {% if isMenuDisplayComp %}
+                            <div class="col-xs-6" align="center">
+                                <a href="javascript:void(0);"> 
+                                <i class="bi bi-circle-fill"></i> 
+                                Afficher/Cacher les compléments   </a>
+                            </div>
+                            {% endif  %}
                         {% endif %}
                     </div>
                 </div>
@@ -434,49 +439,51 @@
                                             {% endif %}
                                              data-toggle='modal'   data-target='#book_shower_page'>
                                             {{ bloc.content_html|safe }}
-                                    {% if bloc.display_qr %} 
-                                    <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
-                                        <label>
-                                        {% if group %}
-                                            {% get_group_display_comp bloc group as this_bloc_is_comp %}
-                                            <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
-                                                <i class="bi bi-toggle-on text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
-                                                    id="cc_bloc{{ bloc.id }}">
-                                                </i>   
-                                            </a>
-                                            <span id="spinner-3-{{bloc.id}}"></span>
-                                            </label>
-                                            {% for a in bloc.appliquettes.all %}
-                                                <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
-                                            {% endfor %}
-                                            {% for e in bloc.exercises.all %} 
-                                            {% if e.supportfile.imagefile %}
-                                                    <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                    
+
+                                            {% if bloc.display_qr %} 
+                                            <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
+                                                <label>
+                                                {% if group %}
+                                                    {% get_group_display_comp bloc group as this_bloc_is_comp %}
+                                                    <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
+                                                        <i class="bi bi-toggle-on text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
+                                                            id="cc_bloc{{ bloc.id }}">
+                                                        </i>   
+                                                    </a>
+                                                    <span id="spinner-3-{{bloc.id}}"></span>
+                                                    </label>
+                                                    {% for a in bloc.appliquettes.all %}
+                                                        <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
+                                                    {% endfor %}
+                                                    {% for e in bloc.exercises.all %} 
+                                                    {% if e.supportfile.imagefile %}
+                                                            <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for e in bloc.exotexs.all %} 
+                                                        <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
+                                                    {% endfor %}
+                                                    <span id="spinner-3-{{bloc.id}}"></span>
+                                                    {% else %}
+                                                    <a class="no_sacado_asso small_size"  > 
+                                                        <i class="bi bi-toggle-on text-default"></i>  
+                                                    </a>
+                                                    </label>
+                                                    {% for a in bloc.appliquettes.all %}
+                                                        <a href="#" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-secondary"></i></a>
+                                                    {% endfor %}
+                                                    {% for e in bloc.exercises.all %} 
+                                                        {% if e.supportfile.imagefile %}
+                                                            <a href="#" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% for e in bloc.exotexs.all %} 
+                                                        <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill"></i></a>
+                                                    {% endfor %}
                                                 {% endif %}
-                                            {% endfor %}
-                                            {% for e in bloc.exotexs.all %} 
-                                                <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
-                                            {% endfor %}
-                                            <span id="spinner-3-{{bloc.id}}"></span>
-                                            {% else %}
-                                            <a class="no_sacado_asso small_size"  > 
-                                                <i class="bi bi-toggle-on text-default"></i>  
-                                            </a>
-                                            </label>
-                                            {% for a in bloc.appliquettes.all %}
-                                                <a href="#" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-secondary"></i></a>
-                                            {% endfor %}
-                                            {% for e in bloc.exercises.all %} 
-                                                {% if e.supportfile.imagefile %}
-                                                    <a href="#" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% for e in bloc.exotexs.all %} 
-                                                <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill"></i></a>
-                                            {% endfor %}
-                                        {% endif %}
-                                    </div>
-                                    {% endif %}  
+                                            </div>
+                                            {% endif %}  
                                         </div>
 
                                         
