@@ -43,7 +43,7 @@ Intro Section -
     <div class="container h-100">
 
 
-        <div class="row justify-content-center align-self-center intro-info order-md-first order-last" style="padding-bottom:20px">
+        <div class="row justify-content-center align-self-center intro-info order-md-first order-last"  >
  
 
 
@@ -94,14 +94,14 @@ Intro Section -
             </div> 
         </div>
 
-        <div class="row">           
+        <div class="row" style="padding-bottom:20px">           
             <div  class="col-xs-6 col-md-6 col-lg-6 col-xl-6" >
                 <div class="row">   
                     <div class="col-xs-9 col-md-9 col-lg-9 col-xl-9" style="color:#7F62B4" >
-                            <h1>Nouveauté à découvrir</h1>
+                            <h1>Nouveauté<br/> à découvrir</h1>
                             <div>En partenariat avec Génération 5, SACADO propose sa première édition du Cahier Manuel Maths Seconde.</div>
-                            <a href="#" data-toggle='modal' data-target='#bookviewer' 
-                            style="padding:10px;border-radius:5px; border:1px solid #7F62B4;">Découvrir l'ouvrage</a>
+                            <div style="margin-top:10px"><a href="#" data-toggle='modal' data-target='#bookviewer' 
+                            style="padding:10px;border-radius:5px; border:1px solid #7F62B4;">Découvrir l'ouvrage</a></div>
                     </div>
                     <div  class="col-xs-3 col-md-3 col-lg-3 col-xl-3" >
                         <img src="{% static 'img/vp_2_index.png' %}" style="max-width: 100px; height: auto; border: 0;float:right" />
@@ -114,9 +114,9 @@ Intro Section -
                     <div style="padding: 10px;">
                         <img src="https://sacado.xyz/ressources/book/6/vp_2.jpg" style="max-width: 100px; height: auto; border: 0;" />
                     </div>
-                    <div style="padding: 10px; font-weight: 500;">
+                    <div style="padding: 10px; font-weight: 500; color:#7F62B4;">
                         Vous êtes enseignant et avez équipé vos classes avec le Cahier Manuel SACADO ?
-                        <a href="{% url 'register_teacher_accueil' %}">Créez votre compte gratuit</a>
+                        <a href="{% url 'register_teacher_accueil' %}" style="padding:10px;border-radius:5px; border:1px solid #7F62B4;">Créez votre compte gratuit</a>
                     </div>
                 </div>
             </div>
