@@ -536,7 +536,14 @@ class Bloc(models.Model):
             if nb_myblocs > 0 : 
                 test = True
                 break
-        return test    
+        return test  
+
+
+
+
+
+
+          
 ###############################################################################################################
 ############################## Attribution d'un livre à un groupe #############################################
 ###############################################################################################################
@@ -560,3 +567,6 @@ class Mybloc(models.Model):
 
     def __str__(self):
         return "{} > {} > {}".format(self.group.name,self.bloc.title,self.is_display_cor)
+
+
+  
