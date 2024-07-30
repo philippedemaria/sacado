@@ -110,10 +110,10 @@
 
 
     {% if  prev_page %}
-    <a href="{% url 'show_mybook' book.id prev_page.number %}" class="prev_page"  title="Page précédente"><i class="bi bi-chevron-left"></i></a>
+    <a href="{% url 'show_mybook_student' book.id prev_page.number %}" class="prev_page"  title="Page précédente"><i class="bi bi-chevron-left"></i></a>
      {% endif %}
     {% if  next_page %}
-    <a href="{% url 'show_mybook' book.id next_page.number %}" class="next_page"  title="Page suivante"><i class="bi bi-chevron-right"></i></a>
+    <a href="{% url 'show_mybook_student' book.id next_page.number %}" class="next_page"  title="Page suivante"><i class="bi bi-chevron-right"></i></a>
      {% endif %}
 
 
@@ -121,10 +121,10 @@
 
     <div id="page_controller"> 
         {% if  prev_page %}
-        <a href="{% url 'show_mybook' book.id prev_page.number %}" class="page_controller_prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i> Page précédente</a>
+        <a href="{% url 'show_mybook_student' book.id prev_page.number %}" class="page_controller_prev_page" title="Page précédente"><i class="bi bi-chevron-left"></i> Page précédente</a>
         {% endif %}
         {% if  next_page %} |
-        <a href="{% url 'show_mybook' book.id next_page.number %}" class="page_controller_next_page" title="Page suivante"> Page suivante <i class="bi bi-chevron-right"></i></a>
+        <a href="{% url 'show_mybook_student' book.id next_page.number %}" class="page_controller_next_page" title="Page suivante"> Page suivante <i class="bi bi-chevron-right"></i></a>
         {% endif %}
     </div>
 
