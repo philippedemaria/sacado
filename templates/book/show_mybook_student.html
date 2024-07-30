@@ -19,7 +19,7 @@
 {% block page_title %}
 
  
-            <form action="{% url 'goto_direct_page' %}" method="post" 
+            <form action="{% url 'goto_direct_page_student' %}" method="post" 
                     style="display: inline-block; max-width: 300px; padding:10px;background-color:#7F62B4; color:white;text-align:center">
                 <label for="id_acces_to_page" style="font-size:15px; display: inline-block;"> Accèder à une page </label><br/>
                 <input type="text" name="acces_to_page" id="id_acces_to_page" maxlength="3" class="acces_to_page" required />
@@ -39,7 +39,7 @@
             <div style="padding-top:15px">
             {% for fpage in first_pages %}
                 {% if fpage %}
-                <a href="{% url 'show_mybook' book.id fpage.number %}"   style="font-size:10px"
+                <a href="{% url 'show_mybook_student' book.id fpage.number %}"   style="font-size:10px"
                     class="btn btn-xs btn-{% if fpage in page.chapter.pages.all %}primary{% else %}sacado{% endif %}">
                     {% if forloop.counter0 == 0 %}
                     <b>Sommaire</b>

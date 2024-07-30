@@ -483,6 +483,11 @@ def show_mybook_two_pages(request,idb, n):
 
 
 
+@csrf_exempt
+def goto_direct_page_student(request):
+    n_page  = request.POST.get("acces_to_page" , None )
+    idb = 9
+    return show_mybook_student(request,idb , n_page)
 
 
 
