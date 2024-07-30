@@ -146,4 +146,8 @@ urlpatterns = [
     
     path('group_can_get_the_book', group_can_get_the_book, name='group_can_get_the_book'),
     path('goto_direct_page', goto_direct_page, name='goto_direct_page'),
+    path('goto_direct_page_student', goto_direct_page_student, name='goto_direct_page_student'),
+
+
+    
  ]
