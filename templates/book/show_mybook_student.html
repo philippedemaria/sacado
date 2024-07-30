@@ -138,11 +138,11 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 {% if forloop.counter0 > 0 %}<span class="paragraph_number">{{ forloop.counter0 }}</span> 
-                                <a href="{% url 'show_mybook' book.id fpage.number %}" class="paragraph_title">
+                                <a href="{% url 'show_mybook_student' book.id fpage.number %}" class="paragraph_title">
                                     {{ fpage.chapter.title }} 
                                 </a>
                                 {% else %}  
-                                <a href="{% url 'show_mybook' book.id fpage.number %}"
+                                <a href="{% url 'show_mybook_student' book.id fpage.number %}"
                                 style="font-size:30px;padding:10px; color:#fc499d;text-decoration:underline">
                                     {{ fpage.chapter.title }} 
                                 </a>
