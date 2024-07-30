@@ -443,9 +443,9 @@
 
                                             {% if bloc.display_qr %} 
                                             <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
-                                                <label>
                                                 {% if group %}
                                                     {% get_group_display_comp bloc group as this_bloc_is_comp %}
+                                                    <label>
                                                     <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
                                                         <i class="bi bi-toggle-on text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
                                                             id="cc_bloc{{ bloc.id }}">
