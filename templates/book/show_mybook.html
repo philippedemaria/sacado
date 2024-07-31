@@ -442,7 +442,7 @@
                                     
 
                                             {% if bloc.display_qr %} 
-                                            <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
+                                            <div  class="pull-right" >  
                                                 {% if group %}
                                                     {% get_group_display_comp bloc group as this_bloc_is_comp %}
                                                     <label>
@@ -483,6 +483,7 @@
                                                     {% endfor %}
                                                 {% endif %}
                                             </div>
+                                            <div style="height:5px"></div>
                                             {% endif %}  
                                         </div>
 
