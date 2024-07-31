@@ -2193,7 +2193,7 @@ def ajax_display_correction_bloc(request):
 
     if type_id == "0" :            
         chapter = Chapter.objects.get(pk=source_id)
-        if is_correction :
+        if str(is_correction)=="1" :
             for p in chapter.pages.all():
                 for paragraph in p.paragraphs.all():
                     for bloc in  paragraph.blocs.all():
@@ -2209,7 +2209,7 @@ def ajax_display_correction_bloc(request):
             print( " type_id : " +str (type_id ) +" type(type_id) : " +str (type(type_id) ) , file=f)
 
  
-        if is_correction :
+        if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
@@ -2229,7 +2229,7 @@ def ajax_display_correction_bloc(request):
 
 
     elif type_id == "2" : 
-        if is_correction :
+        if str(is_correction)=="1" :
             paragraph = Paragraph.objects.get(pk=source_id) 
             for bloc in  paragraph.blocs.all():
                 Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
@@ -2239,7 +2239,7 @@ def ajax_display_correction_bloc(request):
                 Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif  type_id == "3" : 
-        if is_correction :
+        if str(is_correction)=="1" :
             Mybloc.objects.filter(group_id=group_id, bloc=source_id).update(is_display_cor=status)  
         else :
             Mybloc.objects.filter(group_id=group_id, bloc=source_id).update(is_display_comp=status) 
