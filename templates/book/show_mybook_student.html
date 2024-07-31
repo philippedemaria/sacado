@@ -256,7 +256,7 @@
                                             {{ bloc.content_html|safe }}
 
                                             {% if groups %} 
-                                            <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
+                                            <div  class="pull-right">  
                                                 <label>
                                        
                                                     {% get_bloc_comp_visible_by_student bloc groups as this_bloc_is_comp %}
@@ -275,6 +275,7 @@
                                                     {% endif %}
                                                 </label>
                                             </div>
+                                            <div style="height:5px"></div>
                                             {% endif %}  
                                         </div>
                                     </div>
