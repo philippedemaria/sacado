@@ -2206,7 +2206,7 @@ def ajax_display_correction_bloc(request):
 
     elif type_id == "1" : 
         with open("logs/output.txt", "a") as f:
-        print( " type_id : " +str (type_id ) +" type(type_id) : " +str (type(type_id) ) , file=f)
+            print( " type_id : " +str (type_id ) +" type(type_id) : " +str (type(type_id) ) , file=f)
 
  
         if is_correction :
