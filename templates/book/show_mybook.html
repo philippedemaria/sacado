@@ -157,7 +157,6 @@
                                     {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
                                     {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
 
-                                    === {{ this_chapter_is_comp }} ===
                                     <div class="relative pull-right" style="width: 410px; border:1px solid #7F62B4;border-radius:5px">
                                         <div class="row">
                                             <div class="col-xs-6"  align="center" >
@@ -315,7 +314,9 @@
                                 </a>
                             </div>
                             <div style="margin-top:5px;margin-bottom:5px;font-size:12px">
-                            
+                            === {{ this_page_is_comp }} ; {{page.id}} ===
+
+
                             Compléments<br/>
                             {% if this_page_is_comp %}activés{% else %}désactivés{% endif %}
                             </div>
