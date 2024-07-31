@@ -252,33 +252,25 @@
                                         <div class="bloc_content" 
                                             {% if 'exo' in bloc.typebloc.css  %} style="margin-left:65px;"
                                             {% elif bloc.correction_html %} style="margin-left:20px"
-                                            {% endif %}
-                                             data-toggle='modal'   data-target='#book_shower_page'>
+                                            {% endif %}>
                                             {{ bloc.content_html|safe }}
--- {{ groups }} --
+
                                             {% if groups %} 
                                             <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
                                                 <label>
                                        
                                                     {% get_bloc_comp_visible_by_student bloc groups as this_bloc_is_comp %}
-                                                    -- {{ this_bloc_is_comp }} --
                                                     {% if this_bloc_is_comp %}
                                                         {% for a in bloc.appliquettes.all %}
-                                                            <a href="#" target="_blank" style="margin-right:10px;font-size:20px">
-                                                                <i class="bi bi-plus-square-fill text-secondary"></i>
-                                                            </a>
+                                                            <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-success"></i></a>
                                                         {% endfor %}
                                                         {% for e in bloc.exercises.all %} 
-                                                            {% if e.supportfile.imagefile %}
-                                                                <a href="#" target="_blank" style="margin-right:10px">
-                                                                    <img src="{{ e.supportfile.imagefile.url }}" class="complements_img">
-                                                                </a>
+                                                        {% if e.supportfile.imagefile %}
+                                                                <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
                                                             {% endif %}
                                                         {% endfor %}
                                                         {% for e in bloc.exotexs.all %} 
-                                                            <a href="#" target="_blank" style="margin-right:10px">
-                                                                <i class="bi bi-plus-square-fill"></i>
-                                                            </a>
+                                                            <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-success"></i></a>
                                                         {% endfor %}
                                                     {% endif %}
                                                 </label>
