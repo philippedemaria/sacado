@@ -2184,7 +2184,7 @@ def ajax_display_correction_bloc(request):
     source_id = request.POST.get('source_id',None)
     status    = request.POST.get('status',False)
     group_id  = request.session.get('book_group_id')
-    is_correction    = request.POST.get('is_correction',False)
+    is_correction = request.POST.get('is_correction',False)
 
     if status == "off" : 
         status , css , nocss = True ,  "text-success",  "text-secondary"
