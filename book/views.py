@@ -2186,6 +2186,10 @@ def ajax_display_correction_bloc(request):
     group_id  = request.session.get('book_group_id')
     is_correction = request.POST.get('is_correction',False)
 
+    with open("logs/output.txt", "a") as f:
+        print( "type_id : " +str (type_id ) +"source_id : " +str (source_id )+"status : " +str (status )+"group_id : " +str (group_id )+"is_correction : " +str (is_correction ), file=f)
+
+
     if status == "off" : 
         status , css , nocss = True ,  "text-success",  "text-secondary"
     else : 
