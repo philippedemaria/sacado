@@ -257,10 +257,10 @@
                                             {{ bloc.content_html|safe }}
                                     
 
-                                            {% if bloc.display_qr %} 
+                                            {% if group %} 
                                             <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
                                                 <label>
-                                                {% if group %}
+                                       
                                                     {% get_bloc_comp_visible_by_student bloc group as this_bloc_is_comp %}
                                                     {% if this_bloc_is_comp %}
                                                         {% for a in bloc.appliquettes.all %}
@@ -281,7 +281,7 @@
                                                             </a>
                                                         {% endfor %}
                                                     {% endif %}
-                                                {% endif %}
+                                                </label>
                                             </div>
                                             {% endif %}  
                                         </div>
