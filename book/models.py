@@ -317,6 +317,13 @@ class Page(models.Model):
         else :  return ''
 
 
+
+
+
+
+
+
+
 class Paragraph(models.Model):
 
     page    = models.ForeignKey(Page, on_delete=models.CASCADE,  blank=True, null=True,  related_name='paragraphs')
