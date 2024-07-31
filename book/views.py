@@ -2204,12 +2204,21 @@ def ajax_display_correction_bloc(request):
                     for bloc in  paragraph.blocs.all():
                         Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
-    elif type_id == "1" :  
+    elif type_id == "1" : 
+        with open("logs/output.txt", "a") as f:
+        print( " type_id : " +str (type_id ) +" type(type_id) : " +str (type(type_id) ) , file=f)
+
+ 
         if is_correction :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
-                    Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status) 
+                    Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status)
+                    with open("logs/output.txt", "a") as f:
+                        print( " group_id : " +str (group_id ) +" bloc_id : " +str (bloc.id )+" status : " +str (status ), file=f)
+
+
+
         else :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
