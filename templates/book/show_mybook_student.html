@@ -232,8 +232,8 @@
                                                 </span> 
                                             {% endif %}
                                         </div> 
-                                        {% if group %}
-                                            {% get_bloc_cor_visible_by_student bloc group as this_bloc_is_cor %}      
+                                        {% if groups %}
+                                            {% get_bloc_cor_visible_by_student bloc groups as this_bloc_is_cor %}      
                                             {% if this_bloc_is_cor %}
                                                 <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:40px;left:25px"
                                              {% else %} style="position:absolute; top:40px;left:5px"
@@ -255,13 +255,12 @@
                                             {% endif %}
                                              data-toggle='modal'   data-target='#book_shower_page'>
                                             {{ bloc.content_html|safe }}
-                                    
--- {{ group }} --
-                                            {% if group %} 
+-- {{ groups }} --
+                                            {% if groups %} 
                                             <div {% if 'exo' in bloc.typebloc.css %} class="pull-right"{% endif %}>  
                                                 <label>
                                        
-                                                    {% get_bloc_comp_visible_by_student bloc group as this_bloc_is_comp %}
+                                                    {% get_bloc_comp_visible_by_student bloc groups as this_bloc_is_comp %}
                                                     -- {{ this_bloc_is_comp }} --
                                                     {% if this_bloc_is_comp %}
                                                         {% for a in bloc.appliquettes.all %}

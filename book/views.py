@@ -499,12 +499,15 @@ def show_mybook_student(request,idb, n):
     book = Book.objects.get(pk=idb)
     student = request.user.student
 
+    groups = student.students_to_group.all()
+
     prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
     this_chapter = this_page.chapter
     # Appel de la page n
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   
     context = {'book': book, "n" : n ,  'this_chapter' : this_chapter , 'page' : this_page , 'next_page' : next_page  ,
-               'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css , 'student' : student }
+               'prev_page' : prev_page , 'first_pages' : first_pages , 'use_this_css' : use_this_css , 'student' : student
+                , 'groups' : groups }
     return render(request, 'book/show_mybook_student.html', context)
 
 
