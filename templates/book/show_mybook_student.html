@@ -262,6 +262,7 @@
                                                 <label>
                                        
                                                     {% get_bloc_comp_visible_by_student bloc group as this_bloc_is_comp %}
+                                                    -- {{ this_bloc_is_comp }} --
                                                     {% if this_bloc_is_comp %}
                                                         {% for a in bloc.appliquettes.all %}
                                                             <a href="#" target="_blank" style="margin-right:10px;font-size:20px">
