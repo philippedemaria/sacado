@@ -2205,9 +2205,6 @@ def ajax_display_correction_bloc(request):
                         Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "1" : 
-        with open("logs/output.txt", "a") as f:
-            print( " type_id : " +str (type_id ) +" type(type_id) : " +str (type(type_id) ) , file=f)
-
  
         if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
@@ -2247,7 +2244,6 @@ def ajax_display_correction_bloc(request):
 def group_can_get_the_book(request):    
     group_id    = request.POST.get('group_id',False)
     data = dict()
-    print(group_id)
 
     if Mybook.objects.filter(group_id = group_id, book_id = 9 ).count() :    
         Mybook.objects.filter(group_id = group_id).delete()
