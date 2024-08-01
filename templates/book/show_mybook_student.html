@@ -238,10 +238,6 @@
                                                 <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:40px;left:25px"
                                              {% else %} style="position:absolute; top:40px;left:5px"
                                              {% endif %} >
-                                                 <a href="javascript:void(0);" data-target="#book_shower_correction"          data-toggle="modal" 
-                                                class="show_this_bloc_correction"  data-bloc_id="{{ bloc.id }}" >
-                                                <i class="bi bi-c-circle"></i>
-                                            </a> 
                                             <div class="no_visu_on_load" id="book_shower_this_correction{{ bloc.id }}">{{ bloc.correction_html|safe }}</div>
                                             </div>
                                             </div>
