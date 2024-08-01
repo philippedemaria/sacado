@@ -2169,7 +2169,6 @@ def delete_appliquette(request,ida):
 def show_appliquette(request,ida):
 
     app = Appliquette.objects.get(id=ida)
-
     context = { 'app' : app }
 
     return render(request, 'book/show_appliquette.html', context )
@@ -2178,7 +2177,6 @@ def show_appliquette(request,ida):
 
 @csrf_exempt
 def ajax_display_correction_bloc(request):
-
 
     type_id   = request.POST.get('type_id',None)
     source_id = request.POST.get('source_id',None)
