@@ -170,7 +170,7 @@
                                                             data-is_correction = 1 
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
-                                                            <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-on text-secondary{% endif %}" 
+                                                            <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
                                                             id="cc_chapter_cor{{ fpage.chapter.id }}"
                                                             title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                                         </a>
@@ -214,7 +214,7 @@
                                                             data-is_correction = 1 
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
-                                                            <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-on text-secondary{% endif %}" 
+                                                            <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
                                                             id="cc_chapter_cor{{ fpage.chapter.id }}"
                                                             title="Corrections{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
                                                         </a>
@@ -232,7 +232,7 @@
                                                             data-is_correction = 0  
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
-                                                            <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-on text-secondary{% endif %}" 
+                                                            <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
                                                             id="cc_chapter{{ fpage.chapter.id }}"></i> 
                                                         </a>
                                                     </div>
