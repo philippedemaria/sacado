@@ -447,6 +447,8 @@
                                             <div  class="pull-right" >  
                                                 {% if group %}
                                                     {% get_group_display_comp bloc group as this_bloc_is_comp %}
+
+                                                    {% if bloc.appliquettes.count + bloc.exercises.count +  bloc.exotexs.count > 0 %}
                                                     <label>
                                                     <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
                                                         <i class="bi {% if this_bloc_is_comp %}bi-toggle-on text-success{% else %}bi-toggle-off text-secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
@@ -455,6 +457,8 @@
                                                     </a>
                                                     <span id="spinner-3-{{bloc.id}}"></span>
                                                     </label>
+                                                    {% endif %}
+
                                                     {% for a in bloc.appliquettes.all %}
                                                         <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}primary{% else %}secondary{% endif %}"></i></a>
                                                     {% endfor %}
