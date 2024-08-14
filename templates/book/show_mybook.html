@@ -133,8 +133,8 @@
         {% endif %}
     </div>
 
-    <div class="row {{ page.css }} one_page" style="margin-top:20px;"> 
-        <div class="col-xs-12 page_book" {% if page.css == 'intro_page_top' %} style="min-height:1100px" {% endif %}>
+    <div class="row {{ page.css }} one_page" style="margin-top:20px;{% if page.css == 'intro_page_top' %} min-height:1250px {% endif %}"> 
+        <div class="col-xs-12 page_book">
             {% if n == 0  %}
 
                 <div style="padding:10px; border-radius:0px 0px 4px 4px ;background-color:white">
