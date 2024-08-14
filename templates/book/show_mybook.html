@@ -381,7 +381,7 @@
                             {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                                 <div class="col-xs-{{ bloc.size }}" >
                                     <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
-                                        {% if bloc %}
+                                        {% if bloc.title %}
                                         <div id="title_bloc{{ bloc.id }}" {% if 'exo' in bloc.typebloc.css  %} style="float:left"{% endif %}>
                                             {% if 'exo' in bloc.typebloc.css  %}
                                                 {% if bloc.title %}
