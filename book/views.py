@@ -459,10 +459,6 @@ def show_mybook(request,idb, n):
     if str(n) in ["19","30","44","58","72","85","101","117","133","144","158","173","189","201","211","224"] : isMenuDisplayComp = False
     else : isMenuDisplayComp = True
 
-
-
-
-
     if str(n) in ["1","2","3","4","5","6","7","8"]: n=9
     # Appel de la page n
     use_this_css = "css/bookstyle_6_shower.css"  #"css/bookstyle_"+str(book.level.id)+".css"   

@@ -138,8 +138,12 @@ define(["jquery", "bootstrap"], function ($) {
 
                 if (status == "off") {
                   $("#legendcor" + source_id).html("visibles");
+                  $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_chapter_cor" + source_id).addClass("bi-toggle-on");
                 } else {
                   $("#legendcor" + source_id).html("cachés");
+                  $("#cc_chapter_cor" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_chapter_cor" + source_id).addClass("bi-toggle-off");
                 }
                 $("#label_cor" + source_id).removeClass(data.nocss);
                 $("#label_cor" + source_id).addClass(data.css);
@@ -173,12 +177,32 @@ define(["jquery", "bootstrap"], function ($) {
 
                 $(".all_these_blocs_cor").addClass(data.css);
                 $(".all_these_blocs_cor").removeClass(data.nocss);
+
+                if (status == "off") {
+                  $("#cc_page_cor" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_page_cor" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_page_cor" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_page_cor" + source_id).addClass("bi-toggle-off");
+                }
+
               } else {
                 $("#cc_page" + source_id).addClass(data.css);
                 $("#cc_page" + source_id).removeClass(data.nocss);
 
                 $(".all_these_blocs").addClass(data.css);
                 $(".all_these_blocs").removeClass(data.nocss);
+
+                if (status == "off") {
+                  $("#cc_page" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_page" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_page" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_page" + source_id).addClass("bi-toggle-off");
+                }
+
+
+
               }
             } else if (type_id == "2") {
               if (is_correction) {
@@ -187,20 +211,59 @@ define(["jquery", "bootstrap"], function ($) {
 
                 $(".these_blocs_cor" + paragraph_id).addClass(data.css);
                 $(".these_blocs_cor" + paragraph_id).removeClass(data.nocss);
+
+                if (status == "off") {
+                  $("#cc_paragraph_cor" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_paragraph_cor" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_paragraph_cor" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_paragraph_cor" + source_id).addClass("bi-toggle-off");
+                }
+
+
               } else {
                 $("#cc_paragraph" + source_id).addClass(data.css);
                 $("#cc_paragraph" + source_id).removeClass(data.nocss);
 
                 $(".these_blocs" + paragraph_id).addClass(data.css);
                 $(".these_blocs" + paragraph_id).removeClass(data.nocss);
+
+                if (status == "off") {
+                  $("#cc_paragraph" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_paragraph" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_paragraph" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_paragraph" + source_id).addClass("bi-toggle-off");
+                }
+
+
               }
             } else if (type_id == "3") {
               if (is_correction) {
                 $("#cc_bloc_cor" + source_id).addClass(data.css);
                 $("#cc_bloc_cor" + source_id).removeClass(data.nocss);
+
+                if (status == "off") {
+                  $("#cc_bloc_cor" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_bloc_cor" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_bloc_cor" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_bloc_cor" + source_id).addClass("bi-toggle-off");
+                }
+
               } else {
                 $("#cc_bloc" + source_id).addClass(data.css);
                 $("#cc_bloc" + source_id).removeClass(data.nocss);
+
+                if (status == "off") {
+                  $("#cc_bloc" + source_id).removeClass("bi-toggle-off");
+                  $("#cc_bloc" + source_id).addClass("bi-toggle-on");
+                } else {
+                  $("#cc_bloc" + source_id).removeClass("bi-toggle-on");
+                  $("#cc_bloc" + source_id).addClass("bi-toggle-off");
+                }
+
+                
               }
             }
             $("#spinner-" + type_id + "-" + source_id).html("");
