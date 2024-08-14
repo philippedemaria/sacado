@@ -351,6 +351,7 @@
                     {% elif page.css == 'course_page_top' %} style="width:100%;background-image: url('/static/img/course_book.png'); background-repeat: no-repeat ;height:100px"
                     {% endif %}> 
                 </div>
+
                 {% endif %}
 
                 {% for paragraph in page.paragraphs.all|dictsort:"ranking" %}
@@ -380,6 +381,7 @@
                             {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                                 <div class="col-xs-{{ bloc.size }}" >
                                     <div class="global_bloc {{ bloc.typebloc.css }} to_projection" data-paragraph_id="{{paragraph.id}}" > 
+                                        {% if bloc %}
                                         <div id="title_bloc{{ bloc.id }}" {% if 'exo' in bloc.typebloc.css  %} style="float:left"{% endif %}>
                                             {% if 'exo' in bloc.typebloc.css  %}
                                                 {% if bloc.title %}
@@ -404,7 +406,7 @@
                                                 </span> 
                                             {% endif %}
                                         </div> 
-
+                                        {% endif %}
                                         {% if bloc.correction_html %}
                                         <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:40px;left:25px"
                                              {% else %} style="position:absolute; top:40px;left:5px"
