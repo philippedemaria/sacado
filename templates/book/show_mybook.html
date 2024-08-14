@@ -268,31 +268,33 @@
                     </div>
                     <div class="row">
                         {% if group %}
-                        <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} align="center">
-                            <div>
-                                <i id="bi-c-circle-fill{{page.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
-                            </div>
-    
-                            {% get_group_display_cor page group as this_page_is_cor %}
-                            <div style="margin-top:5px;margin-bottom:5px" >
-                                <a href="javascript:void(0);" 
-                                class="display_correction_bloc_button active_small_size" 
-                                    data-source_id = "{{page.id}}" 
-                                    data-type_id = "1"  
-                                    data-paragraph_id = "0" 
-                                    data-is_correction = 1 
-                                    style="font-size:30px!important; padding:10px"> 
- 
-                                    <i class="bi {% if this_page_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
-                                    id="cc_page_cor{{ page.id }}"
-                                    title="Corrections{% if this_page_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
-                                </a>
-                            </div>
-                            <div style="margin-top:5px;margin-bottom:5px;font-size:12px" >
-                                Corrections<br/>
-                                {% if this_page_is_cor %}activées{% else %}désactivées{% endif %}
-                            </div>
-                        </div>
+                            {% if isMenuDisplayCor %}
+                                <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} align="center">
+                                    <div>
+                                        <i id="bi-c-circle-fill{{page.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
+                                    </div>
+            
+                                    {% get_group_display_cor page group as this_page_is_cor %}
+                                    <div style="margin-top:5px;margin-bottom:5px" >
+                                        <a href="javascript:void(0);" 
+                                        class="display_correction_bloc_button active_small_size" 
+                                            data-source_id = "{{page.id}}" 
+                                            data-type_id = "1"  
+                                            data-paragraph_id = "0" 
+                                            data-is_correction = 1 
+                                            style="font-size:30px!important; padding:10px"> 
+         
+                                            <i class="bi {% if this_page_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
+                                            id="cc_page_cor{{ page.id }}"
+                                            title="Corrections{% if this_page_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
+                                        </a>
+                                    </div>
+                                    <div style="margin-top:5px;margin-bottom:5px;font-size:12px" >
+                                        Corrections<br/>
+                                        {% if this_page_is_cor %}activées{% else %}désactivées{% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
                         {% if isMenuDisplayComp %}
                         <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} align="center" >
                             {% get_group_display_comp page group as this_page_is_comp %}
