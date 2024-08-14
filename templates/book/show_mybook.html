@@ -454,11 +454,17 @@
                                                     <span id="spinner-3-{{bloc.id}}"></span>
                                                     </label>
                                                     {% for a in bloc.appliquettes.all %}
-                                                        <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
+                                                        <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}primary{% else %}secondary{% endif %}"></i></a>
                                                     {% endfor %}
                                                     {% for e in bloc.exercises.all %} 
-                                                    {% if e.supportfile.imagefile %}
-                                                            <a href="{% url 'execute_exercise_from_book' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                        {% if e.supportfile.imagefile %}
+                                                            <a href="{% url 'execute_exercise_from_book' e.id %}" 
+                                                                target="_blank" style="margin-right:10px;font-size:20px">
+                                                                    <!-- <img src="{{ e.supportfile.imagefile.url }}" class="complements_img"> -->
+                                                                <i class="bi {% if this_bloc_is_comp %}bi-toggle-on text-primary{% else %}bi-toggle-off text-secondary{% endif %}">
+                                                                </i>     
+
+                                                            </a>
                                                         {% endif %}
                                                     {% endfor %}
                                                     {% for e in bloc.exotexs.all %} 
