@@ -447,11 +447,14 @@ def show_mybook(request,idb, n):
     prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
     this_chapter = this_page.chapter
 
-    isMenuDisplay = True
-    if str(n) in ["9","21","33","47","61","75","87","103","119","135","147","161","175","203","213"] : isMenuDisplay = False
 
-    isMenuDisplayComp = True
+    if str(n) in ["9","21","33","47","61","75","87","103","119","135","147","161","175","203","213"] : isMenuDisplay = False
+    elif this_page.css == 'course_page_top' or this_page.css == 'ad_page_top' : isMenuDisplay = False
+    else : isMenuDisplay = True
+
+ 
     if str(n) in ["19","30","44","58","72","85","101","117","133","144","158","173","189","201","211","224"] : isMenuDisplayComp = False
+    else : isMenuDisplayComp = True
 
     if str(n) in ["1","2","3","4","5","6","7","8"]: n=9
     # Appel de la page n
