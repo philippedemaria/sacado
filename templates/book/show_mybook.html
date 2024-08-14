@@ -142,9 +142,9 @@
                     <div {% if n == 0 %}class="this_paragraph0"{% else %}class="this_paragraph"{% endif %} id="this_paragraph{{ fpage.chapter.id }}" style="margin:10px 0px">
                         <div class="row">
                             <div class="col-xs-12">
-                                {% if forloop.counter0 > 0 %}<span class="paragraph_number">{{ forloop.counter0 }}</span> 
+                                {% if forloop.counter0 > 0 %} 
                                 <a href="{% url 'show_mybook' book.id fpage.number %}" class="paragraph_title">
-                                    {{ fpage.chapter.title }} 
+                                   <span style="font-size:25px">Chapitre {{ forloop.counter0 }}</span> -   {{ fpage.chapter.title }} 
                                 </a>
                                 {% else %}  
                                 <a href="{% url 'show_mybook' book.id fpage.number %}"
