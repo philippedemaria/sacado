@@ -780,9 +780,11 @@ def delete_formule(request, id):
 
 @user_passes_test(user_is_board)
 def erase_gar(request):
-    these_users_gar = User.objects.filter(email__contains='@sacado.xyz')
+    these_users_gar = User.objects.filter(email__contains='@sacado.xyz').exclude(id=277744)
     for u in these_users_gar:
-        u.delete()
+        try :
+            u.delete()
+        except: pass
 
 
     context = {'these_users_gar':these_users_gar }
