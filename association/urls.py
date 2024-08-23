@@ -124,5 +124,7 @@ urlpatterns = [
     
     path('courbeLog', courbeLog, name='courbeLog'),
 
+    path('erase_gar', erase_gar, name='erase_gar'),
+
 ]
  

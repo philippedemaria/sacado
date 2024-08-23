@@ -1,0 +1,33 @@
+{% extends 'dashboard.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% load item_tags %}
+
+
+   
+{% block require %}
+    <script src="{% static 'js/require.js' %}"   data-main="{% static 'js/common2_withoutMathJax.js' %}"></script>
+ 
+{% endblock %} 
+
+
+{% block page_title %}
+    <a href="{% url 'association_index' %}" ><i class="fa fa-cloud"></i> </a> Tous les établissements - {{ schools.count }}
+{% endblock %} 
+
+{% block page_menu_right %}
+ 
+{% endblock %}
+
+
+{% block body %}
+<section class="content_main"> 
+    {% if request.user.is_board %}
+        <ul>
+            {% for  u in these_users_gar %}
+            <li>{{ u.id }} {{ u.first_name }}  {{ u.last_name }} > {{ u.email }} </li>
+            {% enfor %}
+        </ul>
+    {% endif %} 
+</section> 
+{% endblock %}

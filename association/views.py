@@ -778,6 +778,18 @@ def delete_formule(request, id):
 #####################################################################################################################################
 #####################################################################################################################################
 
+@user_passes_test(user_is_board)
+def erase_gar(request):
+    these_users_gar = User.objects.filter(email__contains='@sacado.xyz')
+
+
+    context = {'these_users_gar':these_users_gar }
+    return render(request, 'association/erase_gar.html', context ) 
+
+
+
+
+
 # def school_to_customer():
 #     today       = datetime.now()
 #     abonnements = Abonnement.objects.values_list('school').distinct()
