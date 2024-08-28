@@ -2192,9 +2192,9 @@ def ajax_display_correction_bloc(request):
     is_correction = request.POST.get('is_correction',False)
 
     if status == "off" : 
-        status , css , nocss = True ,  "text-success",  "text-secondary"
+        status , css , nocss, csscomp, nocsscomp = True ,  "text-success",  "text-secondary",  "text-violet",  "text-secondary"
     else : 
-        status , css,nocss =  False , "text-secondary",  "text-success"
+        status , css, nocss, csscomp, nocsscomp =  False , "text-secondary",  "text-success",  "text-success",  "text-violet"
 
     if type_id == "0" :            
         chapter = Chapter.objects.get(pk=source_id)
