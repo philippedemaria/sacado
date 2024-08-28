@@ -460,18 +460,19 @@
                                                         </label>
                                                     {% endif %}
                                                     {% for a in bloc.appliquettes.all %}
-                                                        <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}primary{% else %}secondary{% endif %}"></i></a>
+                                                        <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px">
+                                                            <i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}primary{% else %}secondary{% endif %}"></i>
+                                                        </a>
                                                     {% endfor %}
                                                     {% for e in bloc.exercises.all %} 
-                                                        {% if e.supportfile.imagefile %}
+                                                         
                                                             <a href="{% url 'execute_exercise_from_book' e.id %}" 
                                                                 target="_blank" style="margin-right:10px;font-size:20px">
                                                                     <!-- <img src="{{ e.supportfile.imagefile.url }}" class="complements_img"> -->
-                                                                <i class="bi {% if this_bloc_is_comp %}bi-toggle-on text-primary{% else %}bi-toggle-off text-secondary{% endif %}">
-                                                                </i>     
+                                                                <i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}primary{% else %}secondary{% endif %}"></i>    
 
                                                             </a>
-                                                        {% endif %}
+                                                      
                                                     {% endfor %}
                                                     {% for e in bloc.exotexs.all %} 
                                                         <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
@@ -487,11 +488,11 @@
                                                     {% endfor %}
                                                     {% for e in bloc.exercises.all %} 
                                                         {% if e.supportfile.imagefile %}
-                                                            <a href="#" target="_blank" style="margin-right:10px"><img src="{{ e.supportfile.imagefile.url }}" class="complements_img"></a>
+                                                            <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill text-secondary"></i></a>
                                                         {% endif %}
                                                     {% endfor %}
                                                     {% for e in bloc.exotexs.all %} 
-                                                        <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill"></i></a>
+                                                        <a href="#" target="_blank" style="margin-right:10px"><i class="bi bi-plus-square-fill text-secondary"></i></a>
                                                     {% endfor %}
                                                 {% endif %}
                                             </div>
