@@ -178,17 +178,12 @@ define(["jquery", "bootstrap"], function ($) {
                 $(".all_these_blocs_cor").addClass(data.css);
                 $(".all_these_blocs_cor").removeClass(data.nocss);
 
-
                 if (status == "off") {
                   $("#cc_page_cor" + source_id).removeClass("bi-toggle-off");
                   $("#cc_page_cor" + source_id).addClass("bi-toggle-on");
-                  $(".all_these_blocs_cor").addClass("bi-toggle-on");
-                  $(".all_these_blocs_cor").removeClass("bi-toggle-off");
                 } else {
                   $("#cc_page_cor" + source_id).removeClass("bi-toggle-on");
                   $("#cc_page_cor" + source_id).addClass("bi-toggle-off");
-                  $(".all_these_blocs_cor").addClass("bi-toggle-off");
-                  $(".all_these_blocs_cor").removeClass("bi-toggle-on");
                 }
 
               } else {
@@ -201,13 +196,9 @@ define(["jquery", "bootstrap"], function ($) {
                 if (status == "off") {
                   $("#cc_page" + source_id).removeClass("bi-toggle-off");
                   $("#cc_page" + source_id).addClass("bi-toggle-on");
-                  $(".these_blocs").addClass("bi-toggle-on");
-                  $(".these_blocs").removeClass("bi-toggle-off");
                 } else {
                   $("#cc_page" + source_id).removeClass("bi-toggle-on");
                   $("#cc_page" + source_id).addClass("bi-toggle-off");
-                  $(".these_blocs").addClass("bi-toggle-off");
-                  $(".these_blocs").removeClass("bi-toggle-on");
                 }
 
 
