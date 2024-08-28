@@ -782,8 +782,7 @@ def delete_formule(request, id):
 def erase_gar(request):
     these_users_gar = User.objects.filter(email__contains='@sacado.xyz').exclude(id=277744)
     for u in these_users_gar:
-        try :
-            u.delete()
+        try : u.delete()
         except: pass
 
 
