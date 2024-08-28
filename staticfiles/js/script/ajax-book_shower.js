@@ -107,10 +107,10 @@ define(["jquery", "bootstrap"], function ($) {
         let type_id = $(this).data("type_id");
         let paragraph_id = $(this).data("paragraph_id");
         let is_correction = $(this).data("is_correction");
-        if ($(this).children().first().hasClass("text-success")) {
-          var status = "on";
-        } else {
+        if ($(this).children().first().hasClass("text-secondary")) {
           var status = "off";
+        } else {
+          var status = "on";
         }
 
         $("#spinner-" + type_id + "-" + source_id).html(
