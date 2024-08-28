@@ -2242,6 +2242,9 @@ def ajax_display_correction_bloc(request):
     data = {}
     data['css'] = css
     data['nocss'] = nocss
+    data['csscomp'] = csscomp
+    data['nocsscomp'] = nocsscomp
+
     return JsonResponse(data) 
 
 
