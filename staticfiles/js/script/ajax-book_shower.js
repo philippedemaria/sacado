@@ -197,17 +197,21 @@ define(["jquery", "bootstrap"], function ($) {
 
                 $(".all_these_blocs").addClass(data.css);
                 $(".all_these_blocs").removeClass(data.nocss);
+                $(".bi-plus-square-fill").addClass(data.css);
+                $(".bi-plus-square-fill").removeClass(data.nocss);
+                
 
                 if (status == "off") {
                   $("#cc_page" + source_id).removeClass("bi-toggle-off");
                   $("#cc_page" + source_id).addClass("bi-toggle-on");
-                  $(".these_blocs").addClass("bi-toggle-on");
-                  $(".these_blocs").removeClass("bi-toggle-off");
+                  $(".all_these_blocs").addClass("bi-toggle-on");
+                  $(".all_these_blocs").removeClass("bi-toggle-off");
+
                 } else {
                   $("#cc_page" + source_id).removeClass("bi-toggle-on");
                   $("#cc_page" + source_id).addClass("bi-toggle-off");
-                  $(".these_blocs").addClass("bi-toggle-off");
-                  $(".these_blocs").removeClass("bi-toggle-on");
+                  $(".all_these_blocs").addClass("bi-toggle-off");
+                  $(".all_these_blocs").removeClass("bi-toggle-on");
                 }
 
 
@@ -236,7 +240,8 @@ define(["jquery", "bootstrap"], function ($) {
 
                 $(".these_blocs" + paragraph_id).addClass(data.css);
                 $(".these_blocs" + paragraph_id).removeClass(data.nocss);
-
+                $(".bi-plus-square-fill").addClass(data.css);
+                $(".bi-plus-square-fill").removeClass(data.nocss);
                 if (status == "off") {
                   $("#cc_paragraph" + source_id).removeClass("bi-toggle-off");
                   $("#cc_paragraph" + source_id).addClass("bi-toggle-on");
