@@ -452,11 +452,11 @@ def show_mybook(request,idb, n):
     else : isMenuDisplay = True
 
  
-    if  this_page.css == "course_page_top" : isMenuDisplayCor = False
+    if  this_page.css == "course_page_top" : isMenuDisplayCor = True
     else : isMenuDisplayCor = True
 
 
-    if str(n) in ["19","30","44","58","72","85","101","117","133","144","158","173","189","201","211","224"] : isMenuDisplayComp = False
+    if str(n) in ["19","30","44","58","72","85","101","117","133","144","158","173","189","201","211","224"] : isMenuDisplayComp = True
     else : isMenuDisplayComp = True
 
     if str(n) in ["1","2","3","4","5","6","7","8"]: n=9
