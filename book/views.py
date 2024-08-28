@@ -2194,7 +2194,7 @@ def ajax_display_correction_bloc(request):
     if status == "off" : 
         status , css , nocss, csscomp, nocsscomp = True ,  "text-success",  "text-secondary",  "text-violet",  "text-secondary"
     else : 
-        status , css, nocss, csscomp, nocsscomp =  False , "text-secondary",  "text-success",  "text-success",  "text-violet"
+        status , css, nocss, csscomp, nocsscomp =  False , "text-secondary",  "text-success",  "text-secondary",  "text-violet"
 
     if type_id == "0" :            
         chapter = Chapter.objects.get(pk=source_id)
