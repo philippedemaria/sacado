@@ -2193,15 +2193,15 @@ def ajax_display_correction_bloc(request):
 
     with open("logs/outputBook.txt", "a") as f:
         print("type_id : "  + type_id , file=f)
-        # except : print("erreur de type_id")
-        # try :print("source_id : " + source_id, file=f)
-        # except : print("erreur de source_id")
-        # try :print("status : " + status , file=f)
-        # except : print("erreur de status")
-        # try :print("group_id : " + group_id, file=f)
-        # except : print("erreur de group_id")
-        # try :print("is_correction : " + is_correction, file=f)
-        # except : print("erreur de is_correction")
+        except : print("erreur de type_id")
+        try :print("source_id : " + source_id, file=f)
+        except : print("erreur de source_id")
+        try :print("status : " + status , file=f)
+        except : print("erreur de status")
+        try :print("group_id : " + group_id, file=f)
+        except : print("erreur de group_id")
+        try :print("is_correction : " + is_correction, file=f)
+        except : print("erreur de is_correction")
 
 
 
@@ -2227,16 +2227,16 @@ def ajax_display_correction_bloc(request):
         if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
             with open("logs/outputBook.txt", "a") as f:
-                print("page : " + page.id , file=f)
+                print("page : " + str(page.id) , file=f)
 
             for paragraph in page.paragraphs.all():
                 with open("logs/outputBook.txt", "a") as f:
-                    print("paragraph : " + paragraph.id , file=f)
+                    print("paragraph : " + str(paragraph.id) , file=f)
 
                 for bloc in  paragraph.blocs.all():
                     Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status)
                     with open("logs/outputBook.txt", "a") as f:
-                        print("bloc : " + bloc.id , file=f)
+                        print("bloc : " + str(bloc.id) , file=f)
 
         else :
             page = Page.objects.get(pk=source_id) 
@@ -2244,7 +2244,7 @@ def ajax_display_correction_bloc(request):
                 for bloc in  paragraph.blocs.all():
                     Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
                     with open("logs/outputBook.txt", "a") as f:
-                        print("bloc comp: " + bloc.id , file=f)
+                        print("bloc comp: " + str(bloc.id) , file=f)
     elif type_id == "2" : 
         if str(is_correction)=="1" :
             paragraph = Paragraph.objects.get(pk=source_id) 
