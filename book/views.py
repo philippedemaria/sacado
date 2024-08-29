@@ -2227,9 +2227,14 @@ def ajax_display_correction_bloc(request):
         if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
+                with open("logs/outputBook.txt", "a") as f:
+                    try :print("paragraph : " + paragraph , file=f)
+                    except : pass
                 for bloc in  paragraph.blocs.all():
                     Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status)
-
+                    with open("logs/outputBook.txt", "a") as f:
+                        try :print("bloc : " + bloc , file=f)
+                        except : pass
         else :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
