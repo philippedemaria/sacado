@@ -1284,8 +1284,11 @@ def ask_school_adhesion(request):
 	if request.method == "POST" : 
 		if form.is_valid():   
 			school = form.save()
-			Customer.objects.get_or_create(school=school , defaults = {'user' : user , 'phone' : '' ,'status' : 0 } )
-			
+			try : Customer.objects.get_or_create(school=school , defaults = {'user' : user , 'phone' : '' ,'status' : 0 } )
+			except :
+				with open("logs/output.txt", "a") as f:
+					print("problème de Customer" , file=f)
+
 			if school.gar : asking_gar = " Accès au GAR demandé"
 			else : asking_gar = " Pas d'accès au GAR demandé"
 			
