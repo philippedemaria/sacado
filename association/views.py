@@ -19,7 +19,6 @@ from association.forms import *
 from account.models import User, Student, Teacher, Parent ,  Response , Connexion
 from bibliotex.models import Relationtex
 from qcm.models import Exercise, Studentanswer , Customanswerbystudent , Writtenanswerbystudent
-from school.models import School
 from school.forms import SchoolForm
 from group.models import Group
 from school.gar import *
@@ -806,6 +805,7 @@ def new_customer(request):
  
 
     if request.method == 'POST' :
+        from school.models import School
         rne = request.POST.get('rne',None)
         if rne :
             this_user_id = request.POST.get('this_user_id',None)
@@ -842,7 +842,7 @@ def ajax_customer(request):
 
 @csrf_exempt
 def ajax_new_customer(request):
-
+    from school.models import School
     rne =  request.POST.get("rne")
     school = School.objects.filter(code_acad=rne).first()
     data = {}
@@ -854,7 +854,7 @@ def ajax_new_customer(request):
 
 @user_passes_test(user_is_board) 
 def update_school_admin(request,id):
-
+    from school.models import School
     today    = datetime.now()
     today_time = today -   timedelta(days = 15)
     school = School.objects.get(id=id)
@@ -2088,7 +2088,7 @@ def ajax_total_period(request):
 
 @user_passes_test(user_is_board) 
 def create_accounting(request,tp,ids):
- 
+    from school.models import School
     form     = AccountingForm(request.POST or None )
     formSet  = inlineformset_factory( Accounting , Detail , fields=('accounting','description','amount',) , extra=0)
     form_ds  = formSet(request.POST or None)
@@ -2218,7 +2218,7 @@ def create_accounting(request,tp,ids):
 @user_passes_test(user_is_board) 
 def renew_accounting(request,ids):
  
-
+    from school.models import School
     school   = School.objects.get(pk=ids)
     form     = AccountingForm(request.POST or None , initial = { 'school' : school, })
     #form_abo = AbonnementForm(request.POST or None )
@@ -2413,7 +2413,7 @@ def get_the_string_between(content,sub1,sub2) :
 @user_passes_test(user_is_board)
 def abonnements_gar(request):
 
-
+    from school.models import School
     #global_content = str('<?xml version="1.0" encoding="UTF-8" standalone="yes"?><abonnements xmlns="http://www.atosworldline.com/wsabonnement/v1.0/"><abonnement><idAbonnement>AUTO_0350896J_26271_1619092961178</idAbonnement><commentaireAbonnement>Abonnement automatique</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ARK</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2021-04-22T14:02:41.000+02:00</debutValidite><finValidite>2024-08-15T00:00:01.000+02:00</finValidite><anneeFinValidite>2020-2021</anneeFinValidite><uaiEtab>0350896J</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>ETABL</typeAffectation><nbLicenceGlobale>ILLIMITE</nbLicenceGlobale><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>AUTO_0350896J_26271_1629007368419</idAbonnement><commentaireAbonnement>Abonnement automatique</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ARK</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2021-08-15T08:02:48.000+02:00</debutValidite><finValidite>2023-08-15T00:00:00.000+02:00</finValidite><anneeFinValidite>2021-2022</anneeFinValidite><uaiEtab>0350896J</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>ETABL</typeAffectation><nbLicenceGlobale>ILLIMITE</nbLicenceGlobale><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0291103S_1659621068</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-04T14:51:08.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0291103S</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0291103S_1659631645</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-04T17:47:25.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0291103S</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0350029S_1660732089</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-17T11:28:09.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0350029S</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0350029S_1660732189</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-17T11:29:49.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0350029S</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0350896J_1659614436</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-04T13:00:36.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0350896J</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0350896J_1659638763</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-04T19:46:03.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0350896J</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0561622J_1660732409</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-17T11:33:30.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0561622J</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0561622J_1660732443</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-17T11:34:02.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0561622J</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement><abonnement><idAbonnement>SACADO_0561622J_1660732461</idAbonnement><commentaireAbonnement>AbonnementSacAdo</commentaireAbonnement><idDistributeurCom>832020065_0000000000000000</idDistributeurCom><idRessource>ark:/46173/00001.p</idRessource><typeIdRessource>ark</typeIdRessource><libelleRessource>SACADO</libelleRessource><debutValidite>2022-08-17T11:34:21.000+02:00</debutValidite><finValidite>2023-07-14T00:00:00.000+02:00</finValidite><uaiEtab>0561622J</uaiEtab><categorieAffectation>transferable</categorieAffectation><typeAffectation>INDIV</typeAffectation><nbLicenceEnseignant>ILLIMITE</nbLicenceEnseignant><nbLicenceEleve>500</nbLicenceEleve><nbLicenceProfDoc>100</nbLicenceProfDoc><nbLicenceAutrePersonnel>50</nbLicenceAutrePersonnel><publicCible>ELEVE</publicCible><publicCible>ENSEIGNANT</publicCible><publicCible>DOCUMENTALISTE</publicCible><publicCible>AUTRE PERSONNEL</publicCible></abonnement></abonnements>')
  
 
@@ -2459,13 +2459,13 @@ def abonnements_gar(request):
 
 @user_passes_test(user_is_board)
 def delete_abonnement_gar(request,idg):
-  
+    from school.models import School
 
     abonnement = Abonnement.objects.get(gar_abonnement_id = idg)
     school_id  = abonnement.school.id
 
     test, raison , header , decode   = delete_gar_abonnement(idg)
-
+    
     if test :
         school = School.objects.get(pk = school_id)
         School.objects.filter(pk = school.id).update(gar = 1)
