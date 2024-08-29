@@ -12,7 +12,7 @@ from account.models import User, Teacher, Student , Parent ,Response
 from qcm.models import Relationship  
 from socle.models import Skill, Theme, Waiting, Knowledge
 from account.forms import UserForm , StudentForm ,NewUserSForm
-from association.models import Accounting, Rate, Detail
+from association.models import Accounting, Rate, Detail, Customer
 from school.forms import SchoolForm, CountryForm, GroupForm, StageForm, SchoolUpdateForm
 from school.gar import *
 from group.views import include_students
@@ -1284,7 +1284,8 @@ def ask_school_adhesion(request):
 	if request.method == "POST" : 
 		if form.is_valid():   
 			school = form.save()
-			Customer.objects.get_or_create(school=school , defaults = {'user' : user , 'phone' : '' ,'status' : 0 } )
+			try: Customer.objects.get_or_create(school=school , defaults = {'user' : user , 'phone' : '' ,'status' : 0 } )
+			except : pass
 			if school.gar : asking_gar = " Accès au GAR demandé"
 			else : asking_gar = " Pas d'accès au GAR demandé"
 			
@@ -1357,7 +1358,6 @@ def csv_full_group(request):
         for line in lines:
         	try :
 	            ln, fn, username , password , email , group_name , level , is_username_changed = separate_values(request, line, 0 , simple) # 0 donne la forme du CSV
-
 	            if group_name not in group_history :
 	                group, created_group = Group.objects.get_or_create(name=group_name, teacher = teacher , defaults={ 'color': '#46119c' , 'level_id': level  })
 	                if created_group :
