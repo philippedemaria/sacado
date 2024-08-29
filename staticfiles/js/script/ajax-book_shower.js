@@ -274,9 +274,14 @@ define(["jquery", "bootstrap"], function ($) {
                 if (status == "off") {
                   $("#cc_bloc_cor" + source_id).removeClass("bi-toggle-off");
                   $("#cc_bloc_cor" + source_id).addClass("bi-toggle-on");
+                  $("#bi-c-circle-fill"+ source_id).addClass("text-danger");
+                  $("#bi-c-circle-fill"+ source_id).removeClass("text-success");
+
                 } else {
                   $("#cc_bloc_cor" + source_id).removeClass("bi-toggle-on");
                   $("#cc_bloc_cor" + source_id).addClass("bi-toggle-off");
+                  $("#bi-c-circle-fill"+ source_id).addClass("text-danger");
+                  $("#bi-c-circle-fill"+ source_id).removeClass("text-success");
                 }
 
               } else {
