@@ -2224,8 +2224,6 @@ def ajax_display_correction_bloc(request):
                         Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "1" : 
-        with open("logs/outputBook.txt", "a") as f:
-            try :print("ici type 1 : " , file=f)
         if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
