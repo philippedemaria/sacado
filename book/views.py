@@ -2192,7 +2192,7 @@ def ajax_display_correction_bloc(request):
     is_correction = request.POST.get('is_correction',False)
 
     with open("logs/outputBook.txt", "a") as f:
-        print("type_id : "  + type_id , file=f)
+        try :print("type_id : "  + type_id , file=f)
         except : print("erreur de type_id")
         try :print("source_id : " + source_id, file=f)
         except : print("erreur de source_id")
