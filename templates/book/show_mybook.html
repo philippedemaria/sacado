@@ -159,7 +159,8 @@
                                                             data-source_id = "{{fpage.chapter.id}}" 
                                                             data-type_id = "0"  
                                                             data-paragraph_id = "0" 
-                                                            data-is_correction = 1 
+                                                            data-is_correction = 1               
+                                                            data-book_group_id={{group.id}}
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
                                                             <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
@@ -178,7 +179,8 @@
                                                         data-source_id = "{{fpage.chapter.id}}" 
                                                         data-type_id = "0"  
                                                         data-paragraph_id = "0" 
-                                                        data-is_correction = 0  
+                                                        data-is_correction = 0 
+                                                        data-book_group_id={{group.id}}
                                                         style="font-size:30px!important; padding:10px"> 
                                                          
                                                         <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
@@ -191,8 +193,7 @@
 
 
                                     {% endif %}
-                                {% else %}
-                                    {% if not forloop.first %}
++                                    {% if not forloop.first %}
                                     <!-- Dans cette partie, il n'y a pas de groupe affecté, donc les boutons deviennent inactifs mais restent apparents. -->
                                     <div class="relative pull-right" style="width: 410px;border:1px solid #7F62B4;border-radius:5px">
                                         <div class="row">
@@ -275,6 +276,7 @@
                                             data-type_id = "1"  
                                             data-paragraph_id = "0" 
                                             data-is_correction = 1 
+                                            data-book_group_id={{group.id}}
                                             style="font-size:30px!important; padding:10px"> 
          
                                             <i class="bi {% if this_page_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
@@ -300,6 +302,7 @@
                                     data-source_id = "{{page.id}}" 
                                     data-type_id = "1"  
                                     data-paragraph_id = "0" 
+                                    data-book_group_id={{group.id}}
                                     data-is_correction = 0 
                                     style="font-size:30px!important; padding:10px"> 
                                     <i class="bi {% if this_page_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
@@ -411,7 +414,8 @@
                                             <div style="margin-top :10px;">
                                             {% if group %}
                                                 {% get_group_display_cor bloc group as this_bloc_is_cor %}
-                                                <a class="display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-is_correction = 1   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
+                                                <a class="display_correction_bloc_button" data-source_id = "{{bloc.id}}" data-is_correction = 1                                                          data-book_group_id={{group.id}}
+                                                 data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
                                                     <i class="bi {% if this_bloc_is_cor %}bi-toggle-on text-success{% else %}bi-toggle-off text-secondary{% endif %} these_blocs_cor{{ paragraph.id }} all_these_blocs_cor"
                                                         id="cc_bloc_cor{{ bloc.id }}">
                                                     </i> 
@@ -443,7 +447,9 @@
 
                                                     {% if bloc.appliquettes.count > 0 or bloc.exercises.count > 0 or  bloc.exotexs.count  > 0 %}
                                                         <label>
-                                                        <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
+                                                        <a class="display_correction_bloc_button" data-source_id="{{bloc.id}}" data-is_correction = 0   
+                                                        data-book_group_id={{group.id}}
+                                                        data-paragraph_id = "{{paragraph.id}}" data-type_id = "3" style="font-size:20px"> 
                                                             <i class="bi {% if this_bloc_is_comp %}bi-toggle-on text-success{% else %}bi-toggle-off text-secondary{% endif %} these_blocs{{ paragraph.id }} all_these_blocs"
                                                                 id="cc_bloc{{ bloc.id }}">
                                                             </i>   

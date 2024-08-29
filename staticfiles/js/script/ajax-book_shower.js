@@ -107,6 +107,9 @@ define(["jquery", "bootstrap"], function ($) {
         let type_id = $(this).data("type_id");
         let paragraph_id = $(this).data("paragraph_id");
         let is_correction = $(this).data("is_correction");
+        let book_group_id = $(this).data("book_group_id");
+
+        
         if ($(this).children().first().hasClass("text-secondary")) {
           var status = "off";
         } else {
@@ -125,6 +128,7 @@ define(["jquery", "bootstrap"], function ($) {
             source_id: source_id,
             is_correction: is_correction,
             status: status,
+            book_group_id:book_group_id,
           },
           url: "../../ajax_display_correction_bloc",
           success: function (data) {
