@@ -199,12 +199,9 @@
                                             <div class="col-xs-6">
                                                 <div id="label_cor{{fpage.chapter.id}}"  style="font-size: 12px;text-align:center">Corrigés</div>
                                                     <div class="margin-top:10px;margin-bottom:10px" >
-                                                        <a href="javascript:void(0);" 
+                                                        <a href="" 
                                                         class="active_small_size" 
-                                                            data-source_id = "{{fpage.chapter.id}}" 
-                                                            data-type_id = "0"  
-                                                            data-paragraph_id = "0" 
-                                                            data-is_correction = 1 
+                    
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
                                                             <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
@@ -218,11 +215,7 @@
                                                 <div id="label_comp{{fpage.chapter.id}}" 
                                                  style="font-size: 12px;text-align:center">Compléments</div>
                                                 <div > 
-                                                        <a href="javascript:void(0);"  class="active_small_size" 
-                                                            data-source_id = "{{fpage.chapter.id}}" 
-                                                            data-type_id = "0"  
-                                                            data-paragraph_id = "0" 
-                                                            data-is_correction = 0  
+                                                        <a href="javascript:void(0);"  class="active_small_size"  
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
                                                             <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
@@ -293,7 +286,7 @@
                         <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} align="center" >
                             {% get_group_display_comp page group as this_page_is_comp %}
                             <div>                                                        
-                                <i id="bi-plus-square-fill" class="bi bi-plus-square-fill {% if this_page_is_comp %}text-success{% else %} text-secondary{% endif %}" ></i>
+                                <i id="bi-plus-square-fill" class="bi bi-plus-square-fill {% if this_page_is_comp %}text-violet{% else %} text-secondary{% endif %}" ></i>
                             </div>
                             <div  style="margin-top:5px;margin-bottom:5px;"  >
                                 <a href="javascript:void(0);" 
@@ -458,7 +451,7 @@
                                                     {% endif %}
                                                     {% for a in bloc.appliquettes.all %}
                                                         <a href="{% url 'goto_appliquette_after_qrcode' a.code %}" target="_blank" style="margin-right:10px;font-size:20px">
-                                                            <i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}primary{% else %}secondary{% endif %}"></i>
+                                                            <i class="bi bi-plus-square-fill square_fill_bloc text-{% if this_bloc_is_comp %}violet{% else %}secondary{% endif %}"></i>
                                                         </a>
                                                     {% endfor %}
                                                     {% for e in bloc.exercises.all %} 
@@ -466,13 +459,15 @@
                                                             <a href="{% url 'execute_exercise_from_book' e.id %}" 
                                                                 target="_blank" style="margin-right:10px;font-size:20px">
                                                                     <!-- <img src="{{ e.supportfile.imagefile.url }}" class="complements_img"> -->
-                                                                <i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}primary{% else %}secondary{% endif %}"></i>    
+                                                                <i class="bi bi-plus-square-fill square_fill_bloc text-{% if this_bloc_is_comp %}violet{% else %}secondary{% endif %}"></i>    
 
                                                             </a>
                                                       
                                                     {% endfor %}
                                                     {% for e in bloc.exotexs.all %} 
-                                                        <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px;font-size:20px"><i class="bi bi-plus-square-fill text-{% if this_bloc_is_comp %}success{% else %}secondary{% endif %}"></i></a>
+                                                        <a href="{% url 'show_exotex' e.id %}" target="_blank" style="margin-right:10px;font-size:20px">
+                                                            <i class="bi bi-plus-square-fill square_fill_bloc text-{% if this_bloc_is_comp %}violet{% else %}secondary{% endif %}"></i>
+                                                        </a>
                                                     {% endfor %}
                                                     <span id="spinner-3-{{bloc.id}}"></span>
                                                 {% else %}

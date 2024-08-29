@@ -109,7 +109,7 @@ define(["jquery", "bootstrap"], function ($) {
         let is_correction = $(this).data("is_correction");
         let book_group_id = $(this).data("book_group_id");
 
-        
+
         if ($(this).children().first().hasClass("text-secondary")) {
           var status = "off";
         } else {
@@ -272,7 +272,8 @@ define(["jquery", "bootstrap"], function ($) {
               } else {
                 $("#cc_bloc" + source_id).addClass(data.css);
                 $("#cc_bloc" + source_id).removeClass(data.nocss);
-
+                $(".square_fill_bloc").addClass(data.csscomp);
+                $(".square_fill_bloc").addClass(data.nocsscomp);
                 if (status == "off") {
                   $("#cc_bloc" + source_id).removeClass("bi-toggle-off");
                   $("#cc_bloc" + source_id).addClass("bi-toggle-on");
