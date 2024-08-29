@@ -2192,13 +2192,13 @@ def ajax_display_correction_bloc(request):
     is_correction = request.POST.get('is_correction',False)
 
     with open("logs/outputBook.txt", "a") as f:
-        try :print("type_id : " + type_id , file=f)
+        try :print("type_id : " + type_id +" est de type : " + type(type_id), file=f)
         except : pass
-        try :print("source_id : " + source_id, file=f)
+        try :print("source_id : " + source_id+" est de type : " + type(source_id), file=f)
         except : pass
-        try :print("status : " + status , file=f)
+        try :print("status : " + status+" est de type : " + type(status) , file=f)
         except : pass
-        try :print("group_id : " + group_id, file=f)
+        try :print("group_id : " + group_id+" est de type : " + type(group_id), file=f)
         except : print("erreur de group_id")
         try :print("is_correction : " + is_correction+" est de type : " + type(is_correction), file=f)
         except : print("erreur de is_correction")
@@ -2224,7 +2224,8 @@ def ajax_display_correction_bloc(request):
                         Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "1" : 
- 
+        with open("logs/outputBook.txt", "a") as f:
+            try :print("ici type 1 : " , file=f)
         if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
