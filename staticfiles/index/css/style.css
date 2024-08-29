@@ -396,6 +396,8 @@ a.btn-connex{
   border-radius: 4px;
   border : solid 1px #5d4391;   
   border-radius: 10px;
+  color: #5d4391 !important;
+  background-color:white;    
 }
 a.btn-connex:hover{
   border-radius: 4px;
