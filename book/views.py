@@ -2199,7 +2199,7 @@ def ajax_display_correction_bloc(request):
         try :print("status : " + status , file=f)
         except : pass
         try :print("group_id : " + group_id, file=f)
-        except : pass
+        except : print("erreur de group_id")
 
 
 
