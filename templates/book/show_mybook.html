@@ -256,11 +256,10 @@
                         {% if group %}
                             {% if isMenuDisplayCor %}
                                 <div {% if isMenuDisplayComp %}class="col-xs-6"{% else  %}class="col-xs-12"{% endif  %} align="center">
-                                    <div>
-                                        <i id="bi-c-circle-fill{{page.id}}" class="bi bi-c-circle-fill text-{% if this_chapter_is_cor %}success{% else %}danger{% endif %}"></i>
-                                    </div>
-            
                                     {% get_group_display_cor page group as this_page_is_cor %}
+                                    <div>
+                                        <i id="bi-c-circle-fill{{page.id}}" class="bi bi-c-circle-fill text-{% if this_page_is_cor %}success{% else %}danger{% endif %}"></i>
+                                    </div>
                                     <div style="margin-top:5px;margin-bottom:5px" >
                                         <a href="javascript:void(0);" 
                                         class="display_correction_bloc_button active_small_size" 
@@ -400,7 +399,7 @@
                                              {% endif %} >
                                             <a href="javascript:void(0);" data-target="#book_shower_correction" data-toggle="modal" 
                                                 class="show_this_bloc_correction"  data-bloc_id="{{ bloc.id }}" >
-                                                <i class="bi bi-c-circle"></i>
+                                                <i class="bi bi-c-circle-fill text-{% if this_bloc_is_cor %}success{% else %}danger{% endif %}"></i>
                                             </a> 
                                             <div class="no_visu_on_load" id="book_shower_this_correction{{ bloc.id }}">{{ bloc.correction_html|safe }}</div>
                                             <div style="margin-top :10px;">
