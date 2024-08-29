@@ -1291,7 +1291,7 @@ def ask_school_adhesion(request):
 			send_mail("Demande d'abonnement à la version établissement",
 			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant "+ user.first_name +" "+ user.last_name +" : "+ user.email +".\n"+asking_gar+"\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
 			          settings.DEFAULT_FROM_EMAIL,
-			          ['sacado.asso@gmail.com'])
+			          ['sacado.asso@gmail.com','tresorier.sacado@gmail.com'])
 
 			send_mail("Demande d'abonnement à la version établissement",
 		              "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school.name +"\n"+asking_gar+"\n\nCotisation : "+str(school.fee())+" €.\nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
