@@ -280,8 +280,8 @@ define(["jquery", "bootstrap"], function ($) {
                 } else {
                   $("#cc_bloc_cor" + source_id).removeClass("bi-toggle-on");
                   $("#cc_bloc_cor" + source_id).addClass("bi-toggle-off");
-                  $("#bi-c-circle-fill"+ source_id).addClass("text-danger");
-                  $("#bi-c-circle-fill"+ source_id).removeClass("text-success");
+                  $("#bi-c-circle-fill"+ source_id).removeClass("text-danger");
+                  $("#bi-c-circle-fill"+ source_id).addClass("text-success");
                 }
 
               } else {
