@@ -273,7 +273,7 @@ define(["jquery", "bootstrap"], function ($) {
                 $("#cc_bloc" + source_id).addClass(data.css);
                 $("#cc_bloc" + source_id).removeClass(data.nocss);
                 $(".square_fill_bloc").addClass(data.csscomp);
-                $(".square_fill_bloc").addClass(data.nocsscomp);
+                $(".square_fill_bloc").removeClass(data.nocsscomp);
                 if (status == "off") {
                   $("#cc_bloc" + source_id).removeClass("bi-toggle-off");
                   $("#cc_bloc" + source_id).addClass("bi-toggle-on");
