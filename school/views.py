@@ -1280,11 +1280,17 @@ def ask_school_adhesion(request):
 	school = request.user.school
 	user   = request.user
 	form   = SchoolUpdateForm(request.POST or None, request.FILES  or None, instance = school)
-
+	with open("logs/output.txt", "a") as f:
+		print("ask_school_adhesion" , file=f)
 	if request.method == "POST" : 
 		if form.is_valid():   
 			school = form.save()
-			try : Customer.objects.get_or_create(school=school , defaults = {'user' : user , 'phone' : '' ,'status' : 0 } )
+			with open("logs/output.txt", "a") as f:
+				print("school ok " , file=f)
+			try : 
+				Customer.objects.get_or_create(school=school , defaults = {'user' : user , 'phone' : '' ,'status' : 0 } )
+				with open("logs/output.txt", "a") as f:
+					print("Customer OK" , file=f)
 			except :
 				with open("logs/output.txt", "a") as f:
 					print("problème de Customer" , file=f)
