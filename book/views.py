@@ -2188,7 +2188,7 @@ def ajax_display_correction_bloc(request):
     type_id   = request.POST.get('type_id',None)
     source_id = request.POST.get('source_id',None)
     status    = request.POST.get('status',False)
-    group_id  = request.session.get('book_group_id')
+    group_id  = request.POST.get('book_group_id',None)
     is_correction = request.POST.get('is_correction',False)
 
     with open("logs/outputBook.txt", "a") as f:
