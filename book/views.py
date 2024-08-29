@@ -2200,7 +2200,8 @@ def ajax_display_correction_bloc(request):
         except : pass
         try :print("group_id : " + group_id, file=f)
         except : print("erreur de group_id")
-
+        try :print("is_correction : " + is_correction+" est de type : " + type(is_correction), file=f)
+        except : print("erreur de is_correction")
 
 
 
