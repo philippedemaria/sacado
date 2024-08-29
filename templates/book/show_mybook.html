@@ -146,54 +146,53 @@
                                 {% endif %}  
                                 {% if group %}
                                     {% if not forloop.first %}
-                                    {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
-                                    {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
+                                        {% get_group_display_cor fpage.chapter group as this_chapter_is_cor %}
+                                        {% get_group_display_comp fpage.chapter group as this_chapter_is_comp %}
 
-                                    <div class="relative pull-right" style="width: 410px; border:1px solid #7F62B4;border-radius:5px">
-                                        <div class="row">
-                                            <div class="col-xs-6"  align="center" >
-                                                <div style="font-size: 12px;text-align:center">Corrigés</div>
-                                                    <div class="margin-top:10px;margin-bottom:10px" >
-                                                        <a href="javascript:void(0);" 
-                                                        class="display_correction_bloc_button active_small_size" 
+                                        <div class="relative pull-right" style="width: 410px; border:1px solid #7F62B4;border-radius:5px">
+                                            <div class="row">
+                                                <div class="col-xs-6"  align="center" >
+                                                    <div style="font-size: 12px;text-align:center">Corrigés</div>
+                                                        <div class="margin-top:10px;margin-bottom:10px" >
+                                                            <a href="javascript:void(0);" 
+                                                            class="display_correction_bloc_button active_small_size" 
+                                                                data-source_id = "{{fpage.chapter.id}}" 
+                                                                data-type_id = "0"  
+                                                                data-paragraph_id = "0" 
+                                                                data-is_correction = 1               
+                                                                data-book_group_id={{group.id}}
+                                                                style="font-size:30px!important; padding:10px"> 
+                                                                 
+                                                                <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
+                                                                id="cc_chapter_cor{{ fpage.chapter.id }}"
+                                                                title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
+                                                            </a>
+                                                        </div>
+
+                                                </div> 
+                                                <div class="col-xs-6"  align="center" >
+                                                    <div style="font-size: 12px;text-align:center">
+                                                        Compléments
+                                                    </div>
+                                                    <div > 
+                                                        <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
                                                             data-source_id = "{{fpage.chapter.id}}" 
                                                             data-type_id = "0"  
                                                             data-paragraph_id = "0" 
-                                                            data-is_correction = 1               
+                                                            data-is_correction = 0 
                                                             data-book_group_id={{group.id}}
                                                             style="font-size:30px!important; padding:10px"> 
                                                              
-                                                            <i class="bi {% if this_chapter_is_cor %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
-                                                            id="cc_chapter_cor{{ fpage.chapter.id }}"
-                                                            title="Compléments{% if this_chapter_is_cor %} visibles par les élèves{% else %} cachés aux élèves{% endif %}"></i>
+                                                            <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
+                                                            id="cc_chapter{{ fpage.chapter.id }}"></i> 
                                                         </a>
                                                     </div>
-
-                                            </div> 
-                                            <div class="col-xs-6"  align="center" >
-                                                <div style="font-size: 12px;text-align:center">
-                                                    Compléments
-                                                </div>
-                                                <div > 
-                                                    <a href="javascript:void(0);"  class="display_correction_bloc_button active_small_size" 
-                                                        data-source_id = "{{fpage.chapter.id}}" 
-                                                        data-type_id = "0"  
-                                                        data-paragraph_id = "0" 
-                                                        data-is_correction = 0 
-                                                        data-book_group_id={{group.id}}
-                                                        style="font-size:30px!important; padding:10px"> 
-                                                         
-                                                        <i class="bi {% if this_chapter_is_comp %}bi-toggle-on  text-success{% else %} bi-toggle-off text-secondary{% endif %}" 
-                                                        id="cc_chapter{{ fpage.chapter.id }}"></i> 
-                                                    </a>
-                                                </div>
-                                            </div>   
+                                                </div>   
+                                            </div>
                                         </div>
-                                    </div>
-
-
                                     {% endif %}
-+                                    {% if not forloop.first %}
+                                {% else %}
+                                    {% if not forloop.first %}
                                     <!-- Dans cette partie, il n'y a pas de groupe affecté, donc les boutons deviennent inactifs mais restent apparents. -->
                                     <div class="relative pull-right" style="width: 410px;border:1px solid #7F62B4;border-radius:5px">
                                         <div class="row">

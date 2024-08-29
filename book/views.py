@@ -2226,25 +2226,21 @@ def ajax_display_correction_bloc(request):
     elif type_id == "1" : 
         if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
-            with open("logs/outputBook.txt", "a") as f:
-                print("page : " + str(page.id) , file=f)
-
             for paragraph in page.paragraphs.all():
-                with open("logs/outputBook.txt", "a") as f:
-                    print("paragraph : " + str(paragraph.id) , file=f)
-
                 for bloc in  paragraph.blocs.all():
+                    myblocs = Mybloc.objects.filter(group_id=group_id, bloc=bloc)
                     Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status)
                     with open("logs/outputBook.txt", "a") as f:
                         print("bloc : " + str(bloc.id) , file=f)
+                        print(myblocs, file=f)                        
 
         else :
             page = Page.objects.get(pk=source_id) 
             for paragraph in page.paragraphs.all():
                 for bloc in  paragraph.blocs.all():
                     Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
-                    with open("logs/outputBook.txt", "a") as f:
-                        print("bloc comp: " + str(bloc.id) , file=f)
+
+
     elif type_id == "2" : 
         if str(is_correction)=="1" :
             paragraph = Paragraph.objects.get(pk=source_id) 
