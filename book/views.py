@@ -2192,15 +2192,15 @@ def ajax_display_correction_bloc(request):
     is_correction = request.POST.get('is_correction',False)
 
     with open("logs/outputBook.txt", "a") as f:
-        try :print("type_id : " + type_id+" est de type : " + type(type_id) , file=f)
-        except : pass
-        try :print("source_id : " + source_id+" est de type : " + type(source_id), file=f)
-        except : pass
-        try :print("status : " + status+" est de type : " + type(status) , file=f)
-        except : pass
-        try :print("group_id : " + group_id+" est de type : " + type(group_id), file=f)
+        try :print("type_id : "  + type(type_id) , file=f)
+        except : print("erreur de type_id")
+        try :print("source_id : " + type(source_id), file=f)
+        except : print("erreur de source_id")
+        try :print("status : " + type(status) , file=f)
+        except : print("erreur de status")
+        try :print("group_id : " + type(group_id), file=f)
         except : print("erreur de group_id")
-        try :print("is_correction : " + is_correction+" est de type : " + type(is_correction), file=f)
+        try :print("is_correction : " + type(is_correction), file=f)
         except : print("erreur de is_correction")
 
 
@@ -2224,19 +2224,19 @@ def ajax_display_correction_bloc(request):
                         Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_comp=status) 
 
     elif type_id == "1" : 
-        with open("logs/outputBook.txt", "a") as f:
-            try :print("ici type 1 : " , file=f)
-            except:print("erreur0")
         if str(is_correction)=="1" :
             page = Page.objects.get(pk=source_id) 
+            with open("logs/outputBook.txt", "a") as f:
+                try :print("page : " + page.id , file=f)
+                except:print("erreur0")
             for paragraph in page.paragraphs.all():
                 with open("logs/outputBook.txt", "a") as f:
-                    try :print("paragraph : " + paragraph , file=f)
+                    try :print("paragraph : " + paragraph.id , file=f)
                     except : pass
                 for bloc in  paragraph.blocs.all():
                     Mybloc.objects.filter(group_id=group_id, bloc=bloc).update(is_display_cor=status)
                     with open("logs/outputBook.txt", "a") as f:
-                        try :print("bloc : " + bloc , file=f)
+                        try :print("bloc : " + bloc.id , file=f)
                         except : pass
         else :
             page = Page.objects.get(pk=source_id) 
