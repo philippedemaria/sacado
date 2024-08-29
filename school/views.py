@@ -1292,20 +1292,14 @@ def ask_school_adhesion(request):
 			if school.gar : asking_gar = " Accès au GAR demandé"
 			else : asking_gar = " Pas d'accès au GAR demandé"
 			
-			try :
-				send_mail("Demande d'abonnement à la version établissement",
+			send_mail("Demande d'abonnement à la version établissement",
 			          "Bonjour l'équipe SACADO, \nl'établissement suivant demande la version établissement :\n"+ school.name +" via son enseignant "+ user.first_name +" "+ user.last_name +" : "+ user.email +".\n"+asking_gar+"\n\n Cotisation : "+str(school.fee())+" €.\n\nEnregistrement de l'établissement dans la base de données.\nEn attente de paiement. \nhttps://sacado.xyz. Ne pas répondre.",
 			          settings.DEFAULT_FROM_EMAIL,
 			          ['sacado.asso@gmail.com','tresorier.sacado@gmail.com'])
-			except : 
-				with open("logs/output.txt", "a") as f:
-					print("problème de mail" , file=f)
 
-			try :
-				send_mail("Demande d'abonnement à la version établissement",
+			send_mail("Demande d'abonnement à la version établissement",
 		              "Bonjour "+user.first_name+" "+user.last_name +", \nVous avez demandé la version établissement pour :\n"+ school.name +"\n"+asking_gar+"\n\nCotisation : "+str(school.fee())+" €.\nEn attente de paiement. \nL'équipe SACADO vous remercie de votre confiance. \nCeci est un mail automatique. Ne pas répondre. ",
 	               settings.DEFAULT_FROM_EMAIL,[user.email])
-			except : pass
 
 			messages.success(request,"Demande d'abonnement envoyée. Vous recevrez rapidement l'IBAN de l'association à transmettre à votre DAF")
 
