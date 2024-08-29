@@ -182,17 +182,23 @@ define(["jquery", "bootstrap"], function ($) {
                 $(".all_these_blocs_cor").addClass(data.css);
                 $(".all_these_blocs_cor").removeClass(data.nocss);
 
+                $(".bi-c-circle-fill").addClass("bi-toggle-on");
+                $(".all_these_blocs_cor").removeClass("bi-toggle-off");
 
                 if (status == "off") {
                   $("#cc_page_cor" + source_id).removeClass("bi-toggle-off");
                   $("#cc_page_cor" + source_id).addClass("bi-toggle-on");
                   $(".all_these_blocs_cor").addClass("bi-toggle-on");
                   $(".all_these_blocs_cor").removeClass("bi-toggle-off");
+                  $(".bi-c-circle-fill").addClass("text-success");
+                  $(".bi-c-circle-fill").removeClass("text-danger");
                 } else {
                   $("#cc_page_cor" + source_id).removeClass("bi-toggle-on");
                   $("#cc_page_cor" + source_id).addClass("bi-toggle-off");
                   $(".all_these_blocs_cor").addClass("bi-toggle-off");
                   $(".all_these_blocs_cor").removeClass("bi-toggle-on");
+                  $(".bi-c-circle-fill").addClass("text-danger");
+                  $(".bi-c-circle-fill").removeClass("text-success");
                 }
 
               } else {
@@ -210,12 +216,16 @@ define(["jquery", "bootstrap"], function ($) {
                   $("#cc_page" + source_id).addClass("bi-toggle-on");
                   $(".all_these_blocs").addClass("bi-toggle-on");
                   $(".all_these_blocs").removeClass("bi-toggle-off");
+                  $(".bi-c-circle-fill").addClass("text-success");
+                  $(".bi-c-circle-fill").removeClass("text-danger");
 
                 } else {
                   $("#cc_page" + source_id).removeClass("bi-toggle-on");
                   $("#cc_page" + source_id).addClass("bi-toggle-off");
                   $(".all_these_blocs").addClass("bi-toggle-off");
                   $(".all_these_blocs").removeClass("bi-toggle-on");
+                  $(".bi-c-circle-fill").addClass("text-danger");
+                  $(".bi-c-circle-fill").removeClass("text-success");
                 }
 
 
