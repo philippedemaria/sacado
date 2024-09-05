@@ -727,7 +727,7 @@ def teacher_has_parcourses(teacher,is_evaluation ,is_archive ):
     #     for p in pcs :
     #         if p not in parcourses:
     #             parcourses.append(p) 
-    return parcourses
+    return prcs
 
 def teacher_has_permisson_to_share_inverse_parcourses(request,teacher,parcours):
     """
