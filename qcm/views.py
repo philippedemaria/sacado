@@ -3084,6 +3084,8 @@ def create_parcours_or_evaluation(request,create_or_update,is_eval, idf,is_seque
             nf.teacher = teacher
             nf.is_evaluation = is_eval
             nf.is_sequence   = is_sequence
+            if is_eval :
+                nf.maxexo = 1
             if nf.is_share :
                 if is_eval :
                     texte = "Une nouvelle évaluation"
