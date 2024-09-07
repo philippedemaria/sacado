@@ -1143,7 +1143,9 @@ def peuplate_parcours(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = parcours , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    if parcours.is_evaluation : maxexo= 1
+                    else :  maxexo= -1
+                    r = Relationship.objects.create(parcours = parcours , exercise = exercise , maxexo=maxexo, ranking =  i, is_paper = exercise.supportfile.is_paper, is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
@@ -1215,7 +1217,7 @@ def peuplate_parcours_evaluation(request,id):
         for exercise in exercises_posted_ids :
             try :
                 if Relationship.objects.filter(parcours = parcours , exercise__supportfile = exercise.supportfile ).count() == 0 :
-                    r = Relationship.objects.create(parcours = parcours , exercise = exercise , ranking =  i, is_paper = exercise.supportfile.is_paper,is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
+                    r = Relationship.objects.create(parcours = parcours , exercise = exercise , maxexo = 1, ranking =  i, is_paper = exercise.supportfile.is_paper,is_calculator = exercise.supportfile.calculator, situation = exercise.supportfile.situation , duration = exercise.supportfile.duration )  
                     r.skills.set(exercise.supportfile.skills.all()) 
                     i+=1
                 else :
