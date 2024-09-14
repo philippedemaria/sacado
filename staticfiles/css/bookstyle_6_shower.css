@@ -856,12 +856,7 @@ h1 {
 .complements_img {
   width: 30px!important;
 }
-.complements_img:hover {
-  width: 250px;
-  position: absolute;
-  z-index: 999;
-}
-
+ 
 a.small_size {
   font-size: 12px !important;
   color: #657574;
