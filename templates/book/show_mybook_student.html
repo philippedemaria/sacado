@@ -240,7 +240,7 @@
                                                 <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:40px;left:25px"
                                                     {% else %} style="position:absolute; top:40px;left:5px"
                                                     {% endif %} 
-                                                >{% if this_bloc_is_cor %}
+                                                >{% if this_bloc_is_cor and bloc.correction_html %}
                                                     <a href="javascript:void(0);"  data-toggle='modal' data-target='#cor{{ bloc.id }}'>
                                                         <i class="bi bi-c-circle-fill text-success"></i>
                                                     </a>
