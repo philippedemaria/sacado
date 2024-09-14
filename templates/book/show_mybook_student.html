@@ -233,13 +233,16 @@
                                             {% endif %}
                                         </div> 
                                         {% if groups %}
-                                            {% get_bloc_cor_visible_by_student bloc groups as this_bloc_is_cor %}      
+                                            {% get_bloc_cor_visible_by_student bloc groups as this_bloc_is_cor %}  
+                                            ---{{ this_bloc_is_cor }} ---    
                                             {% if this_bloc_is_cor %}
                                                 <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:40px;left:25px"
-                                             {% else %} style="position:absolute; top:40px;left:5px"
-                                             {% endif %} >
-                                            <div class="no_visu_on_load" id="book_shower_this_correction{{ bloc.id }}">{{ bloc.correction_html|safe }}</div>
-                                            </div>
+                                                    {% else %} style="position:absolute; top:40px;left:5px"
+                                                    {% endif %} 
+                                                >
+                                                    <div class="no_visu_on_load" id="book_shower_this_correction{{ bloc.id }}">{{ bloc.correction_html|safe }}
+                                                    </div>
+                                                </div>
                                             {% endif %} 
                                         {% endif %}
 
