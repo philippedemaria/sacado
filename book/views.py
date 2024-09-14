@@ -443,12 +443,12 @@ def show_mybook(request,idb, n):
     try: group = Group.objects.get(pk=group_id)
     except : group = None
     book = Book.objects.get(pk=idb)
-
+    if str(n) in ["1","2","3","4","5","6","7","8"]: n=9
     prev_page, this_page , next_page , first_pages = get_the_page(int(idb),int(n))
     this_chapter = this_page.chapter
 
 
-    if str(n) in ["9","21","33","47","61","75","87","103","119","135","147","161","175","203","213"] : isMenuDisplay = False
+    if str(n) in ["1","9","21","33","47","61","75","87","103","119","135","147","161","175","203","213"] : isMenuDisplay = False
     else : isMenuDisplay = True
 
  
