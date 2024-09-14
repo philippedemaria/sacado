@@ -208,7 +208,8 @@
                             {% for bloc in paragraph.blocs.all|dictsort:"ranking" %} 
                                 <div class="col-xs-{{ bloc.size }}" >
                                     <div class="global_bloc {{ bloc.typebloc.css }}" data-paragraph_id="{{paragraph.id}}" > 
-                                        <div id="title_bloc{{ bloc.id }}" {% if 'exo' in bloc.typebloc.css  %} style="float:left"{% endif %}>
+                                        <div id="title_bloc{{ bloc.id }}" {% if 'exo' in bloc.typebloc.css  %} 
+                                                style="float:left"{% endif %}>
                                             {% if 'exo' in bloc.typebloc.css  %}
                                                 {% if bloc.title %}
                                                 <div class="bloc_title {{ bloc.typebloc.css }}">
@@ -234,15 +235,32 @@
                                         </div> 
                                         {% if groups %}
                                             {% get_bloc_cor_visible_by_student bloc groups as this_bloc_is_cor %}  
-                                            ---{{ this_bloc_is_cor }} ---    
+
                                             {% if this_bloc_is_cor %}
                                                 <div {% if 'exo' in bloc.typebloc.css  %}style="position:absolute; top:40px;left:25px"
                                                     {% else %} style="position:absolute; top:40px;left:5px"
                                                     {% endif %} 
                                                 >
-                                                    <div class="no_visu_on_load" id="book_shower_this_correction{{ bloc.id }}">{{ bloc.correction_html|safe }}
-                                                    </div>
+                                                    <a href="javascript:void(0);"  data-toggle='modal' data-target='#cor{{ bloc.id }}'  >
+                                                    </a>
                                                 </div>
+                   
+                                                    <div class="modal fade" id="cor{{ bloc.id }}" tabindex="-1" role="dialog" aria-labelledby="actu">
+                                                        <div class="modal-dialog modal-maxsize" role="document">
+                                                            <div class="modal-content" >
+                                                                <div class="modal-header">     
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button> 
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    {{ bloc.correction_html|safe }}
+                                                                </div>
+                                                            </div>
+                                                        </div> 
+                                                    </div>
+
+
                                             {% endif %} 
                                         {% endif %}
 
