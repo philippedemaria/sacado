@@ -854,10 +854,10 @@ h1 {
 }
 
 .complements_img {
-  width: 30px;
+  width: 30px!important;
 }
 .complements_img:hover {
-  width: 300px;
+  width: 250px;
   position: absolute;
   z-index: 999;
 }
