@@ -9035,7 +9035,6 @@ def store_the_score_relation_ajax(request):
 
         numexo = request.POST.get("numexo",None)    
         answer = request.POST.get("answer",None) 
-        if numexo == 0 : return
 
         relation_id = int(request.POST.get("relation_id"))
         relation = Relationship.objects.get(pk = relation_id)
@@ -9063,7 +9062,6 @@ def store_the_score_relation_ajax(request):
             else :
                 score = get_the_score(request,relation.exercise.supportfile,answer)            
 
-            if numexo > 0 :
             this_studentanswer = Studentanswer.objects.create(exercise  = relation.exercise , parcours  = relation.parcours ,  student  = student , numexo= numexo,  point= score, secondes= timer )
 
             relationship_students_done = Relationship.objects.get(exercise  = relation.exercise , parcours  = relation.parcours)
