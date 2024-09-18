@@ -690,14 +690,6 @@ class Parcours(ModelWithCode):
         if self.maxexo == -1   :
             is_ok = True
 
-        try :
-            if self.is_evaluation :
-                f = open('/var/www/sacado/logs/output.txt','a')
-                print( str(self.id) + " : " + str(nbleft) + str(is_ok) , file=f)
-                f.close()
-        except :
-            pass 
-
 
         data["is_ok"] = is_ok
         data["nbleft"] = nbleft
