@@ -543,11 +543,16 @@
             }
             $("#attempt").html(nb_left); 
   	         // ========= AJAX ================
-            use_ajax( 1 , start_time, score, parcours_id,  relation_id, "ok" , true )
+        
+          //if ( applet.getValue("demarrer") && numexo > situation && objName == "numexo"   ){
+         //   use_ajax( numexo, start_time, score, parcours_id,  relation_id, "ok" , false )
+         // }
+
+
           }
-        if ( applet.getValue("demarrer") && numexo > situation && objName == "numexo"   ){
-            use_ajax( numexo, start_time, score, parcours_id,  relation_id, "ok" , false )
-          }
+        //if ( applet.getValue("demarrer") && numexo > situation && objName == "numexo"   ){
+        ////    use_ajax( numexo, start_time, score, parcours_id,  relation_id, "ok" , false )
+       //   }
         if ( applet.getValue("fini")  ==  1 ) {
             alert("Vous êtes en évaluation. L'exercice est fini. Passer à l'exercice suivant.") ;
             applet.setValue("fini", 0) ; 

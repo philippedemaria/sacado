@@ -9034,7 +9034,7 @@ def store_the_score_relation_ajax(request):
         timer      = get_the_timer(time_begin)
 
         numexo = request.POST.get("numexo",None)    
-        answer = request.POST.get("answer",None) 
+        answer = request.POST.get("answer",None)
 
         relation_id = int(request.POST.get("relation_id"))
         relation = Relationship.objects.get(pk = relation_id)
