@@ -33,9 +33,17 @@
 <script>
   require(["script/ajax-parcours", "script/ajax-duplication-document"]);
 </script>
-{% endblock %} {% block page_title %} {% include 'qcm/breadcrumb.html' %} {%
-endblock %} {% block page_menu_right %} {% include 'qcm/submenu_parcours.html'
-%} {% endblock %} {% block body %}
+{% endblock %} 
+
+{% block page_title %} 
+{% include 'qcm/breadcrumb.html' %} 
+{% endblock %} 
+
+{% block page_menu_right %} 
+{% include 'qcm/submenu_parcours.html' %} 
+{% endblock %} 
+
+{% block body %}
 
 <style type="text/css">
   #response_div {
