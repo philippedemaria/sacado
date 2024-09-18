@@ -599,17 +599,13 @@ class Student(ModelWithCode):
 
     def is_lock_this_parcours(self,parcours,today):
 
-        
         booleen , test , teest , tst   = False , False , False  , False    
 
         if parcours.stop < today :
             tst = True 
 
         nbe = self.students_relationship.filter(parcours=parcours).count()
-
         nbc = self.students_customexercises.filter(parcourses = parcours).count()
- 
-
         n = 0
         for el in  self.student_exerciselocker.filter(customexercise__parcourses = parcours, custom = 1, lock__gt= today ) :
             n +=1
@@ -626,6 +622,14 @@ class Student(ModelWithCode):
             booleen = True
  
         return booleen
+
+
+    def this_is_locked(self,relation):
+        booleen = False
+        if self.answers.count() >= relation.maxexo :
+            booleen = True
+        return booleen
+
 
 
 

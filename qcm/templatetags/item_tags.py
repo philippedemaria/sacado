@@ -870,6 +870,14 @@ def get_this_exercise_is_locked(obj,exercise, parcours , custom, today):
 
 
 @register.simple_tag  
+def get_this_is_locked(obj,relation): 
+    """
+    L'exercice ou la relation est bloqué pour l'objet student
+    """
+    return obj.this_is_locked(relation)
+   
+
+@register.simple_tag  
 def get_percent_student_done_parcours_exercice_group(obj,parcours, group): 
 
     return obj.percent_student_done_parcours_exercice_group(parcours,group)

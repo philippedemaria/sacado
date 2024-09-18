@@ -136,7 +136,7 @@
                     {%  get_last_score_and_time   rc.exercise   rc.parcours   student    as    data %}
                     {%  get_noggb_data   rc   student    as    noggb_data %}
 
-
+ 
                     {% if rc.exercise.supportfile %}  
                         {% get_this_exercise_is_locked  student rc parcours  0 today as is_blck %}
                     {% else %} 
@@ -302,9 +302,18 @@
                                                 </div>
                                                 {% include 'qcm/_imagefile_displayer.html' %}
                                             {% else %}
-                                                <a href="{% if not is_lock %}{% url 'execute_exercise'  rc.parcours.id  rc.exercise.id   %}{% endif %}">  
+                                                {% get_this_is_locked  student rc as is_lock %}
+                                                {% if not is_lock %}
+                                                <a href="{% url 'execute_exercise'  rc.parcours.id  rc.exercise.id   %}">  
                                                     {% include 'qcm/_imagefile_displayer.html' %}
                                                 </a>
+                                                {% else %}
+
+                                                    <div class="alert alert-danger" style="position: absolute; z-index:9; top:100px;font-size:12px;border-radius: 0px 4px 4px  0px;"> 
+                                                        <i class="fa fa-lock"></i>   Vous avez répondu à cet exercice  
+                                                    </div>
+                                                    {% include 'qcm/_imagefile_displayer.html' %}
+                                                {% endif %}
                                             {% endif %}
 
                                         {% else %}                                            
