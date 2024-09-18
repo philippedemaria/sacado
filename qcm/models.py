@@ -680,10 +680,14 @@ class Parcours(ModelWithCode):
         is_ok = True
         nbs = Studentanswer.objects.filter(parcours=self , exercise= exercise,student = student ).count()
 
+        mexo = self.maxexo
+        relation = relationship.objects.filter(parcours=self , exercise= exercise).first()
+        maxexo = max(mexo, relation.maxexo)
+
         try : 
-            nbleft = self.maxexo - nbs
+            nbleft = maxexo - nbs
         except :
-            nbleft = self.maxexo 
+            nbleft = maxexo
 
         if nbleft == 0  :
             is_ok = False
