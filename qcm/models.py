@@ -691,7 +691,7 @@ class Parcours(ModelWithCode):
             is_ok = True
 
         try :
-            if relation.parcours.is_evaluation :
+            if self.is_evaluation :
                 f = open('/var/www/sacado/logs/output.txt','a')
                 print(nbleft, file=f)
                 print(is_ok, file=f)
