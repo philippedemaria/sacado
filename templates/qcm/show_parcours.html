@@ -209,8 +209,7 @@ endblock %} {% block page_menu_right %} {% include 'qcm/submenu_parcours.html'
             ><i class="bi bi-text-indent-left"></i>
             <span class="btn_label">Gérer les sections</span></a
           >
-          {% endif %} {% if 'qcm/parcours_show' in request.path or 
-          'qcm/parcours_evaluation_show' in request.path or
+          {% endif %} {% if 'qcm/parcours_show' in request.path or
           'qcm/parcours_tasks_and_publishes' in request.path or
           'qcm/parcours_individualise' in request.path or 'qcm/recap_parcours'
           in request.path %}
