@@ -225,6 +225,18 @@
                   >
               {% endif %} 
 
+              {% if 'qcm/parcours_show' in request.path or  'qcm/parcours_tasks_and_publishes' in request.path or 'qcm/parcours_individualise' in request.path or  'qcm/recap_parcours' in request.path %}
+              <a href="#" id="handler_order_exercises" class="btn btn-xs btn-sacado"
+                ><i class="bi bi-filter-circle"></i>
+                <span class="btn_label">Organiser les exercices</span>
+              </a>
+              {% else %}
+              <a href="#" class="no_sacado_asso btn btn-xs btn-sacado"
+                ><i class="bi bi-filter-circle"></i>
+                <span class="btn_label">Organiser les exercices</span>
+              </a>
+              {% endif %} 
+
 
           {% if sacado_asso %} 
               {% if folder %}
