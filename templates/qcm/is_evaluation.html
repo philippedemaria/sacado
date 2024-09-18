@@ -12,7 +12,7 @@
 				    		<input  class="btn btn-primary parcours_is_stop"   type="submit" id="submit_button_evaluation"  value="Passer à l'exercice suivant"  />
 						 {% elif parcours.is_next  %}  
 				 			{% if nextExerciseId %}
-				    			<a href="{% url 'execute_exercise' parcours.id   nextExerciseId %}"  class="btn btn-primary parcours_is_stop" id="parcours_is_next" > Enregistrer et passer à l'exercice suivant </a>
+				    			<a href="{% url 'execute_exercise' parcours.id   nextExerciseId %}"  class="btn btn-primary parcours_is_stop" id="parcours_is_next" > Passer à l'exercice suivant </a>
 							{% else %}
 								<a href="{% url 'show_parcours_student' parcours.id %}"  class="btn btn-warning parcours_is_stop" 
 									id="parcours_is_next">   Fin de l'evaluation </a>
