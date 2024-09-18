@@ -693,8 +693,7 @@ class Parcours(ModelWithCode):
         try :
             if self.is_evaluation :
                 f = open('/var/www/sacado/logs/output.txt','a')
-                print(nbleft, file=f)
-                print(is_ok, file=f)
+                print( str(self.id) + " : " + str(nbleft) + str(is_ok) , file=f)
                 f.close()
         except :
             pass 
