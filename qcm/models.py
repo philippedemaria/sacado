@@ -681,7 +681,7 @@ class Parcours(ModelWithCode):
         nbs = Studentanswer.objects.filter(parcours=self , exercise= exercise,student = student ).count()
 
         mexo = self.maxexo
-        relation = relationship.objects.filter(parcours=self , exercise= exercise).first()
+        relation = Relationship.objects.filter(parcours=self , exercise= exercise).first()
         maxexo = max(mexo, relation.maxexo)
 
         try : 
