@@ -75,9 +75,7 @@ define(['jquery', 'bootstrap'], function ($) {
                         alert("Vous devez effectuer le nombre de "+situation+" situations attendues.");
                         return false;
                     }
-                  else if ( this_situation < numexo ){
-                        alert("Vous devez effectuer le nombre de "+situation+" demandées. Respectez les consignes.");
-                  }
+
 
             score = grade/(numexo-1) ;
  
