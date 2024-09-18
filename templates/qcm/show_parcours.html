@@ -225,23 +225,178 @@
                   >
               {% endif %} 
 
-              {% if 'qcm/parcours_show' in request.path or
-              'qcm/parcours_tasks_and_publishes' in request.path or
-              'qcm/parcours_individualise' in request.path or 
-              'qcm/recap_parcours' in request.path %}
-              <a href="#" id="handler_order_exercises" class="btn btn-xs btn-sacado"
-                ><i class="bi bi-filter-circle"></i>
-                <span class="btn_label">Organiser les exercices</span>
-              </a>
+
+          {% if sacado_asso %} 
+              {% if folder %}
+                  <a
+                    href="{% url 'change_publications_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-toggle-on"></i>
+                    <span class="btn_label">Gérer les publications</span></a
+                  >
+                  <a
+                    href="{% url 'change_situations_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-5-circle"></i>
+                    <span class="btn_label">Gérer le nombre de situations</span></a
+                  >
+                  <a
+                    href="{% url 'change_durations_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-clock"></i>
+                    <span class="btn_label">Gérer les durées</span></a
+                  >
+
+                  <a
+                    href="{% url 'change_number_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-123"></i>
+                    <span class="btn_label">Renuméroter les exercices</span></a
+                  >
               {% else %}
-              <a href="#" class="no_sacado_asso btn btn-xs btn-sacado"
-                ><i class="bi bi-filter-circle"></i>
-                <span class="btn_label">Organiser les exercices</span>
-              </a>
+                  <a
+                    href="{% url 'change_publications_in_all_relationships' 0 parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-toggle-on" style="margin-right: 0px"></i>
+                    <span class="btn_label">Gérer les publications</span></a
+                  >
+                  <a
+                    href="{% url 'change_situations_in_all_relationships' 0 parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-5-circle"></i>
+                    <span class="btn_label">Gérer le nombre de situations</span></a
+                  >
+                  <a
+                    href="{% url 'change_durations_in_all_relationships' 0 parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-clock"></i>
+                    <span class="btn_label">Gérer les durées</span></a
+                  >
+
+                  <a
+                    href="{% url 'change_number_in_all_relationships' 0 parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-123"></i>
+                    <span class="btn_label">Renuméroter les exercices</span></a
+                  >
+              {% endif %}
+              <a
+                href="javascript:void(0);"
+                id="display_exercises_parcours"
+                data-parcours_id="{{parcours.id}}"
+                class="btn btn-xs btn-{% if parcours.is_full_display %}sacado{% else %}danger{% endif %}"
+                ><i class="bi bi-eye"></i
+                ><span id="display_exercises_spinner"></span>
+                <span class="btn_label"
+                  >Montrer seulement les exercices publiés</span
+                ></a
+              >
+
+              {% if parcours.is_ia and parcours.is_testpos %} 
+                {% if folder %}
+                    <a
+                      href="{% url 'show_parcours' folder.id  parcours.test_to_parcours.id   %}"
+                      class="btn btn-xs btn-sacado"
+                      ><b>IA</b
+                      ><span class="btn_label"> Voir le parcours lié à ce test</span></a
+                    >
+                {% else %}
+                    <a
+                      href="{% url 'show_parcours' 0  parcours.test_to_parcours.id  %}"
+                      class="btn btn-xs btn-sacado"
+                      ><b>IA</b
+                      ><span class="btn_label"> Voir le parcours lié à ce test</span></a
+                    >
+                {% endif %} 
+              {% if parcours.test_to_parcours.exercises.count == 0 %} 
+
+                  {% if folder %}
+                  <a
+                    href="{% url 'create_parcours_ia_assisted' folder.id  parcours.test_to_parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-grid-3x3-gap"></i
+                    ><span class="btn_label">
+                      Créer le parcours lié à ce test avec l'IA</span
+                    ></a
+                  >
+                  {% else %}
+                  <a
+                    href="{% url 'create_parcours_ia_assisted' 0 parcours.test_to_parcours.id  %}"
+                    class="btn btn-xs btn-sacado"
+                    ><i class="bi bi-grid-3x3-gap"></i
+                    ><span class="btn_label">
+                      Créer le parcours lié à ce test avec l'IA</span
+                    ></a
+                  >
+                  {% endif %} 
+              {% endif %} 
+          {% elif parcours.is_ia and not  parcours.is_testpos %} 
+
+              {% if folder %}
+                <a
+                  href="{% url 'show_parcours' folder.id  parcours.testpositionnement.id %}"
+                  class="btn btn-xs btn-sacado"
+                  ><b>IA</b>
+                  <span class="btn_label"> Voir le test de positionnement</span></a
+                >
+              {% else %}
+                <a
+                  href="{% url 'show_parcours' 0  parcours.testpositionnement.id  %}"
+                  class="btn btn-xs btn-sacado"
+                  ><b>IA</b
+                  ><span class="btn_label"> Voir le test de positionnement</span></a
+                >
+              {% endif %}
+          {% endif %} 
+
+          {% else %}
+
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><i class="fa fa-circle-o-notch" style="margin-right: 0px"></i
+                ><span class="btn_label"> Gérer les publications</span></a
+              >
+
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><i class="bi bi-5-circle"></i>
+                <span class="btn_label">Gérer le nombre de situations</span></a
+              >
+
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><i class="bi bi-clock"></i>
+                <span class="btn_label">Gérer les durées</span></a
+              >
+
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><i class="bi bi-eye"></i>
+                <span class="btn_label"
+                  >Montrer seulement les exercices publiés</span
+                ></a
+              >
+
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><i class="bi bi-123"></i>
+                <span class="btn_label">Renuméroter les exercices</span></a
+              >
+
+              {% if parcours.is_ia and parcours.is_testpos %}
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><b>IA</b>
+                <span class="btn_label">Voir le parcours lié à ce test</span></a
+              >
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><i class="bi bi-grid-3x3-gap"></i>
+                <span class="btn_label"
+                  >Créer le parcours lié à ce test avec l'IA</span
+                ></a
+              >
+              {% elif parcours.is_ia and not parcours.is_testpos %}
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
+                ><b>IA</b
+                ><span class="btn_label"> Voir le test de positionnement</span></a
+              >
               {% endif %} 
 
-
-
+          {% endif %}
         </div>
       </div>
 
