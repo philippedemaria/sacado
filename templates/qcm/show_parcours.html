@@ -1,5 +1,10 @@
-{% extends 'dashboard.html' %} {% load widget_tweaks %} {% load static %} {%
-load item_tags %} {% block require %}
+{% extends 'dashboard.html' %} 
+{% load widget_tweaks %} 
+{% load static %} 
+{% load item_tags %} 
+
+
+{% block require %}
 
 <script
   src="{% static 'js/require.js' %}"
@@ -9,9 +14,17 @@ load item_tags %} {% block require %}
 <script>
   require(["script/ajax-parcours", "script/ajax-duplication-document"]);
 </script>
-{% endblock %} {% block page_title %} {% include 'qcm/breadcrumb.html' %} {%
-endblock %} {% block page_menu_right %} {% include 'qcm/submenu_parcours.html'
-%} {% endblock %} {% block body %}
+{% endblock %} 
+
+{% block page_title %} 
+{% include 'qcm/breadcrumb.html' %} 
+{% endblock %} 
+
+{% block page_menu_right %} 
+{% include 'qcm/submenu_parcours.html'%} {% endblock %} 
+
+
+{% block body %}
 
 <style type="text/css">
   #response_div {
