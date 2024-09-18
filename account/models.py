@@ -625,23 +625,21 @@ class Student(ModelWithCode):
 
 
     def this_is_locked(self,relation):
-        booleen = False
+ 
         nb_exo = self.answers.filter(exercise = relation.exercise, parcours = relation.parcours).count()
         try :
-            f = open('/var/www/sacado/logs/output.txt','a')
-            print(nb_exo, file=f)
-            print(relation.exercise, file=f)
-            print(relation.parcours, file=f)
-            print(relation.id, file=f)
-            print(relation.maxexo, file=f)
-            print(nb_exo == relation.maxexo, file=f)
-            f.close()
+            if relation.parcours.is_evaluation :
+                f = open('/var/www/sacado/logs/output.txt','a')
+                print(nb_exo, file=f)
+                print(relation.exercise, file=f)
+                print(relation.parcours, file=f)
+                print(relation.id, file=f)
+                print(relation.maxexo, file=f)
+                print(nb_exo == relation.maxexo, file=f)
+                f.close()
         except :
             pass 
-
-        if relation.parcours.is_evaluation and nb_exo == relation.maxexo :
-            booleen = True
-        return booleen
+        return relation.parcours.is_evaluation and nb_exo == relation.maxexo
 
 
 

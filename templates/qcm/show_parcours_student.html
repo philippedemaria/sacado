@@ -303,7 +303,6 @@
                                                 {% include 'qcm/_imagefile_displayer.html' %}
                                             {% else %}
                                                 {% get_this_is_locked  student rc as is_lock %}
-                                                {{ is_lock }}
                                                 {% if not is_lock %}
                                                 <a href="{% url 'execute_exercise'  rc.parcours.id  rc.exercise.id   %}">  
                                                     {% include 'qcm/_imagefile_displayer.html' %}
