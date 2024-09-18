@@ -21,10 +21,21 @@
 {% endblock %} 
 
 {% block page_menu_right %} 
-{% include 'qcm/submenu_parcours.html'%} {% endblock %} 
+{% include 'qcm/submenu_parcours.html'%} 
+{% endblock %} 
 
 
-{% block body %}
+<script
+  src="{% static 'js/require.js' %}"
+  data-main="{% static 'js/common4_mini.js' %}"
+></script>
+
+<script>
+  require(["script/ajax-parcours", "script/ajax-duplication-document"]);
+</script>
+{% endblock %} {% block page_title %} {% include 'qcm/breadcrumb.html' %} {%
+endblock %} {% block page_menu_right %} {% include 'qcm/submenu_parcours.html'
+%} {% endblock %} {% block body %}
 
 <style type="text/css">
   #response_div {
