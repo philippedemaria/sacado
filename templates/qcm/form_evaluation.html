@@ -139,6 +139,12 @@
                 <p class="alert alert-danger">{{error}}</p>
             {% endfor %}</td>
     </tr>
+    <tr>
+        <td>{{ form.is_next.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
+                <div class="helper_tip_text" >Après avoir effectué l'exercice, l'exercice suivant est proposé à l'élève.</div></td>
+        <td>{{ form.is_next |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
+        <td>{{ form.is_next.errors }}</td>
+    </tr>
     <!-- <tr>
         <td><label>Tentatives max</label>  <span class="helper_tip"> <i class="fa fa-question-circle"></i>
                                 <div class="helper_tip_text red" >Nombre maximum de fois que chaque exercice peut être fait.</div>
@@ -146,12 +152,7 @@
         <td>{{ form.maxexo|attr:"min:1"|attr:"max:10"|attr:"step:1"}}</td>
         <td></td>
     </tr>
-    <tr>
-        <td>{{ form.is_next.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
-                <div class="helper_tip_text" >Après avoir effectué l'exercice, l'exercice suivant est proposé à l'élève.</div></td>
-        <td>{{ form.is_next |attr:"data-toggle:toggle" |attr:"data-onstyle:primary"|attr:"data-offstyle:default"|attr:"data-on:Oui"|attr:"data-off:Non"}}</td>
-        <td>{{ form.is_next.errors }}</td>
-    </tr>
+
     <tr >
         <td>{{ form.is_exit.label_tag }}<span class="helper_tip"> <i class="fa fa-question-circle"></i>
                 <div class="helper_tip_text" >L'élève accède à l'ensemble des exercices à tout moment.</div></td>
