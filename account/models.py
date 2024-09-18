@@ -626,7 +626,7 @@ class Student(ModelWithCode):
 
     def this_is_locked(self,relation):
         booleen = False
-        if self.answers.count() >= relation.maxexo :
+        if relation.parcours.is_evaluation and self.answers.filter(exercice = relation.exercice, parcours = relation.exercice).count() >= relation.maxexo :
             booleen = True
         return booleen
 
