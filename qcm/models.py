@@ -691,7 +691,7 @@ class Parcours(ModelWithCode):
 
         if nbleft == 0  :
             is_ok = False
-        if self.maxexo == -1   :
+        if self.maxexo == -1  or relation.maxexo == -1 :
             is_ok = True
 
 
