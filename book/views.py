@@ -1105,7 +1105,6 @@ def get_the_pages(idb,n):
 
 
 
-
 def show_student_book(request,idb, n):
     book = Book.objects.get(pk=idb)
     prev_page, this_page , next_page , first_pages = get_the_page(idb,n)
@@ -1464,7 +1463,6 @@ def print_latex_to_book(request,idch,idp):
 
 
 def print_latex_to_tex_avec_cor(request,idch,idp):
-
 
     elements =""  
 
@@ -1981,20 +1979,21 @@ def update_bloc(request, idb, idp, idbl):
     if request.method == "POST" :
         if form.is_valid():
             nf = form.save()
+            """
             Exotex.objects.filter(bloc_id=nf.id).update(content = nf.content, 
                                                             content_html =nf.content_html,
                                                             calculator = nf.is_calculator,
                                                             knowledge = nf.knowledge,   
                                                             theme = nf.theme,
-                                                             is_share     = 1,
-                                                             is_python    = nf.is_python,
-                                                             is_scratch   =  nf.is_scratch,
-                                                             is_tableur   =  nf.is_tableur,
-                                                             is_corrected = 1,
-                                                             is_annals   = nf.is_annals,
-                                                             correction = nf.correction,
-                                                             correction_html =nf.correction_html)
-
+                                                            is_share     = 1,
+                                                            is_python    = nf.is_python,
+                                                            is_scratch   =  nf.is_scratch,
+                                                            is_tableur   =  nf.is_tableur,
+                                                            is_corrected = 1,
+                                                            is_annals   = nf.is_annals,
+                                                            correction = nf.correction,
+                                                            correction_html =nf.correction_html)
+            """
 
             messages.success(request, 'Le bloc a été modifié avec succès !')
             return redirect('update_page', idb, idp)
