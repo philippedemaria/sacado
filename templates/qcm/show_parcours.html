@@ -181,22 +181,16 @@
     <div class="tab-pane active" id="3">
       <div class="row" style="margin-bottom: 20px">
         <div class="col-xs-12">
-          <a
-            href="{% url 'peuplate_parcours' parcours.id   %}"
-            class="btn btn-xs btn-sacado"
-            ><i class="bi bi-clipboard-plus"></i>
-            <span class="btn_label">Dupliquer un exercice mutualisé</span></a
-          >
+          <a href="{% url 'peuplate_parcours' parcours.id   %}"
+            class="btn btn-xs btn-sacado"><i class="bi bi-clipboard-plus"></i>
+            <span class="btn_label">Dupliquer un exercice mutualisé</span></a>
           <a href="{% url 'my_own_exercises' %}" class="btn btn-xs btn-sacado"
             ><i class="bi bi-plus-circle-dotted"></i>
-            <span class="btn_label">Créer un nouvel exercice</span></a
-          >
-          <a
-            href="{% url 'individualise_parcours' parcours.id  %}"
-            class="btn btn-xs btn-sacado"
-            ><i class="bi bi-people"></i>
-            <span class="btn_label">Individualiser les exercices</span></a
-          >
+            <span class="btn_label">Créer un nouvel exercice</span></a>
+          <a href="{% url 'individualise_parcours' parcours.id  %}"
+            class="btn btn-xs btn-sacado">
+            <i class="bi bi-people"></i>
+            <span class="btn_label">Individualiser les exercices</span></a>
               {% if sacado_asso %}
               <a
                 href="{% url 'real_time' parcours.id %}"
@@ -206,23 +200,19 @@
                 <span class="btn_label">Suivre en temps réel </span>
               </a>
               {% else %}
-              <a
-                href=""
+              <a href=""
                 class="btn btn-xs btn-sacado no_sacado_asso"
-                title="Version établissement requise"
-              >
+                title="Version établissement requise">
                 <i class="bi bi-clock-history"></i>
                 <span class="btn_label">Suivre en temps réel </span>
               </a>
               {% endif %} 
 
               {% if not parcours.is_evaluation %}
-                  <a
-                    href="{% url 'parcours_tasks_and_publishes' parcours.id %}"
+                  <a href="{% url 'parcours_tasks_and_publishes' parcours.id %}"
                     class="btn btn-xs btn-sacado"
                     ><i class="bi bi-text-indent-left"></i>
-                    <span class="btn_label">Gérer les sections</span></a
-                  >
+                    <span class="btn_label">Gérer les sections</span></a>
               {% endif %} 
 
               {% if 'qcm/parcours_show' in request.path or  'qcm/parcours_tasks_and_publishes' in request.path or 'qcm/parcours_individualise' in request.path or  'qcm/recap_parcours' in request.path %}
@@ -236,35 +226,20 @@
                 <span class="btn_label">Organiser les exercices</span>
               </a>
               {% endif %} 
-
-
           {% if sacado_asso %} 
               {% if folder %}
-                  <a
-                    href="{% url 'change_publications_in_all_relationships' folder.id parcours.id  %}"
-                    class="btn btn-xs btn-sacado"
-                    ><i class="bi bi-toggle-on"></i>
-                    <span class="btn_label">Gérer les publications</span></a
-                  >
-                  <a
-                    href="{% url 'change_situations_in_all_relationships' folder.id parcours.id  %}"
-                    class="btn btn-xs btn-sacado"
-                    ><i class="bi bi-5-circle"></i>
-                    <span class="btn_label">Gérer le nombre de situations</span></a
-                  >
-                  <a
-                    href="{% url 'change_durations_in_all_relationships' folder.id parcours.id  %}"
-                    class="btn btn-xs btn-sacado"
-                    ><i class="bi bi-clock"></i>
-                    <span class="btn_label">Gérer les durées</span></a
-                  >
-
-                  <a
-                    href="{% url 'change_number_in_all_relationships' folder.id parcours.id  %}"
-                    class="btn btn-xs btn-sacado"
-                    ><i class="bi bi-123"></i>
-                    <span class="btn_label">Renuméroter les exercices</span></a
-                  >
+                  <a href="{% url 'change_publications_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"><i class="bi bi-toggle-on"></i>
+                    <span class="btn_label">Gérer les publications</span></a>
+                  <a href="{% url 'change_situations_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"><i class="bi bi-5-circle"></i>
+                    <span class="btn_label">Gérer le nombre de situations</span></a>
+                  <a  href="{% url 'change_durations_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"><i class="bi bi-clock"></i>
+                    <span class="btn_label">Gérer les durées</span></a>
+                  <a href="{% url 'change_number_in_all_relationships' folder.id parcours.id  %}"
+                    class="btn btn-xs btn-sacado"><i class="bi bi-123"></i>
+                    <span class="btn_label">Renuméroter les exercices</span></a>
               {% else %}
                   <a
                     href="{% url 'change_publications_in_all_relationships' 0 parcours.id  %}"
@@ -308,38 +283,24 @@
                 {% if folder %}
                     <a
                       href="{% url 'show_parcours' folder.id  parcours.test_to_parcours.id   %}"
-                      class="btn btn-xs btn-sacado"
-                      ><b>IA</b
-                      ><span class="btn_label"> Voir le parcours lié à ce test</span></a
-                    >
+                      class="btn btn-xs btn-sacado">
+                      <b>IA</b><span class="btn_label"> Voir le parcours lié à ce test</span></a>
                 {% else %}
                     <a
                       href="{% url 'show_parcours' 0  parcours.test_to_parcours.id  %}"
-                      class="btn btn-xs btn-sacado"
-                      ><b>IA</b
-                      ><span class="btn_label"> Voir le parcours lié à ce test</span></a
-                    >
+                      class="btn btn-xs btn-sacado"><b>IA</b>
+                      <span class="btn_label"> Voir le parcours lié à ce test</span></a>
                 {% endif %} 
               {% if parcours.test_to_parcours.exercises.count == 0 %} 
 
                   {% if folder %}
-                  <a
-                    href="{% url 'create_parcours_ia_assisted' folder.id  parcours.test_to_parcours.id  %}"
-                    class="btn btn-xs btn-sacado"
-                    ><i class="bi bi-grid-3x3-gap"></i
-                    ><span class="btn_label">
-                      Créer le parcours lié à ce test avec l'IA</span
-                    ></a
-                  >
+                  <a href="{% url 'create_parcours_ia_assisted' folder.id  parcours.test_to_parcours.id  %}"
+                    class="btn btn-xs btn-sacado"><i class="bi bi-grid-3x3-gap"></i><span class="btn_label">
+                      Créer le parcours lié à ce test avec l'IA</span></a>
                   {% else %}
-                  <a
-                    href="{% url 'create_parcours_ia_assisted' 0 parcours.test_to_parcours.id  %}"
-                    class="btn btn-xs btn-sacado"
-                    ><i class="bi bi-grid-3x3-gap"></i
-                    ><span class="btn_label">
-                      Créer le parcours lié à ce test avec l'IA</span
-                    ></a
-                  >
+                  <a href="{% url 'create_parcours_ia_assisted' 0 parcours.test_to_parcours.id  %}"
+                    class="btn btn-xs btn-sacado"><i class="bi bi-grid-3x3-gap"></i><span class="btn_label">
+                      Créer le parcours lié à ce test avec l'IA</span></a>
                   {% endif %} 
               {% endif %} 
           {% elif parcours.is_ia and not  parcours.is_testpos %} 
@@ -363,49 +324,37 @@
 
           {% else %}
 
-              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
-                ><i class="fa fa-circle-o-notch" style="margin-right: 0px"></i
-                ><span class="btn_label"> Gérer les publications</span></a
-              >
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso">
+                <i class="fa fa-circle-o-notch" style="margin-right: 0px">
+              </i><span class="btn_label"> Gérer les publications</span></a>
 
               <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
                 ><i class="bi bi-5-circle"></i>
-                <span class="btn_label">Gérer le nombre de situations</span></a
-              >
+                <span class="btn_label">Gérer le nombre de situations</span></a>
 
               <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
                 ><i class="bi bi-clock"></i>
-                <span class="btn_label">Gérer les durées</span></a
-              >
+                <span class="btn_label">Gérer les durées</span></a>
 
               <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
                 ><i class="bi bi-eye"></i>
                 <span class="btn_label"
-                  >Montrer seulement les exercices publiés</span
-                ></a
-              >
+                  >Montrer seulement les exercices publiés</span>
+              </a>
 
-              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
-                ><i class="bi bi-123"></i>
-                <span class="btn_label">Renuméroter les exercices</span></a
-              >
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso">
+                <i class="bi bi-123"></i>
+                <span class="btn_label">Renuméroter les exercices</span></a>
 
               {% if parcours.is_ia and parcours.is_testpos %}
-              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
-                ><b>IA</b>
-                <span class="btn_label">Voir le parcours lié à ce test</span></a
-              >
-              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
-                ><i class="bi bi-grid-3x3-gap"></i>
-                <span class="btn_label"
-                  >Créer le parcours lié à ce test avec l'IA</span
-                ></a
-              >
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><b>IA</b>
+                <span class="btn_label">Voir le parcours lié à ce test</span></a>
+
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><i class="bi bi-grid-3x3-gap"></i>
+                <span class="btn_label" >Créer le parcours lié à ce test avec l'IA</span></a>
+                
               {% elif parcours.is_ia and not parcours.is_testpos %}
-              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"
-                ><b>IA</b
-                ><span class="btn_label"> Voir le test de positionnement</span></a
-              >
+              <a href="#" class="btn btn-xs btn-sacado no_sacado_asso"><b>IA</b><span class="btn_label"> Voir le test de positionnement</span></a>
               {% endif %} 
 
           {% endif %}
@@ -415,20 +364,16 @@
       <form action="" methode="POST" id="exercise_sorter">
         {% for rc in relationships_customexercises %} 
         {% if rc.exercise.supportfile.is_title %}
-              <h2
-                class="listing_div thin"
-                style="padding-left: 30px; width: 100%; clear: both"
-              >
+              <h2         class="listing_div thin"
+                style="padding-left: 30px; width: 100%; clear: both">
               {% if rc.is_header_of_section %}
-              <a
-                href="#"
+              <a href="#"
                 data-toggle="modal"
                 data-target="#head_of_section"
                 style="color:{{ parcours.color  }}"
                 data-relation_id="{{ rc.id }}"
                 class="header_shower"
-                title="Cours associé à cette section"
-              >
+                title="Cours associé à cette section">
                 {% if rc.exercise.supportfile.title %} 
                   {{ rc.exercise.supportfile.title|cleanhtml|capfirst }} 
                 {% else %} 
@@ -444,22 +389,17 @@
             {% endif %}
         </h2>
         {% elif rc.exercise.supportfile.is_subtitle %}
-        <h3
-          class="listing_div thin"
-          style="padding-left: 30px; width: 100%; clear: both"
-        >
+        <h3 class="listing_div thin"
+          style="padding-left: 30px; width: 100%; clear: both">
           {% if rc.is_header_of_section %}
-          <a
-            href="#"
+          <a href="#"
             data-toggle="modal"
             data-target="#head_of_section"
             style="color:{{ parcours.color  }}"
             data-relation_id="{{ rc.id }}"
             class="header_shower"
-            title="Cours associé à cette sous-section"
-            >{{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
-            <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup
-          ></a>
+            title="Cours associé à cette sous-section">{{ rc.exercise.supportfile.title|cleanhtml|capfirst }}
+            <sup><i class="fa fa-desktop" style="font-size: 9px"></i></sup></a>
           {% else %} 
           {{ rc.exercise.supportfile.title|cleanhtml|capfirst }} 
           {% endif %}
