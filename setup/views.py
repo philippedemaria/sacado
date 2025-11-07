@@ -548,32 +548,6 @@ def ressource_sacado(request): #Protection saml pour le GAR
                 except :
                     pass
 
-        # elif 'doc' in dico_received["PRO"][0] :  # si DOCUMENTALISTE 'National_doc' in dico_received["PRO"][0] 
-            
-        #     try :
-        #         f = open('/var/www/sacado/logs/gar_connexions.log','a')
-        #         print("===> DOCUMENTALISTE", file=f)
-        #         f.close()
-        #     except :
-        #         pass
-
-
-        #     try :
-        #         user_type   = 2    
-        #         user, created     = User.objects.get_or_create(username = username, defaults = {  "school" : school , "user_type" : user_type , "password" : password , "is_manager" : 1 ,  "time_zone" : time_zone , "last_name" : last_name , "first_name" : first_name  , "email" : email , "closure" : closure ,  "country" : country , })
-        #         teacher,created_t = Teacher.objects.get_or_create(user = user, defaults = { "notification" : 0 , "exercise_post" : 0    })
-
-        #         if not dico_received["DIV"][0] :
-        #             messages.error(request,"Vous êtes référencé.e en tant que DOCUMENTALISTE ou AUTRE PERSONNEL. Vous n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
-        #             return redirect('index')
-        #     except :
-        #         messages.error(request,"Vous n'êtes pas référencé.e et n'avez aucun groupe attribué. Contacter votre administrateur GAR.")
-        #         return redirect('index')
-
-        # else :
-        #     messages.error(request,"Votre catégorie de PERSONNEL n'est pas reconnue. Contacter votre administrateur GAR.")
-        #     return redirect('index')
-        #
         #########################################################
         # mdp sacado_gar = pbkdf2_sha256$180000$F7ef9xEiScUx$rB9DXm380T29cbGxC5KPdnhZ7Lw0KyWa9ypZcKvyVks=
         #########################################################
@@ -664,7 +638,11 @@ def ressource_sacado_test(request): #Protection saml pour le GAR
     if Customer.objects.filter( school__code_acad = uai ,  date_stop__gte = today , statut = 3 ) : 
 
         divs = dico_received["DIV"]
-        gros = dico_received["GRO"]
+        
+        try :
+            gros = dico_received["GRO"]
+        except:
+            gros = []
 
         liste_div_gro = div_gro(divs , gros)
 
