@@ -11,19 +11,19 @@ from group.models import Group
 from socle.models import Knowledge, Skill
 
 
-from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+#from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 from itertools import groupby
 from general_fonctions import *
 
 def validation_file(content):
-    if content :
-	    content_type = content.content_type.split('/')[0]
-	    if content_type in settings.CONTENT_TYPES:
-	        if content._size > settings.MAX_UPLOAD_SIZE: 
-	            raise forms.ValidationError("Taille max : {}. Taille trop volumineuse {}".format(filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(content._size)))
-	    else:
-	        raise forms.ValidationError("Type de fichier non accepté")
-	    return content
+	if content :
+		content_type = content.content_type.split('/')[0]
+		if content_type in settings.CONTENT_TYPES :
+			if content._size > settings.MAX_UPLOAD_SIZE: 
+				raise forms.ValidationError("Taille max : {}. Taille trop volumineuse {}".format(filesizeformat(settings.MAX_UPLOAD_SIZE), filesizeformat(content._size)))
+		else:
+			raise forms.ValidationError("Type de fichier non accepté")
+		return content
 
 
  
@@ -83,7 +83,7 @@ class ParcoursForm(forms.ModelForm):
 		start_date = cleaned_data.get("start")
 		stop_date = cleaned_data.get("stop")
 		try :
-			if stop <= start:
+			if stop_date <= start_date:
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
@@ -155,7 +155,7 @@ class FolderForm(forms.ModelForm):
 		start_date = cleaned_data.get("start")
 		stop_date = cleaned_data.get("stop")
 		try :
-			if stop <= start:
+			if stop_date <= start_date:
 				raise forms.ValidationError("La date de verrouillage ne peut pas être antérieure à son début.")
 		except:
 			pass
@@ -374,11 +374,11 @@ class BaseSupportchoiceFormset(BaseInlineFormSet):
             if self._is_adding_nested_inlines_to_empty_form(form):
                 form.add_error(
                     field=None,
-                    error=_(
+                    error= 
                         "You are trying to add image(s) to a book which "
                         "does not yet exist. Please add information "
                         "about the book and choose the image file(s) again."
-                    ),
+                    ,
                 )
 
     def save(self, commit=True):

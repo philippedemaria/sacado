@@ -136,55 +136,46 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <div class="row" align="center">
-              <div class="col-lg-6 col-md-6 col-xs-6">
-                <h2 class="sacado">
-                  Vous êtes Enseignant<br /><small>Version gratuite</small>
-                </h2>
+          <div class="modal-body" style="padding: 40px 30px;">
+            <div style="text-align: center; max-width: 560px; margin: 0 auto;">
 
-                <a href="{% url 'register_teacher_accueil' %}"
-                  ><img
-                    src="{% static 'img/teacherss.jpg' %}"
-                    width="400"
-                    class="img-fluid"
-                /></a>
-              </div>
-              <div class="col-lg-6 col-md-6 col-xs-6">
-                <h2 class="sacado">
-                  Vous représentez un établissement<br /><small
-                    >Voir tarifs et conditions</small
-                  >
-                </h2>
+              <div style="font-size: 64px; margin-bottom: 16px;">🎓</div>
 
-                <a href="{% url 'school_adhesion' %}"
-                  ><img
-                    src="{% static 'img/schoolss.jpg' %}"
-                    width="400"
-                    class="img-fluid"
-                /></a>
-              </div>
-            </div>
+              <h2 style="font-size: 1.6rem; font-weight: 700; color: #2d3748; margin-bottom: 10px;">
+                Rejoignez Sacado !
+              </h2>
 
-            <div class="row" align="center">
-              <div class="col-lg-6 col-md-6 col-xs-6">
-                <h2 class="sacado">Vous êtes Élève</h2>
-                <a href="#" data-toggle="modal" data-target="#students"
-                  ><img
-                    src="{% static 'img/students.jpg' %}"
-                    width="400"
-                    class="img-fluid"
-                /></a>
-              </div>
-              <div class="col-lg-6 col-md-6 col-xs-6">
-                <h2 class="sacado">Vous êtes Parent</h2>
-                <a href="#" data-toggle="modal" data-target="#parents"
-                  ><img
-                    src="{% static 'img/parentss.jpg' %}"
-                    width="400"
-                    class="img-fluid"
-                /></a>
-              </div>
+              <p style="font-size: 1.05rem; color: #718096; margin-bottom: 32px; line-height: 1.6;">
+                Les inscriptions se font désormais directement sur notre nouveau site officiel, plus rapide, plus ergonomique.<br>
+                Cliquez ci-dessous pour créer votre compte en quelques secondes.
+              </p>
+
+              <a
+                href="https://sacado.fr"
+                target="_blank"
+                rel="noopener noreferrer"
+                style="
+                  display: inline-block;
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: #fff;
+                  font-size: 1.1rem;
+                  font-weight: 600;
+                  padding: 14px 40px;
+                  border-radius: 50px;
+                  text-decoration: none;
+                  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.45);
+                  transition: opacity 0.2s;
+                "
+                onmouseover="this.style.opacity='0.88'"
+                onmouseout="this.style.opacity='1'"
+              >
+                👉 &nbsp; Aller sur sacado.fr
+              </a>
+
+              <p style="margin-top: 28px; font-size: 0.85rem; color: #a0aec0;">
+                Enseignants · Établissements · Élèves · Parents
+              </p>
+
             </div>
           </div>
         </div>

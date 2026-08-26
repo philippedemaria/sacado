@@ -305,7 +305,6 @@ def index(request):
 
 
         if request.GET.get("next", '') : 
-            print("next")
             redirect_to = request.GET.get('next', '')
             request.session["login_url"]=redirect_to
 
@@ -395,7 +394,13 @@ def ressource_sacado(request): #Protection saml pour le GAR
     if Customer.objects.filter( school__code_acad = uai ,  date_stop__gte = today  ) : 
 
         divs = dico_received["DIV"]
-        gros = dico_received["GRO"]
+ 
+
+        try :
+            gros = dico_received["GRO"]
+        except:
+            gros = []
+
 
         try :
             if divs[0] == "None" : divs = []

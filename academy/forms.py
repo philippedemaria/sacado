@@ -4,7 +4,7 @@ from .models import  Autotest
 from account.models import Student , Teacher
 from socle.models import Knowledge, Skill
 from group.models import Group
-from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
+#from bootstrap_datepicker_plus import DatePickerInput, DateTimePickerInput
 
 from django.template.defaultfilters import filesizeformat
 from django.conf import settings
